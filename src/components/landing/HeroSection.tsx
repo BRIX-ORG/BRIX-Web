@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { ShieldCheck, Play } from 'lucide-react';
+import Link from 'next/link';
 
 export function HeroSection() {
     return (
@@ -40,9 +41,12 @@ export function HeroSection() {
 
                     {/* CTAs */}
                     <div className="flex flex-wrap gap-4 pt-4">
-                        <button className="h-14 px-8 bg-primary text-primary-foreground font-display font-black text-sm uppercase tracking-widest hover:translate-x-1 hover:-translate-y-1 transition-transform border-r-4 border-b-4 border-white">
+                        <Link
+                            href="/login"
+                            className="flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground font-display font-black text-sm uppercase tracking-widest hover:translate-x-1 hover:-translate-y-1 transition-transform border-r-4 border-b-4 border-white"
+                        >
                             Get Started
-                        </button>
+                        </Link>
                         <button className="h-14 px-8 border border-border text-foreground font-display font-bold text-sm uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2">
                             <Play className="size-4" />
                             Watch Demo

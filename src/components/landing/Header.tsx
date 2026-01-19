@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { BrixBrandLogo } from '@/components/shared';
 
 const navLinks = [
     { href: '#concept', label: 'The Concept' },
@@ -18,14 +19,7 @@ export function Header() {
         <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-primary/20">
             <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-                    <div className="size-8 bg-primary flex items-center justify-center rounded-sm rotate-45 group-hover:rotate-90 transition-transform duration-500">
-                        <div className="size-4 bg-background -rotate-45 group-hover:-rotate-90 transition-transform duration-500"></div>
-                    </div>
-                    <h2 className="font-display text-2xl font-bold tracking-tighter text-foreground">
-                        BRIX<span className="text-primary">.</span>
-                    </h2>
-                </Link>
+                <BrixBrandLogo href="/" size="md" animated />
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center gap-8">

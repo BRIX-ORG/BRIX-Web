@@ -198,3 +198,18 @@ img {
     scrollbar-color: var(--primary) var(--muted);
     scrollbar-width: thin;
 }
+
+/* ============================
+   Glassmorphism Effect
+   ============================ */
+.glassmorphism {
+    background: rgba(16, 24, 24, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Neon glow focus effect */
+.neon-glow:focus {
+    box-shadow: 0 0 15px rgba(0, 238, 255, 0.3);
+}
