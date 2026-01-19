@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+pnpm-lock.yaml
+
+# Next.js
+.next
+out
+build
+
+# Environment
+.env
+.env*.local
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+*.md
+!README.md
+.editorconfig
+.prettierrc
+.prettierignore
+.eslintrc*
+tsconfig.json

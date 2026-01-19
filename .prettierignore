@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+out
+build
+dist
+
+# Environment files
+.env*.local
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# IDE
+.vscode
+.idea
+
+# Antigravity
+.gemini
+
+# Git
+.git
