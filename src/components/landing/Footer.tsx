@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Terminal, Network } from 'lucide-react';
+import { BrixBrandLogo } from '@/components/shared';
 
 const footerLinks = [
     { href: '#', label: 'Privacy Policy' },
@@ -9,13 +10,10 @@ const footerLinks = [
 
 export function Footer() {
     return (
-        <footer className="py-12 bg-background border-t border-border">
+        <footer className="py-12  border-t border-border">
             <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
                 {/* Logo */}
-                <div className="flex items-center gap-3">
-                    <div className="size-6 bg-muted-foreground rotate-45"></div>
-                    <h2 className="font-display text-xl font-bold tracking-tighter">BRIX</h2>
-                </div>
+                <BrixBrandLogo href="/" size="sm" animated />
 
                 {/* Links */}
                 <div className="flex gap-8 font-mono text-[10px] text-muted-foreground uppercase tracking-widest">

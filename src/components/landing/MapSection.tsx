@@ -26,7 +26,7 @@ const userLocations = [
     { id: 12, city: 'Toronto', country: 'Canada', lng: -79.3832, lat: 43.6532, users: 145 },
 ];
 
-// Pulsing marker for active nodes
+// Pulsing marker for active nodes with glow effect
 function PulsingMarker({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
     const sizeClasses = {
         sm: 'size-2',
@@ -34,15 +34,21 @@ function PulsingMarker({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
         lg: 'size-4',
     };
 
+    const glowSizes = {
+        sm: 'shadow-[0_0_6px_#00eeff]',
+        md: 'shadow-[0_0_10px_#00eeff]',
+        lg: 'shadow-[0_0_14px_#00eeff]',
+    };
+
     return (
         <div className="relative">
             {/* Pulse ring */}
             <div
-                className={`absolute inset-0 ${sizeClasses[size]} bg-primary rounded-full animate-ping opacity-75`}
+                className={`absolute inset-0 ${sizeClasses[size]} bg-primary rounded-full animate-ping opacity-60`}
             />
-            {/* Core */}
+            {/* Core with glow */}
             <div
-                className={`relative ${sizeClasses[size]} bg-primary rounded-full border-2 border-white shadow-lg`}
+                className={`relative ${sizeClasses[size]} bg-primary rounded-full border border-white/50 ${glowSizes[size]}`}
             />
         </div>
     );
