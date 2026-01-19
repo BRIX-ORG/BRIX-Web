@@ -47,10 +47,13 @@ export function HeroSection() {
                         >
                             Get Started
                         </Link>
-                        <button className="h-14 px-8 border border-border text-foreground font-display font-bold text-sm uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2">
+                        <Link
+                            href="/introduction"
+                            className="h-14 px-8 border border-border text-foreground font-display font-bold text-sm uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2"
+                        >
                             <Play className="size-4" />
-                            Watch Demo
-                        </button>
+                            Explore BRIX
+                        </Link>
                     </div>
                 </div>
 

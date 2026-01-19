@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 // Dynamic import for Lightning background (WebGL)
-const Lightning = dynamic(() => import('@/components/react-bits-bg/Lightning'), {
+const Lightning = dynamic(() => import('@/components/react-bits/Lightning'), {
     ssr: false,
 });
 

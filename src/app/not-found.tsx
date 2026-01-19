@@ -8,7 +8,7 @@ import { BrixBrandLogo } from '@/components/shared';
 import { Footer } from '@/components/landing';
 
 // Dynamic import for Waves to avoid SSR issues
-const Waves = dynamic(() => import('@/components/react-bits-bg/Waves'), {
+const Waves = dynamic(() => import('@/components/react-bits/Waves'), {
     ssr: false,
 });
 

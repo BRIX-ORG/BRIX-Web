@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 // Dynamic import to avoid SSR issues with WebGL
-const DomeGallery = dynamic(() => import('@/components/react-bits-bg/DomeGallery'), {
+const DomeGallery = dynamic(() => import('@/components/react-bits/DomeGallery'), {
     ssr: false,
     loading: () => (
         <div className="w-full h-full flex items-center justify-center">
