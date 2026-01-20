@@ -1,0 +1,10 @@
+export { MessagesHeader } from './MessagesHeader';
+export { ContactItem, type Contact } from './ContactItem';
+export { ContactsSidebar } from './ContactsSidebar';
+export { ChatHeader } from './ChatHeader';
+export { MessageBubble, type Message } from './MessageBubble';
+export { BrickMessage, type BrickData } from './BrickMessage';
+export { MessageInput } from './MessageInput';
+export { TrustScoreCircle } from './TrustScoreCircle';
+export { UserInfoSidebar } from './UserInfoSidebar';
+export { ChatArea } from './ChatArea';

@@ -46,7 +46,7 @@ const sidebarGroups: SidebarGroup[] = [
             },
             {
                 title: 'Messages',
-                href: '/dashboard/messages',
+                href: '/messages',
                 icon: MessageCircle,
             },
             {

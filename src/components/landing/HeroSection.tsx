@@ -100,6 +100,9 @@ export function HeroSection() {
                                             UNIX: 1715693422
                                         </p>
                                     </div>
+                                    <div className="size-12 border border-primary/50 flex items-center justify-center">
+                                        <div className="size-6 bg-primary animate-pulse"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
