@@ -213,3 +213,45 @@ img {
 .neon-glow:focus {
     box-shadow: 0 0 15px rgba(0, 238, 255, 0.3);
 }
+
+/* ============================
+   Camera Page Effects
+   ============================ */
+
+/* CRT Scan Effect */
+.crt-scan {
+    background:
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+    background-size:
+        100% 3px,
+        3px 100%;
+}
+
+/* Shutter Pulse Animation */
+@keyframes pulse-shutter {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(0.95);
+    }
+}
+
+/* Vertical Text */
+.vertical-text {
+    writing-mode: vertical-rl;
+}
+
+/* Hide Scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
