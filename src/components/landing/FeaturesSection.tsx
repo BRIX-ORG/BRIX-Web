@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Fingerprint, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
+import ShinyText from '@/components/react-bits/ShinyText';
 
 export function FeaturesSection() {
     return (
@@ -25,7 +26,15 @@ export function FeaturesSection() {
                                 <Fingerprint className="size-6 text-primary" />
                             </div>
                             <h3 className="font-display text-2xl font-bold uppercase mb-4">
-                                Total Authenticity
+                                <ShinyText
+                                    text="Total Authenticity"
+                                    speed={2.5}
+                                    delay={0}
+                                    color="#ffffff"
+                                    shineColor="#00eeff"
+                                    spread={120}
+                                    direction="left"
+                                />
                             </h3>
                             <p className="font-body text-muted-foreground max-w-md leading-relaxed">
                                 Every image is an encrypted block on the chain. Our proprietary
@@ -45,7 +54,15 @@ export function FeaturesSection() {
                     <div className="bento-card p-8 group border-t-4 border-t-primary/50">
                         <MapPin className="size-10 text-primary mb-6" strokeWidth={1.5} />
                         <h3 className="font-display text-xl font-bold uppercase mb-4">
-                            GPS Verification
+                            <ShinyText
+                                text="GPS Verification"
+                                speed={2.5}
+                                delay={0.3}
+                                color="#ffffff"
+                                shineColor="#00eeff"
+                                spread={120}
+                                direction="left"
+                            />
                         </h3>
                         <p className="font-body text-sm text-muted-foreground leading-relaxed">
                             Integrated location metadata for every block. Precise geolocation
@@ -57,7 +74,15 @@ export function FeaturesSection() {
                     <div className="bento-card p-8 group border-t-4 border-t-secondary/50">
                         <Clock className="size-10 text-secondary mb-6" strokeWidth={1.5} />
                         <h3 className="font-display text-xl font-bold uppercase mb-4">
-                            Temporal Proof
+                            <ShinyText
+                                text="Temporal Proof"
+                                speed={2.5}
+                                delay={0.6}
+                                color="#ffffff"
+                                shineColor="#bc00ff"
+                                spread={120}
+                                direction="left"
+                            />
                         </h3>
                         <p className="font-body text-sm text-muted-foreground leading-relaxed">
                             Immutable Unix timestamps anchored at the moment of capture. Time cannot
@@ -77,7 +102,15 @@ export function FeaturesSection() {
                         </div>
                         <div className="flex-1">
                             <h3 className="font-display text-2xl font-bold uppercase mb-4">
-                                The Concept
+                                <ShinyText
+                                    text="The Concept"
+                                    speed={2.5}
+                                    delay={0.9}
+                                    color="#ffffff"
+                                    shineColor="#bc00ff"
+                                    spread={120}
+                                    direction="left"
+                                />
                             </h3>
                             <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
                                 Digital assets are no longer ephemeral. BRIX treats photography as

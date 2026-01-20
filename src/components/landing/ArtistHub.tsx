@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import ShinyText from '@/components/react-bits/ShinyText';
 
 // Dynamic import to avoid SSR issues with WebGL
 const DomeGallery = dynamic(() => import('@/components/react-bits/DomeGallery'), {
@@ -54,9 +55,19 @@ export function ArtistHub() {
                 {/* Section Header */}
                 <div className="flex items-center gap-4 mb-16">
                     <span className="h-px flex-1 bg-border"></span>
-                    <h2 className="font-display text-2xl font-bold uppercase tracking-[0.3em] px-8 text-center">
-                        Artist Hub Showcase
-                    </h2>
+                    <ShinyText
+                        text="Artist Hub Showcase"
+                        speed={2}
+                        delay={0}
+                        color="#b5b5b5"
+                        shineColor="#00eeff"
+                        spread={120}
+                        direction="left"
+                        yoyo={false}
+                        pauseOnHover={false}
+                        disabled={false}
+                        className="font-display text-2xl font-bold uppercase tracking-[0.3em] px-8 text-center"
+                    />
                     <span className="h-px flex-1 bg-border"></span>
                 </div>
 

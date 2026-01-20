@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { ShieldCheck, Play } from 'lucide-react';
 import Link from 'next/link';
+import ScrambledText from '@/components/react-bits/ScrambledText';
 
 export function HeroSection() {
     return (
@@ -34,10 +35,16 @@ export function HeroSection() {
                     </h1>
 
                     {/* Description */}
-                    <p className="font-body text-lg text-muted-foreground max-w-lg leading-relaxed">
+                    <ScrambledText
+                        className="font-body text-lg text-muted-foreground max-w-lg leading-relaxed"
+                        radius={100}
+                        duration={1.2}
+                        speed={0.5}
+                        scrambleChars=".:"
+                    >
                         The first immutable image repository with integrated GPS and temporal
                         verification. Captured, hashed, and anchored forever on the block.
-                    </p>
+                    </ScrambledText>
 
                     {/* CTAs */}
                     <div className="flex flex-wrap gap-4 pt-4">
