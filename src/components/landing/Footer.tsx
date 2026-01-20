@@ -47,7 +47,7 @@ export function Footer() {
 
             {/* Copyright */}
             <p className="text-center font-mono text-[9px] text-muted-foreground mt-12 uppercase tracking-[0.5em]">
-                © 2024 BRIX Immutable Network. All Rights Verified.
+                © 2026 BRIX Immutable Network. All Rights Verified.
             </p>
         </footer>
     );

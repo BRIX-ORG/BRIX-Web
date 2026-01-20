@@ -1,7 +1,9 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import { ArtistCard, Artist } from './ArtistCard';
+import { Artist } from './ArtistCard';
+import CircularGallery, { GalleryItem } from '@/components/react-bits/CircularGallery';
 
 interface RisingArtistsProps {
     artists: Artist[];
@@ -9,6 +11,21 @@ interface RisingArtistsProps {
 }
 
 export function RisingArtists({ artists, onViewAll }: RisingArtistsProps) {
+    const router = useRouter();
+
+    // Transform artists to CircularGallery format
+    const galleryItems: GalleryItem[] = artists.map((artist) => ({
+        image: artist.avatar,
+        text: `${artist.username} • ${artist.brixCount} BRIX`,
+        url: `/dashboard/artist/${artist.id}`,
+    }));
+
+    const handleItemClick = (item: GalleryItem) => {
+        if (item.url) {
+            router.push(item.url);
+        }
+    };
+
     return (
         <section className="mb-12">
             <div className="flex items-center justify-between mb-6 px-2">
@@ -24,10 +41,17 @@ export function RisingArtists({ artists, onViewAll }: RisingArtistsProps) {
                     <ChevronRight className="size-3" />
                 </button>
             </div>
-            <div className="flex overflow-x-auto gap-8 pb-4 scrollbar-hide">
-                {artists.map((artist) => (
-                    <ArtistCard key={artist.id} artist={artist} />
-                ))}
+            <div className="h-[320px] -mx-8">
+                <CircularGallery
+                    items={galleryItems}
+                    bend={2}
+                    textColor="#00eeff"
+                    borderRadius={0.5}
+                    font="bold 16px 'Space Grotesk', sans-serif"
+                    scrollSpeed={1.5}
+                    scrollEase={0.06}
+                    onItemClick={handleItemClick}
+                />
             </div>
         </section>
     );

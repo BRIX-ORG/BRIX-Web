@@ -55,7 +55,7 @@ export function TrustScoreBanner({
                 </div>
             </div>
             {/* Background decoration */}
-            <div className="absolute -right-4 -bottom-4 text-[120px] text-foreground/[0.02] rotate-12 select-none pointer-events-none">
+            <div className="absolute -right-4 -bottom-4 text-[120px] text-foreground/2 rotate-12 select-none pointer-events-none">
                 <Shield className="size-32" />
             </div>
         </div>
