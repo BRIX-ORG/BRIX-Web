@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { BadgeCheck, Sparkles } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/types/utils';
 
 export interface Artist {
     id: string;

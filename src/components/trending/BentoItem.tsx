@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Coins, Share2, Zap } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/types/utils';
 
 export interface TrendingItem {
     id: string;

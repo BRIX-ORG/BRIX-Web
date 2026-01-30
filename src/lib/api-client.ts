@@ -1,10 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { useAuthStore } from '@/stores/auth-store';
-
-interface RefreshTokenResponse {
-    accessToken: string;
-    refreshToken: string;
-}
+import { auth } from '@/lib/auth';
+import { updateSession } from '@/lib/auth-actions';
+import type { RefreshResponse } from '@/types/auth.types';
 
 // Create axios instance
 export const apiClient = axios.create({
@@ -19,13 +16,14 @@ export const apiClient = axios.create({
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
 
-// Request interceptor to add auth token
+// Request interceptor to add auth token from NextAuth session
 apiClient.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-        const accessToken = useAuthStore.getState().accessToken;
+    async (config: InternalAxiosRequestConfig) => {
+        // Get session from NextAuth
+        const session = await auth();
 
-        if (accessToken && config.headers) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
+        if (session?.accessToken && config.headers) {
+            config.headers.Authorization = `Bearer ${session.accessToken}`;
         }
 
         return config;
@@ -64,8 +62,7 @@ apiClient.interceptors.response.use(
                 // Retry the original request
                 return apiClient(originalRequest);
             } else {
-                // Refresh failed, sign out
-                useAuthStore.getState().signOut();
+                // Refresh failed - session will be cleared by auth flow
                 return Promise.reject(error);
             }
         }
@@ -77,48 +74,78 @@ apiClient.interceptors.response.use(
 // Function to refresh the access token
 async function refreshAccessToken(): Promise<string | null> {
     try {
-        const refreshToken = useAuthStore.getState().refreshToken;
+        const session = await auth();
 
-        if (!refreshToken) {
-            useAuthStore.getState().signOut();
+        if (!session?.refreshToken) {
             return null;
         }
 
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/refresh-token`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
+        // Call refresh endpoint with refresh token in Authorization header
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/refresh`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${session.refreshToken}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-        );
+        });
 
         if (!response.ok) {
-            useAuthStore.getState().signOut();
             return null;
         }
 
-        const data = (await response.json()) as RefreshTokenResponse;
+        const data = (await response.json()) as RefreshResponse;
 
-        if (data.accessToken && data.refreshToken) {
-            useAuthStore.getState().setAuth({
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken,
+        if (data.data) {
+            const {
+                user,
+                accessToken,
+                accessTokenExpiresAt,
+                refreshToken: newRefreshToken,
+                refreshTokenExpiresAt,
+            } = data.data;
+
+            // Update NextAuth session with new tokens via server action
+            await updateSession({
+                user,
+                accessToken,
+                accessTokenExpiresAt,
+                refreshToken: newRefreshToken,
+                refreshTokenExpiresAt,
             });
-            return data.accessToken;
+
+            return accessToken;
         }
 
-        useAuthStore.getState().signOut();
         return null;
     } catch (error) {
         console.error('[REFRESH TOKEN] Error during refresh:', error);
-        useAuthStore.getState().signOut();
         return null;
     } finally {
         isRefreshing = false;
         refreshPromise = null;
     }
 }
+
+// Helper function for creating API calls
+export const createApiCall = <TResponse, TRequest = unknown>(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
+    url: string,
+) => {
+    return async (data?: TRequest): Promise<TResponse> => {
+        const config: {
+            method: string;
+            url: string;
+            data?: TRequest;
+            params?: TRequest;
+        } = {
+            method,
+            url,
+            data: method !== 'GET' ? data : undefined,
+            params: method === 'GET' ? data : undefined,
+        };
+
+        const response = await apiClient.request<TResponse>(config);
+        return response.data;
+    };
+};

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/types/utils';
 import { SidebarItemType } from '@/types/sidebar';
 
 interface SidebarItemProps {

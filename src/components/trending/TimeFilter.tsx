@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/types/utils';
 
 interface TimeFilterProps {
     value: '24h' | '7d' | 'all';

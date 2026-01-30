@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { DashboardSidebar, DashboardHeader } from '@/components/dashboard';
-import { cn } from '@/lib/utils';
+import { cn } from '@/types/utils';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [isCollapsed, setIsCollapsed] = useState(false);

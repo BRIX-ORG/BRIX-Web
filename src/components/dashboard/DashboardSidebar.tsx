@@ -20,7 +20,7 @@ import {
     MessageCircle,
     X,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/types/utils';
 import { SidebarItem } from './SidebarItem';
 import { SidebarGroup } from '@/types/sidebar';
 import { BrixBrandLogo } from '@/components/shared';
