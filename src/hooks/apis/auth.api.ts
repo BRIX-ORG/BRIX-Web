@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { signIn, signOut } from 'next-auth/react';
+import { signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
 import { createApiCall } from '@/lib/api-client';
+import { auth, providerMap } from '@/providers/firebase';
 import type {
     RegisterRequest,
     RegisterResponse,
@@ -99,27 +101,53 @@ export const useLogout = () => {
     });
 };
 
-// Google Auth Hook
+// Google Auth Hook - Firebase Popup Flow
+// Backend xác thực Firebase idToken và trả về accessToken/refreshToken như local auth
 export const useGoogleAuth = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (request: GoogleAuthRequest) => {
-            // Call backend API with Firebase ID token
-            const response = await authApi.googleAuth(request);
+        mutationFn: async () => {
+            // Step 1: Open Firebase Google popup to get idToken
+            const provider = providerMap.google;
+            const result = await signInWithPopup(auth, provider);
+            const idToken = await result.user.getIdToken();
 
-            if (response.data) {
-                // Create NextAuth session with user data and tokens
-                await signIn('credentials', {
-                    redirect: false,
-                    idToken: request.idToken,
-                });
+            // Step 2: Sign in with NextAuth credentials provider (use idToken)
+            const signInResult = await signIn('credentials', {
+                redirect: false,
+                idToken,
+            });
 
-                // Clear all cache on Google auth
-                queryClient.clear();
+            if (signInResult?.error) {
+                throw new Error(signInResult.error);
             }
 
-            return response;
+            // Clear all cache on Google auth
+            queryClient.clear();
+
+            return signInResult;
+        },
+    });
+};
+
+// Google Sign Out Hook
+export const useGoogleSignOut = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => {
+            // Sign out from Firebase
+            await firebaseSignOut(auth);
+
+            // Call backend logout API
+            await authApi.logout();
+
+            // Sign out from NextAuth
+            await signOut({ redirect: false });
+
+            // Clear query cache
+            queryClient.clear();
         },
     });
 };
