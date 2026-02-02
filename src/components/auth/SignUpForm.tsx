@@ -2,13 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, User, Zap, Loader2, Phone } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema, RegisterFormData } from '@/lib/validations/auth';
 import { useRegister } from '@/hooks/apis/auth.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
 import { Input } from '@/components/ui';
+import type { Gender } from '@/types/auth.types';
+
+// Gender options with icons and labels
+const genderOptions: { value: Gender; label: string; icon: string }[] = [
+    { value: 'MALE', label: 'Male', icon: '♂' },
+    { value: 'FEMALE', label: 'Female', icon: '♀' },
+    { value: 'OTHER', label: 'Other', icon: '⚧' },
+];
 
 export function SignUpForm() {
     const router = useRouter();
@@ -20,6 +28,7 @@ export function SignUpForm() {
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -28,6 +37,7 @@ export function SignUpForm() {
             fullName: '',
             email: '',
             phone: '',
+            gender: undefined,
             password: '',
             confirmPassword: '',
         },
@@ -41,6 +51,7 @@ export function SignUpForm() {
                 fullName: data.fullName,
                 email: data.email,
                 phone: data.phone,
+                gender: data.gender,
                 password: data.password,
             });
             hideLoading();
@@ -107,6 +118,49 @@ export function SignUpForm() {
                 placeholder="0912345678"
                 error={errors.phone?.message}
             />
+
+            {/* Gender Field */}
+            <div className="space-y-2">
+                <label className="block text-xs font-mono font-medium text-muted-foreground uppercase tracking-[0.2em]">
+                    Identity_Type
+                </label>
+                <Controller
+                    name="gender"
+                    control={control}
+                    render={({ field }) => (
+                        <div className="grid grid-cols-3 gap-3">
+                            {genderOptions.map((option) => (
+                                <button
+                                    key={option.value}
+                                    type="button"
+                                    disabled={isLoading}
+                                    onClick={() => field.onChange(option.value)}
+                                    className={`
+                                        relative flex flex-col items-center justify-center gap-1 py-3 px-4
+                                        border rounded-sm font-mono text-sm uppercase tracking-wider
+                                        transition-all duration-200
+                                        disabled:opacity-50 disabled:cursor-not-allowed
+                                        ${
+                                            field.value === option.value
+                                                ? 'bg-primary/10 border-primary text-primary shadow-[0_0_15px_rgba(0,238,255,0.3)]'
+                                                : 'bg-muted border-border text-muted-foreground hover:border-primary/50 hover:text-foreground'
+                                        }
+                                    `}
+                                >
+                                    <span className="text-xl">{option.icon}</span>
+                                    <span className="text-xs">{option.label}</span>
+                                    {field.value === option.value && (
+                                        <div className="absolute -top-1 -right-1 size-2 bg-primary rounded-full" />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                />
+                {errors.gender && (
+                    <p className="text-xs text-red-400 font-mono">{errors.gender.message}</p>
+                )}
+            </div>
 
             {/* Password Field */}
             <Input

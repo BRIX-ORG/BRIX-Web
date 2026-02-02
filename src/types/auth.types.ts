@@ -1,3 +1,6 @@
+// Gender type
+export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
+
 // API Response Wrapper
 export interface ApiResponse<T> {
     message: string;
@@ -12,6 +15,7 @@ export interface User {
     fullName: string;
     email: string;
     phone: string;
+    gender: Gender;
     avatar: string;
     background: string;
     address: string;
@@ -39,6 +43,7 @@ export interface RegisterRequest {
     fullName: string;
     email: string;
     phone: string;
+    gender: Gender;
     password: string;
 }
 
@@ -137,6 +142,7 @@ declare module 'next-auth' {
         fullName: string;
         email: string;
         phone: string;
+        gender: Gender;
         avatar: string;
         background: string;
         address: string;
@@ -170,6 +176,7 @@ declare module 'next-auth/jwt' {
             fullName: string;
             email: string;
             phone: string;
+            gender: Gender;
             avatar: string;
             background: string;
             address: string;

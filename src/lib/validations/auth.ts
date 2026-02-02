@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+// Gender enum values
+export const genderValues = ['MALE', 'FEMALE', 'OTHER'] as const;
+export type GenderValue = (typeof genderValues)[number];
+
 // Login Schema
 export const loginSchema = z.object({
     identifier: z
@@ -37,6 +41,7 @@ export const registerSchema = z
             .min(10, 'Phone number must be at least 10 digits')
             .max(15, 'Phone number must be at most 15 digits')
             .regex(/^[0-9+]+$/, 'Phone number can only contain digits and +'),
+        gender: z.enum(genderValues, 'Please select your gender'),
         password: z
             .string()
             .min(8, 'Password must be at least 8 characters')

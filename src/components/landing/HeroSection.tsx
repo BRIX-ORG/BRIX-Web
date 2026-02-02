@@ -36,7 +36,7 @@ export function HeroSection() {
 
                     {/* Description */}
                     <ScrambledText
-                        className="font-body text-lg text-muted-foreground max-w-lg leading-relaxed"
+                        className="font-body text-lg text-muted-foreground max-w-lg min-h-24 leading-relaxed"
                         radius={100}
                         duration={1.2}
                         speed={0.5}
