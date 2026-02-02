@@ -34,7 +34,7 @@ export function ProtectedUserRoute({ children }: ProtectedUserRouteProps) {
         }
 
         // Email not verified (only for LOCAL provider) - redirect to verify email
-        if (session.user.provider === 'LOCAL' && !session.user.isVerified) {
+        if (session.user.provider === 'LOCAL' && !session.user.verifiedAt) {
             router.push('/verify-email');
             return;
         }
@@ -51,7 +51,7 @@ export function ProtectedUserRoute({ children }: ProtectedUserRouteProps) {
     }
 
     // Not verified (LOCAL provider only)
-    if (session.user.provider === 'LOCAL' && !session.user.isVerified) {
+    if (session.user.provider === 'LOCAL' && !session.user.verifiedAt) {
         return null;
     }
 

@@ -19,7 +19,7 @@ const mockArtist: ArtistData = {
     tagline: 'Multi-Disciplinary Digital Sovereign / Neo-Tokyo',
     avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7hUY-LJv7KTYIn8fYeXcMOocN_oSpwUlVOOsyi-ACH1EzEcLeVhW4JjGzIS8W6ilDjyHtZKiNcN7b0RgiwQQqKCdejqNzMDlN7bekLkTTVYumiBcUJOv5pRy3w2B5E__p17P0wckdaZ8oCeGx9nJ77c739GwWfa9LCMgRplSMcWFsTfULU_5p48U2sWYN7EntrDJZOnooh4m3q6QtF7R75-EXQtihVQhfunA8T63-VVMPVe7HC868e1rKfIdLno6i2c0Si_cGMPM',
     trustScore: 99.8,
-    isVerified: true,
+    verifiedAt: '2026-01-01T00:00:00Z',
 };
 
 const mockStats: ArtistStats = {

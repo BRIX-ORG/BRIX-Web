@@ -9,7 +9,7 @@ export interface TrendingItem {
     artist?: string;
     brixCount: string;
     shares?: number;
-    isVerified?: boolean;
+    verifiedAt?: string | null;
     size?: 'default' | 'large' | 'wide';
 }
 
@@ -47,7 +47,7 @@ export function BentoItem({ item, onClick }: BentoItemProps) {
             <div className="absolute inset-0 bg-linear-to-t from-background/90 via-transparent to-transparent" />
 
             {/* Verified Badge */}
-            {item.isVerified && (
+            {item.verifiedAt && (
                 <div className="absolute top-4 left-4">
                     <span className="bg-primary/90 text-primary-foreground text-[10px] font-black px-2 py-1 rounded-md uppercase tracking-tighter">
                         Verified Authentic

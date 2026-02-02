@@ -32,7 +32,7 @@ export default function VerifyEmailPage() {
         }
 
         // Already verified - redirect to dashboard
-        if (session.user.isVerified) {
+        if (session.user.verifiedAt) {
             router.push('/dashboard');
             return;
         }
@@ -87,7 +87,7 @@ export default function VerifyEmailPage() {
             swal.close();
 
             // Update session to reflect verified status
-            await update({ user: { ...session.user, isVerified: true } });
+            await update({ user: { ...session.user, verifiedAt: new Date().toISOString() } });
 
             await swal.success('Email Verified!', 'Your email has been verified successfully.');
             router.push('/dashboard');

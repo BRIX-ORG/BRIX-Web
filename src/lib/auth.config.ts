@@ -85,7 +85,7 @@ function toNextAuthUser(data: AuthResponseData) {
         trustScore: user.trustScore,
         role: user.role,
         provider: user.provider,
-        isVerified: user.isVerified,
+        verifiedAt: user.verifiedAt,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         accessToken,
@@ -170,7 +170,7 @@ export const authConfig: NextAuthConfig = {
                     trustScore: authUser.trustScore,
                     role: authUser.role,
                     provider: authUser.provider,
-                    isVerified: authUser.isVerified,
+                    verifiedAt: authUser.verifiedAt,
                     createdAt: authUser.createdAt,
                     updatedAt: authUser.updatedAt,
                 };

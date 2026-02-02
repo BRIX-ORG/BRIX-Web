@@ -7,7 +7,7 @@ export interface Artist {
     username: string;
     avatar: string;
     brixCount: string;
-    isVerified?: boolean;
+    verifiedAt?: string | null;
     isRising?: boolean;
 }
 
@@ -35,12 +35,12 @@ export function ArtistCard({ artist, onClick }: ArtistCardProps) {
                     height={96}
                     className="size-24 rounded-full object-cover border-2 border-background"
                 />
-                {artist.isVerified && (
+                {artist.verifiedAt && (
                     <div className="absolute bottom-1 right-1 bg-primary text-primary-foreground rounded-full p-1 border-2 border-background">
                         <BadgeCheck className="size-3" />
                     </div>
                 )}
-                {artist.isRising && !artist.isVerified && (
+                {artist.isRising && !artist.verifiedAt && (
                     <div className="absolute bottom-1 right-1 bg-secondary text-secondary-foreground rounded-full p-1 border-2 border-background">
                         <Sparkles className="size-3" />
                     </div>

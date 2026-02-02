@@ -11,7 +11,7 @@ const mockArtists: Artist[] = [
         username: '@NEO_GRID',
         avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB55g0L31d9b7ePrI8JIbXMvkeUIhE2iv8HPzxvPKSrvIKZ6Bg_yZS8im53HnQNSTW6_zALnS8JpW8LVUi2lnbMgWm6MwgHVRwqc_uQp2cxe2hwNQhhOHMgWtS6IAQnvAk_YM2DeiCcbUl7IP7woMdfUADd3Xz2PyVWyS5MGsb9o8ZAOXXBMgO8kPqXG0c1A8HfEJF3OJrCJE_9u5hj8jJwwIC9UMjyt92gVv3Nolz4GrK5qsbUksnoBFxDDCfirr2XLwntfd4Xh6Q',
         brixCount: '42.8k',
-        isVerified: true,
+        verifiedAt: '2026-01-01T00:00:00Z',
     },
     {
         id: '2',
@@ -37,7 +37,7 @@ const mockArtists: Artist[] = [
         username: '@MIRA_V',
         avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUbd6IQvp4mFo7rOrv-hI_GU9549QyJbYoG7_75UkYf8Kh9oqraq-30BPHfdX7NvQpbjY-wc1XFQtcbLq_YMDUXDMB1N_IWUrCm89fO7iEQvxQ_LYPJqAEMV4djOmBKdFHM-BpSBxwNKTQEqvhLLzs1I5wL6IYwbyU8zR25bnruKGIekDnV3SGWd6ohArCZaY7nNENRlS2rsRLJ9TOpNUZGpIA8x5ZAVdngbyJ_JCSu3MYgWOFp6tf39KkMI9ssl-eTN92F67bgQA',
         brixCount: '24.7k',
-        isVerified: true,
+        verifiedAt: '2026-01-01T00:00:00Z',
     },
     {
         id: '6',
@@ -51,7 +51,7 @@ const mockArtists: Artist[] = [
         username: '@GLITCH_WAVE',
         avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-udIvopAatUn7kZR1sTprT2fquuNO3ccYx9kI_2SIdBpsOdy2UGv2jxYanjcO9ugAB7n0HoTTtCIXfDzLKk6Lyrvb6Elz3yaWpCPBiwjT316p-DwLYTOSIruikNNCgwFaYkOId3Sh7YrFwH-UBCpFhx2t5hXTxTAEaYsFh4h7EzAQc6SLTt3dY51IBBVNEUync7y6Hx80SybLEHiIx-G4pTPCGKfzn9SzFDJJvx0BnV5mQ82pEpQsk0Ogw4xrsSVN0qk9K0tL0X8',
         brixCount: '19.8k',
-        isVerified: true,
+        verifiedAt: '2026-01-01T00:00:00Z',
     },
     {
         id: '8',
@@ -77,7 +77,7 @@ const mockArtists: Artist[] = [
         username: '@ECHO_PRIME',
         avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAThnX_c4LGf6NxdVHKl-0sT8gbunorSYUKehqFwJVdk9u63-xmanJzFnT9ck67zqeaErhNys23nVncUQHdnZGzXlUMjPjs_sLFQp8rQQCJNeFGcu8wl2idUnHCOI4i9AfynrmnbHktdGM4cWPPyRdlnLET5o4M98EmZKmItnyptba_LPZJMUQKK0VkgXLZUk5we6j_V_NOWq_w-I6DC3wCCzbkJvkIxrieH9YoSLLOLNiJ9wp2DAaXM9RMxFrWUH3GnFNLc6HC8Nk',
         brixCount: '12.9k',
-        isVerified: true,
+        verifiedAt: '2026-01-01T00:00:00Z',
     },
     {
         id: '12',

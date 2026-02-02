@@ -23,7 +23,7 @@ export interface User {
     trustScore: number;
     role: 'USER' | 'ADMIN';
     provider: 'LOCAL' | 'GOOGLE';
-    isVerified: boolean;
+    verifiedAt: string | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -150,7 +150,7 @@ declare module 'next-auth' {
         trustScore: number;
         role: 'USER' | 'ADMIN';
         provider: 'LOCAL' | 'GOOGLE';
-        isVerified: boolean;
+        verifiedAt: string | null;
         createdAt: string;
         updatedAt: string;
         accessToken?: string;
@@ -184,7 +184,7 @@ declare module 'next-auth/jwt' {
             trustScore: number;
             role: 'USER' | 'ADMIN';
             provider: 'LOCAL' | 'GOOGLE';
-            isVerified: boolean;
+            verifiedAt: string | null;
             createdAt: string;
             updatedAt: string;
         };

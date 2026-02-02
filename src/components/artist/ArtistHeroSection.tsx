@@ -9,7 +9,7 @@ export interface ArtistData {
     tagline: string;
     avatar: string;
     trustScore: number;
-    isVerified: boolean;
+    verifiedAt: string | null;
 }
 
 interface ArtistHeroSectionProps {
@@ -45,7 +45,7 @@ export function ArtistHeroSection({ artist, onFollow, onConnect }: ArtistHeroSec
                                 className="w-full h-full object-cover"
                             />
                         </div>
-                        {artist.isVerified && (
+                        {artist.verifiedAt && (
                             <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground rounded-full p-1 border-4 border-background">
                                 <BadgeCheck className="size-4" />
                             </div>
