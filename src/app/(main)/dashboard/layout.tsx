@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { DashboardSidebar, DashboardHeader } from '@/components/dashboard';
+import { ProtectedUserRoute } from '@/guards/ProtectedUserRoute';
 import { cn } from '@/types/utils';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -9,28 +10,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
-        <div className="flex min-h-screen bg-background">
-            {/* Sidebar */}
-            <DashboardSidebar
-                isOpen={isMobileOpen}
-                onClose={() => setIsMobileOpen(false)}
-                isCollapsed={isCollapsed}
-                toggleCollapse={() => setIsCollapsed(!isCollapsed)}
-            />
+        <ProtectedUserRoute>
+            <div className="flex min-h-screen bg-background">
+                {/* Sidebar */}
+                <DashboardSidebar
+                    isOpen={isMobileOpen}
+                    onClose={() => setIsMobileOpen(false)}
+                    isCollapsed={isCollapsed}
+                    toggleCollapse={() => setIsCollapsed(!isCollapsed)}
+                />
 
-            {/* Main Content - adjust margin for sidebar */}
-            <div
-                className={cn(
-                    'flex-1 flex flex-col overflow-hidden transition-all duration-300',
-                    isCollapsed ? 'lg:ml-20' : 'lg:ml-64',
-                )}
-            >
-                {/* Header with mobile menu toggle */}
-                <DashboardHeader onMenuClick={() => setIsMobileOpen(true)} />
+                {/* Main Content - adjust margin for sidebar */}
+                <div
+                    className={cn(
+                        'flex-1 flex flex-col overflow-hidden transition-all duration-300',
+                        isCollapsed ? 'lg:ml-20' : 'lg:ml-64',
+                    )}
+                >
+                    {/* Header with mobile menu toggle */}
+                    <DashboardHeader onMenuClick={() => setIsMobileOpen(true)} />
 
-                {/* Page Content */}
-                <main className="flex-1 overflow-y-auto">{children}</main>
+                    {/* Page Content */}
+                    <main className="flex-1 overflow-y-auto">{children}</main>
+                </div>
             </div>
-        </div>
+        </ProtectedUserRoute>
     );
 }

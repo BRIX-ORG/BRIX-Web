@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard,
     Compass,
@@ -19,11 +19,15 @@ import {
     ChevronRight,
     MessageCircle,
     X,
+    Loader2,
 } from 'lucide-react';
 import { cn } from '@/types/utils';
 import { SidebarItem } from './SidebarItem';
 import { SidebarGroup } from '@/types/sidebar';
 import { BrixBrandLogo } from '@/components/shared';
+import { useLogout } from '@/hooks/apis/auth.api';
+import { useToast } from '@/hooks/useToast';
+import { useUIStore } from '@/stores/ui-store';
 
 const sidebarGroups: SidebarGroup[] = [
     {
@@ -123,6 +127,27 @@ export function DashboardSidebar({
     toggleCollapse,
 }: DashboardSidebarProps) {
     const pathname = usePathname();
+    const router = useRouter();
+    const { success, error: toastError } = useToast();
+    const showLoading = useUIStore((state) => state.showLoading);
+    const hideLoading = useUIStore((state) => state.hideLoading);
+    const logoutMutation = useLogout();
+
+    const handleLogout = async () => {
+        try {
+            showLoading('Signing out...');
+            await logoutMutation.mutateAsync();
+            hideLoading();
+            success('Signed out successfully');
+            router.push('/login');
+        } catch (err) {
+            hideLoading();
+            const errorMessage = err instanceof Error ? err.message : 'Failed to sign out';
+            toastError(errorMessage);
+        }
+    };
+
+    const isLoggingOut = logoutMutation.isPending;
 
     return (
         <>
@@ -248,15 +273,23 @@ export function DashboardSidebar({
 
                         {/* Logout Button */}
                         <button
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
                             className={cn(
-                                'flex w-full items-center rounded-lg p-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors',
+                                'flex w-full items-center rounded-lg p-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
                                 isCollapsed ? 'justify-center' : '',
                             )}
                             title={isCollapsed ? 'Logout' : undefined}
                         >
-                            <LogOut className="size-5 shrink-0" />
+                            {isLoggingOut ? (
+                                <Loader2 className="size-5 shrink-0 animate-spin" />
+                            ) : (
+                                <LogOut className="size-5 shrink-0" />
+                            )}
                             {!isCollapsed && (
-                                <span className="ml-3 text-sm font-medium">Logout</span>
+                                <span className="ml-3 text-sm font-medium">
+                                    {isLoggingOut ? 'Signing out...' : 'Logout'}
+                                </span>
                             )}
                         </button>
                     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { RotateCcw } from 'lucide-react';
@@ -13,6 +13,17 @@ const Waves = dynamic(() => import('@/components/react-bits/Waves'), {
 });
 
 export default function NotFound() {
+    const router = useRouter();
+
+    const handleGoBack = () => {
+        // Check if there's history to go back to
+        if (typeof window !== 'undefined' && window.history.length > 1) {
+            router.back();
+        } else {
+            router.push('/');
+        }
+    };
+
     return (
         <div className="bg-background min-h-screen flex flex-col overflow-hidden relative">
             {/* Waves Background */}
@@ -121,9 +132,9 @@ export default function NotFound() {
 
                         {/* Action Button */}
                         <div className="pt-12 flex justify-center">
-                            <Link
-                                href="/"
-                                className="group relative px-10 py-4 bg-transparent border-2 border-primary text-primary font-bold uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-[0_0_20px_rgba(0,238,255,0.2)] hover:shadow-[0_0_40px_rgba(0,238,255,0.4)]"
+                            <button
+                                onClick={handleGoBack}
+                                className="group relative px-10 py-4 bg-transparent border-2 border-primary text-primary font-bold uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-[0_0_20px_rgba(0,238,255,0.2)] hover:shadow-[0_0_40px_rgba(0,238,255,0.4)] cursor-pointer"
                             >
                                 <span className="relative z-10 flex items-center gap-3">
                                     <RotateCcw className="size-5" />
@@ -132,7 +143,7 @@ export default function NotFound() {
                                 {/* Decorative corners */}
                                 <div className="absolute -top-1 -left-1 size-2 bg-background border-r border-b border-primary" />
                                 <div className="absolute -bottom-1 -right-1 size-2 bg-background border-l border-t border-primary" />
-                            </Link>
+                            </button>
                         </div>
                     </div>
 

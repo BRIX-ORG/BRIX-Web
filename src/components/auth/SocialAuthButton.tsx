@@ -1,3 +1,11 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
+import { useGoogleAuth } from '@/hooks/apis/auth.api';
+import { useToast } from '@/hooks/useToast';
+import { useUIStore } from '@/stores/ui-store';
+
 interface SocialAuthButtonProps {
     provider: 'google' | 'github' | 'twitter';
 }
@@ -53,21 +61,73 @@ const providerConfig = {
 };
 
 export function SocialAuthButton({ provider }: SocialAuthButtonProps) {
+    const router = useRouter();
     const config = providerConfig[provider];
+    const { success, error: toastError } = useToast();
+    const showLoading = useUIStore((state) => state.showLoading);
+    const hideLoading = useUIStore((state) => state.hideLoading);
+    const googleAuthMutation = useGoogleAuth();
 
-    const handleClick = () => {
-        // TODO: Implement social auth
-        console.log(`${provider} auth clicked`);
+    const handleClick = async () => {
+        if (provider === 'google') {
+            try {
+                showLoading('Connecting to Google...');
+                const result = await googleAuthMutation.mutateAsync();
+                hideLoading();
+
+                // Check if sign in was successful
+                if (result?.ok) {
+                    success('Signed in with Google successfully!');
+                    router.push('/dashboard');
+                } else {
+                    // Sign in returned but with potential issues
+                    console.error('[SocialAuth] Sign in result:', result);
+                    toastError('Google authentication failed. Please try again.');
+                }
+            } catch (err) {
+                hideLoading();
+                console.error('[SocialAuth] Google auth error:', err);
+
+                // Extract meaningful error message
+                let errorMessage = 'Failed to sign in with Google. Please try again.';
+                if (err instanceof Error) {
+                    // Handle specific Firebase errors
+                    if (err.message.includes('popup-closed-by-user')) {
+                        errorMessage = 'Sign in cancelled. Please try again.';
+                    } else if (err.message.includes('network-request-failed')) {
+                        errorMessage = 'Network error. Please check your connection.';
+                    } else if (err.message) {
+                        errorMessage = err.message;
+                    }
+                }
+                toastError(errorMessage);
+            }
+        } else {
+            // TODO: Implement other providers
+            toastError(`${provider} authentication is not yet available.`);
+        }
     };
+
+    const isLoading = googleAuthMutation.isPending;
 
     return (
         <button
             type="button"
             onClick={handleClick}
-            className="w-full border border-border hover:border-primary/30 bg-transparent text-foreground font-mono text-xs py-4 rounded-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 hover:bg-muted"
+            disabled={isLoading}
+            className="w-full border border-border hover:border-primary/30 bg-transparent text-foreground font-mono text-xs py-4 rounded-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
         >
-            {config.icon}
-            {config.label}
+            {isLoading ? (
+                <>
+                    <Loader2 className="size-4 animate-spin" />
+                    <span>Connecting...</span>
+                </>
+            ) : (
+                <>
+                    {config.icon}
+                    {config.label}
+                </>
+            )}
         </button>
     );
 }

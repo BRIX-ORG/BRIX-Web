@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
+import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
 
 export const metadata: Metadata = {
@@ -73,7 +76,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
             <body className={`${fontsVariables.join(' ')} antialiased`} suppressHydrationWarning>
-                <QueryProvider>{children}</QueryProvider>
+                <QueryProvider>
+                    {children}
+                    <LoadingSpinner />
+                </QueryProvider>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={4000}
+                    hideProgressBar={false}
+                    newestOnTop
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
             </body>
         </html>
     );

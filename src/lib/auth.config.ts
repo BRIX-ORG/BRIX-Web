@@ -5,34 +5,72 @@ import type { Session } from 'next-auth';
 import type { LoginRequest, AuthResponseData, User } from '@/types/auth.types';
 
 // Helper: Gọi API login với email/password
-async function authenticateWithCredentials(identifier: string, password: string) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identifier, password } as LoginRequest),
-    });
+async function authenticateWithCredentials(
+    identifier: string,
+    password: string,
+): Promise<AuthResponseData | null> {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier, password } as LoginRequest),
+        });
 
-    if (!response.ok) return null;
-    const data = await response.json();
-    return data.data as AuthResponseData | null;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('[Auth] Login failed:', response.status, errorData);
+            return null;
+        }
+
+        const data = await response.json();
+        console.log('[Auth] Login successful for:', identifier);
+        return data.data as AuthResponseData;
+    } catch (error) {
+        console.error('[Auth] Login error:', error);
+        return null;
+    }
 }
 
 // Helper: Gọi API Google auth với Firebase idToken
-async function authenticateWithGoogle(idToken: string) {
+async function authenticateWithGoogle(idToken: string): Promise<AuthResponseData> {
+    console.log('[Auth] Calling Google auth API with idToken...');
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ idToken }),
     });
 
-    if (!response.ok) return null;
-    const data = await response.json();
-    return data.data as AuthResponseData | null;
+    const responseData = await response.json().catch(() => ({}));
+    console.log('[Auth] Google auth response status:', response.status);
+
+    if (!response.ok) {
+        // Extract error message from backend response
+        const errorMessage =
+            responseData.message || responseData.error || 'Google authentication failed';
+        console.error('[Auth] Google auth failed:', response.status, errorMessage);
+        throw new Error(errorMessage);
+    }
+
+    // Check if data has the expected structure
+    if (!responseData.data) {
+        console.error('[Auth] Google auth response missing data field:', responseData);
+        throw new Error('Invalid response from server');
+    }
+
+    console.log('[Auth] Google auth successful for user:', responseData.data.user?.email);
+    return responseData.data as AuthResponseData;
 }
 
 // Helper: Convert AuthResponseData to NextAuth user object
 function toNextAuthUser(data: AuthResponseData) {
     const { user, accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt } = data;
+
+    if (!user || !accessToken) {
+        console.error('[Auth] Invalid auth data - missing user or accessToken');
+        throw new Error('Invalid auth response data');
+    }
+
     return {
         id: user.id,
         username: user.username,
@@ -46,6 +84,7 @@ function toNextAuthUser(data: AuthResponseData) {
         trustScore: user.trustScore,
         role: user.role,
         provider: user.provider,
+        isVerified: user.isVerified,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         accessToken,
@@ -65,27 +104,39 @@ export const authConfig: NextAuthConfig = {
                 idToken: { label: 'Firebase ID Token', type: 'text' },
             },
             async authorize(credentials) {
-                try {
-                    let authData: AuthResponseData | null = null;
-
-                    // Google Firebase auth (idToken provided)
-                    if (credentials?.idToken) {
-                        authData = await authenticateWithGoogle(credentials.idToken as string);
-                    }
-                    // Local auth (identifier + password provided)
-                    else if (credentials?.identifier && credentials?.password) {
-                        authData = await authenticateWithCredentials(
-                            credentials.identifier as string,
-                            credentials.password as string,
+                // Google Firebase auth (idToken provided)
+                if (credentials?.idToken) {
+                    console.log('[Auth] Attempting Google auth...');
+                    try {
+                        const authData = await authenticateWithGoogle(
+                            credentials.idToken as string,
                         );
+                        return toNextAuthUser(authData);
+                    } catch (error) {
+                        // Re-throw with the original error message
+                        const message =
+                            error instanceof Error ? error.message : 'Google authentication failed';
+                        console.error('[Auth] Google auth error:', message);
+                        throw new Error(message);
+                    }
+                }
+                // Local auth (identifier + password provided)
+                else if (credentials?.identifier && credentials?.password) {
+                    console.log('[Auth] Attempting local auth for:', credentials.identifier);
+                    const authData = await authenticateWithCredentials(
+                        credentials.identifier as string,
+                        credentials.password as string,
+                    );
+
+                    if (!authData) {
+                        throw new Error('Invalid credentials');
                     }
 
-                    if (!authData) return null;
                     return toNextAuthUser(authData);
-                } catch (error) {
-                    console.error('Auth error:', error);
-                    return null;
                 }
+
+                console.error('[Auth] No valid credentials provided');
+                throw new Error('No credentials provided');
             },
         }),
     ],
@@ -117,6 +168,7 @@ export const authConfig: NextAuthConfig = {
                     trustScore: authUser.trustScore,
                     role: authUser.role,
                     provider: authUser.provider,
+                    isVerified: authUser.isVerified,
                     createdAt: authUser.createdAt,
                     updatedAt: authUser.updatedAt,
                 };
@@ -155,7 +207,9 @@ export const authConfig: NextAuthConfig = {
         },
     },
     pages: {
-        signIn: '/auth/login', // Custom login page
+        signIn: '/login', // Custom login page
+        error: '/login', // Redirect errors to login page
     },
+    debug: process.env.NODE_ENV === 'development', // Enable debug logs in development
     secret: process.env.NEXTAUTH_SECRET,
 };

@@ -7,6 +7,9 @@ settings:
 importers:
     .:
         dependencies:
+            '@hookform/resolvers':
+                specifier: ^5.2.2
+                version: 5.2.2(react-hook-form@7.71.1(react@19.2.4))
             '@tanstack/react-query':
                 specifier: ^5.90.12
                 version: 5.90.18(react@19.2.4)
@@ -61,12 +64,24 @@ importers:
             react-dom:
                 specifier: 19.2.4
                 version: 19.2.4(react@19.2.4)
+            react-hook-form:
+                specifier: ^7.71.1
+                version: 7.71.1(react@19.2.4)
+            react-toastify:
+                specifier: ^11.0.5
+                version: 11.0.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+            sweetalert2:
+                specifier: ^11.26.17
+                version: 11.26.17
             tailwind-merge:
                 specifier: ^3.4.0
                 version: 3.4.0
             three:
                 specifier: ^0.167.1
                 version: 0.167.1
+            zod:
+                specifier: ^4.3.6
+                version: 4.3.6
             zustand:
                 specifier: ^5.0.9
                 version: 5.0.10(@types/react@19.2.8)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
@@ -1574,6 +1589,14 @@ packages:
         engines: { node: '>=6' }
         hasBin: true
 
+    '@hookform/resolvers@5.2.2':
+        resolution:
+            {
+                integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==,
+            }
+        peerDependencies:
+            react-hook-form: ^7.55.0
+
     '@humanfs/core@0.19.1':
         resolution:
             {
@@ -2124,6 +2147,12 @@ packages:
         resolution:
             {
                 integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==,
+            }
+
+    '@standard-schema/utils@0.3.0':
+        resolution:
+            {
+                integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==,
             }
 
     '@svgr/babel-plugin-add-jsx-attribute@8.0.0':
@@ -5467,11 +5496,29 @@ packages:
         peerDependencies:
             react: ^19.2.4
 
+    react-hook-form@7.71.1:
+        resolution:
+            {
+                integrity: sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==,
+            }
+        engines: { node: '>=18.0.0' }
+        peerDependencies:
+            react: ^16.8.0 || ^17 || ^18 || ^19
+
     react-is@16.13.1:
         resolution:
             {
                 integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==,
             }
+
+    react-toastify@11.0.5:
+        resolution:
+            {
+                integrity: sha512-EpqHBGvnSTtHYhCPLxML05NLY2ZX0JURbAdNYa6BUkk+amz4wbKBQvoKQAB0ardvSarUBuY4Q4s1sluAzZwkmA==,
+            }
+        peerDependencies:
+            react: ^18 || ^19
+            react-dom: ^18 || ^19
 
     react@19.2.4:
         resolution:
@@ -5941,6 +5988,12 @@ packages:
         engines: { node: '>=16' }
         hasBin: true
 
+    sweetalert2@11.26.17:
+        resolution:
+            {
+                integrity: sha512-kkaySn1IRfwNlf9AkZVqDmBINDWw9NRR6Ij0O5dBRBOD1+mbtZJWxxR9/pA90nce9E5tIIkJ7SWij4rMWXtA1g==,
+            }
+
     synckit@0.11.12:
         resolution:
             {
@@ -6305,10 +6358,10 @@ packages:
         peerDependencies:
             zod: ^3.25.0 || ^4.0.0
 
-    zod@4.3.5:
+    zod@4.3.6:
         resolution:
             {
-                integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==,
+                integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==,
             }
 
     zustand@5.0.10:
@@ -7577,6 +7630,11 @@ snapshots:
             protobufjs: 7.5.4
             yargs: 17.7.2
 
+    '@hookform/resolvers@5.2.2(react-hook-form@7.71.1(react@19.2.4))':
+        dependencies:
+            '@standard-schema/utils': 0.3.0
+            react-hook-form: 7.71.1(react@19.2.4)
+
     '@humanfs/core@0.19.1': {}
 
     '@humanfs/node@0.16.7':
@@ -7828,6 +7886,8 @@ snapshots:
     '@protobufjs/utf8@1.1.0': {}
 
     '@rtsao/scc@1.1.0': {}
+
+    '@standard-schema/utils@0.3.0': {}
 
     '@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.28.6)':
         dependencies:
@@ -8937,8 +8997,8 @@ snapshots:
             '@babel/parser': 7.28.6
             eslint: 9.39.2(jiti@2.6.1)
             hermes-parser: 0.25.1
-            zod: 4.3.5
-            zod-validation-error: 4.0.2(zod@4.3.5)
+            zod: 4.3.6
+            zod-validation-error: 4.0.2(zod@4.3.6)
         transitivePeerDependencies:
             - supports-color
 
@@ -9934,7 +9994,17 @@ snapshots:
             react: 19.2.4
             scheduler: 0.27.0
 
+    react-hook-form@7.71.1(react@19.2.4):
+        dependencies:
+            react: 19.2.4
+
     react-is@16.13.1: {}
+
+    react-toastify@11.0.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+        dependencies:
+            clsx: 2.1.1
+            react: 19.2.4
+            react-dom: 19.2.4(react@19.2.4)
 
     react@19.2.4: {}
 
@@ -10280,6 +10350,8 @@ snapshots:
             picocolors: 1.1.1
             sax: 1.4.4
 
+    sweetalert2@11.26.17: {}
+
     synckit@0.11.12:
         dependencies:
             '@pkgr/core': 0.2.9
@@ -10526,11 +10598,11 @@ snapshots:
 
     yocto-queue@1.2.2: {}
 
-    zod-validation-error@4.0.2(zod@4.3.5):
+    zod-validation-error@4.0.2(zod@4.3.6):
         dependencies:
-            zod: 4.3.5
+            zod: 4.3.6
 
-    zod@4.3.5: {}
+    zod@4.3.6: {}
 
     zustand@5.0.10(@types/react@19.2.8)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4)):
         optionalDependencies:

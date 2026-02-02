@@ -19,6 +19,7 @@ export interface User {
     trustScore: number;
     role: 'USER' | 'ADMIN';
     provider: 'LOCAL' | 'GOOGLE';
+    isVerified: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -79,7 +80,7 @@ export interface ForgotPasswordResponseData {
 
 export type ForgotPasswordResponse = ApiResponse<ForgotPasswordResponseData>;
 
-// Verify OTP
+// Verify OTP (Password Reset)
 export interface VerifyOtpRequest {
     email: string;
     otp: string;
@@ -104,6 +105,29 @@ export interface ResetPasswordResponseData {
 
 export type ResetPasswordResponse = ApiResponse<ResetPasswordResponseData>;
 
+// Email Verification - Send OTP
+export interface SendEmailVerificationRequest {
+    email: string;
+}
+
+export interface SendEmailVerificationResponseData {
+    message: string;
+}
+
+export type SendEmailVerificationResponse = ApiResponse<SendEmailVerificationResponseData>;
+
+// Email Verification - Verify OTP
+export interface VerifyEmailRequest {
+    email: string;
+    otp: string;
+}
+
+export interface VerifyEmailResponseData {
+    message: string;
+}
+
+export type VerifyEmailResponse = ApiResponse<VerifyEmailResponseData>;
+
 // NextAuth Type Extensions
 // These extend NextAuth's built-in types to include our custom fields
 declare module 'next-auth' {
@@ -120,6 +144,7 @@ declare module 'next-auth' {
         trustScore: number;
         role: 'USER' | 'ADMIN';
         provider: 'LOCAL' | 'GOOGLE';
+        isVerified: boolean;
         createdAt: string;
         updatedAt: string;
         accessToken?: string;
@@ -152,6 +177,7 @@ declare module 'next-auth/jwt' {
             trustScore: number;
             role: 'USER' | 'ADMIN';
             provider: 'LOCAL' | 'GOOGLE';
+            isVerified: boolean;
             createdAt: string;
             updatedAt: string;
         };
