@@ -1,13 +1,6 @@
 'use client';
 
-import {
-    Map,
-    MapControls,
-    MapMarker,
-    MarkerContent,
-    MarkerTooltip,
-    useMap,
-} from '@/components/ui/Map';
+import { Map, MapControls, MapMarker, MarkerContent, MarkerTooltip, useMap } from '@/components/ui';
 import { useEffect, useId } from 'react';
 
 // Hardcoded user locations around the world

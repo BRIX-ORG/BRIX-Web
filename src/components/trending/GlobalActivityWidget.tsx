@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Globe, X } from 'lucide-react';
-import { Map, MapMarker, MarkerContent } from '@/components/ui/Map';
+import { Map, MapMarker, MarkerContent } from '@/components/ui';
 
 interface GlobalActivityWidgetProps {
     activeNodes?: number;

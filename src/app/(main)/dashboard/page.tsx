@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Share2 } from 'lucide-react';
-import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui/Map';
+import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui';
 
 // Pulsing marker for active nodes
 function PulsingMarker({ size = 'sm' }: { size?: 'sm' | 'md' | 'lg' }) {
