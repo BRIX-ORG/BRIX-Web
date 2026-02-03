@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 interface BrixBrandLogoProps {
     href?: string;

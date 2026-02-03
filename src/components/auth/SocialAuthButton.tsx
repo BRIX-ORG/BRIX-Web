@@ -73,7 +73,6 @@ export function SocialAuthButton({ provider }: SocialAuthButtonProps) {
             try {
                 showLoading('Connecting to Google...');
                 const result = await googleAuthMutation.mutateAsync();
-                hideLoading();
 
                 // Check if sign in was successful
                 if (result?.ok) {
@@ -85,7 +84,6 @@ export function SocialAuthButton({ provider }: SocialAuthButtonProps) {
                     toastError('Google authentication failed. Please try again.');
                 }
             } catch (err) {
-                hideLoading();
                 console.error('[SocialAuth] Google auth error:', err);
 
                 // Extract meaningful error message
@@ -101,6 +99,8 @@ export function SocialAuthButton({ provider }: SocialAuthButtonProps) {
                     }
                 }
                 toastError(errorMessage);
+            } finally {
+                hideLoading();
             }
         } else {
             // TODO: Implement other providers

@@ -25,7 +25,7 @@ export default function UploadsPage() {
     };
 
     return (
-        <div className="p-8 max-w-[1400px] mx-auto w-full">
+        <div className="p-8 max-w-350 mx-auto w-full">
             {/* Page Header */}
             <div className="w-full mb-8">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-2 italic">

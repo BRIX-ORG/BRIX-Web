@@ -21,7 +21,7 @@ interface ArtistHeroSectionProps {
 export function ArtistHeroSection({ artist, onFollow, onConnect }: ArtistHeroSectionProps) {
     return (
         <section className="relative group">
-            <div className="h-[300px] w-full bg-muted rounded-xl overflow-hidden relative border border-primary/10">
+            <div className="h-75 w-full bg-muted rounded-xl overflow-hidden relative border border-primary/10">
                 {/* Cyber grid background */}
                 <div
                     className="absolute inset-0 opacity-30"

@@ -21,13 +21,25 @@ import {
     X,
     Loader2,
 } from 'lucide-react';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 import { SidebarItem } from './SidebarItem';
-import { SidebarGroup } from '@/types/sidebar';
 import { BrixBrandLogo } from '@/components/shared';
 import { useLogout } from '@/hooks/apis/auth.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
+import { LucideIcon } from 'lucide-react';
+
+export type SidebarItemType = {
+    title: string;
+    href: string;
+    icon: LucideIcon;
+    subItems?: SidebarItemType[];
+};
+
+export type SidebarGroup = {
+    title: string;
+    items: SidebarItemType[];
+};
 
 const sidebarGroups: SidebarGroup[] = [
     {

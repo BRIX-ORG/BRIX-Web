@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Lock, ShieldCheck } from 'lucide-react';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 export interface EncryptedFile {
     id: string;

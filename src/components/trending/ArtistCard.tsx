@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { BadgeCheck, Sparkles } from 'lucide-react';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 export interface Artist {
     id: string;
@@ -20,7 +20,7 @@ export function ArtistCard({ artist, onClick }: ArtistCardProps) {
     return (
         <div
             onClick={onClick}
-            className="flex flex-col items-center gap-3 min-w-[120px] group cursor-pointer"
+            className="flex flex-col items-center gap-3 min-w-30 group cursor-pointer"
         >
             <div
                 className={cn(

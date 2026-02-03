@@ -1,5 +1,4 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { auth } from '@/lib/auth';
 import { updateSession } from '@/lib/auth-actions';
 import type { RefreshResponse } from '@/types/auth.types';
 
@@ -16,14 +15,23 @@ export const apiClient = axios.create({
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
 
-// Request interceptor to add auth token from NextAuth session
+// Store for tokens (will be set by client components)
+let cachedAccessToken: string | null = null;
+let cachedRefreshToken: string | null = null;
+
+export function setAccessToken(token: string | null) {
+    cachedAccessToken = token;
+}
+
+export function setRefreshToken(token: string | null) {
+    cachedRefreshToken = token;
+}
+
+// Request interceptor to add auth token
 apiClient.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-        // Get session from NextAuth
-        const session = await auth();
-
-        if (session?.accessToken && config.headers) {
-            config.headers.Authorization = `Bearer ${session.accessToken}`;
+        if (cachedAccessToken && config.headers) {
+            config.headers.Authorization = `Bearer ${cachedAccessToken}`;
         }
 
         return config;
@@ -74,9 +82,7 @@ apiClient.interceptors.response.use(
 // Function to refresh the access token
 async function refreshAccessToken(): Promise<string | null> {
     try {
-        const session = await auth();
-
-        if (!session?.refreshToken) {
+        if (!cachedRefreshToken) {
             return null;
         }
 
@@ -84,7 +90,7 @@ async function refreshAccessToken(): Promise<string | null> {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/refresh`, {
             method: 'PUT',
             headers: {
-                Authorization: `Bearer ${session.refreshToken}`,
+                Authorization: `Bearer ${cachedRefreshToken}`,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
@@ -104,6 +110,10 @@ async function refreshAccessToken(): Promise<string | null> {
                 refreshToken: newRefreshToken,
                 refreshTokenExpiresAt,
             } = data.data;
+
+            // Update cached tokens
+            cachedAccessToken = accessToken;
+            cachedRefreshToken = newRefreshToken;
 
             // Update NextAuth session with new tokens via server action
             await updateSession({

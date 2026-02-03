@@ -9,6 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
     error?: string;
     helperText?: string;
     leftIcon?: React.ReactNode;
+    rightIcon?: React.ReactNode;
     showPasswordToggle?: boolean;
 }
 
@@ -23,6 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             helperText,
             disabled,
             leftIcon,
+            rightIcon,
             showPasswordToggle = false,
             ...props
         },
@@ -32,6 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         const isPassword = type === 'password';
         const inputType = isPassword && showPassword ? 'text' : type;
         const isStandard = variant === 'standard';
+        const hasRightContent = (isPassword && showPasswordToggle) || rightIcon;
 
         return (
             <div className="w-full space-y-2">
@@ -46,7 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 )}
                 <div className="relative group">
                     {leftIcon && (
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center z-10">
                             {leftIcon}
                         </div>
                     )}
@@ -61,13 +64,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                             transition-all
                             ${isStandard ? 'py-4 text-sm' : 'py-3 text-sm'}
                             ${leftIcon ? 'pl-12' : 'pl-4'}
-                            ${isPassword && showPasswordToggle ? 'pr-12' : 'pr-4'}
+                            ${hasRightContent ? 'pr-12' : 'pr-4'}
                             ${error ? 'border-red-500/50 focus:border-red-500/50 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)]' : 'border-border'}
                             ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
                             ${className || ''}
                         `}
                         {...props}
                     />
+                    {rightIcon && !isPassword && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center">
+                            {rightIcon}
+                        </div>
+                    )}
                     {isPassword && showPasswordToggle && (
                         <button
                             type="button"

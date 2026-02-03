@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Mail, Lock, User, Zap, Loader2, Phone } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema, RegisterFormData } from '@/lib/validations/auth';
+import { registerSchema, RegisterFormData } from '@/validations/auth';
 import { useRegister } from '@/hooks/apis/auth.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
@@ -50,7 +50,7 @@ export function SignUpForm() {
                 username: data.username,
                 fullName: data.fullName,
                 email: data.email,
-                phone: data.phone,
+                phone: data.phone || '',
                 gender: data.gender,
                 password: data.password,
             });

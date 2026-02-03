@@ -1,5 +1,5 @@
 import { LucideIcon, ChevronRight, Key } from 'lucide-react';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 export interface VaultFolder {
     id: string;

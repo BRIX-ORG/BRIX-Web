@@ -18,7 +18,7 @@ import {
 import { createPortal } from 'react-dom';
 import { X, Minus, Plus, Locate, Maximize, Loader2 } from 'lucide-react';
 
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 // Check document class for theme (works with next-themes, etc.)
 function getDocumentTheme(): Theme | null {

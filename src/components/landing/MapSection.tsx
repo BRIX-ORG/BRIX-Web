@@ -7,7 +7,7 @@ import {
     MarkerContent,
     MarkerTooltip,
     useMap,
-} from '@/components/ui/map';
+} from '@/components/ui/Map';
 import { useEffect, useId } from 'react';
 
 // Hardcoded user locations around the world

@@ -29,19 +29,29 @@ export const registerSchema = z
         username: z
             .string()
             .min(3, 'Username must be at least 3 characters')
-            .max(30, 'Username must be at most 30 characters')
-            .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers and underscores'),
+            .max(30, 'Username cannot exceed 30 characters')
+            .regex(
+                /^(?!.*\.\.)(?!.*\.$)(?!^\.)([a-zA-Z0-9._]{3,30})$/,
+                'Username can only contain letters, numbers, dots, and underscores. Dots cannot be at the start or end, or be consecutive.',
+            ),
         fullName: z
             .string()
-            .min(2, 'Full name must be at least 2 characters')
-            .max(100, 'Full name must be at most 100 characters'),
-        email: z.string().email('Please enter a valid email address'),
+            .min(1, 'Full name is required')
+            .max(50, 'Full name cannot exceed 50 characters'),
+        email: z
+            .string()
+            .email('Please enter a valid email address')
+            .max(100, 'Email cannot exceed 100 characters'),
         phone: z
             .string()
-            .min(10, 'Phone number must be at least 10 digits')
-            .max(15, 'Phone number must be at most 15 digits')
-            .regex(/^[0-9+]+$/, 'Phone number can only contain digits and +'),
-        gender: z.enum(genderValues, 'Please select your gender'),
+            .regex(
+                /^(0[3|5|7|8|9])+([0-9]{8})$/,
+                'Please enter a valid Vietnam phone number (e.g., 0912345678)',
+            )
+            .max(15, 'Phone number cannot exceed 15 characters')
+            .optional()
+            .or(z.literal('')),
+        gender: z.enum(genderValues),
         password: z
             .string()
             .min(8, 'Password must be at least 8 characters')

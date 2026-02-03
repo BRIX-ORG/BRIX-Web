@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Settings, Search } from 'lucide-react';
 import { BrixBrandLogo } from '@/components/shared';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 import Image from 'next/image';
 
 const navLinks = [

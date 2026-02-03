@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { cn } from '@/types/utils';
-import { SidebarItemType } from '@/types/sidebar';
+import { cn } from '@/utils/classnames';
+import { SidebarItemType } from '@/components/dashboard/DashboardSidebar';
 
 interface SidebarItemProps {
     item: SidebarItemType;
@@ -99,7 +99,7 @@ export function SidebarItem({ item, pathname, isCollapsed = false, onClose }: Si
 
                 {/* Hover Tooltip for Collapsed State (Only when not expanded) */}
                 {!isExpanded && (
-                    <div className="absolute left-full top-0 ml-2 hidden w-max min-w-[120px] max-w-[200px] rounded-lg border border-border bg-background p-2 shadow-lg group-hover:block z-50 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="absolute left-full top-0 ml-2 hidden w-max min-w-30 max-w-50 rounded-lg border border-border bg-background p-2 shadow-lg group-hover:block z-50 animate-in fade-in zoom-in-95 duration-200">
                         <div
                             className={cn(
                                 'px-2 py-1 text-sm font-semibold text-foreground',

@@ -146,7 +146,7 @@ const mockGalleryItems: MasonryItem[] = [
 
 export default function ArtistProfilePage() {
     return (
-        <div className="relative p-8 max-w-[1440px] mx-auto space-y-8">
+        <div className="relative p-8 max-w-360 mx-auto space-y-8">
             <ArtistHeroSection artist={mockArtist} />
 
             <ArtistStatsGrid stats={mockStats} />

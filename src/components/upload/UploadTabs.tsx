@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 interface Tab {
     href: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import { Upload } from 'lucide-react';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 interface UploadDropzoneProps {
     onFileSelect?: (files: FileList) => void;

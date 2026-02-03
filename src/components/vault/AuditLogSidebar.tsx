@@ -1,7 +1,7 @@
 'use client';
 
 import { Search } from 'lucide-react';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 export interface AuditLogEntry {
     id: string;

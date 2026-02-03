@@ -80,7 +80,10 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                     </button>
 
                     {/* User Avatar */}
-                    <div className="size-9 rounded bg-cover bg-center border border-primary/30 overflow-hidden">
+                    <Link
+                        href="/dashboard/settings"
+                        className="size-9 rounded bg-cover bg-center border border-primary/30 overflow-hidden hover:border-primary/60 transition-colors"
+                    >
                         <Image
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuANHBj7oUI2fcHJIJH9-wi7wVfxWfSRPYpQe8ZE9m62xK8PkdQ4yNaVuUO0gCe0eJ1RW-jObnk_9LmpSnlBzg056JP5n7v7fjkjOmN4MFC6LkEe6GnJ9u5fMvGLpbuluycrF01uzTWi9St7NVWu-rp5sxGNZi1NWWy7Kpv-kgElWhouY9dlI4L_BQwcZCI_3dBF257ImU0v1kbeM03F7l9frNSNEReQxiLX_sGcavfrnZl59McdRvNnkbTQ8_C_idR-GEBXJEcZgCc"
                             alt="User avatar"
@@ -88,7 +91,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                             height={36}
                             className="object-cover"
                         />
-                    </div>
+                    </Link>
                 </div>
             </div>
         </header>

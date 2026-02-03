@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Mail, Lock, Zap, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, LoginFormData } from '@/lib/validations/auth';
+import { loginSchema, LoginFormData } from '@/validations/auth';
 import { useLogin } from '@/hooks/apis/auth.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';

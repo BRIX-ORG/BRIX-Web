@@ -11,7 +11,7 @@ import {
     ForgotPasswordFormData,
     resetPasswordSchema,
     ResetPasswordFormData,
-} from '@/lib/validations/auth';
+} from '@/validations/auth';
 import { useForgotPassword, useVerifyOtp, useResetPassword } from '@/hooks/apis/auth.api';
 import { useAuthStore } from '@/stores/auth-store';
 import { useSwal } from '@/hooks/useSwal';

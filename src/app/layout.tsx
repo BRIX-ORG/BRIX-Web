@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
+import { ApiClientProvider } from '@/providers/ApiClientProvider';
 import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
 
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: 'https://brix.io',
+        url: 'https://www.brix.social',
         siteName: 'BRIX',
         title: 'BRIX | Build Your Truth',
         description:
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
         apple: '/apple-touch-icon.png',
     },
     manifest: '/site.webmanifest',
-    metadataBase: new URL('https://brix.io'),
+    metadataBase: new URL('https://www.brix.social'),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -77,8 +78,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" className="dark" suppressHydrationWarning>
             <body className={`${fontsVariables.join(' ')} antialiased`} suppressHydrationWarning>
                 <QueryProvider>
-                    {children}
-                    <LoadingSpinner />
+                    <ApiClientProvider>
+                        {children}
+                        <LoadingSpinner />
+                    </ApiClientProvider>
                 </QueryProvider>
                 <ToastContainer
                     position="top-right"

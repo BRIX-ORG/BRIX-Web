@@ -72,7 +72,7 @@ export function ArtistHub() {
                 </div>
 
                 {/* Dome Gallery */}
-                <div className="h-[600px] md:h-[700px] w-full relative">
+                <div className="h-150 md:h-175 w-full relative">
                     <DomeGallery
                         images={artworkImages}
                         fit={0.6}

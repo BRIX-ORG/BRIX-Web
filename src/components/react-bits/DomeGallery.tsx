@@ -966,13 +966,13 @@ export default function DomeGallery({
                     />
 
                     <div
-                        className="absolute left-0 right-0 top-0 h-[120px] z-5 pointer-events-none rotate-180"
+                        className="absolute left-0 right-0 top-0 h-30 z-5 pointer-events-none rotate-180"
                         style={{
                             background: `linear-gradient(to bottom, transparent, var(--overlay-blur-color, ${overlayBlurColor}))`,
                         }}
                     />
                     <div
-                        className="absolute left-0 right-0 bottom-0 h-[120px] z-5 pointer-events-none"
+                        className="absolute left-0 right-0 bottom-0 h-30 z-5 pointer-events-none"
                         style={{
                             background: `linear-gradient(to bottom, transparent, var(--overlay-blur-color, ${overlayBlurColor}))`,
                         }}

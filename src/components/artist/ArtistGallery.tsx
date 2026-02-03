@@ -44,14 +44,14 @@ export function ArtistGallery({ items, tabs = defaultTabs }: ArtistGalleryProps)
 
             {/* Masonry Gallery */}
             {activeTab === 'gallery' && (
-                <div className="h-[1200px]">
+                <div className="h-300">
                     <Masonry items={items} />
                 </div>
             )}
 
             {/* Other tabs placeholder */}
             {activeTab !== 'gallery' && (
-                <div className="h-[600px] flex items-center justify-center bg-muted/50 rounded-xl border border-primary/10">
+                <div className="h-150 flex items-center justify-center bg-muted/50 rounded-xl border border-primary/10">
                     <p className="text-muted-foreground font-mono text-sm uppercase">
                         {tabs.find((t) => t.id === activeTab)?.label} - Coming Soon
                     </p>

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Share2 } from 'lucide-react';
-import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui/map';
+import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui/Map';
 
 // Pulsing marker for active nodes
 function PulsingMarker({ size = 'sm' }: { size?: 'sm' | 'md' | 'lg' }) {
@@ -134,12 +134,12 @@ export default function DashboardPage() {
                                 key={item.id}
                                 className={`group relative border border-border bg-muted overflow-hidden hover:border-primary/40 transition-colors ${
                                     item.type === 'large'
-                                        ? 'sm:col-span-2 sm:row-span-2 min-h-[200px] sm:min-h-[480px]'
+                                        ? 'sm:col-span-2 sm:row-span-2 min-h-50 sm:min-h-120'
                                         : item.type === 'wide'
-                                          ? 'sm:col-span-2 min-h-[200px] sm:min-h-[240px]'
+                                          ? 'sm:col-span-2 min-h-50 sm:min-h-60'
                                           : item.type === 'tall'
-                                            ? 'sm:row-span-2 min-h-[300px] sm:min-h-[480px]'
-                                            : 'min-h-[200px] sm:min-h-[240px]'
+                                            ? 'sm:row-span-2 min-h-75 sm:min-h-120'
+                                            : 'min-h-50 sm:min-h-60'
                                 }`}
                             >
                                 <Image

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { cn } from '@/types/utils';
+import { cn } from '@/utils/classnames';
 
 export interface Contact {
     id: string;
