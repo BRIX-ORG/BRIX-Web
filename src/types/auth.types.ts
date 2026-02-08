@@ -1,14 +1,8 @@
-import type { User, Gender, CloudinaryImage } from './user.types';
+import type { User, Gender, CloudinaryImage, UserAddress } from './user.types';
+import type { ApiResponse } from './api.types';
 
 // Re-export for convenience
-export type { User, Gender, CloudinaryImage };
-
-// API Response Wrapper
-export interface ApiResponse<T> {
-    message: string;
-    code: number;
-    data: T;
-}
+export type { User, Gender, CloudinaryImage, UserAddress, ApiResponse };
 
 // Auth Response Data (common for login, register, refresh, google)
 export interface AuthResponseData {
@@ -127,7 +121,7 @@ declare module 'next-auth' {
         gender: Gender;
         avatar: CloudinaryImage | null;
         background: CloudinaryImage | null;
-        address: string;
+        address: UserAddress | null;
         shortDescription: string;
         trustScore: number;
         role: 'USER' | 'ADMIN';
@@ -161,7 +155,7 @@ declare module 'next-auth/jwt' {
             gender: Gender;
             avatar: CloudinaryImage | null;
             background: CloudinaryImage | null;
-            address: string;
+            address: UserAddress | null;
             shortDescription: string;
             trustScore: number;
             role: 'USER' | 'ADMIN';

@@ -1,15 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState, useRef } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input, Textarea } from '@/components/ui';
-import { User, Phone, MapPin, Mail, Users, ShieldCheck } from 'lucide-react';
+import { Map, MapMarker, MarkerContent, MapControls, type MapRef } from '@/components/ui/Map';
+import { User, Phone, MapPin, Mail, ShieldCheck } from 'lucide-react';
 import { useUpdateProfile } from '@/hooks/apis/user.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
 import { updateProfileSchema, type UpdateProfileInput } from '@/validations/user';
+import { LocationSearch } from './LocationSearch';
 import type { User as UserType } from '@/types/user.types';
+import type { LocationSuggestion } from '@/types/location.types';
 
 interface ProfileFormProps {
     user: UserType;
@@ -20,11 +23,38 @@ export function ProfileForm({ user }: ProfileFormProps) {
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
     const updateProfile = useUpdateProfile();
+    const mapRef = useRef<MapRef>(null);
+
+    const [selectedLocation, setSelectedLocation] = useState<{
+        displayName: string;
+        lat: number;
+        lng: number;
+        country: string;
+    } | null>(() => {
+        // Initialize with existing user address if available
+        if (user.address) {
+            const lat = parseFloat(user.address.lat);
+            const lng = parseFloat(user.address.lon);
+
+            // Only set if coordinates are valid numbers
+            if (!isNaN(lat) && !isNaN(lng)) {
+                return {
+                    displayName: user.address.displayName,
+                    lat,
+                    lng,
+                    country: user.address.country,
+                };
+            }
+        }
+        return null;
+    });
 
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<UpdateProfileInput>({
         resolver: zodResolver(updateProfileSchema),
@@ -35,10 +65,48 @@ export function ProfileForm({ user }: ProfileFormProps) {
             fullName: user.fullName,
             phone: user.phone,
             gender: user.gender,
-            address: user.address || '',
+            address: user.address,
             shortDescription: user.shortDescription || '',
         });
     }, [user, reset]);
+
+    // Auto fly to new location when selected
+    useEffect(() => {
+        if (selectedLocation && mapRef.current) {
+            mapRef.current.flyTo({
+                center: [selectedLocation.lng, selectedLocation.lat],
+                zoom: 15,
+                duration: 1500,
+                essential: true,
+            });
+        }
+    }, [selectedLocation]);
+
+    const handleLocationSelect = (location: LocationSuggestion) => {
+        const lat = parseFloat(location.lat);
+        const lng = parseFloat(location.lon);
+
+        // Validate coordinates before setting
+        if (isNaN(lat) || isNaN(lng)) {
+            toast.error('Invalid location coordinates');
+            return;
+        }
+
+        const addressData = {
+            lat: location.lat,
+            lon: location.lon,
+            displayName: location.display_name,
+            country: location.address.country,
+        };
+
+        setValue('address', addressData, { shouldValidate: true });
+        setSelectedLocation({
+            displayName: location.display_name,
+            lat,
+            lng,
+            country: location.address.country,
+        });
+    };
 
     const onSubmit = async (data: UpdateProfileInput) => {
         try {
@@ -114,18 +182,43 @@ export function ProfileForm({ user }: ProfileFormProps) {
                         <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
                             Gender
                         </label>
-                        <div className="relative">
-                            <Users className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/50" />
-                            <select
-                                {...register('gender')}
-                                disabled={isSubmitting || updateProfile.isPending}
-                                className="w-full bg-muted border border-border rounded-sm font-cabin text-foreground pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary/50 focus:shadow-[0_0_15px_rgba(0,238,255,0.3)] transition-all appearance-none disabled:opacity-50"
-                            >
-                                <option value="MALE">Male</option>
-                                <option value="FEMALE">Female</option>
-                                <option value="OTHER">Other</option>
-                            </select>
-                        </div>
+                        <Controller
+                            name="gender"
+                            control={control}
+                            render={({ field }) => (
+                                <div className="grid grid-cols-3 gap-3">
+                                    {[
+                                        { value: 'MALE', label: 'Male', icon: '♂' },
+                                        { value: 'FEMALE', label: 'Female', icon: '♀' },
+                                        { value: 'OTHER', label: 'Other', icon: '⚧' },
+                                    ].map((option) => (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            disabled={isSubmitting || updateProfile.isPending}
+                                            onClick={() => field.onChange(option.value)}
+                                            className={`
+                                                relative flex flex-col items-center justify-center gap-1 p-4
+                                                border rounded-sm font-mono text-sm uppercase tracking-wider
+                                                transition-all duration-200
+                                                disabled:opacity-50 disabled:cursor-not-allowed
+                                                ${
+                                                    field.value === option.value
+                                                        ? 'bg-primary/10 border-primary text-primary shadow-[0_0_15px_rgba(0,238,255,0.3)]'
+                                                        : 'bg-muted border-border text-muted-foreground hover:border-primary/50 hover:text-foreground'
+                                                }
+                                            `}
+                                        >
+                                            <span className="text-xl">{option.icon}</span>
+                                            <span className="text-xs">{option.label}</span>
+                                            {field.value === option.value && (
+                                                <div className="absolute -top-1 -right-1 size-2 bg-primary rounded-full" />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        />
                         {errors.gender && (
                             <p className="text-xs text-red-400 font-mono">
                                 {errors.gender.message}
@@ -133,25 +226,62 @@ export function ProfileForm({ user }: ProfileFormProps) {
                         )}
                     </div>
 
-                    <Input
-                        label="Location / Address"
-                        {...register('address')}
-                        leftIcon={<MapPin className="size-4" />}
+                    <Textarea
+                        label="Short Description / Bio"
+                        {...register('shortDescription')}
+                        rows={3}
                         variant="compact"
                         disabled={isSubmitting || updateProfile.isPending}
-                        error={errors.address?.message}
+                        error={errors.shortDescription?.message}
                     />
 
                     <div className="col-span-1 md:col-span-2">
-                        <Textarea
-                            label="Short Description / Bio"
-                            {...register('shortDescription')}
-                            rows={3}
-                            variant="compact"
+                        <LocationSearch
+                            label="Location / Address"
+                            placeholder="Search for your address..."
+                            defaultValue={user.address?.displayName || ''}
+                            onSelect={handleLocationSelect}
                             disabled={isSubmitting || updateProfile.isPending}
-                            error={errors.shortDescription?.message}
+                            error={errors.address?.displayName?.message}
                         />
                     </div>
+
+                    {selectedLocation && (
+                        <div className="col-span-1 md:col-span-2">
+                            <div className="space-y-2">
+                                <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                                    Location Preview
+                                </label>
+                                <div className="relative w-full h-75 rounded-sm overflow-hidden border border-border shadow-[0_0_15px_rgba(0,238,255,0.2)]">
+                                    <Map
+                                        ref={mapRef}
+                                        center={[selectedLocation.lng, selectedLocation.lat]}
+                                        zoom={15}
+                                        theme="dark"
+                                    >
+                                        <MapMarker
+                                            longitude={selectedLocation.lng}
+                                            latitude={selectedLocation.lat}
+                                        >
+                                            <MarkerContent>
+                                                <div className="relative">
+                                                    <div className="size-6 rounded-full bg-primary shadow-[0_0_20px_rgba(0,238,255,0.6)] flex items-center justify-center animate-pulse">
+                                                        <MapPin className="size-4 text-background" />
+                                                    </div>
+                                                </div>
+                                            </MarkerContent>
+                                        </MapMarker>
+                                        <MapControls
+                                            position="bottom-right"
+                                            showZoom
+                                            showCompass
+                                            showLocate
+                                        />
+                                    </Map>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 

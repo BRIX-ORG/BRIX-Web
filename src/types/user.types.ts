@@ -14,6 +14,14 @@ export interface CloudinaryImage {
     format: string;
 }
 
+// Address with geolocation
+export interface UserAddress {
+    lat: string;
+    lon: string;
+    displayName: string;
+    country: string;
+}
+
 // User Model
 export interface User {
     id: string;
@@ -24,7 +32,7 @@ export interface User {
     gender: Gender;
     avatar: CloudinaryImage | null;
     background: CloudinaryImage | null;
-    address: string;
+    address: UserAddress | null;
     shortDescription: string;
     trustScore: number;
     role: 'USER' | 'ADMIN';

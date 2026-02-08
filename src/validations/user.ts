@@ -22,7 +22,15 @@ export const updateProfileSchema = z.object({
             message: 'Gender must be MALE, FEMALE, or OTHER',
         })
         .optional(),
-    address: z.string().max(100, 'Address cannot exceed 100 characters').optional(),
+    address: z
+        .object({
+            lat: z.string(),
+            lon: z.string(),
+            displayName: z.string().max(200, 'Address cannot exceed 200 characters'),
+            country: z.string(),
+        })
+        .nullable()
+        .optional(),
     shortDescription: z.string().max(200, 'Description cannot exceed 200 characters').optional(),
 });
 

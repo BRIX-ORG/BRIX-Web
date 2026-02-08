@@ -12,7 +12,10 @@ interface QueryProviderProps {
 
 export function QueryProvider({ children }: QueryProviderProps) {
     return (
-        <SessionProvider>
+        <SessionProvider
+            refetchInterval={5 * 60} // Refetch session every 5 minutes
+            refetchOnWindowFocus={false} // Don't refetch on window focus
+        >
             <QueryClientProvider client={queryClient}>
                 {children}
                 {process.env.NODE_ENV === 'development' && (

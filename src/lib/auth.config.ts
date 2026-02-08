@@ -165,7 +165,7 @@ export const authConfig: NextAuthConfig = {
                     gender: authUser.gender,
                     avatar: authUser.avatar,
                     background: authUser.background,
-                    address: authUser.address,
+                    address: authUser.address || null,
                     shortDescription: authUser.shortDescription,
                     trustScore: authUser.trustScore,
                     role: authUser.role,
