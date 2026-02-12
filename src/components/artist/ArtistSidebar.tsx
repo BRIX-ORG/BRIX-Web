@@ -1,5 +1,8 @@
 import Image from 'next/image';
-import { Database, Users } from 'lucide-react';
+import { Database, MapPin, Users } from 'lucide-react';
+import type { FollowUser } from '@/types/user.types';
+import { getAvatarUrl } from '@/utils/cloudinary';
+import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui/Map';
 
 export interface ActivityItem {
     id: string;
@@ -9,22 +12,35 @@ export interface ActivityItem {
     time: string;
 }
 
+// Keep for backward compatibility
 export interface Collaborator {
     id: string;
     avatar: string;
 }
 
+interface LocationInfo {
+    lat: number;
+    lng: number;
+    displayName: string;
+}
+
 interface ArtistSidebarProps {
     activities: ActivityItem[];
-    collaborators: Collaborator[];
-    additionalCollaboratorsCount?: number;
+    followers: FollowUser[];
+    totalFollowers: number;
+    onViewAllFollowers?: () => void;
+    location?: LocationInfo;
 }
 
 export function ArtistSidebar({
     activities,
-    collaborators,
-    additionalCollaboratorsCount = 0,
+    followers,
+    totalFollowers,
+    onViewAllFollowers,
+    location,
 }: ArtistSidebarProps) {
+    const remainingCount = totalFollowers - followers.length;
+
     return (
         <aside className="col-span-12 lg:col-span-3 space-y-8">
             {/* Node Activity */}
@@ -49,34 +65,78 @@ export function ArtistSidebar({
                 </div>
             </div>
 
-            {/* Collaborators */}
+            {/* Location Mini Map */}
+            {location && (
+                <div className="space-y-3">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-primary/60">
+                        <MapPin className="size-3.5" /> Location
+                    </h3>
+                    <div className="relative w-full h-56 rounded-lg overflow-hidden border border-primary/10">
+                        <Map
+                            center={[location.lng, location.lat]}
+                            zoom={11}
+                            theme="dark"
+                            attributionControl={false}
+                            dragPan={true}
+                            scrollZoom={true}
+                            dragRotate={false}
+                            touchZoomRotate={true}
+                        >
+                            <MapMarker longitude={location.lng} latitude={location.lat}>
+                                <MarkerContent>
+                                    <div className="size-4 rounded-full bg-primary shadow-[0_0_12px_rgba(0,238,255,0.5)] flex items-center justify-center">
+                                        <div className="size-1.5 rounded-full bg-background" />
+                                    </div>
+                                </MarkerContent>
+                                <MarkerTooltip className="bg-background/95! text-foreground! border-none! backdrop-blur-md px-2.5 py-1.5 max-w-52 cyber-grid shadow-[0_0_8px_rgba(0,238,255,0.15)]">
+                                    <p className="text-[9px] font-mono text-primary/80 leading-snug">
+                                        {location.displayName}
+                                    </p>
+                                </MarkerTooltip>
+                            </MapMarker>
+                            <MapControls position="bottom-right" showZoom />
+                        </Map>
+                    </div>
+                </div>
+            )}
+
+            {/* Followers */}
             <div className="space-y-4">
                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-primary/60">
-                    <Users className="size-4" /> Top Collaborators
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                    {collaborators.map((collab) => (
-                        <div
-                            key={collab.id}
-                            className="size-10 rounded-full border border-primary/30 p-0.5 hover:border-primary transition-colors cursor-pointer"
-                        >
-                            <Image
-                                src={collab.avatar}
-                                alt="Collaborator"
-                                width={40}
-                                height={40}
-                                className="rounded-full w-full h-full object-cover"
-                            />
-                        </div>
-                    ))}
-                    {additionalCollaboratorsCount > 0 && (
-                        <div className="size-10 rounded-full border border-primary/30 p-0.5 flex items-center justify-center bg-muted cursor-pointer hover:border-primary transition-colors">
-                            <span className="text-[10px] font-mono">
-                                +{additionalCollaboratorsCount}
-                            </span>
-                        </div>
+                    <Users className="size-4" /> Followers
+                    {totalFollowers > 0 && (
+                        <span className="text-muted-foreground">({totalFollowers})</span>
                     )}
-                </div>
+                </h3>
+                {followers.length === 0 ? (
+                    <p className="text-xs text-muted-foreground font-mono">No followers yet</p>
+                ) : (
+                    <div className="flex flex-wrap gap-2">
+                        {followers.map((follower) => (
+                            <div
+                                key={follower.id}
+                                className="size-10 rounded-full border border-primary/30 p-0.5 hover:border-primary transition-colors cursor-pointer"
+                                title={follower.username}
+                            >
+                                <Image
+                                    src={getAvatarUrl(follower.avatar, follower.gender)}
+                                    alt={follower.username}
+                                    width={40}
+                                    height={40}
+                                    className="rounded-full w-full h-full object-cover"
+                                />
+                            </div>
+                        ))}
+                        {remainingCount > 0 && (
+                            <button
+                                onClick={onViewAllFollowers}
+                                className="size-10 rounded-full border border-primary/30 p-0.5 flex items-center justify-center bg-muted cursor-pointer hover:border-primary transition-colors"
+                            >
+                                <span className="text-[10px] font-mono">+{remainingCount}</span>
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
         </aside>
     );

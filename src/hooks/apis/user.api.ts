@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import type { ApiResponse, User } from '@/types/auth.types';
+import type { FollowActionResponse, FollowListResponse } from '@/types/user.types';
 import type { UpdateProfileInput, UpdatePasswordInput } from '@/validations/user';
 import { updateUserProfile } from '@/lib/auth-actions';
 
@@ -115,5 +116,107 @@ export function useUpdateBackground() {
             queryClient.invalidateQueries({ queryKey: ['user'] });
             queryClient.invalidateQueries({ queryKey: ['session'] });
         },
+    });
+}
+
+/**
+ * Follow a user
+ */
+export function useFollowUser() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (userId: string) => {
+            const response = await apiClient.post<ApiResponse<FollowActionResponse>>(
+                `/api/follows/${userId}`,
+            );
+            return response.data.data;
+        },
+        onSuccess: (_data, userId) => {
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['followers'] });
+            queryClient.invalidateQueries({ queryKey: ['following'] });
+            queryClient.invalidateQueries({ queryKey: ['followStatus', userId] });
+        },
+    });
+}
+
+/**
+ * Unfollow a user
+ */
+export function useUnfollowUser() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (userId: string) => {
+            const response = await apiClient.delete<ApiResponse<FollowActionResponse>>(
+                `/api/follows/${userId}`,
+            );
+            return response.data.data;
+        },
+        onSuccess: (_data, userId) => {
+            queryClient.invalidateQueries({ queryKey: ['user'] });
+            queryClient.invalidateQueries({ queryKey: ['followers'] });
+            queryClient.invalidateQueries({ queryKey: ['following'] });
+            queryClient.invalidateQueries({ queryKey: ['followStatus', userId] });
+        },
+    });
+}
+
+/**
+ * Get followers of a user (paginated)
+ */
+export function useGetFollowers(idOrUsername: string, limit?: number, offset = 0) {
+    return useQuery({
+        queryKey: ['followers', idOrUsername, limit, offset],
+        queryFn: async () => {
+            const params = new URLSearchParams();
+            if (limit !== undefined) params.set('limit', String(limit));
+            if (offset) params.set('offset', String(offset));
+
+            const response = await apiClient.get<ApiResponse<FollowListResponse>>(
+                `/api/follows/users/${idOrUsername}/followers`,
+                { params },
+            );
+            return response.data.data;
+        },
+        enabled: !!idOrUsername,
+    });
+}
+
+/**
+ * Check if current user is following a specific user
+ */
+export function useCheckFollow(userId: string | undefined) {
+    return useQuery({
+        queryKey: ['followStatus', userId],
+        queryFn: async () => {
+            const response = await apiClient.get<ApiResponse<FollowActionResponse>>(
+                `/api/follows/check/${userId}`,
+            );
+            return response.data.data;
+        },
+        enabled: !!userId,
+    });
+}
+
+/**
+ * Get users that a user is following (paginated)
+ */
+export function useGetFollowing(idOrUsername: string, limit?: number, offset = 0) {
+    return useQuery({
+        queryKey: ['following', idOrUsername, limit, offset],
+        queryFn: async () => {
+            const params = new URLSearchParams();
+            if (limit !== undefined) params.set('limit', String(limit));
+            if (offset) params.set('offset', String(offset));
+
+            const response = await apiClient.get<ApiResponse<FollowListResponse>>(
+                `/api/follows/users/${idOrUsername}/following`,
+                { params },
+            );
+            return response.data.data;
+        },
+        enabled: !!idOrUsername,
     });
 }

@@ -41,3 +41,29 @@ export interface User {
     createdAt: string;
     updatedAt: string;
 }
+
+/** User item returned in followers/following lists */
+export interface FollowUser {
+    id: string;
+    username: string;
+    fullName: string;
+    avatar: CloudinaryImage | null;
+    gender: Gender;
+    role: 'USER' | 'ADMIN';
+    provider: 'LOCAL' | 'GOOGLE';
+    shortDescription: string | null;
+    isFollowing: boolean;
+}
+
+/** Paginated response for followers/following lists */
+export interface FollowListResponse {
+    data: FollowUser[];
+    total: number;
+    limit: number | null;
+    offset: number;
+}
+
+/** Response from follow/unfollow actions */
+export interface FollowActionResponse {
+    isFollowing: boolean;
+}

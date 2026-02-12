@@ -1,6 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { notFound, useParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { MasonryItem } from '@/components/react-bits/Masonry';
+import { useUIStore } from '@/stores/ui-store';
+import type { ApiResponse } from '@/types/auth.types';
+import type { FollowActionResponse } from '@/types/user.types';
 import {
     ArtistHeroSection,
     ArtistStatsGrid,
@@ -9,18 +16,18 @@ import {
     ArtistData,
     ArtistStats,
     ActivityItem,
-    Collaborator,
+    FollowersModal,
 } from '@/components/artist';
+import {
+    useGetUser,
+    useGetFollowers,
+    useFollowUser,
+    useUnfollowUser,
+    useGetFollowing,
+    useCheckFollow,
+} from '@/hooks/apis/user.api';
 
-// Mock artist data
-const mockArtist: ArtistData = {
-    id: '1',
-    username: 'KØRE_ARCHITECT',
-    tagline: 'Multi-Disciplinary Digital Sovereign / Neo-Tokyo',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7hUY-LJv7KTYIn8fYeXcMOocN_oSpwUlVOOsyi-ACH1EzEcLeVhW4JjGzIS8W6ilDjyHtZKiNcN7b0RgiwQQqKCdejqNzMDlN7bekLkTTVYumiBcUJOv5pRy3w2B5E__p17P0wckdaZ8oCeGx9nJ77c739GwWfa9LCMgRplSMcWFsTfULU_5p48U2sWYN7EntrDJZOnooh4m3q6QtF7R75-EXQtihVQhfunA8T63-VVMPVe7HC868e1rKfIdLno6i2c0Si_cGMPM',
-    trustScore: 99.8,
-    verifiedAt: '2026-01-01T00:00:00Z',
-};
+// ─── Mock data for sections without API yet ────────────────────────
 
 const mockStats: ArtistStats = {
     digitalAssets: 42804,
@@ -30,6 +37,7 @@ const mockStats: ArtistStats = {
     rankPercentile: 'Top 1%',
 };
 
+// TODO: replace with API when available
 const mockActivity: ActivityItem[] = [
     {
         id: '1',
@@ -54,21 +62,7 @@ const mockActivity: ActivityItem[] = [
     },
 ];
 
-const mockCollaborators: Collaborator[] = [
-    {
-        id: '1',
-        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCmpbJr-QlPxxuUXNCyLIUyhXUQ8ObxVcYqkYfZcXtOXQzPLTOVi6DBWFhy6ervSMYdEmIVfjqEWsAfokKTByq1SIZHmj3CpVb9yNyPDUEbZrVvweWIBszheuWqKuakMBPgymj79vBmwsncbHMwRfAK2TkqeOzDNMv14boDE7Ak0q8cytihNxEMuXW2K0g-TfCSCOA1G_v2kGoN0fNDpeatU2c71J2cvLUMyQmmCXhPp3UljWmpNeHGPnk14R_bTfYbBJ3j5tYpezk',
-    },
-    {
-        id: '2',
-        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAiyi48Jffadf83toRypWMb1yJi98KAKsT0mffL_gH0i5lWIDwTopjGLY50bif9QAAL5scXaUGpNd5i7im__6Rkc8SwH2FO_tlYfFjXPh6dgTOriImhmbu7-pKfKM_OC0vyZEs9qc1rA11il7WjhA1wlyItxiy8gppRGo_15DtD1i4h-bOZKSa7BjBUbiv9Yatl7RezRh0NFIQsRCPGY-pxoFaAzM_HcwAjywQ-uRQW0U7G7bH9hY44n-45xFbFLq7fJTDAWeiUnJw',
-    },
-    {
-        id: '3',
-        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDe_2Vnro3ql-Pvo1gMggR83DrE31FUdZXesRbs03i6qO1ZI_LmxDS8c7aFNclIFBvfHtBTE28fsyw2oXkDTztjD6-S_2Z-JdiDshNJP631LyN__j6fbRzt6JVG47ciHeiyxs2e7IUWdeGD1n-DKNU3MUaF13G7qFRQuZnWP_AAKv3jc8OygM40k3hf9WBKjbAbr9AbgP_kT_CN0i_Xl72bRrya7eN3fucni7W9UWOq1BRb9oet_V82j8k0_0fNwDasSXeXS4PIhRQ',
-    },
-];
-
+// TODO: replace with API when available
 const mockGalleryItems: MasonryItem[] = [
     {
         id: '1',
@@ -144,22 +138,165 @@ const mockGalleryItems: MasonryItem[] = [
     },
 ];
 
+// ─── Default avatar for users without one ──────────────────────────
+const SIDEBAR_FOLLOWERS_LIMIT = 12;
+
 export default function ArtistProfilePage() {
+    const { id } = useParams<{ id: string }>();
+    const router = useRouter();
+    const { data: session } = useSession();
+    const showLoading = useUIStore((state) => state.showLoading);
+    const hideLoading = useUIStore((state) => state.hideLoading);
+
+    // ─── Fetch profile user ────────────────────────────────
+    const { data: profileUser, isLoading: isProfileLoading, isError } = useGetUser(id);
+
+    // ─── Check own profile ─────────────────────────────────
+    const isOwnProfile = !!(session?.user && profileUser && session.user.id === profileUser.id);
+
+    // ─── Followers for sidebar ─────────────────────────────
+    const { data: followersData } = useGetFollowers(id, SIDEBAR_FOLLOWERS_LIMIT);
+    const sidebarFollowers = followersData?.data ?? [];
+    const totalFollowers = followersData?.total ?? 0;
+
+    // ─── Following count (fetch first page just for total) ─
+    const { data: followingData } = useGetFollowing(id, 1);
+    const totalFollowing = followingData?.total ?? 0;
+
+    // ─── Follow status check ───────────────────────────────
+    const queryClient = useQueryClient();
+    const profileUserId = isOwnProfile ? undefined : profileUser?.id;
+    const { data: followStatus } = useCheckFollow(profileUserId);
+    const isFollowing = followStatus?.isFollowing ?? false;
+
+    // ─── Follow / Unfollow (optimistic cache update) ───────
+    const followMutation = useFollowUser();
+    const unfollowMutation = useUnfollowUser();
+    const isFollowLoading = followMutation.isPending || unfollowMutation.isPending;
+
+    const setOptimisticFollow = (value: boolean) => {
+        queryClient.setQueryData<ApiResponse<FollowActionResponse>['data']>(
+            ['followStatus', profileUser?.id],
+            { isFollowing: value },
+        );
+    };
+
+    const handleFollow = () => {
+        if (!profileUser) return;
+        setOptimisticFollow(true);
+        followMutation.mutate(profileUser.id, {
+            onError: () => setOptimisticFollow(false),
+        });
+    };
+
+    const handleUnfollow = () => {
+        if (!profileUser) return;
+        setOptimisticFollow(false);
+        unfollowMutation.mutate(profileUser.id, {
+            onError: () => setOptimisticFollow(true),
+        });
+    };
+
+    // ─── Followers / Following modal ───────────────────────
+    const [showModal, setShowModal] = useState(false);
+    const [modalTab, setModalTab] = useState<'followers' | 'following'>('followers');
+
+    const openFollowersModal = () => {
+        setModalTab('followers');
+        setShowModal(true);
+    };
+
+    const openFollowingModal = () => {
+        setModalTab('following');
+        setShowModal(true);
+    };
+
+    // ─── Loading state ─────────────────────────────────────
+    useEffect(() => {
+        if (isProfileLoading) {
+            showLoading('Loading profile...');
+        } else {
+            hideLoading();
+        }
+    }, [isProfileLoading, showLoading, hideLoading]);
+
+    // ─── Error state → 404 ──────────────────────────────────
+    if (isError && !isProfileLoading) {
+        notFound();
+    }
+
+    if (isProfileLoading || !profileUser) {
+        return null;
+    }
+
+    // ─── Map User → ArtistData ─────────────────────────────
+    const artistData: ArtistData = {
+        id: profileUser.id,
+        username: profileUser.username,
+        fullName: profileUser.fullName,
+        tagline: profileUser.shortDescription || `${profileUser.role} / BRIX Network`,
+        avatar: profileUser.avatar,
+        gender: profileUser.gender,
+        background: profileUser.background?.url ?? null,
+        trustScore: profileUser.trustScore,
+        verifiedAt: profileUser.verifiedAt,
+        followersCount: totalFollowers,
+        followingCount: totalFollowing,
+    };
+
+    // ─── Parse user address for map ────────────────────────
+    const userAddress = profileUser.address;
+    const lat = userAddress ? parseFloat(userAddress.lat) : NaN;
+    const lng = userAddress ? parseFloat(userAddress.lon) : NaN;
+    const hasValidLocation = !isNaN(lat) && !isNaN(lng);
+
     return (
         <div className="relative p-8 max-w-360 mx-auto space-y-8">
-            <ArtistHeroSection artist={mockArtist} />
+            <ArtistHeroSection
+                artist={artistData}
+                isOwnProfile={isOwnProfile}
+                isFollowing={isFollowing}
+                isFollowLoading={isFollowLoading}
+                onFollow={handleFollow}
+                onUnfollow={handleUnfollow}
+                onConnect={() => {
+                    // TODO: implement connect / message
+                }}
+                onEditProfile={() => router.push('/dashboard/settings')}
+                onFollowersClick={openFollowersModal}
+                onFollowingClick={openFollowingModal}
+            />
 
+            {/* TODO: replace mockStats with API when available */}
             <ArtistStatsGrid stats={mockStats} />
 
             <div className="grid grid-cols-12 gap-8">
                 <ArtistSidebar
                     activities={mockActivity}
-                    collaborators={mockCollaborators}
-                    additionalCollaboratorsCount={12}
+                    followers={sidebarFollowers}
+                    totalFollowers={totalFollowers}
+                    onViewAllFollowers={openFollowersModal}
+                    location={
+                        hasValidLocation
+                            ? { lat, lng, displayName: userAddress?.displayName ?? '' }
+                            : undefined
+                    }
                 />
 
+                {/* TODO: replace mockGalleryItems with API when available */}
                 <ArtistGallery items={mockGalleryItems} />
             </div>
+
+            {/* Followers / Following Modal */}
+            <FollowersModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                idOrUsername={id}
+                currentUserId={session?.user?.id}
+                initialTab={modalTab}
+                followersCount={totalFollowers}
+                followingCount={totalFollowing}
+            />
         </div>
     );
 }

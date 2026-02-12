@@ -72,7 +72,7 @@ export default function NotFound() {
 
                 <main className="flex-1 flex flex-col items-center justify-center p-6 relative">
                     {/* Terminal Corner - Top Left */}
-                    <div className="absolute top-12 left-12 hidden lg:block border border-primary/30 p-4 font-mono text-[10px] text-primary/80 max-w-[240px] bg-background/80 backdrop-blur-md shadow-lg">
+                    <div className="absolute top-12 left-12 hidden lg:block border border-primary/30 p-4 font-mono text-[10px] text-primary/80 max-w-60 bg-background/80 backdrop-blur-md shadow-lg">
                         <p>&gt; RECOVERY_PROTOCOL: FAILED</p>
                         <p>&gt; SECTOR_SCAN: 0x88492... ERROR</p>
                         <p>&gt; PACKET_LOSS: 98.4%</p>
@@ -83,7 +83,7 @@ export default function NotFound() {
                     </div>
 
                     {/* Terminal Corner - Bottom Right */}
-                    <div className="absolute bottom-12 right-12 hidden lg:block border border-secondary/30 p-4 font-mono text-[10px] text-secondary/80 max-w-[240px] bg-background/80 backdrop-blur-md shadow-lg">
+                    <div className="absolute bottom-12 right-12 hidden lg:block border border-secondary/30 p-4 font-mono text-[10px] text-secondary/80 max-w-60 bg-background/80 backdrop-blur-md shadow-lg">
                         <p>&gt; MEMORY_CORRUPTION_DETECTED</p>
                         <p>&gt; STACK_TRACE: 0xAF00...0xFFFF</p>
                         <p>&gt; DATA_STREAM: INTERRUPTED</p>
@@ -148,7 +148,7 @@ export default function NotFound() {
                     </div>
 
                     {/* NotFound Image */}
-                    <div className="mt-20 w-full max-w-[800px] px-4 group">
+                    <div className="mt-20 w-full max-w-200 px-4 group">
                         <div className="relative overflow-hidden border-2 border-primary/30 aspect-21/9 grayscale group-hover:grayscale-0 transition-all duration-700 shadow-[0_0_30px_rgba(0,238,255,0.2)] bg-background/40 backdrop-blur-sm">
                             <Image
                                 src="/images/NotFound.png"

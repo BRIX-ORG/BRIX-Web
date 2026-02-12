@@ -3,7 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Bell, Upload, Menu } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { BrixBrandLogo } from '@/components/shared';
+import { getAvatarUrl } from '@/utils/cloudinary';
 
 const navLinks = [
     { href: '/dashboard/feed', label: 'Feed', active: true },
@@ -16,6 +18,10 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
+    const { data: session } = useSession();
+    const user = session?.user;
+    const avatarUrl = user ? getAvatarUrl(user.avatar, user.gender) : null;
+
     return (
         <header className="sticky top-0 z-30 flex items-center justify-between border-b border-primary/20 bg-background/80 backdrop-blur-md px-4 md:px-6 py-3">
             <div className="flex items-center gap-4 md:gap-8">
@@ -81,16 +87,18 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
                     {/* User Avatar */}
                     <Link
-                        href="/dashboard/settings"
-                        className="size-9 rounded bg-cover bg-center border border-primary/30 overflow-hidden hover:border-primary/60 transition-colors"
+                        href={user ? `/dashboard/artist/${user.id}` : '/dashboard/settings'}
+                        className="size-9 rounded-full bg-cover bg-center border border-primary/30 overflow-hidden hover:border-primary/60 transition-colors"
                     >
-                        <Image
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuANHBj7oUI2fcHJIJH9-wi7wVfxWfSRPYpQe8ZE9m62xK8PkdQ4yNaVuUO0gCe0eJ1RW-jObnk_9LmpSnlBzg056JP5n7v7fjkjOmN4MFC6LkEe6GnJ9u5fMvGLpbuluycrF01uzTWi9St7NVWu-rp5sxGNZi1NWWy7Kpv-kgElWhouY9dlI4L_BQwcZCI_3dBF257ImU0v1kbeM03F7l9frNSNEReQxiLX_sGcavfrnZl59McdRvNnkbTQ8_C_idR-GEBXJEcZgCc"
-                            alt="User avatar"
-                            width={36}
-                            height={36}
-                            className="object-cover"
-                        />
+                        {avatarUrl && (
+                            <Image
+                                src={avatarUrl}
+                                alt={user?.username ?? 'User avatar'}
+                                width={36}
+                                height={36}
+                                className="w-full h-full object-cover"
+                            />
+                        )}
                     </Link>
                 </div>
             </div>
