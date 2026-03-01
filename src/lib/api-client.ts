@@ -19,12 +19,19 @@ let refreshPromise: Promise<string | null> | null = null;
 let cachedAccessToken: string | null = null;
 let cachedRefreshToken: string | null = null;
 
+// Callback when session expires (refresh token invalid/expired)
+let onSessionExpiredCallback: (() => void) | null = null;
+
 export function setAccessToken(token: string | null) {
     cachedAccessToken = token;
 }
 
 export function setRefreshToken(token: string | null) {
     cachedRefreshToken = token;
+}
+
+export function setOnSessionExpired(callback: (() => void) | null) {
+    onSessionExpiredCallback = callback;
 }
 
 // Request interceptor to add auth token
@@ -70,7 +77,10 @@ apiClient.interceptors.response.use(
                 // Retry the original request
                 return apiClient(originalRequest);
             } else {
-                // Refresh failed - session will be cleared by auth flow
+                // Refresh failed - force logout
+                if (onSessionExpiredCallback) {
+                    onSessionExpiredCallback();
+                }
                 return Promise.reject(error);
             }
         }

@@ -13,7 +13,7 @@ export const loginSchema = z.object({
             (val) => {
                 // Accept either email format or username (alphanumeric with underscore)
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
+                const usernameRegex = /^[a-zA-Z0-9_.]{3,30}$/;
                 return emailRegex.test(val) || usernameRegex.test(val);
             },
             { message: 'Please enter a valid email or username' },

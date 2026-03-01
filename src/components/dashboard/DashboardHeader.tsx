@@ -87,7 +87,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
                     {/* User Avatar */}
                     <Link
-                        href={user ? `/dashboard/artist/${user.id}` : '/dashboard/settings'}
+                        href={user ? `/dashboard/artist/${user.username}` : '/dashboard/settings'}
                         className="size-9 rounded-full bg-cover bg-center border border-primary/30 overflow-hidden hover:border-primary/60 transition-colors"
                     >
                         {avatarUrl && (
