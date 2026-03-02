@@ -10,8 +10,8 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-    { href: '/dashboard/uploads', label: 'Single Upload' },
-    { href: '/dashboard/uploads/batch', label: 'Batch Brix' },
+    { href: '/dashboard/uploads', label: 'Art Upload' },
+    { href: '/dashboard/uploads/model', label: 'Model Upload' },
 ];
 
 export function UploadTabs() {
@@ -37,7 +37,7 @@ export function UploadTabs() {
                                 {tab.label}
                             </span>
                             {isActive && (
-                                <div className="absolute bottom-0 w-full h-[3px] bg-primary shadow-[0_0_10px_#00eeff]" />
+                                <div className="absolute bottom-0 w-full h-0.75 bg-primary shadow-[0_0_10px_#00eeff]" />
                             )}
                         </Link>
                     );

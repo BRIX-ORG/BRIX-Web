@@ -45,3 +45,36 @@ export interface LocationAutocompleteRequest {
 
 // Autocomplete Response
 export type LocationAutocompleteResponse = ApiResponse<LocationSuggestion[]>;
+
+// Reverse Geocoding Request Parameters
+export interface LocationReverseRequest {
+    lat: number; // Latitude of the location
+    lon: number; // Longitude of the location
+    addressdetails?: number; // Include a breakdown of the address into elements (0 or 1)
+    lang?: string; // Preferred language for showing search results
+    normalizeaddress?: number; // Makes parsing of the address object easier (0 or 1)
+}
+
+// Reverse Geocoding address (simplified shape from API)
+export interface LocationReverseAddress {
+    lat: string;
+    lon: string;
+    displayName: string;
+    country: string;
+}
+
+// Reverse Geocoding Data
+export interface LocationReverseData {
+    place_id: string;
+    licence: string;
+    osm_type?: string;
+    osm_id?: string;
+    lat: string;
+    lon: string;
+    display_name: string;
+    address: LocationReverseAddress;
+    boundingbox: string[];
+}
+
+// Reverse Geocoding Response
+export type LocationReverseResponse = ApiResponse<LocationReverseData>;

@@ -3,6 +3,8 @@ import { apiClient } from '@/lib/api-client';
 import type {
     LocationAutocompleteRequest,
     LocationAutocompleteResponse,
+    LocationReverseRequest,
+    LocationReverseResponse,
 } from '@/types/location.types';
 
 /**
@@ -44,5 +46,41 @@ export function useLocationAutocomplete(
         enabled: enabled && params.q.length > 0, // Only run if query is not empty
         staleTime: 5 * 60 * 1000, // Cache results for 5 minutes
         retry: 1, // Only retry once on failure
+    });
+}
+
+/**
+ * Reverse geocoding: convert coordinates to a human-readable address
+ * @param params - Latitude, longitude, and optional formatting options
+ * @param enabled - Whether the query should execute
+ */
+export function useLocationReverse(params: LocationReverseRequest, enabled: boolean = true) {
+    return useQuery({
+        queryKey: ['location', 'reverse', params.lat, params.lon],
+        queryFn: async () => {
+            const queryParams = new URLSearchParams();
+            queryParams.append('lat', params.lat.toString());
+            queryParams.append('lon', params.lon.toString());
+
+            if (params.addressdetails !== undefined) {
+                queryParams.append('addressdetails', params.addressdetails.toString());
+            }
+
+            if (params.lang) {
+                queryParams.append('lang', params.lang);
+            }
+
+            if (params.normalizeaddress !== undefined) {
+                queryParams.append('normalizeaddress', params.normalizeaddress.toString());
+            }
+
+            const response = await apiClient.get<LocationReverseResponse>(
+                `/api/location/reverse?${queryParams.toString()}`,
+            );
+            return response.data.data;
+        },
+        enabled: enabled && params.lat !== 0 && params.lon !== 0,
+        staleTime: 10 * 60 * 1000, // Cache for 10 minutes
+        retry: 1,
     });
 }

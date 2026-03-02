@@ -1,29 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { UploadDropzone, MetadataPanel, UploadControls, UploadTabs } from '@/components/upload';
+import { ArtUploadForm, UploadTabs } from '@/components/upload';
 
 export default function UploadsPage() {
-    const [isReady, setIsReady] = useState(true);
-    const [isUploading, setIsUploading] = useState(false);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-    const handleFileSelect = (files: FileList) => {
-        if (files.length > 0) {
-            setSelectedFile(files[0]);
-            console.log('File selected:', files[0].name);
-        }
-    };
-
-    const handleUpload = async () => {
-        if (!selectedFile) return;
-        setIsUploading(true);
-        // TODO: Implement actual upload logic
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        setIsUploading(false);
-        console.log('Upload complete');
-    };
-
     return (
         <div className="p-8 max-w-350 mx-auto w-full">
             {/* Page Header */}
@@ -39,42 +18,8 @@ export default function UploadsPage() {
             {/* Tabs */}
             <UploadTabs />
 
-            {/* Main Content Grid */}
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
-                {/* Main Upload Area */}
-                <div className="lg:col-span-8 flex flex-col gap-6">
-                    <UploadDropzone onFileSelect={handleFileSelect} />
-                    <UploadControls
-                        isReady={isReady}
-                        onToggleReady={setIsReady}
-                        onUpload={handleUpload}
-                        isUploading={isUploading}
-                    />
-                </div>
-
-                {/* Metadata Sidebar */}
-                <div className="lg:col-span-4">
-                    <MetadataPanel
-                        isProcessing={isUploading}
-                        fileData={
-                            selectedFile
-                                ? {
-                                      resolution: '7680 x 4320',
-                                      bitDepth: '32-BIT FLOAT',
-                                      colorSpace: 'WIDE_GAMUT_P3',
-                                      aperture: 'f/2.8',
-                                      iso: 'ISO 100',
-                                      shutter: '1/125s',
-                                      hash: '77a1c22d9b881340b...',
-                                      timestamp: new Date().toISOString(),
-                                      geoTag: '51.5074° N, 0.1278° W',
-                                      aiProbability: '0.04%',
-                                  }
-                                : undefined
-                        }
-                    />
-                </div>
-            </div>
+            {/* Art Upload Form */}
+            <ArtUploadForm />
 
             {/* Visual Decoration Footer */}
             <div className="w-full mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 opacity-30 pointer-events-none">
