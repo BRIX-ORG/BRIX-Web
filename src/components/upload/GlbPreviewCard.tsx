@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { Box, Loader2, RotateCcw } from 'lucide-react';
+import { Box, Loader2, RefreshCw, RotateCcw } from 'lucide-react';
 import { Map, MapMarker, MarkerContent } from '@/components/ui';
 import { cn } from '@/utils/classnames';
 
@@ -56,6 +56,16 @@ export function GlbPreviewCard({
     avatarUrl,
     className,
 }: GlbPreviewCardProps) {
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const handleRefresh = useCallback(() => {
+        setIsRefreshing(true);
+        setRefreshKey((k) => k + 1);
+        // Brief visual feedback before remount
+        setTimeout(() => setIsRefreshing(false), 300);
+    }, []);
+
     const hasCoords = latitude != null && longitude != null && latitude !== 0 && longitude !== 0;
 
     const timestamp = useMemo(
@@ -96,26 +106,53 @@ export function GlbPreviewCard({
             <div className="border-b border-border">
                 {glbUrl ? (
                     <div className="relative">
-                        <ModelViewer
-                            url={glbUrl}
-                            format="glb"
-                            width="100%"
-                            height={320}
-                            showScreenshotButton={false}
-                            environmentPreset="studio"
-                            autoFrame
-                            fadeIn
-                            autoRotate
-                            autoRotateSpeed={0.5}
-                            enableManualRotation
-                            enableManualZoom
-                            enableMouseParallax={false}
-                            enableHoverRotation={false}
-                            onModelLoaded={onModelLoaded}
-                        />
+                        {isRefreshing ? (
+                            <div
+                                className="w-full flex items-center justify-center bg-muted/40 border border-border"
+                                style={{ height: 320 }}
+                            >
+                                <div className="flex flex-col items-center gap-3">
+                                    <Loader2 className="size-8 animate-spin text-primary/40" />
+                                    <span className="text-[10px] font-mono text-muted-foreground/40 tracking-widest uppercase">
+                                        Reloading 3D Engine...
+                                    </span>
+                                </div>
+                            </div>
+                        ) : (
+                            <ModelViewer
+                                key={refreshKey}
+                                url={glbUrl}
+                                format="glb"
+                                width="100%"
+                                height={320}
+                                showScreenshotButton
+                                environmentPreset="studio"
+                                autoFrame
+                                fadeIn
+                                autoRotate
+                                autoRotateSpeed={0.5}
+                                enableManualRotation
+                                enableManualZoom
+                                enableMouseParallax={false}
+                                enableHoverRotation={false}
+                                onModelLoaded={onModelLoaded}
+                            />
+                        )}
                         {/* GLB badge */}
-                        <div className="absolute top-3 right-3 bg-secondary/80 text-secondary-foreground px-2.5 py-0.5 text-[10px] font-bold rounded-full z-10">
-                            GLB
+                        <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+                            <button
+                                type="button"
+                                onClick={handleRefresh}
+                                title="Refresh 3D model"
+                                className="bg-secondary/80 hover:bg-secondary text-secondary-foreground p-1.5 rounded-full transition-colors cursor-pointer"
+                            >
+                                <RefreshCw
+                                    className={cn('size-3', isRefreshing && 'animate-spin')}
+                                />
+                            </button>
+                            <div className="bg-secondary/80 text-secondary-foreground px-2.5 py-0.5 text-[10px] font-bold rounded-full">
+                                3D
+                            </div>
                         </div>
                         {/* Rotation hint */}
                         {modelLoaded && (

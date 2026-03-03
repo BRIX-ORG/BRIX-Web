@@ -10,7 +10,7 @@ import { useUpdateProfile } from '@/hooks/apis/user.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
 import { updateProfileSchema, type UpdateProfileInput } from '@/validations/user';
-import { LocationSearch } from './LocationSearch';
+import { LocationSearch } from '@/components/settings';
 import type { User as UserType } from '@/types/user.types';
 import type { LocationSuggestion } from '@/types/location.types';
 

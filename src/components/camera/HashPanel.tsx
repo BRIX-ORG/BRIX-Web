@@ -1,4 +1,4 @@
-import { DataStream } from './DataStream';
+import { DataStream } from '@/components/camera';
 
 interface HashPanelProps {
     hash?: string;

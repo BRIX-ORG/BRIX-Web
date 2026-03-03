@@ -16,7 +16,7 @@ import { useForgotPassword, useVerifyOtp, useResetPassword } from '@/hooks/apis/
 import { useAuthStore } from '@/stores/auth-store';
 import { useSwal } from '@/hooks/useSwal';
 import { useToast } from '@/hooks/useToast';
-import { OTPInput } from './OTPInput';
+import { OTPInput } from '@/components/auth';
 import { Input } from '@/components/ui';
 
 type RecoveryStep = 'email' | 'otp' | 'reset';

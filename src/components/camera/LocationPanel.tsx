@@ -1,5 +1,5 @@
 import { GeolocationData } from '@/hooks/useGeolocation';
-import { DataStream } from './DataStream';
+import { DataStream } from '@/components/camera';
 
 interface LocationPanelProps {
     location: GeolocationData;

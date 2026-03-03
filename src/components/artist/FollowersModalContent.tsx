@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback, useReducer } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import type { FollowUser } from '@/types/user.types';
 import { useGetFollowers, useGetFollowing } from '@/hooks/apis/user.api';
-import { FollowUserItem } from './FollowUserItem';
+import { FollowUserItem } from '@/components/artist';
 
 type ModalTab = 'followers' | 'following';
 

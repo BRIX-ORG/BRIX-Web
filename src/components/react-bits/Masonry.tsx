@@ -66,6 +66,7 @@ export interface MasonryItem {
     lat: string;
     lng: string;
     timestamp?: string;
+    address?: string;
 }
 
 interface GridItem extends MasonryItem {
@@ -312,6 +313,18 @@ const Masonry: React.FC<MasonryProps> = ({
                                     </p>
                                 </div>
                             </div>
+
+                            {/* Address */}
+                            {item.address && (
+                                <div className="bg-primary/5 border border-primary/20 p-1.5 rounded">
+                                    <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
+                                        Location
+                                    </p>
+                                    <p className="text-[9px] font-mono text-foreground truncate">
+                                        {item.address}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         {/* Color Shift Overlay */}

@@ -16,7 +16,7 @@ interface MetadataPanelProps {
 
 export function MetadataPanel({ fileData, isProcessing = false }: MetadataPanelProps) {
     return (
-        <div className="bg-muted border border-border flex flex-col h-full min-h-[500px]">
+        <div className="bg-muted border border-border flex flex-col h-full min-h-125">
             {/* Header */}
             <div className="p-4 border-b border-border flex items-center justify-between">
                 <h2 className="text-sm font-bold tracking-[0.2em] uppercase flex items-center gap-2">

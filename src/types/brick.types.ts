@@ -78,8 +78,119 @@ export interface GlbBrick {
     updatedAt: string;
 }
 
+// Unified brick type from GET /api/bricks/user/{idOrUsername}
+// Media can be either MinIO (IMAGE) or Cloudinary (GLTF)
+export interface UserBrick {
+    id: string;
+    userId: string;
+    media: BrickMedia | BrickCloudinaryMedia;
+    thumbnail: BrickThumbnail[] | null;
+    watermark: BrickWatermark | null;
+    title: string;
+    description: string | null;
+    generatedDescription: string | null;
+    mediaType: BrickMediaType;
+    tagType: BrickTagType;
+    isPublic: boolean;
+    address: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+// Paginated response for user bricks
+export interface PaginatedBricksResponse {
+    data: UserBrick[];
+    total: number;
+    limit: number;
+    offset: number;
+}
+
 // Upload Art Brick response
 export type UploadArtBrickResponse = ApiResponse<Brick>;
 
 // Upload GLB Brick response
 export type UploadGlbBrickResponse = ApiResponse<GlbBrick>;
+
+// ─── Brick Detail (GET /api/bricks/{id}) ────────────────────────
+
+export interface BrickDetailUser {
+    id: string;
+    username: string;
+    fullName: string;
+    gender: import('./user.types').Gender;
+    avatar: import('./user.types').CloudinaryImage | null;
+}
+
+export interface BrickDetail {
+    id: string;
+    user: BrickDetailUser;
+    media: BrickMedia | BrickCloudinaryMedia | null;
+    thumbnail: BrickThumbnail[] | null;
+    watermark: BrickWatermark | null;
+    title: string;
+    description: string | null;
+    generatedDescription: string | null;
+    mediaType: BrickMediaType;
+    tagType: BrickTagType;
+    isPublic: boolean;
+    address: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    _count: {
+        votes: number;
+        comments: number;
+    };
+    createdAt: string;
+    updatedAt: string;
+}
+
+// ─── Brick Votes ────────────────────────────────────────────────
+
+export interface BrickVoteStatus {
+    userVote: number | null;
+    upvoteCount: number;
+    downvoteCount: number;
+    score: number;
+}
+
+// ─── Brick Upvoter ──────────────────────────────────────────────
+
+export interface BrickUpvoter {
+    id: string;
+    username: string;
+    fullName: string;
+    gender: import('./user.types').Gender;
+    avatar: import('./user.types').CloudinaryImage | null;
+}
+
+// ─── Brick Comment ──────────────────────────────────────────────
+
+export interface BrickCommentImage {
+    url: string;
+    publicId: string;
+    width: number;
+    height: number;
+    format: string;
+}
+
+export interface BrickComment {
+    id: string;
+    brickId: string;
+    content: string;
+    type: 'COMMENT' | 'REPLY';
+    parentId: string | null;
+    user: BrickDetailUser;
+    likeCount: number;
+    replyCount: number;
+    images: BrickCommentImage[];
+    replies: BrickComment[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface PaginatedCommentsResponse {
+    comments: BrickComment[];
+    total: number;
+}

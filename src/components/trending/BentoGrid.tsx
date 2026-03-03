@@ -1,6 +1,6 @@
 'use client';
 
-import { BentoItem, TrendingItem } from './BentoItem';
+import { BentoItem, TrendingItem } from '@/components/trending';
 
 interface BentoGridProps {
     items: TrendingItem[];

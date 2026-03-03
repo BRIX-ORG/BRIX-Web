@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import { Artist } from './ArtistCard';
+import { Artist } from '@/components/trending';
 import CircularGallery, { GalleryItem } from '@/components/react-bits/CircularGallery';
 
 interface RisingArtistsProps {
@@ -41,7 +41,7 @@ export function RisingArtists({ artists, onViewAll }: RisingArtistsProps) {
                     <ChevronRight className="size-3" />
                 </button>
             </div>
-            <div className="h-[320px] -mx-8">
+            <div className="h-80 -mx-8">
                 <CircularGallery
                     items={galleryItems}
                     bend={2}

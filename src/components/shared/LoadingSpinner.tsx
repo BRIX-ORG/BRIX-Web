@@ -12,7 +12,7 @@ export function LoadingSpinner() {
 
     return (
         <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="relative bg-background/90 rounded-lg p-8 shadow-2xl flex flex-col items-center gap-6 min-w-[300px] border border-border">
+            <div className="relative bg-background/90 rounded-lg p-8 shadow-2xl flex flex-col items-center gap-6 min-w-75 border border-border">
                 {/* Decorative corners - BRIX style */}
                 <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary" />
                 <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-primary" />

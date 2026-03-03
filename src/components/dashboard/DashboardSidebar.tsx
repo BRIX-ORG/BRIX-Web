@@ -22,7 +22,7 @@ import {
     Loader2,
 } from 'lucide-react';
 import { cn } from '@/utils/classnames';
-import { SidebarItem } from './SidebarItem';
+import { SidebarItem } from '@/components/dashboard';
 import { BrixBrandLogo } from '@/components/shared';
 import { useLogout } from '@/hooks/apis/auth.api';
 import { useToast } from '@/hooks/useToast';

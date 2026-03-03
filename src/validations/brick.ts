@@ -55,3 +55,42 @@ export const uploadGlbBrickSchema = z.object({
 });
 
 export type UploadGlbBrickFormInput = z.infer<typeof uploadGlbBrickSchema>;
+
+// ─── Brick comment / reply ──────────────────────────────────────
+
+export const createCommentSchema = z.object({
+    content: z
+        .string()
+        .min(1, 'Comment is required')
+        .max(2000, 'Comment must be at most 2000 characters'),
+    parentId: z.string().uuid().optional(),
+});
+
+export type CreateCommentInput = z.infer<typeof createCommentSchema>;
+
+export const editCommentSchema = z.object({
+    content: z
+        .string()
+        .min(1, 'Comment is required')
+        .max(2000, 'Comment must be at most 2000 characters'),
+});
+
+export type EditCommentInput = z.infer<typeof editCommentSchema>;
+
+// ─── Brick metadata update ──────────────────────────────────────
+
+export const updateBrickSchema = z.object({
+    title: z
+        .string()
+        .min(1, 'Title is required')
+        .max(100, 'Title must be at most 100 characters')
+        .optional(),
+    description: z
+        .string()
+        .max(500, 'Description must be at most 500 characters')
+        .optional()
+        .or(z.literal('')),
+    isPublic: z.boolean().optional(),
+});
+
+export type UpdateBrickInput = z.infer<typeof updateBrickSchema>;
