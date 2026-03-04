@@ -37,7 +37,7 @@ interface RealtimeUploadFormProps {
     defaultLatitude?: number | null;
     defaultLongitude?: number | null;
     capturedPreviewUrl?: string | null;
-    nonce?: string | null;
+    sessionId?: string | null;
 }
 
 export function RealtimeUploadForm({
@@ -46,7 +46,7 @@ export function RealtimeUploadForm({
     defaultLatitude,
     defaultLongitude,
     capturedPreviewUrl,
-    nonce,
+    sessionId,
 }: RealtimeUploadFormProps) {
     const swal = useSwal();
     const { data: session } = useSession();
@@ -402,7 +402,7 @@ export function RealtimeUploadForm({
                         address={watchedAddress}
                         latitude={watchedLat}
                         longitude={watchedLon}
-                        nonce={nonce}
+                        nonce={sessionId?.slice(0, 8)}
                         username={user?.username}
                         avatarUrl={avatarUrl}
                     />

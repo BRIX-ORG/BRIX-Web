@@ -199,7 +199,7 @@ export interface PaginatedCommentsResponse {
 
 export interface RealtimeSession {
     sessionId: string;
-    nonce: string;
+    qrToken: string;
     expiresIn: number;
 }
 

@@ -16,7 +16,7 @@ import {
     LocationPanel,
     HashPanel,
     CaptureButton,
-    NonceOverlay,
+    QROverlay,
     SessionCountdown,
     FormCountdown,
     RealtimeUploadForm,
@@ -35,7 +35,7 @@ export default function CameraPage() {
         isLoading: cameraLoading,
         error: cameraError,
         requestCamera,
-        captureWithNonce,
+        captureWithQR,
         stopCamera,
     } = useCamera();
     const {
@@ -48,7 +48,7 @@ export default function CameraPage() {
     // Realtime session store
     const {
         sessionId,
-        nonce,
+        qrToken,
         countdown,
         status,
         error: sessionError,
@@ -104,19 +104,23 @@ export default function CameraPage() {
         try {
             setRequesting();
             const data = await createSession.mutateAsync();
-            startSession(data.sessionId, data.nonce, data.expiresIn);
+            startSession(data.sessionId, data.qrToken, data.expiresIn);
         } catch {
             setError('Failed to create capture session.');
             swal.error('Session Error', 'Failed to create capture session. Please try again.');
         }
     }, [hasLocation, createSession, startSession, setRequesting, setError, swal]);
 
-    // ─── Step 2: Capture photo with nonce embedded ────────────────
+    // ─── Step 2: Capture photo with QR embedded ──────────────────
     const handleCapture = useCallback(async () => {
-        if (!nonce || status !== 'active') return;
+        if (!qrToken || status !== 'active') return;
 
         setCapturing();
-        const blob = await captureWithNonce(nonce);
+        const coords =
+            location.latitude != null && location.longitude != null
+                ? { latitude: location.latitude, longitude: location.longitude }
+                : undefined;
+        const blob = await captureWithQR(qrToken, coords);
 
         if (blob) {
             const previewUrl = URL.createObjectURL(blob);
@@ -124,7 +128,7 @@ export default function CameraPage() {
         } else {
             setError('Failed to capture image. Please try again.');
         }
-    }, [nonce, status, captureWithNonce, setCapturing, setCapturedImage, setError]);
+    }, [qrToken, status, location, captureWithQR, setCapturing, setCapturedImage, setError]);
 
     // ─── Step 3: Upload captured image ────────────────────────────
     const handleUpload = useCallback(
@@ -208,7 +212,7 @@ export default function CameraPage() {
             case 'requesting':
                 return 'SYSTEM: REQUESTING_SESSION...';
             case 'active':
-                return `SESSION_ACTIVE: NONCE_${nonce} | TTL_${countdown}s`;
+                return `SESSION_ACTIVE: QR_READY | TTL_${countdown}s`;
             case 'capturing':
                 return capturedPreview
                     ? `CAPTURE_COMPLETE: FORM_TTL_${countdown}s`
@@ -285,8 +289,8 @@ export default function CameraPage() {
             {/* Gradient Overlay */}
             <div className="absolute inset-0 z-10 bg-linear-to-t from-background via-transparent to-background/40 pointer-events-none" />
 
-            {/* Nonce Overlay (top-right) */}
-            <NonceOverlay />
+            {/* QR Overlay (top-right) */}
+            <QROverlay />
 
             {/* Left Panel - Location Data (Desktop only) */}
             <div className="absolute left-8 top-1/2 -translate-y-1/2 z-20 w-48 hidden lg:flex flex-col gap-4">
@@ -469,7 +473,7 @@ export default function CameraPage() {
                                             {location.longitude?.toFixed(4) ?? '--'}
                                         </span>
                                         <span className="text-primary neon-glow-text">
-                                            NONCE: {nonce}
+                                            SESSION: {sessionId?.slice(0, 8)}...
                                         </span>
                                     </div>
 
@@ -491,7 +495,7 @@ export default function CameraPage() {
                                     defaultLatitude={location.latitude}
                                     defaultLongitude={location.longitude}
                                     capturedPreviewUrl={capturedPreview}
-                                    nonce={nonce}
+                                    sessionId={sessionId}
                                 />
                             </>
                         )}

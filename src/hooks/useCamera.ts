@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import QRCode from 'qrcode';
 
 interface UseCameraReturn {
     videoRef: React.RefObject<HTMLVideoElement | null>;
@@ -10,7 +11,10 @@ interface UseCameraReturn {
     error: string | null;
     requestCamera: () => Promise<void>;
     capture: () => string | null;
-    captureWithNonce: (nonce: string) => Promise<Blob | null>;
+    captureWithQR: (
+        qrToken: string,
+        coords?: { latitude: number; longitude: number },
+    ) => Promise<Blob | null>;
     stopCamera: () => void;
 }
 
@@ -172,22 +176,63 @@ export function useCamera(): UseCameraReturn {
     }, [isActive]);
 
     /**
-     * Capture current frame with nonce text embedded directly into canvas pixels.
-     * Optimized for backend OCR verification:
-     * - Prefix: "BRX-" + nonce (e.g. "BRX-A91DFK")
-     * - Position: bottom-LEFT, fixed ROI
-     * - Font: bold monospace, cyan #00EEFF on semi-transparent black bg
-     * - Timestamp: top-left (decorative, not validated by BE)
-     *
-     * Backend ROI crop guide:
-     *   roiWidth  = canvas.width * 0.35
-     *   roiHeight = canvas.height * 0.12
-     *   roi = { x: 0, y: canvas.height - roiHeight, width: roiWidth, height: roiHeight }
-     *
-     * Returns a Blob (PNG) ready for upload.
+     * Draw the BRIX diamond logo in the center of a QR canvas.
+     * Uses a white circle background (~18% of QR area) so pyzbar
+     * can still decode with ECC level H.
      */
-    const captureWithNonce = useCallback(
-        async (nonce: string): Promise<Blob | null> => {
+    const drawLogoOnQR = useCallback(
+        (ctx: CanvasRenderingContext2D, qrX: number, qrY: number, qrSize: number) => {
+            const logoSize = Math.round(qrSize * 0.22); // ~18-20% area
+            const centerX = qrX + qrSize / 2;
+            const centerY = qrY + qrSize / 2;
+
+            // White circle background (required for pyzbar readability)
+            const circleR = logoSize * 0.6;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, circleR, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+
+            // BRIX diamond: outer cyan diamond + inner dark square
+            const half = logoSize / 2;
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(Math.PI / 4); // 45° rotation
+
+            // Outer diamond (cyan)
+            const outerHalf = half * 0.8;
+            ctx.fillStyle = '#00EEFF';
+            ctx.beginPath();
+            ctx.roundRect(-outerHalf, -outerHalf, outerHalf * 2, outerHalf * 2, 1);
+            ctx.fill();
+
+            // Inner square (dark)
+            const innerHalf = half * 0.32;
+            ctx.fillStyle = '#050505';
+            ctx.fillRect(-innerHalf, -innerHalf, innerHalf * 2, innerHalf * 2);
+
+            ctx.restore();
+        },
+        [],
+    );
+
+    /**
+     * Capture current frame with QR code embedded directly into canvas pixels.
+     * The QR encodes the qrToken (base64 HMAC-signed JSON from BE).
+     *
+     * - Position: bottom-LEFT
+     * - Size: 96×96px (with ECC H + BRIX logo center)
+     * - Color: cyan #00EEFF on transparent, with dark bg pad
+     * - Timestamp + coords: top-left (decorative)
+     * - Export: JPEG 0.9 quality for upload
+     *
+     * Returns a Blob (JPEG) ready for upload.
+     */
+    const captureWithQR = useCallback(
+        async (
+            qrToken: string,
+            coords?: { latitude: number; longitude: number },
+        ): Promise<Blob | null> => {
             if (!videoRef.current || !isActive) return null;
 
             const video = videoRef.current;
@@ -206,52 +251,59 @@ export function useCamera(): UseCameraReturn {
             // Draw the video frame
             ctx.drawImage(video, 0, 0);
 
-            // ─── Nonce overlay (bottom-LEFT, OCR-optimized) ───────────
-            // Fixed font size: ~4% of canvas height, min 24px
-            const fontSize = Math.max(24, Math.floor(canvas.height * 0.04));
-            const padding = fontSize * 0.6;
+            // ─── QR code overlay (bottom-LEFT) ───────────────────────
+            const qrSize = 96;
+            const qrMargin = 12;
 
-            // Nonce text as-is (BE already includes "BRX-" prefix)
-            const nonceText = nonce;
+            // Generate QR canvas with ECC level H for logo tolerance
+            const qrCanvas = document.createElement('canvas');
+            await QRCode.toCanvas(qrCanvas, qrToken, {
+                errorCorrectionLevel: 'H',
+                width: qrSize,
+                margin: 1,
+                color: {
+                    dark: '#00EEFF', // cyan QR modules
+                    light: '#00000000', // transparent background
+                },
+            });
 
-            ctx.font = `bold ${fontSize}px monospace`;
-            ctx.textBaseline = 'bottom';
-            const textMetrics = ctx.measureText(nonceText);
-            const textWidth = textMetrics.width;
+            // Draw semi-transparent background pad behind QR
+            const padX = qrMargin;
+            const padY = canvas.height - qrSize - qrMargin;
 
-            // ROI box dimensions (fixed region for BE to crop)
-            const boxWidth = textWidth + padding * 2;
-            const boxHeight = fontSize + padding * 2;
-            const boxX = padding; // bottom-LEFT
-            const boxY = canvas.height - boxHeight - padding;
-
-            // Semi-transparent background for contrast isolation
             ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+            ctx.fillRect(padX - 4, padY - 4, qrSize + 8, qrSize + 8);
 
             // 1px border for visual clarity
             ctx.strokeStyle = 'rgba(0, 238, 255, 0.4)';
             ctx.lineWidth = 1;
-            ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+            ctx.strokeRect(padX - 4, padY - 4, qrSize + 8, qrSize + 8);
 
-            // Nonce text — cyan monospace
-            ctx.fillStyle = '#00EEFF';
-            ctx.fillText(nonceText, boxX + padding, boxY + boxHeight - padding);
+            // Draw QR code onto main canvas
+            ctx.drawImage(qrCanvas, padX, padY, qrSize, qrSize);
 
-            // ─── Timestamp watermark (top-LEFT, decorative) ──────────
+            // Draw BRIX logo in center of QR
+            drawLogoOnQR(ctx, padX, padY, qrSize);
+
+            // ─── Timestamp + coordinates watermark (top-LEFT, decorative) ──
             const timestamp = new Date().toISOString();
-            const tsFontSize = Math.floor(fontSize * 0.45);
+            const tsFontSize = Math.max(12, Math.floor(canvas.height * 0.018));
             ctx.font = `${tsFontSize}px monospace`;
             ctx.textBaseline = 'top';
             ctx.fillStyle = 'rgba(0, 238, 255, 0.4)';
-            ctx.fillText(timestamp, padding, padding);
+            ctx.fillText(timestamp, qrMargin, qrMargin);
 
-            // Convert canvas to Blob
+            if (coords) {
+                const coordText = `LAT ${coords.latitude.toFixed(6)}  LNG ${coords.longitude.toFixed(6)}`;
+                ctx.fillText(coordText, qrMargin, qrMargin + tsFontSize + 4);
+            }
+
+            // Convert canvas to Blob (JPEG 0.9 to preserve QR quality)
             return new Promise<Blob | null>((resolve) => {
-                canvas.toBlob((blob) => resolve(blob), 'image/png', 1.0);
+                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.9);
             });
         },
-        [isActive],
+        [isActive, drawLogoOnQR],
     );
 
     const stopCamera = useCallback(() => {
@@ -282,7 +334,7 @@ export function useCamera(): UseCameraReturn {
         error,
         requestCamera,
         capture,
-        captureWithNonce,
+        captureWithQR,
         stopCamera,
     };
 }

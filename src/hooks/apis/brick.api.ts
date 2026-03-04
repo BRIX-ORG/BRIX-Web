@@ -477,7 +477,7 @@ export function useGetCommentUpvoters(commentId: string | undefined) {
 
 /**
  * Create a challenge-based photo capture session.
- * Returns sessionId + nonce (30s TTL). Each session is single-use.
+ * Returns sessionId + qrToken (90s TTL). Each session is single-use.
  */
 export function useCreateRealtimeSession() {
     return useMutation({

@@ -3,7 +3,7 @@ export { CornerBrackets } from './CornerBrackets';
 export { LocationPanel } from './LocationPanel';
 export { DataStream } from './DataStream';
 export { HashPanel } from './HashPanel';
-export { NonceOverlay } from './NonceOverlay';
+export { QROverlay } from './NonceOverlay';
 export { SessionCountdown } from './SessionCountdown';
 export { FormCountdown } from './FormCountdown';
 export { RealtimeUploadForm } from './RealtimeUploadForm';

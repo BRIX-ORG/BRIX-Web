@@ -19,7 +19,7 @@ export const CAPTURE_PHASE_SECONDS = 30;
 interface RealtimeSessionState {
     // Session data from API
     sessionId: string | null;
-    nonce: string | null;
+    qrToken: string | null;
     expiresIn: number;
 
     // Countdown — ticks the full session TTL (90s from BE)
@@ -37,7 +37,7 @@ interface RealtimeSessionState {
 
 interface RealtimeSessionActions {
     /** Set session data from API response and start countdown */
-    startSession: (sessionId: string, nonce: string, expiresIn: number) => void;
+    startSession: (sessionId: string, qrToken: string, expiresIn: number) => void;
 
     /** Tick countdown by 1 second */
     tick: () => void;
@@ -74,7 +74,7 @@ type RealtimeSessionStore = RealtimeSessionState & RealtimeSessionActions;
 
 const initialState: RealtimeSessionState = {
     sessionId: null,
-    nonce: null,
+    qrToken: null,
     expiresIn: 90,
     countdown: 0,
     countdownInterval: null,
@@ -87,7 +87,7 @@ const initialState: RealtimeSessionState = {
 export const useRealtimeSessionStore = create<RealtimeSessionStore>((set, get) => ({
     ...initialState,
 
-    startSession: (sessionId, nonce, expiresIn) => {
+    startSession: (sessionId, qrToken, expiresIn) => {
         // Clear any previous interval
         const prev = get().countdownInterval;
         if (prev) clearInterval(prev);
@@ -110,7 +110,7 @@ export const useRealtimeSessionStore = create<RealtimeSessionStore>((set, get) =
 
         set({
             sessionId,
-            nonce,
+            qrToken,
             expiresIn,
             countdown: expiresIn,
             countdownInterval: interval,
