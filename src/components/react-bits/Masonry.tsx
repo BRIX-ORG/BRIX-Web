@@ -260,7 +260,7 @@ const Masonry: React.FC<MasonryProps> = ({
                             <div className="relative aspect-4/3 w-full bg-primary/10 rounded-sm overflow-hidden border border-primary/20">
                                 <NextImage
                                     src={item.img}
-                                    alt={item.title}
+                                    alt={item.description || item.title}
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                                     sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 20vw"

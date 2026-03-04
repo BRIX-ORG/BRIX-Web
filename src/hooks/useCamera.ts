@@ -10,6 +10,7 @@ interface UseCameraReturn {
     error: string | null;
     requestCamera: () => Promise<void>;
     capture: () => string | null;
+    captureWithNonce: (nonce: string) => Promise<Blob | null>;
     stopCamera: () => void;
 }
 
@@ -170,6 +171,89 @@ export function useCamera(): UseCameraReturn {
         return canvas.toDataURL('image/png');
     }, [isActive]);
 
+    /**
+     * Capture current frame with nonce text embedded directly into canvas pixels.
+     * Optimized for backend OCR verification:
+     * - Prefix: "BRX-" + nonce (e.g. "BRX-A91DFK")
+     * - Position: bottom-LEFT, fixed ROI
+     * - Font: bold monospace, cyan #00EEFF on semi-transparent black bg
+     * - Timestamp: top-left (decorative, not validated by BE)
+     *
+     * Backend ROI crop guide:
+     *   roiWidth  = canvas.width * 0.35
+     *   roiHeight = canvas.height * 0.12
+     *   roi = { x: 0, y: canvas.height - roiHeight, width: roiWidth, height: roiHeight }
+     *
+     * Returns a Blob (PNG) ready for upload.
+     */
+    const captureWithNonce = useCallback(
+        async (nonce: string): Promise<Blob | null> => {
+            if (!videoRef.current || !isActive) return null;
+
+            const video = videoRef.current;
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                console.error('Video not ready for capture');
+                return null;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return null;
+
+            // Draw the video frame
+            ctx.drawImage(video, 0, 0);
+
+            // ─── Nonce overlay (bottom-LEFT, OCR-optimized) ───────────
+            // Fixed font size: ~4% of canvas height, min 24px
+            const fontSize = Math.max(24, Math.floor(canvas.height * 0.04));
+            const padding = fontSize * 0.6;
+
+            // Nonce text as-is (BE already includes "BRX-" prefix)
+            const nonceText = nonce;
+
+            ctx.font = `bold ${fontSize}px monospace`;
+            ctx.textBaseline = 'bottom';
+            const textMetrics = ctx.measureText(nonceText);
+            const textWidth = textMetrics.width;
+
+            // ROI box dimensions (fixed region for BE to crop)
+            const boxWidth = textWidth + padding * 2;
+            const boxHeight = fontSize + padding * 2;
+            const boxX = padding; // bottom-LEFT
+            const boxY = canvas.height - boxHeight - padding;
+
+            // Semi-transparent background for contrast isolation
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+
+            // 1px border for visual clarity
+            ctx.strokeStyle = 'rgba(0, 238, 255, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+            // Nonce text — cyan monospace
+            ctx.fillStyle = '#00EEFF';
+            ctx.fillText(nonceText, boxX + padding, boxY + boxHeight - padding);
+
+            // ─── Timestamp watermark (top-LEFT, decorative) ──────────
+            const timestamp = new Date().toISOString();
+            const tsFontSize = Math.floor(fontSize * 0.45);
+            ctx.font = `${tsFontSize}px monospace`;
+            ctx.textBaseline = 'top';
+            ctx.fillStyle = 'rgba(0, 238, 255, 0.4)';
+            ctx.fillText(timestamp, padding, padding);
+
+            // Convert canvas to Blob
+            return new Promise<Blob | null>((resolve) => {
+                canvas.toBlob((blob) => resolve(blob), 'image/png', 1.0);
+            });
+        },
+        [isActive],
+    );
+
     const stopCamera = useCallback(() => {
         if (stream) {
             stream.getTracks().forEach((track) => track.stop());
@@ -198,6 +282,7 @@ export function useCamera(): UseCameraReturn {
         error,
         requestCamera,
         capture,
+        captureWithNonce,
         stopCamera,
     };
 }

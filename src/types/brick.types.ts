@@ -194,3 +194,16 @@ export interface PaginatedCommentsResponse {
     comments: BrickComment[];
     total: number;
 }
+
+// ─── Realtime Session ───────────────────────────────────────────
+
+export interface RealtimeSession {
+    sessionId: string;
+    nonce: string;
+    expiresIn: number;
+}
+
+export interface RealtimeUploadResult {
+    message: string;
+    sessionId: string;
+}

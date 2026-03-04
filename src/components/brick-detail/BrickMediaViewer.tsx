@@ -203,7 +203,11 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                             <div className="relative w-full aspect-square max-h-125">
                                 <Image
                                     src={imageUrl}
-                                    alt={brick.title}
+                                    alt={
+                                        brick.generatedDescription ||
+                                        brick.description ||
+                                        brick.title
+                                    }
                                     fill
                                     className="object-contain"
                                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -267,7 +271,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                             >
                                 <Image
                                     src={thumb.url}
-                                    alt={`Thumb ${i + 1}`}
+                                    alt={`${brick.title} - thumbnail ${i + 1}`}
                                     fill
                                     className="object-cover"
                                     unoptimized

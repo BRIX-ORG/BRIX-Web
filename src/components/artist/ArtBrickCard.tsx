@@ -33,7 +33,7 @@ export function ArtBrickCard({ brick, className, onClick }: ArtBrickCardProps) {
                     {imageUrl ? (
                         <Image
                             src={imageUrl}
-                            alt={brick.title}
+                            alt={brick.generatedDescription || brick.description || brick.title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 20vw"

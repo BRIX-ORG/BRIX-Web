@@ -11,10 +11,13 @@ import type {
     GlbBrick,
     PaginatedBricksResponse,
     PaginatedCommentsResponse,
+    RealtimeSession,
+    RealtimeUploadResult,
 } from '@/types/brick.types';
 import type {
     UploadArtBrickFormInput,
     UploadGlbBrickFormInput,
+    UploadRealtimeBrickFormInput,
     UpdateBrickInput,
 } from '@/validations/brick';
 
@@ -465,5 +468,79 @@ export function useGetCommentUpvoters(commentId: string | undefined) {
             return response.data.data;
         },
         enabled: !!commentId,
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Realtime Photo Capture
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Create a challenge-based photo capture session.
+ * Returns sessionId + nonce (30s TTL). Each session is single-use.
+ */
+export function useCreateRealtimeSession() {
+    return useMutation({
+        mutationFn: async () => {
+            const response = await apiClient.post<ApiResponse<RealtimeSession>>(
+                '/api/bricks/realtime/session',
+            );
+            return response.data.data;
+        },
+    });
+}
+
+/**
+ * Upload a webcam photo with session validation.
+ * Server validates session (valid, not expired, not used),
+ * checks image integrity, then queues upload via BullMQ.
+ */
+export function useUploadRealtimeBrick() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (
+            data: { file: Blob; sessionId: string } & UploadRealtimeBrickFormInput,
+        ) => {
+            const formData = new FormData();
+            formData.append('file', data.file, 'capture.png');
+            formData.append('sessionId', data.sessionId);
+            formData.append('title', data.title);
+
+            if (data.description) {
+                formData.append('description', data.description);
+            }
+
+            if (data.address) {
+                formData.append('address', data.address);
+            }
+
+            if (data.latitude != null) {
+                formData.append('latitude', data.latitude.toString());
+            }
+
+            if (data.longitude != null) {
+                formData.append('longitude', data.longitude.toString());
+            }
+
+            if (data.isPublic != null) {
+                formData.append('isPublic', data.isPublic.toString());
+            }
+
+            const response = await apiClient.post<ApiResponse<RealtimeUploadResult>>(
+                '/api/bricks/upload/realtime',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            );
+            return response.data.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['bricks'] });
+            queryClient.invalidateQueries({ queryKey: ['userBricks'] });
+        },
     });
 }

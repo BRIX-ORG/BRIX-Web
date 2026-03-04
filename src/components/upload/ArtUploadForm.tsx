@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,6 +24,7 @@ import { uploadArtBrickSchema, type UploadArtBrickFormInput } from '@/validation
 import type { LocationSuggestion } from '@/types/location.types';
 
 export function ArtUploadForm() {
+    const router = useRouter();
     const swal = useSwal();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
@@ -191,7 +193,7 @@ export function ArtUploadForm() {
 
         try {
             showLoading('Uploading art brick...');
-            await uploadArtBrick.mutateAsync({
+            const result = await uploadArtBrick.mutateAsync({
                 file: selectedFile,
                 ...data,
             });
@@ -200,6 +202,7 @@ export function ArtUploadForm() {
             reset();
             setSelectedFile(null);
             setAddressQuery('');
+            router.push(`/dashboard/brick/${result.id}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             swal.error(

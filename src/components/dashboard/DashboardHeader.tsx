@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Bell, Upload, Menu } from 'lucide-react';
+import { Search, Bell, Camera, Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { BrixBrandLogo } from '@/components/shared';
 import { getAvatarUrl } from '@/utils/cloudinary';
@@ -74,11 +74,14 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 </nav>
 
                 <div className="flex gap-2 md:gap-3 border-l border-border pl-3 md:pl-6">
-                    {/* Upload Button */}
-                    <button className="flex items-center gap-2 bg-primary text-primary-foreground px-3 md:px-4 py-1.5 rounded text-xs font-bold uppercase tracking-tighter hover:brightness-110 transition-all">
-                        <Upload className="size-4" />
-                        <span className="hidden sm:inline">Upload</span>
-                    </button>
+                    {/* Camera Button */}
+                    <Link
+                        href="/camera"
+                        className="flex items-center gap-2 bg-primary text-primary-foreground px-3 md:px-4 py-1.5 rounded text-xs font-bold uppercase tracking-tighter hover:brightness-110 transition-all"
+                    >
+                        <Camera className="size-4" />
+                        <span className="hidden sm:inline">Camera</span>
+                    </Link>
 
                     {/* Notifications */}
                     <button className="size-9 flex items-center justify-center rounded border border-border bg-muted hover:bg-muted/80 transition-colors">

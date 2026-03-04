@@ -145,7 +145,11 @@ export function ModelBrickCard({ brick, className, onClick }: ModelBrickCardProp
                             {coverImage ? (
                                 <Image
                                     src={thumbnails[activeThumbnailIndex]?.url || coverImage}
-                                    alt={brick.title}
+                                    alt={
+                                        brick.generatedDescription ||
+                                        brick.description ||
+                                        brick.title
+                                    }
                                     fill
                                     className="object-cover"
                                     sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 20vw"
@@ -218,7 +222,7 @@ export function ModelBrickCard({ brick, className, onClick }: ModelBrickCardProp
                             >
                                 <Image
                                     src={thumb.url}
-                                    alt={`Thumb ${i + 1}`}
+                                    alt={`${brick.title} - thumbnail ${i + 1}`}
                                     fill
                                     className="object-cover"
                                     unoptimized

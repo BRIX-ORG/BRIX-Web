@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +29,7 @@ const MAX_THUMBNAILS = 5;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export function GlbUploadForm() {
+    const router = useRouter();
     const swal = useSwal();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
@@ -229,7 +231,7 @@ export function GlbUploadForm() {
 
         try {
             showLoading('Uploading 3D model...');
-            await uploadGlbBrick.mutateAsync({
+            const result = await uploadGlbBrick.mutateAsync({
                 glb: glbFile,
                 thumbnails: thumbnails.map((t) => t.file),
                 ...data,
@@ -239,6 +241,7 @@ export function GlbUploadForm() {
             setGlbFile(null);
             setThumbnails([]);
             setAddressQuery('');
+            router.push(`/dashboard/brick/${result.id}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             swal.error(
