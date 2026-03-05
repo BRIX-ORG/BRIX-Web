@@ -1,115 +1,376 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { ChatHeader } from './ChatHeader';
-import { MessageBubble, Message } from './MessageBubble';
-import { BrickMessage, BrickData } from './BrickMessage';
-import { MessageInput } from './MessageInput';
-
-// Mock data
-const initialMessages: Message[] = [
-    {
-        id: '1',
-        content:
-            'The drop location has changed. LA-GRID sector 7 is too hot. High surveillance drones spotted.',
-        sender: 'other',
-        senderName: 'NEON_VIPER',
-        senderAvatar:
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuDnEHcr0lTkRKOa3b29Whyb35l5qE6MFVMRNtqO2LAVedu2_kdBxnV-zXQxJIxxClZUlr7an-pVJFLI_ku_5kAb3R9GRNRvFB_W-M2HMzEuSIdsc9yqeDBh_wb-28CgaeR2SuGHXfnkkO2stxqMH8U2xDyUIjaOrpUOSnUubdNJ2KB_YaGLvL-EKtiMA56TzL2PGDnHzwLou1f79jv7eoWgfRfEN1-ID79RpfS2r1hvq0Auo__8gVkUGSiDBa6OLmhWgHjPXozQaZI',
-        reactions: [
-            { emoji: '🔥', count: 2, reacted: false },
-            { emoji: '👀', count: 1, reacted: true },
-        ],
-    },
-    {
-        id: '2',
-        content: "Understood. Where is the new drop? I'm already in transit.",
-        sender: 'me',
-        status: 'delivered',
-        reactions: [],
-    },
-];
-
-const mockBrick: BrickData = {
-    id: 'brick-1',
-    imageUrl:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCZsq-9ejljNACQGDFTbvxyAJ23iD0sHamYCcnjbmXDfTMWyfEF_JpEu-6jT9frgLnrx_pb5O0KbuU0ReOOcZArRSINAukwLcRzrr2R1rHJRuM6gX9u_f8DjkZHcKd0uKgs3S5YPFfJrmQ21mFbww9CX9zu1xWSRz2Y6ZkZcWaTlFS7SCCQ8OYWoTyOoo9UVjnBs3cum4Jc7Ab4Vgbi5Bhxe74uB2u5tDsFqS2TAqlCmKRIltKUPKh6_FS9HcbWmvAkP07YEG5rjek',
-    latitude: '34.0522° N',
-    longitude: '118.2437° W',
-    fileRef: 'IMG_882.BRICK',
-    altitude: '42M MSL',
-    caption: "Check the coordinates. It's an old industrial basement. Access code: 1088.",
-    senderName: 'NEON_VIPER',
-    senderAvatar:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuAsxw0NA3HXdDQQvEWbtIDwkhb0VY-qEW_A28hjvvW_JC7psH6jqNJhbEYThk5tU7pGvPXJG82eCkHCTo3eM6dk1XdRgNgCxhg1OGma3auF44IIXHkIRYsRNx7GJ4k6TsqZzIJNnUWIHjVl8gDRSsOShujPtvGYg8ObDPnDrZ1bQDhc1bae7Azy_2ovOcUykZud6qndcJoTgkDpEy_5ZeP6yQbB9WAKdFLhICEcfYneBrfdKZlaSXQ59KK84XGbLGqCtEktFcb9zm8',
-};
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { Loader2, MessageSquare } from 'lucide-react';
+import { ChatHeader, MessageBubble, BrickMessage, MessageInput } from '@/components/messages';
+import {
+    useChatStore,
+    useConversationMessages,
+    useCurrentConversation,
+    useTypingUsers,
+} from '@/stores/chat-store';
+import { useChatSocket } from '@/providers/ChatSocketProvider';
+import {
+    useGetMessages,
+    useSendMessage,
+    useEditMessage,
+    useDeleteMessage,
+    useToggleReaction,
+    useMarkConversationRead,
+} from '@/hooks/apis/message.api';
+import { getAvatarUrl } from '@/utils/cloudinary';
+import { apiClient } from '@/lib/api-client';
+import type { ApiResponse } from '@/types/api.types';
+import type { Message, Conversation } from '@/types/message.types';
 
 interface ChatAreaProps {
-    userName?: string;
+    onToggleInfo?: () => void;
 }
 
-export function ChatArea({ userName = 'NEON_VIPER' }: ChatAreaProps) {
-    const [messages, setMessages] = useState<Message[]>(initialMessages);
+export function ChatArea({ onToggleInfo }: ChatAreaProps) {
+    const { data: session } = useSession();
+    const currentUserId = session?.user?.id;
 
-    const handleSend = (message: string) => {
-        console.log('Send message:', message);
-        // TODO: Implement message sending
+    const conversation = useCurrentConversation();
+    const conversationId = conversation?.id ?? null;
+    const messages = useConversationMessages(conversationId);
+    const typingUsers = useTypingUsers(conversationId);
+    const partnerIsTyping = conversation ? typingUsers.includes(conversation.partner.id) : false;
+
+    const { joinConversation, emitTyping, emitStopTyping } = useChatSocket();
+    const { fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useGetMessages(
+        conversationId ?? undefined,
+    );
+    const sendMessage = useSendMessage();
+    const editMessage = useEditMessage();
+    const deleteMessage = useDeleteMessage();
+    const toggleReaction = useToggleReaction();
+    const markRead = useMarkConversationRead();
+
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const bottomRef = useRef<HTMLDivElement>(null);
+    const prevScrollHeightRef = useRef<number>(0);
+    const isNearBottomRef = useRef(true);
+    const [showScrollDown, setShowScrollDown] = useState(false);
+
+    // ─── Join/leave conversation room ───────────────────────
+
+    useEffect(() => {
+        if (!conversationId) return;
+        joinConversation(conversationId);
+        markRead.mutate(conversationId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [conversationId]);
+
+    // ─── Auto-scroll on new messages ────────────────────────
+
+    useEffect(() => {
+        if (isNearBottomRef.current) {
+            bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages.length]);
+
+    // ─── Preserve scroll on prepend (load older) ────────────
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container || !isFetchingNextPage) return;
+
+        // Before fetch, capture scroll height
+        prevScrollHeightRef.current = container.scrollHeight;
+    }, [isFetchingNextPage]);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container || prevScrollHeightRef.current === 0) return;
+
+        const newScrollHeight = container.scrollHeight;
+        const diff = newScrollHeight - prevScrollHeightRef.current;
+        if (diff > 0) {
+            container.scrollTop += diff;
+        }
+        prevScrollHeightRef.current = 0;
+    }, [messages]);
+
+    // ─── Scroll detection ───────────────────────────────────
+
+    const handleScroll = useCallback(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = container;
+        isNearBottomRef.current = scrollHeight - scrollTop - clientHeight < 150;
+        setShowScrollDown(!isNearBottomRef.current);
+
+        // Load older messages when scrolled to top
+        if (scrollTop < 80 && hasNextPage && !isFetchingNextPage) {
+            prevScrollHeightRef.current = container.scrollHeight;
+            fetchNextPage();
+        }
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    // ─── Send message ───────────────────────────────────────
+
+    const handleSend = useCallback(
+        (data: { content?: string; images?: File[]; voice?: File; file?: File }) => {
+            if (!conversation || !currentUserId) return;
+
+            const tempId = crypto.randomUUID();
+
+            // Optimistic message
+            const optimistic: Message = {
+                id: tempId,
+                conversationId: conversation.id,
+                senderId: currentUserId,
+                content: data.content || '',
+                images: [],
+                voice: null,
+                file: null,
+                brickId: null,
+                reactions: null,
+                isRead: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                _tempId: tempId,
+                _status: 'sending',
+            };
+
+            useChatStore.getState().addMessage(conversation.id, optimistic);
+
+            sendMessage.mutate(
+                {
+                    receiverId: conversation.partner.id,
+                    content: data.content,
+                    images: data.images,
+                    voice: data.voice,
+                    file: data.file,
+                },
+                {
+                    onSuccess: (realMessage) => {
+                        const store = useChatStore.getState();
+                        const convId = conversation.id;
+                        const realConvId = realMessage.conversationId;
+
+                        // If this was a placeholder conversation, swap it for the real one
+                        if (convId !== realConvId) {
+                            store.replaceMessage(tempId, realMessage, convId);
+                            store.removeConversation(convId);
+
+                            apiClient
+                                .get<ApiResponse<Conversation>>(`/api/conversations/${realConvId}`)
+                                .then((res) => {
+                                    store.upsertConversation(res.data.data);
+                                    store.setCurrentConversation(realConvId);
+                                    joinConversation(realConvId);
+                                });
+                        } else {
+                            store.replaceMessage(tempId, realMessage);
+                        }
+                    },
+                    onError: () => {
+                        useChatStore.getState().updateMessage({
+                            id: tempId,
+                            _status: 'failed',
+                        });
+                    },
+                },
+            );
+        },
+        [conversation, currentUserId, sendMessage, joinConversation],
+    );
+
+    // ─── Reaction ───────────────────────────────────────────
+
+    const handleReaction = useCallback(
+        (messageId: string, emoji: string) => {
+            toggleReaction.mutate({ messageId, emoji });
+        },
+        [toggleReaction],
+    );
+
+    // ─── Edit ───────────────────────────────────────────────
+
+    const handleEdit = useCallback(
+        (messageId: string, content: string) => {
+            editMessage.mutate({ messageId, content });
+        },
+        [editMessage],
+    );
+
+    // ─── Delete ─────────────────────────────────────────────
+
+    const handleDelete = useCallback(
+        (messageId: string) => {
+            if (!conversationId) return;
+            deleteMessage.mutate({ messageId, conversationId });
+        },
+        [conversationId, deleteMessage],
+    );
+
+    // ─── Typing ─────────────────────────────────────────────
+
+    const handleTyping = useCallback(() => {
+        if (conversationId) emitTyping(conversationId);
+    }, [conversationId, emitTyping]);
+
+    const handleStopTyping = useCallback(() => {
+        if (conversationId) emitStopTyping(conversationId);
+    }, [conversationId, emitStopTyping]);
+
+    // ─── Date dividers ──────────────────────────────────────
+
+    const getDateLabel = (dateStr: string) => {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = now.getTime() - date.getTime();
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+        if (days === 0) return 'TODAY';
+        if (days === 1) return 'YESTERDAY';
+        return date
+            .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            .toUpperCase();
     };
 
-    const handleReaction = useCallback((messageId: string, emoji: string) => {
-        setMessages((prev) =>
-            prev.map((msg) => {
-                if (msg.id !== messageId) return msg;
-                const reactions = [...(msg.reactions ?? [])];
-                const existing = reactions.find((r) => r.emoji === emoji);
-                if (existing) {
-                    if (existing.reacted) {
-                        existing.count -= 1;
-                        existing.reacted = false;
-                        if (existing.count <= 0) {
-                            return {
-                                ...msg,
-                                reactions: reactions.filter((r) => r.emoji !== emoji),
-                            };
-                        }
-                    } else {
-                        existing.count += 1;
-                        existing.reacted = true;
-                    }
-                    return { ...msg, reactions: [...reactions] };
-                }
-                return { ...msg, reactions: [...reactions, { emoji, count: 1, reacted: true }] };
-            }),
+    const shouldShowDateDivider = (msg: Message, prevMsg: Message | undefined) => {
+        if (!prevMsg) return true;
+        const d1 = new Date(msg.createdAt).toDateString();
+        const d2 = new Date(prevMsg.createdAt).toDateString();
+        return d1 !== d2;
+    };
+
+    // ─── Empty state ────────────────────────────────────────
+
+    if (!conversation) {
+        return (
+            <section className="h-full flex flex-col items-center justify-center bg-background/50">
+                <MessageSquare className="size-12 text-muted-foreground/20 mb-4" />
+                <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">
+                    Select a conversation
+                </p>
+            </section>
         );
-    }, []);
+    }
+
+    const currentUserAvatar = session?.user?.avatar
+        ? getAvatarUrl(session.user.avatar, session.user.gender)
+        : undefined;
 
     return (
-        <section className="flex-1 flex flex-col bg-background/50">
+        <section className="h-full flex flex-col bg-background/50 min-w-0">
             {/* Header */}
-            <ChatHeader userName={userName} isOnline />
+            <ChatHeader
+                partner={conversation.partner}
+                conversationId={conversation.id}
+                onToggleInfo={onToggleInfo}
+            />
 
-            {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                {/* System Divider */}
-                <div className="flex items-center gap-4">
-                    <div className="flex-1 h-px bg-border" />
-                    <span className="text-[9px] font-mono text-muted-foreground font-bold uppercase tracking-widest">
-                        Yesterday 23:58 UTC
-                    </span>
-                    <div className="flex-1 h-px bg-border" />
+            {/* Messages */}
+            <div
+                ref={scrollContainerRef}
+                onScroll={handleScroll}
+                className="flex-1 overflow-y-auto p-6 flex flex-col"
+            >
+                {/* Spacer pushes messages to bottom when few */}
+                <div className="flex-1" />
+
+                <div className="space-y-4">
+                    {/* Load older */}
+                    {isFetchingNextPage && (
+                        <div className="flex justify-center py-4">
+                            <Loader2 className="size-5 text-primary animate-spin" />
+                        </div>
+                    )}
+
+                    {isLoading && (
+                        <div className="flex justify-center py-20">
+                            <Loader2 className="size-6 text-primary animate-spin" />
+                        </div>
+                    )}
+
+                    {!isLoading &&
+                        messages.map((msg, i) => {
+                            const prevMsg = messages[i - 1];
+                            const showDivider = shouldShowDateDivider(msg, prevMsg);
+                            const isMe = msg.senderId === currentUserId;
+
+                            return (
+                                <div key={msg._tempId || msg.id}>
+                                    {/* Date divider */}
+                                    {showDivider && (
+                                        <div className="flex items-center gap-4 py-4">
+                                            <div className="flex-1 h-px bg-border" />
+                                            <span className="text-[9px] font-mono text-muted-foreground font-bold uppercase tracking-widest">
+                                                {getDateLabel(msg.createdAt)}
+                                            </span>
+                                            <div className="flex-1 h-px bg-border" />
+                                        </div>
+                                    )}
+
+                                    {/* Brick message */}
+                                    {msg.brickId ? (
+                                        <BrickMessage
+                                            message={msg}
+                                            isMe={isMe}
+                                            partner={conversation.partner}
+                                        />
+                                    ) : (
+                                        <MessageBubble
+                                            message={msg}
+                                            isMe={isMe}
+                                            partner={conversation.partner}
+                                            currentUserAvatar={currentUserAvatar}
+                                            onReaction={handleReaction}
+                                            onEdit={handleEdit}
+                                            onDelete={handleDelete}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
                 </div>
-
-                {/* Messages */}
-                {messages.map((msg) => (
-                    <MessageBubble key={msg.id} message={msg} onReaction={handleReaction} />
-                ))}
-
-                {/* Brick Share */}
-                <BrickMessage brick={mockBrick} />
+                {/* Typing indicator bubble */}
+                {partnerIsTyping && (
+                    <div className="flex items-end gap-3">
+                        <Image
+                            src={getAvatarUrl(
+                                conversation.partner.avatar,
+                                conversation.partner.gender,
+                            )}
+                            alt={conversation.partner.username}
+                            width={28}
+                            height={28}
+                            className="size-7 rounded-full bg-muted object-cover border border-primary/20 shrink-0"
+                        />
+                        <div className="bg-muted border border-border rounded-lg rounded-bl-none px-4 py-3 flex items-center gap-1">
+                            <span className="size-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:0ms]" />
+                            <span className="size-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:150ms]" />
+                            <span className="size-1.5 rounded-full bg-primary/60 animate-bounce [animation-delay:300ms]" />
+                        </div>
+                    </div>
+                )}
+                <div ref={bottomRef} />
             </div>
 
+            {/* Scroll-to-bottom button */}
+            {showScrollDown && (
+                <button
+                    onClick={() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    className="absolute bottom-24 right-8 size-10 flex items-center justify-center bg-muted border border-border rounded-full shadow-lg hover:border-primary transition-colors z-10"
+                >
+                    <span className="text-lg leading-none">↓</span>
+                </button>
+            )}
+
             {/* Input */}
-            <MessageInput onSend={handleSend} />
+            <MessageInput
+                onSend={handleSend}
+                onTyping={handleTyping}
+                onStopTyping={handleStopTyping}
+                isSending={sendMessage.isPending}
+            />
         </section>
     );
 }

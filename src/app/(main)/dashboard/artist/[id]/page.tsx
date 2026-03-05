@@ -25,6 +25,8 @@ import {
     useGetFollowing,
     useCheckFollow,
 } from '@/hooks/apis/user.api';
+import { getConversationByPartner } from '@/hooks/apis/message.api';
+import { useChatStore } from '@/stores/chat-store';
 
 // ─── Mock data for sections without API yet ────────────────────────
 
@@ -182,8 +184,38 @@ export default function ArtistProfilePage() {
                 isFollowLoading={isFollowLoading}
                 onFollow={handleFollow}
                 onUnfollow={handleUnfollow}
-                onConnect={() => {
-                    // TODO: implement connect / message
+                onChat={async () => {
+                    if (!profileUser || isOwnProfile) return;
+
+                    // Check if a conversation already exists with this user
+                    const existing = await getConversationByPartner(profileUser.id);
+
+                    if (existing) {
+                        // Existing conversation → select it and navigate
+                        useChatStore.getState().setCurrentConversation(existing.id);
+                    } else {
+                        // No conversation yet → create a temporary one client-side
+                        // Backend will create the real conversation on first message
+                        useChatStore.getState().upsertConversation({
+                            id: profileUser.id,
+                            partner: {
+                                id: profileUser.id,
+                                username: profileUser.username,
+                                fullName: profileUser.fullName,
+                                avatar: profileUser.avatar,
+                                gender: profileUser.gender,
+                                isOnline: false,
+                                lastSeenAt: null,
+                            },
+                            lastMessage: null,
+                            unreadCount: 0,
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString(),
+                        });
+                        useChatStore.getState().setCurrentConversation(profileUser.id);
+                    }
+
+                    router.push('/messages');
                 }}
                 onEditProfile={() => router.push('/dashboard/settings')}
                 onFollowersClick={openFollowersModal}

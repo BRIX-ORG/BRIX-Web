@@ -1,21 +1,42 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Settings, Search } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { BrixBrandLogo } from '@/components/shared';
 import { cn } from '@/utils/classnames';
-import Image from 'next/image';
+import { getAvatarUrl } from '@/utils/cloudinary';
+import { useGetTotalUnread } from '@/hooks/apis/message.api';
+import { useChatStore } from '@/stores/chat-store';
 
 const navLinks = [
     { href: '/dashboard/feed', label: 'CHANNELS' },
-    { href: '/dashboard/messages', label: 'MESSAGES' },
+    { href: '/messages', label: 'MESSAGES' },
     { href: '/dashboard/network', label: 'NETWORK' },
     { href: '/dashboard/archive', label: 'VAULT' },
 ];
 
 export function MessagesHeader() {
     const pathname = usePathname();
+    const { data: session } = useSession();
+    const totalUnread = useChatStore((s) => s.totalUnread);
+    const setTotalUnread = useChatStore((s) => s.setTotalUnread);
+
+    const { data: unreadData } = useGetTotalUnread();
+
+    // Sync total unread to store via effect
+    useEffect(() => {
+        if (unreadData) {
+            setTotalUnread(unreadData.totalUnread);
+        }
+    }, [unreadData, setTotalUnread]);
+
+    const avatarUrl = session?.user
+        ? getAvatarUrl(session.user.avatar, session.user.gender)
+        : undefined;
 
     return (
         <header className="flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-md px-6 py-3 z-50">
@@ -30,12 +51,17 @@ export function MessagesHeader() {
                             key={link.href}
                             href={link.href}
                             className={cn(
-                                'hover:text-primary transition-colors uppercase',
+                                'relative hover:text-primary transition-colors uppercase',
                                 pathname === link.href &&
                                     'text-primary underline underline-offset-8',
                             )}
                         >
                             {link.label}
+                            {link.href === '/messages' && totalUnread > 0 && (
+                                <span className="absolute -top-1.5 -right-4 size-4 flex items-center justify-center bg-primary text-primary-foreground text-[8px] font-black rounded-full">
+                                    {totalUnread > 99 ? '99+' : totalUnread}
+                                </span>
+                            )}
                         </Link>
                     ))}
                 </nav>
@@ -57,15 +83,22 @@ export function MessagesHeader() {
                     <button className="size-10 flex items-center justify-center rounded bg-muted border border-border hover:border-primary transition-all">
                         <Settings className="size-5" />
                     </button>
-                    <div className="size-10 rounded bg-primary/20 border border-primary/50 overflow-hidden">
-                        <Image
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW0VCSYVMIckTPuZHyAdl8YSlERy4EN6uxTtrFsPPxB_PT67kWuQ2okWETg-Ly6gCzeYvjEkJpoe4jFdo2iQvt56VZvxVf2lRzSoglbbZ9r0GZkrxt68ADJmgcXo7VGhucpuidAaHQtugZm2DDF5DikAKsr9oL30OMDzkGlnAUhFVoN0zCMYek-n9U-nHqO-fSdstSBC5eM4ogbK3uXhkXQV0UqnVNzqH8DSNPcdMyyF5F4uEuCL7K1gu9l13ky7fsEDneaFezsi0"
-                            alt="User avatar"
-                            width={40}
-                            height={40}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
+                    <Link
+                        href={session?.user ? `/dashboard/artist/${session.user.username}` : '#'}
+                        className="size-10 rounded bg-primary/20 border border-primary/50 overflow-hidden"
+                    >
+                        {avatarUrl ? (
+                            <Image
+                                src={avatarUrl}
+                                alt={session?.user?.username || 'User'}
+                                width={40}
+                                height={40}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-muted" />
+                        )}
+                    </Link>
                 </div>
             </div>
         </header>

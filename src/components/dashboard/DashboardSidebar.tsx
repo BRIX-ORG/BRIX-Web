@@ -21,12 +21,15 @@ import {
     X,
     Loader2,
 } from 'lucide-react';
+import { useEffect } from 'react';
 import { cn } from '@/utils/classnames';
 import { SidebarItem } from '@/components/dashboard';
 import { BrixBrandLogo } from '@/components/shared';
 import { useLogout } from '@/hooks/apis/auth.api';
+import { useGetTotalUnread } from '@/hooks/apis/message.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
+import { useChatStore } from '@/stores/chat-store';
 import { LucideIcon } from 'lucide-react';
 
 export type SidebarItemType = {
@@ -143,7 +146,17 @@ export function DashboardSidebar({
     const { success, error: toastError } = useToast();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
+    const totalUnread = useChatStore((s) => s.totalUnread);
+    const setTotalUnread = useChatStore((s) => s.setTotalUnread);
     const logoutMutation = useLogout();
+
+    const { data: unreadData } = useGetTotalUnread();
+
+    useEffect(() => {
+        if (unreadData) {
+            setTotalUnread(unreadData.totalUnread);
+        }
+    }, [unreadData, setTotalUnread]);
 
     const handleLogout = async () => {
         try {
@@ -240,6 +253,9 @@ export function DashboardSidebar({
                                             pathname={pathname}
                                             isCollapsed={isCollapsed}
                                             onClose={onClose}
+                                            badge={
+                                                item.href === '/messages' ? totalUnread : undefined
+                                            }
                                         />
                                     ))}
                                 </ul>

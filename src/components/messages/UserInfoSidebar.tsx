@@ -1,96 +1,194 @@
+'use client';
+
 import Image from 'next/image';
-import { TrustScoreCircle } from './TrustScoreCircle';
+import Link from 'next/link';
+import { Loader2, X } from 'lucide-react';
+import { TrustScoreCircle } from '@/components/messages';
+import { useCurrentConversation } from '@/stores/chat-store';
+import {
+    useGetConversationMedia,
+    useGetConversationFiles,
+    useDeleteConversation,
+} from '@/hooks/apis/message.api';
+import { getAvatarUrl } from '@/utils/cloudinary';
+import { timeAgo } from '@/utils/time';
+import { ConfirmPopup } from '@/components/shared';
+import { useState } from 'react';
 
 interface UserInfoSidebarProps {
-    userName?: string;
-    trustScore?: number;
-    totalBricks?: number;
-    linkDuration?: string;
-    mutualNodes?: number;
-    sharedMedia?: string[];
+    onClose?: () => void;
 }
 
-export function UserInfoSidebar({
-    trustScore = 75,
-    totalBricks = 142,
-    linkDuration = '342D',
-    mutualNodes = 18,
-    sharedMedia = [
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuDSpqf5xidFr1CwD_Qt52baIsBXBfTszjQUWiTGjZ9lUqoz5XqF2zs1txZvPZezTi9GfwkaUzL0Fm5XCnbjMJXWGinrS4grBzYtZEZmHrDhjVr5rmJ2dIVyO_-g7SzzOGHCQcYY7DRQDjjXqy96cjlG41W2vnkvbamnU7rcQjqO5nCCunbL870uL7VxxPYWVuUCib_Q0VSS1mx7CeyEvpWAry8QWSCNhTpxSg2zAGun8l6zDXC68GvdWIH9J4OH1F5VFF4WJS91Yxc',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBhqI5yn_9tJwOV_C2V2J7tMm3QH2L9x0BQchM5VXnbRSZ6CiCrVf5rsKo0tuEcysCta56NZ3-ROgVMtqtH6eW5XX3WPIG9L7k3pTm1A2yaEp7eLygWATAOFk7-RHKsSiQhpch9Rafp31XDZS8qTgw1NbBkEfrOYJ5R5gs7T6JHoCEy1CWGH40oQGjMwAuQxVxUKomFj2Vymr7axrkapU5aT2ySsGNP7I3YSQ6e-tTQpTyYVg87Kz5Cl9BxNkTUeEGLTMWG7wRwhEQ',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBwF-_FpH4HAlEUtcx3huR5lvs5peG3_aUu8XX8otNFbNNl9H_QUIQr2Z7MOcs62avACMTkhdawr9K_RFGT_ZXDfmbVUD-_YexGk2sAwWGqt0yxB4RqAiVJlJ5dTSl11QfjEoHI7sGp_c3PHZapOXLduueaebt8uFiLKCTyX6DpyuwFAGiV9S_O6Vhe_ofWsZQom3UsOX81hZ5C6ddDT-JOiDEo8VbiP-K0lvR4MuWQjw16ZweOVDWE05ftXwzg62bbpsvxtfa9jHY',
-    ],
-}: UserInfoSidebarProps) {
-    return (
-        <aside className="w-80 border-l border-border bg-background flex flex-col p-6 overflow-y-auto">
-            <h3 className="text-[10px] font-black tracking-[0.3em] text-primary/60 uppercase mb-8">
-                RELATIONSHIP_METADATA
-            </h3>
+export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
+    const conversation = useCurrentConversation();
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const deleteConversation = useDeleteConversation();
 
-            {/* Trust Score */}
-            <div className="mb-10">
-                <TrustScoreCircle score={trustScore} />
-                <p className="text-[11px] text-muted-foreground text-center mt-6 leading-relaxed italic">
-                    &quot;High-level interaction history. Link integrity verified through{' '}
-                    {totalBricks > 10 ? totalBricks : 'multiple'} shared bricks.&quot;
+    const conversationId = conversation?.id;
+    const partner = conversation?.partner;
+
+    const { data: mediaData, isLoading: mediaLoading } = useGetConversationMedia(conversationId);
+    const { data: filesData, isLoading: filesLoading } = useGetConversationFiles(conversationId);
+
+    const mediaItems = mediaData?.pages.flatMap((p) => p.data) ?? [];
+    const fileItems = filesData?.pages.flatMap((p) => p.data) ?? [];
+
+    if (!conversation || !partner) {
+        return (
+            <aside className="w-80 border-l border-border bg-background flex flex-col items-center justify-center p-6">
+                <p className="text-xs text-muted-foreground/40 uppercase tracking-widest">
+                    No conversation selected
                 </p>
+            </aside>
+        );
+    }
+
+    const handleDeleteConversation = () => {
+        deleteConversation.mutate(conversation.id);
+        setShowDeleteConfirm(false);
+    };
+
+    return (
+        <aside className="w-80 border-l border-border bg-background flex flex-col overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-border">
+                <h3 className="text-[10px] font-black tracking-[0.3em] text-primary/60 uppercase">
+                    RELATIONSHIP_METADATA
+                </h3>
+                {onClose && (
+                    <button
+                        onClick={onClose}
+                        className="size-8 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        <X className="size-4" />
+                    </button>
+                )}
             </div>
 
-            <div className="space-y-6">
-                {/* Connection Stats */}
-                <div className="border-t border-border pt-6">
-                    <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">
-                        Connection Stats
-                    </p>
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                            <span className="text-xs text-muted-foreground">
-                                Total Bricks Shared
-                            </span>
-                            <span className="text-sm font-bold font-mono">{totalBricks}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-xs text-muted-foreground">Link Duration</span>
-                            <span className="text-sm font-bold font-mono">{linkDuration}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-xs text-muted-foreground">Mutual Nodes</span>
-                            <span className="text-sm font-bold font-mono">{mutualNodes}</span>
-                        </div>
+            <div className="p-6 flex flex-col flex-1">
+                {/* Partner info */}
+                <div className="flex flex-col items-center mb-8">
+                    <Link href={`/dashboard/artist/${partner.username}`}>
+                        <Image
+                            src={getAvatarUrl(partner.avatar, partner.gender)}
+                            alt={partner.username}
+                            width={80}
+                            height={80}
+                            className="size-20 rounded-full border-2 border-primary/30 object-cover bg-muted"
+                        />
+                    </Link>
+                    <Link
+                        href={`/dashboard/artist/${partner.username}`}
+                        className="mt-3 text-sm font-black uppercase tracking-wider hover:text-primary transition-colors"
+                    >
+                        {partner.username}
+                    </Link>
+                    <p className="text-xs text-muted-foreground">{partner.fullName}</p>
+                    <div className="flex items-center gap-1.5 mt-1">
+                        <div
+                            className={`size-2 rounded-full ${partner.isOnline ? 'bg-green-500' : 'bg-muted-foreground/40'}`}
+                        />
+                        <span className="text-[10px] font-mono text-muted-foreground">
+                            {partner.isOnline
+                                ? 'ONLINE'
+                                : partner.lastSeenAt
+                                  ? `Last seen ${timeAgo(partner.lastSeenAt)}`
+                                  : 'OFFLINE'}
+                        </span>
                     </div>
+                </div>
+
+                {/* Trust Score */}
+                <div className="mb-8">
+                    <TrustScoreCircle score={75} />
                 </div>
 
                 {/* Shared Media */}
-                <div className="border-t border-border pt-6">
+                <div className="border-t border-border pt-6 mb-6">
                     <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">
                         Shared Media
                     </p>
-                    <div className="grid grid-cols-3 gap-2">
-                        {sharedMedia.slice(0, 3).map((url, i) => (
-                            <div
-                                key={i}
-                                className="aspect-square bg-muted rounded border border-border overflow-hidden hover:border-primary cursor-pointer transition-all"
-                            >
-                                <Image
-                                    src={url}
-                                    alt={`Shared media ${i + 1}`}
-                                    width={80}
-                                    height={80}
-                                    className="w-full h-full object-cover grayscale hover:grayscale-0"
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <button className="w-full mt-4 text-[10px] font-bold text-primary uppercase hover:underline">
-                        View All {totalBricks} Bricks
-                    </button>
+                    {mediaLoading ? (
+                        <div className="flex justify-center py-4">
+                            <Loader2 className="size-4 text-primary animate-spin" />
+                        </div>
+                    ) : mediaItems.length > 0 ? (
+                        <div className="grid grid-cols-3 gap-2">
+                            {mediaItems.slice(0, 9).map((item) => (
+                                <div
+                                    key={item.messageId + item.data.objectName}
+                                    className="aspect-square bg-muted rounded border border-border overflow-hidden hover:border-primary cursor-pointer transition-all"
+                                >
+                                    <Image
+                                        src={item.data.url}
+                                        alt="Shared media"
+                                        width={80}
+                                        height={80}
+                                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-xs text-muted-foreground/40 text-center py-4">
+                            No shared media
+                        </p>
+                    )}
                 </div>
+
+                {/* Shared Files */}
+                <div className="border-t border-border pt-6 mb-6">
+                    <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">
+                        Shared Files
+                    </p>
+                    {filesLoading ? (
+                        <div className="flex justify-center py-4">
+                            <Loader2 className="size-4 text-primary animate-spin" />
+                        </div>
+                    ) : fileItems.length > 0 ? (
+                        <div className="space-y-2">
+                            {fileItems.slice(0, 5).map((item) => (
+                                <a
+                                    key={item.messageId + item.data.objectName}
+                                    href={item.data.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 px-3 py-2 bg-muted/50 border border-border rounded-sm hover:border-primary/30 transition-colors text-xs"
+                                >
+                                    <span className="truncate flex-1 font-bold">
+                                        {item.data.fileName}
+                                    </span>
+                                    <span className="text-[10px] text-muted-foreground shrink-0">
+                                        {(item.data.fileSize / 1024).toFixed(1)} KB
+                                    </span>
+                                </a>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-xs text-muted-foreground/40 text-center py-4">
+                            No shared files
+                        </p>
+                    )}
+                </div>
+
+                {/* Delete conversation */}
+                <button
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="mt-auto w-full py-3 border border-destructive/30 bg-destructive/5 text-destructive text-[10px] font-black uppercase tracking-[0.2em] hover:bg-destructive/20 transition-all"
+                >
+                    DELETE_CONVERSATION
+                </button>
             </div>
 
-            {/* Terminate Button */}
-            <button className="mt-auto w-full py-3 border border-destructive/30 bg-destructive/5 text-destructive text-[10px] font-black uppercase tracking-[0.2em] hover:bg-destructive/20 transition-all">
-                TERMINATE_CONNECTION
-            </button>
+            <ConfirmPopup
+                isOpen={showDeleteConfirm}
+                onClose={() => setShowDeleteConfirm(false)}
+                onConfirm={handleDeleteConversation}
+                title="Delete conversation?"
+                message="This conversation will be hidden from your inbox. Messages are not permanently deleted."
+                confirmText="Delete"
+                type="danger"
+            />
         </aside>
     );
 }

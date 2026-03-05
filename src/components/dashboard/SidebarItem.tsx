@@ -11,9 +11,16 @@ interface SidebarItemProps {
     pathname: string;
     isCollapsed?: boolean;
     onClose?: () => void;
+    badge?: number;
 }
 
-export function SidebarItem({ item, pathname, isCollapsed = false, onClose }: SidebarItemProps) {
+export function SidebarItem({
+    item,
+    pathname,
+    isCollapsed = false,
+    onClose,
+    badge,
+}: SidebarItemProps) {
     const isActive = pathname === item.href || (item.subItems && pathname.startsWith(item.href));
     const [isExpanded, setIsExpanded] = useState(isActive);
 
@@ -50,6 +57,11 @@ export function SidebarItem({ item, pathname, isCollapsed = false, onClose }: Si
                                 item.subItems && isExpanded && 'rotate-12 scale-110 text-primary',
                             )}
                         />
+                        {!!badge && badge > 0 && (
+                            <span className="absolute -top-1 -right-1 size-4 flex items-center justify-center bg-primary text-primary-foreground text-[8px] font-black rounded-full">
+                                {badge > 99 ? '99+' : badge}
+                            </span>
+                        )}
                         {/* Chevron indicator for items with subitems */}
                         {item.subItems && (
                             <div
@@ -169,6 +181,11 @@ export function SidebarItem({ item, pathname, isCollapsed = false, onClose }: Si
                         {item.title}
                     </span>
                 </div>
+                {!!badge && badge > 0 && (
+                    <span className="size-5 flex items-center justify-center bg-primary text-primary-foreground text-[9px] font-black rounded-full shrink-0">
+                        {badge > 99 ? '99+' : badge}
+                    </span>
+                )}
                 {item.subItems && (
                     <div className={cn('transition-colors', isExpanded ? 'text-primary' : '')}>
                         {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}

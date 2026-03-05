@@ -1,7 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { BadgeCheck, Shield, UserPlus, UserCheck, Terminal, Pencil, Loader2 } from 'lucide-react';
+import {
+    BadgeCheck,
+    Shield,
+    UserPlus,
+    UserCheck,
+    MessageSquare,
+    Pencil,
+    Loader2,
+} from 'lucide-react';
 import type { Gender } from '@/types/user.types';
 import { getAvatarUrl, type CloudinaryImage } from '@/utils/cloudinary';
 
@@ -26,7 +34,7 @@ interface ArtistHeroSectionProps {
     isFollowLoading?: boolean;
     onFollow?: () => void;
     onUnfollow?: () => void;
-    onConnect?: () => void;
+    onChat?: () => void;
     onEditProfile?: () => void;
     onFollowersClick?: () => void;
     onFollowingClick?: () => void;
@@ -39,7 +47,7 @@ export function ArtistHeroSection({
     isFollowLoading = false,
     onFollow,
     onUnfollow,
-    onConnect,
+    onChat,
     onEditProfile,
     onFollowersClick,
     onFollowingClick,
@@ -163,10 +171,10 @@ export function ArtistHeroSection({
                                 </button>
                             )}
                             <button
-                                onClick={onConnect}
+                                onClick={onChat}
                                 className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-secondary to-primary text-primary-foreground rounded-sm font-bold uppercase text-xs hover:opacity-90 transition-all cursor-pointer"
                             >
-                                <Terminal className="size-4" /> Connect
+                                <MessageSquare className="size-4" /> Chat
                             </button>
                         </>
                     )}
