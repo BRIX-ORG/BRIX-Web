@@ -37,6 +37,9 @@ interface ContactsSidebarProps {
 }
 
 export function ContactsSidebar({ onSelectContact }: ContactsSidebarProps) {
+    const activeContacts = mockContacts.filter((c) => c.isOnline);
+    const offlineContacts = mockContacts.filter((c) => !c.isOnline);
+
     return (
         <aside className="w-72 border-r border-border bg-background flex flex-col">
             {/* Active Sessions */}
@@ -51,13 +54,42 @@ export function ContactsSidebar({ onSelectContact }: ContactsSidebarProps) {
                 </div>
 
                 <div className="space-y-1">
-                    {mockContacts.map((contact) => (
-                        <ContactItem
-                            key={contact.id}
-                            contact={contact}
-                            onClick={() => onSelectContact?.(contact)}
-                        />
-                    ))}
+                    {activeContacts.length > 0 ? (
+                        activeContacts.map((contact) => (
+                            <ContactItem
+                                key={contact.id}
+                                contact={contact}
+                                onClick={() => onSelectContact?.(contact)}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-[10px] text-muted-foreground/50 font-mono uppercase tracking-widest text-center py-3">
+                            No active sessions
+                        </p>
+                    )}
+                </div>
+            </div>
+
+            {/* Offline / Inactive */}
+            <div className="p-4 flex-1 overflow-y-auto">
+                <span className="text-[10px] font-bold tracking-widest text-muted-foreground/50 uppercase mb-4 block">
+                    Offline
+                </span>
+
+                <div className="space-y-1">
+                    {offlineContacts.length > 0 ? (
+                        offlineContacts.map((contact) => (
+                            <ContactItem
+                                key={contact.id}
+                                contact={contact}
+                                onClick={() => onSelectContact?.(contact)}
+                            />
+                        ))
+                    ) : (
+                        <p className="text-[10px] text-muted-foreground/50 font-mono uppercase tracking-widest text-center py-3">
+                            No offline contacts
+                        </p>
+                    )}
                 </div>
             </div>
 

@@ -37,6 +37,9 @@ importers:
             clsx:
                 specifier: ^2.1.1
                 version: 2.1.1
+            emoji-picker-react:
+                specifier: ^4.18.0
+                version: 4.18.0(react@19.2.4)
             firebase:
                 specifier: ^12.8.0
                 version: 12.8.0
@@ -3724,6 +3727,15 @@ packages:
                 integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==,
             }
 
+    emoji-picker-react@4.18.0:
+        resolution:
+            {
+                integrity: sha512-vLTrLfApXAIciguGE57pXPWs9lPLBspbEpPMiUq03TIli2dHZBiB+aZ0R9/Wat0xmTfcd4AuEzQgSYxEZ8C88Q==,
+            }
+        engines: { node: '>=10' }
+        peerDependencies:
+            react: '>=16'
+
     emoji-regex@10.6.0:
         resolution:
             {
@@ -4165,6 +4177,12 @@ packages:
         resolution:
             {
                 integrity: sha512-S1tCIR3ENecee0tY2cfTHfMkXqkitHfbsvqpCtvsT0Zi9vDB7A4CodAjHfHCjVvu/XtGy1LHLjOasVcF10rCVw==,
+            }
+
+    flairup@1.0.0:
+        resolution:
+            {
+                integrity: sha512-IKlE+pNvL2R+kVL1kEhUYqRxVqeFnjiIvHWDMLFXNaqyUdFXQM2wte44EfMYJNHkW16X991t2Zg8apKkhv7OBA==,
             }
 
     flat-cache@4.0.1:
@@ -9334,6 +9352,11 @@ snapshots:
 
     electron-to-chromium@1.5.267: {}
 
+    emoji-picker-react@4.18.0(react@19.2.4):
+        dependencies:
+            flairup: 1.0.0
+            react: 19.2.4
+
     emoji-regex@10.6.0: {}
 
     emoji-regex@8.0.0: {}
@@ -9770,6 +9793,8 @@ snapshots:
             '@firebase/util': 1.13.0
         transitivePeerDependencies:
             - '@react-native-async-storage/async-storage'
+
+    flairup@1.0.0: {}
 
     flat-cache@4.0.1:
         dependencies:

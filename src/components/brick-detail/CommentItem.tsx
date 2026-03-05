@@ -104,54 +104,61 @@ export function CommentItem({
                         >
                             {comment.user.username}
                         </Link>
-                        <span className="text-[10px] text-muted-foreground/50">
-                            {timeAgo(comment.createdAt)}
-                        </span>
 
-                        {/* Menu button for own comments */}
-                        {isOwn && (
-                            <div className="relative ml-auto">
-                                <button
-                                    type="button"
-                                    onClick={() => setShowMenu(!showMenu)}
-                                    className="p-0.5 opacity-0 group-hover/comment:opacity-100 text-muted-foreground/60 hover:text-foreground transition-all cursor-pointer"
-                                >
-                                    <MoreHorizontal className="size-3.5" />
-                                </button>
-                                {showMenu && (
-                                    <>
-                                        <div
-                                            className="fixed inset-0 z-10"
-                                            onClick={() => setShowMenu(false)}
-                                        />
-                                        <div className="absolute right-0 top-full mt-1 z-20 bg-background border border-primary/20 rounded-md shadow-lg py-1 min-w-25">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setIsEditing(true);
-                                                    setShowMenu(false);
-                                                }}
-                                                className="flex items-center gap-2 px-3 py-1.5 text-xs w-full hover:bg-muted/50 cursor-pointer"
-                                            >
-                                                <Pencil className="size-3" />
-                                                Edit
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    handleDelete();
-                                                    setShowMenu(false);
-                                                }}
-                                                className="flex items-center gap-2 px-3 py-1.5 text-xs w-full hover:bg-destructive/10 text-destructive cursor-pointer"
-                                            >
-                                                <Trash2 className="size-3" />
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </>
+                        {/* Timestamp + edited + menu pushed to the right */}
+                        <div className="flex items-center gap-1.5 ml-auto shrink-0">
+                            <span className="text-[10px] text-muted-foreground/50">
+                                {timeAgo(comment.createdAt)}
+                                {comment.updatedAt !== comment.createdAt && (
+                                    <span className="ml-0.5 italic">(edited)</span>
                                 )}
-                            </div>
-                        )}
+                            </span>
+
+                            {/* Menu button for own comments */}
+                            {isOwn && (
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowMenu(!showMenu)}
+                                        className="p-0.5 opacity-0 group-hover/comment:opacity-100 text-muted-foreground/60 hover:text-foreground transition-all cursor-pointer"
+                                    >
+                                        <MoreHorizontal className="size-3.5" />
+                                    </button>
+                                    {showMenu && (
+                                        <>
+                                            <div
+                                                className="fixed inset-0 z-10"
+                                                onClick={() => setShowMenu(false)}
+                                            />
+                                            <div className="absolute right-0 top-full mt-1 z-20 bg-background border border-primary/20 rounded-md shadow-lg py-1 min-w-25">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setIsEditing(true);
+                                                        setShowMenu(false);
+                                                    }}
+                                                    className="flex items-center gap-2 px-3 py-1.5 text-xs w-full hover:bg-muted/50 cursor-pointer"
+                                                >
+                                                    <Pencil className="size-3" />
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        handleDelete();
+                                                        setShowMenu(false);
+                                                    }}
+                                                    className="flex items-center gap-2 px-3 py-1.5 text-xs w-full hover:bg-destructive/10 text-destructive cursor-pointer"
+                                                >
+                                                    <Trash2 className="size-3" />
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {/* Body */}

@@ -6,7 +6,7 @@ import Masonry, { type MasonryItem } from '@/components/react-bits/Masonry';
 import type { BrickTagType, UserBrick } from '@/types/brick.types';
 import { useGetUserBricks } from '@/hooks/apis/brick.api';
 import { cn } from '@/utils/classnames';
-import { formatCoord, formatTimestamp, generateHash } from '@/utils/brick';
+import { formatCoord, formatTimestamp } from '@/utils/brick';
 import { ArtistGalleryTabs, ArtistBricksGrid, BrickDetailModal } from '@/components/artist';
 
 interface ArtistGalleryProps {
@@ -23,11 +23,12 @@ function brickToMasonryItem(brick: UserBrick): MasonryItem {
         height: 600,
         title: brick.title,
         description: brick.description || brick.generatedDescription || '',
-        hash: generateHash(brick.title),
         lat: formatCoord(brick.latitude, 'N', 'S'),
         lng: formatCoord(brick.longitude, 'E', 'W'),
         timestamp: formatTimestamp(brick.createdAt),
         address: brick.address && brick.address !== 'string' ? brick.address : undefined,
+        tag: brick.tagType,
+        verifiedAt: brick.metadata?.verifiedAt ?? null,
     };
 }
 

@@ -120,6 +120,14 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                     title={formatDateTime(brick.createdAt)}
                 >
                     {timeAgo(brick.createdAt)}
+                    {brick.updatedAt !== brick.createdAt && (
+                        <span
+                            className="ml-1 italic"
+                            title={`Edited ${formatDateTime(brick.updatedAt)}`}
+                        >
+                            (edited)
+                        </span>
+                    )}
                 </span>
             </div>
 
@@ -250,6 +258,54 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                     <span className="text-[10px] text-muted-foreground/60 font-mono">PRIVATE</span>
                 )}
             </div>
+
+            {/* Verification status block (REALTIME only) */}
+            {brick.tagType === 'REALTIME' && (
+                <div
+                    className={cn(
+                        'border p-3 space-y-2',
+                        brick.metadata?.verifiedAt
+                            ? 'border-primary/30 bg-primary/5'
+                            : 'border-red-500/30 bg-red-500/5',
+                    )}
+                >
+                    <div className="flex items-center gap-2">
+                        <div
+                            className={cn(
+                                'size-2 rounded-full',
+                                brick.metadata?.verifiedAt
+                                    ? 'bg-primary shadow-[0_0_6px_rgba(0,238,255,0.6)] animate-pulse'
+                                    : 'bg-red-500/80',
+                            )}
+                        />
+                        <span
+                            className={cn(
+                                'text-[10px] font-bold font-mono uppercase tracking-widest',
+                                brick.metadata?.verifiedAt ? 'text-primary' : 'text-red-400',
+                            )}
+                        >
+                            {brick.metadata?.verifiedAt
+                                ? 'VERIFICATION PASSED'
+                                : 'VERIFICATION FAILED'}
+                        </span>
+                    </div>
+                    {brick.metadata?.verifiedAt && (
+                        <p className="text-[9px] font-mono text-muted-foreground/60">
+                            VERIFIED_AT: {brick.metadata.verifiedAt}
+                        </p>
+                    )}
+                    {brick.metadata?.hashSha256 && (
+                        <p className="text-[9px] font-mono text-muted-foreground/60 truncate">
+                            SHA256: {brick.metadata.hashSha256}
+                        </p>
+                    )}
+                    {brick.metadata?.onChainTx && (
+                        <p className="text-[9px] font-mono text-muted-foreground/60 truncate">
+                            ON_CHAIN_TX: {brick.metadata.onChainTx}
+                        </p>
+                    )}
+                </div>
+            )}
 
             {/* Save edit confirm popup */}
             <ConfirmPopup

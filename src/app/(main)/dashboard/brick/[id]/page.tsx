@@ -228,6 +228,18 @@ export default function BrickPage() {
                     <span className="bg-secondary/80 text-secondary-foreground px-2 py-0.5 text-[10px] font-bold rounded-full">
                         {brick.mediaType}
                     </span>
+                    {brick.tagType === 'REALTIME' && (
+                        <span
+                            className={cn(
+                                'px-2 py-0.5 text-[10px] font-bold font-mono uppercase tracking-wider border',
+                                brick.metadata?.verifiedAt
+                                    ? 'bg-primary/10 border-primary/40 text-primary shadow-[0_0_8px_rgba(0,238,255,0.2)]'
+                                    : 'bg-red-500/10 border-red-500/40 text-red-400',
+                            )}
+                        >
+                            {brick.metadata?.verifiedAt ? '● VERIFIED' : '○ UNVERIFIED'}
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -272,6 +284,14 @@ export default function BrickPage() {
                                 title={formatDateTime(brick.createdAt)}
                             >
                                 {timeAgo(brick.createdAt)}
+                                {brick.updatedAt !== brick.createdAt && (
+                                    <span
+                                        className="ml-1 italic"
+                                        title={`Edited ${formatDateTime(brick.updatedAt)}`}
+                                    >
+                                        (edited)
+                                    </span>
+                                )}
                             </span>
                         </div>
 
@@ -392,6 +412,56 @@ export default function BrickPage() {
                                             {brick.address}
                                         </p>
                                     </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Verification status (REALTIME only) */}
+                        {brick.tagType === 'REALTIME' && (
+                            <div
+                                className={cn(
+                                    'border p-3 space-y-2',
+                                    brick.metadata?.verifiedAt
+                                        ? 'border-primary/30 bg-primary/5'
+                                        : 'border-red-500/30 bg-red-500/5',
+                                )}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div
+                                        className={cn(
+                                            'size-2 rounded-full',
+                                            brick.metadata?.verifiedAt
+                                                ? 'bg-primary shadow-[0_0_6px_rgba(0,238,255,0.6)] animate-pulse'
+                                                : 'bg-red-500/80',
+                                        )}
+                                    />
+                                    <span
+                                        className={cn(
+                                            'text-[10px] font-bold font-mono uppercase tracking-widest',
+                                            brick.metadata?.verifiedAt
+                                                ? 'text-primary'
+                                                : 'text-red-400',
+                                        )}
+                                    >
+                                        {brick.metadata?.verifiedAt
+                                            ? 'VERIFICATION PASSED'
+                                            : 'VERIFICATION FAILED'}
+                                    </span>
+                                </div>
+                                {brick.metadata?.verifiedAt && (
+                                    <p className="text-[9px] font-mono text-muted-foreground/60">
+                                        VERIFIED_AT: {brick.metadata.verifiedAt}
+                                    </p>
+                                )}
+                                {brick.metadata?.hashSha256 && (
+                                    <p className="text-[9px] font-mono text-muted-foreground/60 truncate">
+                                        SHA256: {brick.metadata.hashSha256}
+                                    </p>
+                                )}
+                                {brick.metadata?.onChainTx && (
+                                    <p className="text-[9px] font-mono text-muted-foreground/60 truncate">
+                                        ON_CHAIN_TX: {brick.metadata.onChainTx}
+                                    </p>
                                 )}
                             </div>
                         )}

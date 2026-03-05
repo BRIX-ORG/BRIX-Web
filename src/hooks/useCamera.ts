@@ -262,8 +262,8 @@ export function useCamera(): UseCameraReturn {
                 width: qrSize,
                 margin: 1,
                 color: {
-                    dark: '#00EEFF', // cyan QR modules
-                    light: '#00000000', // transparent background
+                    dark: '#000000', // standard black modules for pyzbar
+                    light: '#FFFFFF', // white background for pyzbar
                 },
             });
 
@@ -271,13 +271,8 @@ export function useCamera(): UseCameraReturn {
             const padX = qrMargin;
             const padY = canvas.height - qrSize - qrMargin;
 
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillStyle = '#FFFFFF';
             ctx.fillRect(padX - 4, padY - 4, qrSize + 8, qrSize + 8);
-
-            // 1px border for visual clarity
-            ctx.strokeStyle = 'rgba(0, 238, 255, 0.4)';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(padX - 4, padY - 4, qrSize + 8, qrSize + 8);
 
             // Draw QR code onto main canvas
             ctx.drawImage(qrCanvas, padX, padY, qrSize, qrSize);

@@ -38,6 +38,16 @@ export type BrickMediaType = 'IMAGE' | 'GLTF';
 // Tag type enum
 export type BrickTagType = 'ART' | 'REALTIME' | 'PRODUCT';
 
+// Metadata attached to a brick (verification, exif, chain)
+export interface BrickMetadata {
+    id: string;
+    rawExif: Record<string, unknown> | null;
+    modelData: Record<string, unknown> | null;
+    hashSha256: string | null;
+    onChainTx: string | null;
+    verifiedAt: string | null;
+}
+
 // Brick Model (Art / Image)
 export interface Brick {
     id: string;
@@ -95,6 +105,7 @@ export interface UserBrick {
     address: string | null;
     latitude: number | null;
     longitude: number | null;
+    metadata: BrickMetadata | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -138,6 +149,7 @@ export interface BrickDetail {
     address: string | null;
     latitude: number | null;
     longitude: number | null;
+    metadata: BrickMetadata | null;
     _count: {
         votes: number;
         comments: number;

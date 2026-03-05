@@ -1,5 +1,20 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { SmilePlus } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { EmojiStyle, Theme } from 'emoji-picker-react';
+import type { EmojiClickData } from 'emoji-picker-react';
 import { cn } from '@/utils/classnames';
+
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
+
+export interface Reaction {
+    emoji: string;
+    count: number;
+    reacted: boolean;
+}
 
 export interface Message {
     id: string;
@@ -9,17 +24,42 @@ export interface Message {
     senderAvatar?: string;
     timestamp?: string;
     status?: 'sent' | 'delivered' | 'read';
+    reactions?: Reaction[];
 }
 
 interface MessageBubbleProps {
     message: Message;
+    onReaction?: (messageId: string, emoji: string) => void;
 }
 
-export function MessageBubble({ message }: MessageBubbleProps) {
+export function MessageBubble({ message, onReaction }: MessageBubbleProps) {
     const isMe = message.sender === 'me';
+    const [showReactionPicker, setShowReactionPicker] = useState(false);
+    const reactionPickerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!showReactionPicker) return;
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                reactionPickerRef.current &&
+                !reactionPickerRef.current.contains(e.target as Node)
+            ) {
+                setShowReactionPicker(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showReactionPicker]);
+
+    const handleReactionSelect = (emojiData: EmojiClickData) => {
+        onReaction?.(message.id, emojiData.emoji);
+        setShowReactionPicker(false);
+    };
 
     return (
-        <div className={cn('flex items-end gap-3 max-w-[80%]', isMe && 'justify-end ml-auto')}>
+        <div
+            className={cn('group flex items-end gap-3 max-w-[80%]', isMe && 'justify-end ml-auto')}
+        >
             {/* Other's Avatar */}
             {!isMe && message.senderAvatar && (
                 <Image
@@ -40,16 +80,70 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                 )}
 
                 {/* Message Bubble */}
-                <div
-                    className={cn(
-                        'p-4 rounded-sm text-sm leading-relaxed',
-                        isMe
-                            ? 'bg-primary/5 border border-primary/30 text-foreground text-right'
-                            : 'bg-muted/80 border border-border text-foreground',
+                <div className="relative">
+                    <div
+                        className={cn(
+                            'p-4 rounded-sm text-sm leading-relaxed',
+                            isMe
+                                ? 'bg-primary/5 border border-primary/30 text-foreground text-right'
+                                : 'bg-muted/80 border border-border text-foreground',
+                        )}
+                    >
+                        {message.content}
+                    </div>
+
+                    {/* Reaction button (appears on hover) */}
+                    <button
+                        type="button"
+                        onClick={() => setShowReactionPicker((prev) => !prev)}
+                        className={cn(
+                            'absolute -bottom-3 opacity-0 group-hover:opacity-100 transition-opacity size-6 flex items-center justify-center bg-muted border border-border rounded-full hover:border-primary hover:text-primary text-muted-foreground',
+                            isMe ? 'left-0' : 'right-0',
+                        )}
+                    >
+                        <SmilePlus className="size-3" />
+                    </button>
+
+                    {/* Reaction Picker */}
+                    {showReactionPicker && (
+                        <div
+                            ref={reactionPickerRef}
+                            className={cn('absolute bottom-8 z-50', isMe ? 'right-0' : 'left-0')}
+                        >
+                            <EmojiPicker
+                                onEmojiClick={handleReactionSelect}
+                                theme={Theme.DARK}
+                                emojiStyle={EmojiStyle.APPLE}
+                                reactionsDefaultOpen
+                                lazyLoadEmojis
+                                width={350}
+                                height={450}
+                            />
+                        </div>
                     )}
-                >
-                    {message.content}
                 </div>
+
+                {/* Reactions Display */}
+                {message.reactions && message.reactions.length > 0 && (
+                    <div className={cn('flex flex-wrap gap-1 mt-1', isMe && 'justify-end')}>
+                        {message.reactions.map((reaction) => (
+                            <button
+                                key={reaction.emoji}
+                                type="button"
+                                onClick={() => onReaction?.(message.id, reaction.emoji)}
+                                className={cn(
+                                    'flex items-center gap-1 px-2 py-0.5 rounded-full border text-xs transition-colors',
+                                    reaction.reacted
+                                        ? 'bg-primary/10 border-primary/40 text-primary'
+                                        : 'bg-muted/80 border-border text-muted-foreground hover:border-primary/40',
+                                )}
+                            >
+                                <span>{reaction.emoji}</span>
+                                <span className="text-[10px] font-bold">{reaction.count}</span>
+                            </button>
+                        ))}
+                    </div>
+                )}
 
                 {/* Status */}
                 {isMe && message.status && (

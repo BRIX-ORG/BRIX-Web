@@ -62,11 +62,12 @@ export interface MasonryItem {
     height: number;
     title: string;
     description: string;
-    hash: string;
     lat: string;
     lng: string;
     timestamp?: string;
     address?: string;
+    tag?: string;
+    verifiedAt?: string | null;
 }
 
 interface GridItem extends MasonryItem {
@@ -265,13 +266,26 @@ const Masonry: React.FC<MasonryProps> = ({
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                                     sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 20vw"
                                 />
-                                <div className="absolute top-2 right-2 bg-primary/80 text-primary-foreground px-2 py-0.5 text-[10px] font-bold rounded-full">
-                                    AUTHENTIC
-                                </div>
-                                <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background/90 to-transparent p-3">
-                                    <p className="text-[10px] font-mono text-primary truncate">
-                                        HASH: {item.hash}
-                                    </p>
+                                <div className="absolute top-2 right-2 flex items-center gap-1">
+                                    <span className="bg-background/80 backdrop-blur-sm border border-primary/40 text-primary px-1.5 py-0.5 text-[9px] font-bold font-mono uppercase tracking-wider">
+                                        {item.tag || 'AUTHENTIC'}
+                                    </span>
+                                    {item.tag === 'REALTIME' && (
+                                        <span
+                                            className={`backdrop-blur-sm px-1.5 py-0.5 text-[9px] font-bold font-mono uppercase tracking-wider border ${
+                                                item.verifiedAt
+                                                    ? 'bg-primary/10 border-primary/50 text-primary shadow-[0_0_8px_rgba(0,238,255,0.3)]'
+                                                    : 'bg-red-500/10 border-red-500/50 text-red-400'
+                                            }`}
+                                            title={
+                                                item.verifiedAt
+                                                    ? `Verified at ${item.verifiedAt}`
+                                                    : 'Verification failed'
+                                            }
+                                        >
+                                            {item.verifiedAt ? '● VERIFIED' : '○ UNVERIFIED'}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>

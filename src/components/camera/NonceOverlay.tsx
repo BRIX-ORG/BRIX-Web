@@ -56,8 +56,8 @@ export function QROverlay() {
             width: 60,
             margin: 1,
             color: {
-                dark: '#00EEFF',
-                light: '#00000000',
+                dark: '#000000',
+                light: '#FFFFFF',
             },
         })
             .then(() => {

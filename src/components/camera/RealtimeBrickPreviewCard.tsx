@@ -81,7 +81,7 @@ export function RealtimeBrickPreviewCard({
                 >
                     {/* Image Section */}
                     <div className="p-1">
-                        <div className="relative aspect-square w-full bg-primary/10 rounded-sm overflow-hidden border border-primary/20">
+                        <div className="relative aspect-4/3 w-full bg-primary/10 rounded-sm overflow-hidden border border-primary/20">
                             {hasImage ? (
                                 <>
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
