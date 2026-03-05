@@ -38,6 +38,8 @@ const nextConfig: NextConfig = {
 
     images: {
         formats: ['image/avif', 'image/webp'],
+        dangerouslyAllowSVG: true,
+        unoptimized: process.env.NODE_ENV === 'development',
         remotePatterns: [
             {
                 protocol: 'https',
@@ -57,6 +59,12 @@ const nextConfig: NextConfig = {
             {
                 protocol: 'https',
                 hostname: 'pbs.twimg.com',
+                pathname: '/**',
+            },
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '9000',
                 pathname: '/**',
             },
         ],

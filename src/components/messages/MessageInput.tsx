@@ -51,6 +51,7 @@ export function MessageInput({
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
+    const emojiButtonRef = useRef<HTMLButtonElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -64,7 +65,12 @@ export function MessageInput({
     useEffect(() => {
         if (!showEmojiPicker) return;
         const handleClickOutside = (e: MouseEvent) => {
-            if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
+            if (
+                emojiPickerRef.current &&
+                !emojiPickerRef.current.contains(e.target as Node) &&
+                emojiButtonRef.current &&
+                !emojiButtonRef.current.contains(e.target as Node)
+            ) {
                 setShowEmojiPicker(false);
             }
         };
@@ -219,7 +225,7 @@ export function MessageInput({
         <div className="relative p-4 bg-background/80 backdrop-blur-md border-t border-border">
             {/* Emoji Picker */}
             {showEmojiPicker && (
-                <div ref={emojiPickerRef} className="absolute bottom-full left-4 mb-2 z-50">
+                <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50">
                     <EmojiPicker
                         onEmojiClick={handleEmojiClick}
                         theme={Theme.DARK}
@@ -349,7 +355,13 @@ export function MessageInput({
                 className="hidden"
                 onChange={handleImageSelect}
             />
-            <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileSelect} />
+            <input
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                onChange={handleFileSelect}
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.csv,.rtf,.odt,.ods,.odp,.zip,.rar,.7z"
+            />
 
             <div className="flex items-center gap-3 bg-muted border border-border rounded p-2 focus-within:border-primary transition-all">
                 {/* Image upload */}
@@ -377,20 +389,6 @@ export function MessageInput({
                     )}
                 >
                     <Paperclip className="size-5" />
-                </button>
-
-                {/* Emoji */}
-                <button
-                    type="button"
-                    onClick={() => setShowEmojiPicker((prev) => !prev)}
-                    className={cn(
-                        'size-9 flex items-center justify-center transition-colors shrink-0',
-                        showEmojiPicker
-                            ? 'text-primary'
-                            : 'text-muted-foreground hover:text-primary',
-                    )}
-                >
-                    <Smile className="size-5" />
                 </button>
 
                 {/* Voice */}
@@ -430,6 +428,21 @@ export function MessageInput({
                     className="flex-1 bg-transparent border-none text-sm focus:ring-0 placeholder:text-muted-foreground font-bold tracking-tight outline-none resize-none max-h-30"
                     placeholder="TRANSMIT SECURE DATA..."
                 />
+
+                {/* Emoji */}
+                <button
+                    ref={emojiButtonRef}
+                    type="button"
+                    onClick={() => setShowEmojiPicker((prev) => !prev)}
+                    className={cn(
+                        'size-9 flex items-center justify-center transition-colors shrink-0',
+                        showEmojiPicker
+                            ? 'text-primary'
+                            : 'text-muted-foreground hover:text-primary',
+                    )}
+                >
+                    <Smile className="size-5" />
+                </button>
 
                 {/* Send */}
                 <button

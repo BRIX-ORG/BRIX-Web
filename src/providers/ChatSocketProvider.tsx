@@ -102,7 +102,7 @@ export function ChatSocketProvider({ children }: ChatSocketProviderProps) {
         });
 
         socket.on('messageUpdated', (message: SocketMessageUpdatedEvent) => {
-            useChatStore.getState().updateMessage(message);
+            useChatStore.getState().updateMessage({ ...message, _isEdited: true });
         });
 
         socket.on('messageDeleted', (event: SocketMessageDeletedEvent) => {

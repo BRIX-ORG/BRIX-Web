@@ -65,6 +65,7 @@ export interface Message {
     // Client-only fields for optimistic updates
     _tempId?: string;
     _status?: MessageStatus;
+    _isEdited?: boolean;
 }
 
 // ─── Conversation ───────────────────────────────────────────────
@@ -100,7 +101,7 @@ export interface ConversationMediaItem {
     messageId: string;
     senderId: string;
     createdAt: string;
-    data: MessageImage;
+    data: MessageImage[];
 }
 
 export interface ConversationFileItem {

@@ -216,7 +216,7 @@ export function useEditMessage() {
             return response.data.data;
         },
         onSuccess: (updatedMessage) => {
-            useChatStore.getState().updateMessage(updatedMessage);
+            useChatStore.getState().updateMessage({ ...updatedMessage, _isEdited: true });
         },
     });
 }

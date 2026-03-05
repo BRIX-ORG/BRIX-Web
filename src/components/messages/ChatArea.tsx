@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { Loader2, MessageSquare } from 'lucide-react';
+import { useToast } from '@/hooks/useToast';
 import { ChatHeader, MessageBubble, BrickMessage, MessageInput } from '@/components/messages';
 import {
     useChatStore,
@@ -32,6 +33,7 @@ interface ChatAreaProps {
 export function ChatArea({ onToggleInfo }: ChatAreaProps) {
     const { data: session } = useSession();
     const currentUserId = session?.user?.id;
+    const toast = useToast();
 
     const conversation = useCurrentConversation();
     const conversationId = conversation?.id ?? null;
@@ -194,9 +196,15 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
 
     const handleEdit = useCallback(
         (messageId: string, content: string) => {
-            editMessage.mutate({ messageId, content });
+            editMessage.mutate(
+                { messageId, content },
+                {
+                    onSuccess: () => toast.success('Message edited'),
+                    onError: () => toast.error('Failed to edit message'),
+                },
+            );
         },
-        [editMessage],
+        [editMessage, toast],
     );
 
     // ─── Delete ─────────────────────────────────────────────
@@ -204,9 +212,15 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
     const handleDelete = useCallback(
         (messageId: string) => {
             if (!conversationId) return;
-            deleteMessage.mutate({ messageId, conversationId });
+            deleteMessage.mutate(
+                { messageId, conversationId },
+                {
+                    onSuccess: () => toast.success('Message deleted'),
+                    onError: () => toast.error('Failed to delete message'),
+                },
+            );
         },
-        [conversationId, deleteMessage],
+        [conversationId, deleteMessage, toast],
     );
 
     // ─── Typing ─────────────────────────────────────────────
@@ -321,6 +335,7 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
                                             message={msg}
                                             isMe={isMe}
                                             partner={conversation.partner}
+                                            currentUserId={currentUserId}
                                             currentUserAvatar={currentUserAvatar}
                                             onReaction={handleReaction}
                                             onEdit={handleEdit}

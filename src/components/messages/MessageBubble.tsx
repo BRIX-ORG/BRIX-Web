@@ -1,36 +1,27 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-    Check,
-    CheckCheck,
-    Clock,
-    FileIcon,
-    MoreHorizontal,
-    Pencil,
-    SmilePlus,
-    Trash2,
-    X,
-    Download,
-} from 'lucide-react';
-import dynamic from 'next/dynamic';
-import { EmojiStyle, Theme } from 'emoji-picker-react';
-import type { EmojiClickData } from 'emoji-picker-react';
+import { Check, CheckCheck, Clock, FileIcon, Download, X } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 import { timeAgo, formatDateTime } from '@/utils/time';
-import type { Message, MessageReactions } from '@/types/message.types';
+import type { Message } from '@/types/message.types';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import type { ConversationPartner } from '@/types/message.types';
 import { ConfirmPopup } from '@/components/shared';
-
-const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
+import {
+    VoicePlayer,
+    ImageLightbox,
+    MessageReactionsDisplay,
+    MessageActions,
+} from '@/components/messages';
 
 interface MessageBubbleProps {
     message: Message;
     isMe: boolean;
     partner: ConversationPartner;
+    currentUserId?: string;
     currentUserAvatar?: string;
     onReaction?: (messageId: string, emoji: string) => void;
     onEdit?: (messageId: string, content: string) => void;
@@ -41,44 +32,20 @@ export function MessageBubble({
     message,
     isMe,
     partner,
+    currentUserId,
     currentUserAvatar,
     onReaction,
     onEdit,
     onDelete,
 }: MessageBubbleProps) {
-    const [showReactionPicker, setShowReactionPicker] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(message.content);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const reactionPickerRef = useRef<HTMLDivElement>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
+    const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
     const isSending = message._status === 'sending';
     const isFailed = message._status === 'failed';
-    const isEdited = message.updatedAt !== message.createdAt;
-
-    useEffect(() => {
-        if (!showReactionPicker && !showMenu) return;
-        const handleClickOutside = (e: MouseEvent) => {
-            if (
-                reactionPickerRef.current &&
-                !reactionPickerRef.current.contains(e.target as Node)
-            ) {
-                setShowReactionPicker(false);
-            }
-            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-                setShowMenu(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [showReactionPicker, showMenu]);
-
-    const handleReactionSelect = (emojiData: EmojiClickData) => {
-        onReaction?.(message.id, emojiData.emoji);
-        setShowReactionPicker(false);
-    };
+    const isEdited = message._isEdited === true;
 
     const handleSaveEdit = () => {
         const trimmed = editContent.trim();
@@ -99,36 +66,8 @@ export function MessageBubble({
         }
     };
 
-    // Render reactions
-    const renderReactions = (reactions: MessageReactions | null) => {
-        if (!reactions) return null;
-        const entries = Object.entries(reactions).filter(([, users]) => users.length > 0);
-        if (entries.length === 0) return null;
-
-        return (
-            <div className={cn('flex flex-wrap gap-1 mt-1', isMe && 'justify-end')}>
-                {entries.map(([emoji, users]) => (
-                    <button
-                        key={emoji}
-                        type="button"
-                        onClick={() => onReaction?.(message.id, emoji)}
-                        className={cn(
-                            'flex items-center gap-1 px-2 py-0.5 rounded-full border text-xs transition-colors cursor-pointer',
-                            'bg-muted/80 border-border text-muted-foreground hover:border-primary/40',
-                        )}
-                    >
-                        <span>{emoji}</span>
-                        <span className="text-[10px] font-bold">{users.length}</span>
-                    </button>
-                ))}
-            </div>
-        );
-    };
-
-    // Status icon for sent messages
     const renderStatus = () => {
         if (!isMe) return null;
-
         if (isSending) return <Clock className="size-3 text-muted-foreground/40" />;
         if (isFailed) return <X className="size-3 text-destructive" />;
         if (message.isRead) return <CheckCheck className="size-3 text-primary" />;
@@ -158,14 +97,12 @@ export function MessageBubble({
             )}
 
             <div className={cn('flex flex-col gap-1 min-w-0', isMe && 'items-end')}>
-                {/* Sender name for partner */}
                 {!isMe && (
                     <p className="text-[10px] font-bold text-muted-foreground ml-1 uppercase">
                         {partner.username}
                     </p>
                 )}
 
-                {/* Message content */}
                 <div className="relative">
                     {/* Images */}
                     {message.images && message.images.length > 0 && (
@@ -178,9 +115,11 @@ export function MessageBubble({
                             )}
                         >
                             {message.images.map((img, i) => (
-                                <div
+                                <button
                                     key={i}
-                                    className="rounded-sm overflow-hidden border border-border bg-muted"
+                                    type="button"
+                                    onClick={() => setLightboxImage(img.url)}
+                                    className="rounded-sm overflow-hidden border border-border bg-muted cursor-pointer hover:opacity-90 transition-opacity"
                                 >
                                     <Image
                                         src={img.url}
@@ -189,32 +128,13 @@ export function MessageBubble({
                                         height={img.height || 200}
                                         className="w-full h-auto object-cover"
                                     />
-                                </div>
+                                </button>
                             ))}
                         </div>
                     )}
 
                     {/* Voice message */}
-                    {message.voice && (
-                        <div className="flex items-center gap-2 p-3 bg-muted/80 border border-border rounded-sm mb-1">
-                            <div className="flex-1">
-                                <p className="text-[10px] font-mono text-primary/60 uppercase">
-                                    Voice message
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                    {Math.round(message.voice.duration)}s
-                                </p>
-                            </div>
-                            <a
-                                href={message.voice.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-primary hover:text-primary/80"
-                            >
-                                <Download className="size-4" />
-                            </a>
-                        </div>
-                    )}
+                    {message.voice && <VoicePlayer voice={message.voice} isMe={isMe} />}
 
                     {/* File attachment */}
                     {message.file && (
@@ -276,93 +196,31 @@ export function MessageBubble({
                             )}
                         >
                             {message.content}
-                            {isEdited && (
-                                <span className="text-[9px] text-muted-foreground/40 ml-2">
-                                    (edited)
-                                </span>
-                            )}
                         </div>
                     ) : null}
 
-                    {/* Actions overlay (hover) */}
-                    <div
-                        className={cn(
-                            'absolute -top-3 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5 z-10',
-                            isMe ? 'left-0' : 'right-0',
-                        )}
-                    >
-                        {/* Reaction button */}
-                        <button
-                            type="button"
-                            onClick={() => setShowReactionPicker((prev) => !prev)}
-                            className="size-6 flex items-center justify-center bg-muted border border-border rounded-full hover:border-primary hover:text-primary text-muted-foreground cursor-pointer transition-colors"
-                        >
-                            <SmilePlus className="size-3" />
-                        </button>
-
-                        {/* Menu button (own messages only) */}
-                        {isMe && !isSending && (
-                            <div className="relative" ref={menuRef}>
-                                <button
-                                    type="button"
-                                    onClick={() => setShowMenu((prev) => !prev)}
-                                    className="size-6 flex items-center justify-center bg-muted border border-border rounded-full hover:border-primary hover:text-primary text-muted-foreground cursor-pointer transition-colors"
-                                >
-                                    <MoreHorizontal className="size-3" />
-                                </button>
-
-                                {showMenu && (
-                                    <div className="absolute top-7 right-0 bg-popover border border-border rounded-sm shadow-lg py-1 min-w-30 z-50">
-                                        {message.content && (
-                                            <button
-                                                onClick={() => {
-                                                    setIsEditing(true);
-                                                    setEditContent(message.content);
-                                                    setShowMenu(false);
-                                                }}
-                                                className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-foreground hover:bg-muted transition-colors"
-                                            >
-                                                <Pencil className="size-3" />
-                                                Edit
-                                            </button>
-                                        )}
-                                        <button
-                                            onClick={() => {
-                                                setShowDeleteConfirm(true);
-                                                setShowMenu(false);
-                                            }}
-                                            className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-destructive hover:bg-muted transition-colors"
-                                        >
-                                            <Trash2 className="size-3" />
-                                            Delete
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Reaction Picker */}
-                    {showReactionPicker && (
-                        <div
-                            ref={reactionPickerRef}
-                            className={cn('absolute bottom-8 z-50', isMe ? 'right-0' : 'left-0')}
-                        >
-                            <EmojiPicker
-                                onEmojiClick={handleReactionSelect}
-                                theme={Theme.DARK}
-                                emojiStyle={EmojiStyle.APPLE}
-                                reactionsDefaultOpen
-                                lazyLoadEmojis
-                                width={350}
-                                height={450}
-                            />
-                        </div>
-                    )}
+                    {/* Hover actions: reaction picker + edit/delete menu */}
+                    <MessageActions
+                        isMe={isMe}
+                        isSending={isSending}
+                        hasContent={!!message.content}
+                        onReaction={(emoji) => onReaction?.(message.id, emoji)}
+                        onEdit={() => {
+                            setIsEditing(true);
+                            setEditContent(message.content);
+                        }}
+                        onDelete={() => setShowDeleteConfirm(true)}
+                    />
                 </div>
 
                 {/* Reactions display */}
-                {renderReactions(message.reactions)}
+                <MessageReactionsDisplay
+                    reactions={message.reactions}
+                    isMe={isMe}
+                    currentUserId={currentUserId}
+                    partnerName={partner.fullName || partner.username}
+                    onToggle={(emoji) => onReaction?.(message.id, emoji)}
+                />
 
                 {/* Timestamp + status */}
                 <div className={cn('flex items-center gap-1.5', isMe && 'flex-row-reverse')}>
@@ -372,6 +230,9 @@ export function MessageBubble({
                     >
                         {timeAgo(message.createdAt)}
                     </span>
+                    {isEdited && (
+                        <span className="text-[9px] text-muted-foreground/40 italic">edited</span>
+                    )}
                     {renderStatus()}
                 </div>
             </div>
@@ -400,6 +261,11 @@ export function MessageBubble({
                 confirmText="Delete"
                 type="danger"
             />
+
+            {/* Image Lightbox */}
+            {lightboxImage && (
+                <ImageLightbox src={lightboxImage} onClose={() => setLightboxImage(null)} />
+            )}
         </div>
     );
 }

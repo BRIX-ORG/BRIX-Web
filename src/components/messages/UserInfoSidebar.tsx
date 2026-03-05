@@ -30,7 +30,10 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
     const { data: mediaData, isLoading: mediaLoading } = useGetConversationMedia(conversationId);
     const { data: filesData, isLoading: filesLoading } = useGetConversationFiles(conversationId);
 
-    const mediaItems = mediaData?.pages.flatMap((p) => p.data) ?? [];
+    const mediaItems =
+        mediaData?.pages
+            .flatMap((p) => p.data)
+            .flatMap((item) => item.data.map((img) => ({ ...item, image: img }))) ?? [];
     const fileItems = filesData?.pages.flatMap((p) => p.data) ?? [];
 
     if (!conversation || !partner) {
@@ -116,11 +119,11 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                         <div className="grid grid-cols-3 gap-2">
                             {mediaItems.slice(0, 9).map((item) => (
                                 <div
-                                    key={item.messageId + item.data.objectName}
+                                    key={item.messageId + item.image.objectName}
                                     className="aspect-square bg-muted rounded border border-border overflow-hidden hover:border-primary cursor-pointer transition-all"
                                 >
                                     <Image
-                                        src={item.data.url}
+                                        src={item.image.url}
                                         alt="Shared media"
                                         width={80}
                                         height={80}
