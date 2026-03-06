@@ -221,6 +221,10 @@ Example: `feat(camera): add zoom control`
 4. Use `useUIStore().showLoading` / `hideLoading` for global loading states.
 5. Use `useToast` for inline feedback and `useSwal` for confirmations/blocking dialogs.
 6. Define form validation in `src/validations/` with Zod; wire to `react-hook-form` in the component.
+7. **Verification after coding:**
+    - **Small changes:** No commands needed, just double-check logic.
+    - **Medium changes:** Run `pnpm lint`.
+    - **Large changes/Refactorings:** Run `pnpm lint` and `pnpm build`.
 
 ---
 
