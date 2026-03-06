@@ -8,7 +8,14 @@ BRIX is a Next.js 15+ (App Router) photo platform for immutable, GPS/temporally-
 
 ## Commands
 
+### Package Manager
+
+This project uses **`pnpm`** exclusively. **Do not use `npm` or `yarn`.**
+
 ```bash
+pnpm install      # Install dependencies
+pnpm add <pkg>    # Add a package
+pnpm add -D <pkg> # Add a dev dependency
 pnpm dev          # Start dev server
 pnpm build        # Production build
 pnpm start        # Start production server
@@ -87,12 +94,31 @@ Route groups use `layout.tsx` to apply guards. Protected routes wrap with guard 
 
 - Tailwind CSS v4. No `tailwind.config.ts` — all config is in `globals.css` via `@theme`.
 - **Prefer canonical Tailwind classes** over arbitrary values. Use `p-4` not `p-[16px]`, `text-sm` not `text-[14px]`. Only use `[]` when no standard class exists.
-- BRIX design tokens to use in classes:
-    - Colors: `text-brix-primary`, `bg-brix-secondary`, `bg-brix-bg-dark`
-    - Primary cyan: `#00eeff` / Secondary purple: `#bc00ff` / Background: `#050505`
 - App is **dark-mode only** (`html class="dark"` is hardcoded in root layout).
 - Border radius is intentionally sharp (`--radius: 0.125rem`) — don't over-round.
 - Font utility classes: `font-display` (Space Grotesk), `font-body` (Inter), `font-mono` (JetBrains Mono).
+
+#### Token-First Approach
+
+**Always use design token classes instead of hardcoded colors.** This keeps theming centralized in `globals.css`.
+
+```ts
+// ✅ Correct — uses tokens
+<div className="bg-background text-foreground border-border" />
+<button className="bg-primary text-primary-foreground" />
+<span className="text-brix-primary" />
+
+// ❌ Wrong — hardcoded colors
+<div className="bg-[#050505] text-white border-[rgba(255,255,255,0.05)]" />
+```
+
+#### BRIX Design Tokens (from `globals.css`)
+
+**Core tokens (`@theme`):** `brix-primary` (`#00eeff`), `brix-secondary` (`#bc00ff`), `brix-bg-light` (`#f5f5f5`), `brix-bg-dark` (`#050505`).
+
+**Dark theme tokens (`.dark`):** `background`, `foreground`, `muted`, `muted-foreground`, `border`, `input`, `ring`, `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `accent`, `accent-foreground`, `destructive`, `card`, `card-foreground`, `popover`, `popover-foreground`.
+
+**Custom utility classes:** `cyber-grid`, `glow-cyan`, `glow-text-cyan`, `border-tech`, `bento-card`, `glassmorphism`, `neon-glow`, `glow-button`, `neon-glow-text`, `neon-grid`, `glitch-border`, `crt-scan`, `no-scrollbar`.
 
 ### TypeScript
 
