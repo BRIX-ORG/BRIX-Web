@@ -18,6 +18,7 @@ import {
     ChevronLeft,
     ChevronRight,
     MessageCircle,
+    BookImage,
     X,
     Loader2,
 } from 'lucide-react';
@@ -62,6 +63,11 @@ const sidebarGroups: SidebarGroup[] = [
                 title: 'Archive',
                 href: '/dashboard/archive',
                 icon: Database,
+            },
+            {
+                title: 'Albums',
+                href: '/dashboard/albums',
+                icon: BookImage,
             },
             {
                 title: 'Messages',

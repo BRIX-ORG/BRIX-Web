@@ -73,6 +73,9 @@ importers:
             react:
                 specifier: 19.2.4
                 version: 19.2.4
+            react-colorful:
+                specifier: ^5.6.1
+                version: 5.6.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
             react-dom:
                 specifier: 19.2.4
                 version: 19.2.4(react@19.2.4)
@@ -5834,6 +5837,15 @@ packages:
                 integrity: sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g==,
             }
 
+    react-colorful@5.6.1:
+        resolution:
+            {
+                integrity: sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==,
+            }
+        peerDependencies:
+            react: '>=16.8.0'
+            react-dom: '>=16.8.0'
+
     react-dom@19.2.4:
         resolution:
             {
@@ -10739,6 +10751,11 @@ snapshots:
     queue-microtask@1.2.3: {}
 
     quickselect@3.0.0: {}
+
+    react-colorful@5.6.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+        dependencies:
+            react: 19.2.4
+            react-dom: 19.2.4(react@19.2.4)
 
     react-dom@19.2.4(react@19.2.4):
         dependencies:
