@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload, Type, FileText, Zap, X, ImageIcon } from 'lucide-react';
 import { Input, Textarea } from '@/components/ui';
+import { EmojiPickerButton } from '@/components/shared';
 import {
     UploadDropzone,
     BrickPreviewCard,
@@ -269,27 +270,57 @@ export function ArtUploadForm() {
 
                         <div className="grid grid-cols-1 gap-5">
                             {/* Title */}
-                            <Input
-                                label="Title"
-                                {...register('title')}
-                                leftIcon={<Type className="size-4" />}
-                                variant="compact"
-                                placeholder="Give your brick a title..."
-                                error={errors.title?.message}
-                                required
-                                disabled={uploadArtBrick.isPending}
-                            />
+                            <div className="relative z-10 focus-within:z-50">
+                                <Input
+                                    label="Title"
+                                    {...register('title')}
+                                    leftIcon={<Type className="size-4" />}
+                                    variant="compact"
+                                    placeholder="Give your brick a title..."
+                                    error={errors.title?.message}
+                                    required
+                                    disabled={uploadArtBrick.isPending}
+                                />
+                                <div className="absolute right-2 top-[37px]">
+                                    <EmojiPickerButton
+                                        onEmojiSelect={(emoji) =>
+                                            setValue('title', (watchedTitle || '') + emoji, {
+                                                shouldValidate: true,
+                                            })
+                                        }
+                                        className="size-7"
+                                        position="top"
+                                    />
+                                </div>
+                            </div>
 
                             {/* Description */}
-                            <Textarea
-                                label="Description"
-                                {...register('description')}
-                                rows={3}
-                                variant="compact"
-                                placeholder="Describe your artwork (optional)..."
-                                error={errors.description?.message}
-                                disabled={uploadArtBrick.isPending}
-                            />
+                            <div className="relative z-10 focus-within:z-50">
+                                <Textarea
+                                    label="Description"
+                                    {...register('description')}
+                                    rows={3}
+                                    variant="compact"
+                                    placeholder="Describe this moment (optional)..."
+                                    error={errors.description?.message}
+                                    disabled={uploadArtBrick.isPending}
+                                />
+                                <div className="absolute right-2 bottom-2">
+                                    <EmojiPickerButton
+                                        onEmojiSelect={(emoji) =>
+                                            setValue(
+                                                'description',
+                                                (watchedDescription || '') + emoji,
+                                                {
+                                                    shouldValidate: true,
+                                                },
+                                            )
+                                        }
+                                        className="size-7"
+                                        position="top"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Geo Coordinates */}

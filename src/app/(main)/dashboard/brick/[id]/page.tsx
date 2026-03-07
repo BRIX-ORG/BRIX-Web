@@ -484,7 +484,10 @@ export default function BrickPage() {
                                 {voteMutation.isPending ? (
                                     <Loader2 className="size-4 animate-spin" />
                                 ) : (
-                                    <ArrowBigUp className="size-4" />
+                                    <ArrowBigUp
+                                        className="size-4"
+                                        fill={userVote === 1 ? 'currentColor' : 'none'}
+                                    />
                                 )}
                                 <span>{upvotes}</span>
                             </button>
@@ -517,7 +520,10 @@ export default function BrickPage() {
                                         : 'text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-transparent',
                                 )}
                             >
-                                <ArrowBigDown className="size-4" />
+                                <ArrowBigDown
+                                    className="size-4"
+                                    fill={userVote === -1 ? 'currentColor' : 'none'}
+                                />
                                 <span>{downvotes}</span>
                             </button>
 

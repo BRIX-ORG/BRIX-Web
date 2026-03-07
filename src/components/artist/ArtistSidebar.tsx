@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Database, MapPin, Users } from 'lucide-react';
 import type { FollowUser } from '@/types/user.types';
 import { getAvatarUrl } from '@/utils/cloudinary';
@@ -113,8 +114,9 @@ export function ArtistSidebar({
                 ) : (
                     <div className="flex flex-wrap gap-2">
                         {followers.map((follower) => (
-                            <div
+                            <Link
                                 key={follower.id}
+                                href={`/dashboard/artist/${follower.username}`}
                                 className="size-10 rounded-full border border-primary/30 p-0.5 hover:border-primary transition-colors cursor-pointer"
                                 title={follower.username}
                             >
@@ -125,7 +127,7 @@ export function ArtistSidebar({
                                     height={40}
                                     className="rounded-full w-full h-full object-cover"
                                 />
-                            </div>
+                            </Link>
                         ))}
                         {remainingCount > 0 && (
                             <button

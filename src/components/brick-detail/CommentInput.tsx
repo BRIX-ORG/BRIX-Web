@@ -1,10 +1,15 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { ImagePlus, Send, X, Loader2 } from 'lucide-react';
+import { useRef, useState, useEffect } from 'react';
+import { ImagePlus, Send, X, Loader2, Smile } from 'lucide-react';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { EmojiStyle, Theme } from 'emoji-picker-react';
+import type { EmojiClickData } from 'emoji-picker-react';
 import { cn } from '@/utils/classnames';
 import { useCreateComment } from '@/hooks/apis/brick.api';
+
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 interface CommentInputProps {
     brickId: string;
@@ -29,8 +34,28 @@ export function CommentInput({
     const [content, setContent] = useState('');
     const [images, setImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const fileRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const emojiPickerRef = useRef<HTMLDivElement>(null);
+    const emojiButtonRef = useRef<HTMLButtonElement>(null);
+
+    // Close on click outside
+    useEffect(() => {
+        if (!showEmojiPicker) return;
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                emojiPickerRef.current &&
+                !emojiPickerRef.current.contains(e.target as Node) &&
+                emojiButtonRef.current &&
+                !emojiButtonRef.current.contains(e.target as Node)
+            ) {
+                setShowEmojiPicker(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showEmojiPicker]);
 
     const createComment = useCreateComment();
 
@@ -83,6 +108,11 @@ export function CommentInput({
         }
     };
 
+    const handleEmojiClick = (emojiData: EmojiClickData) => {
+        setContent((prev) => prev + emojiData.emoji);
+        textareaRef.current?.focus();
+    };
+
     const adjustHeight = () => {
         const el = textareaRef.current;
         if (!el) return;
@@ -91,7 +121,24 @@ export function CommentInput({
     };
 
     return (
-        <div className="border-t border-primary/10 px-4 py-3">
+        <div className="relative border-t border-primary/10 px-4 py-3">
+            {/* Emoji Picker */}
+            {showEmojiPicker && (
+                <div
+                    ref={emojiPickerRef}
+                    className="absolute bottom-full right-4 mb-2 z-50 shadow-[0_0_20px_rgba(0,0,0,0.5)] border border-primary/20 rounded-lg overflow-hidden"
+                >
+                    <EmojiPicker
+                        onEmojiClick={handleEmojiClick}
+                        theme={Theme.DARK}
+                        emojiStyle={EmojiStyle.APPLE}
+                        lazyLoadEmojis
+                        width={300}
+                        height={400}
+                    />
+                </div>
+            )}
+
             {/* Image previews */}
             {previews.length > 0 && (
                 <div className="flex gap-2 mb-2 overflow-x-auto scrollbar-none">
@@ -161,9 +208,24 @@ export function CommentInput({
                         'flex-1 resize-none bg-muted/50 border border-primary/10 rounded-lg',
                         'px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/40',
                         'focus:outline-none focus:border-primary/30 transition-colors',
-                        'scrollbar-hide',
+                        'scrollbar-hide h-8',
                     )}
                 />
+
+                {/* Emoji toggle */}
+                <button
+                    ref={emojiButtonRef}
+                    type="button"
+                    onClick={() => setShowEmojiPicker((p) => !p)}
+                    className={cn(
+                        'p-1.5 rounded transition-colors cursor-pointer shrink-0',
+                        showEmojiPicker
+                            ? 'text-primary'
+                            : 'text-muted-foreground/60 hover:text-primary',
+                    )}
+                >
+                    <Smile className="size-4" />
+                </button>
 
                 {/* Action buttons */}
                 <div className="flex items-center gap-1 shrink-0">

@@ -34,12 +34,12 @@ export function CommentItem({
     depth = 0,
     onShowUpvoters,
 }: CommentItemProps) {
-    const [showReplyInput, setShowReplyInput] = useState(false);
-    const [showReplies, setShowReplies] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(comment.content);
     const [showMenu, setShowMenu] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showEditConfirm, setShowEditConfirm] = useState(false);
 
     const { data: voteStatus } = useGetCommentVotes(comment.id);
     const editMutation = useEditComment();
@@ -50,13 +50,24 @@ export function CommentItem({
 
     const handleSaveEdit = () => {
         const trimmed = editContent.trim();
-        if (!trimmed || trimmed === comment.content) {
+        if (!trimmed) {
             setIsEditing(false);
             return;
         }
+        setShowEditConfirm(true);
+    };
+
+    const confirmEdit = () => {
+        const trimmed = editContent.trim();
         editMutation.mutate(
             { commentId: comment.id, content: trimmed },
-            { onSuccess: () => setIsEditing(false) },
+            {
+                onSuccess: () => {
+                    setIsEditing(false);
+                    setShowEditConfirm(false);
+                },
+                onError: () => setShowEditConfirm(false),
+            },
         );
     };
 
@@ -230,8 +241,13 @@ export function CommentItem({
                         {depth === 0 && (
                             <button
                                 type="button"
-                                onClick={() => setShowReplyInput(!showReplyInput)}
-                                className="flex items-center gap-1 text-[10px] text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer"
+                                onClick={() => setIsExpanded(!isExpanded)}
+                                className={cn(
+                                    'flex items-center gap-1 text-[10px] transition-colors cursor-pointer',
+                                    isExpanded
+                                        ? 'text-primary'
+                                        : 'text-muted-foreground/60 hover:text-primary',
+                                )}
                             >
                                 <MessageCircle className="size-3" />
                                 Reply
@@ -242,10 +258,10 @@ export function CommentItem({
                         {hasReplies && (
                             <button
                                 type="button"
-                                onClick={() => setShowReplies(!showReplies)}
+                                onClick={() => setIsExpanded(!isExpanded)}
                                 className="flex items-center gap-1 text-[10px] text-primary/70 hover:text-primary transition-colors cursor-pointer"
                             >
-                                {showReplies ? (
+                                {isExpanded ? (
                                     <ChevronUp className="size-3" />
                                 ) : (
                                     <ChevronDown className="size-3" />
@@ -256,25 +272,8 @@ export function CommentItem({
                         )}
                     </div>
 
-                    {/* Reply input */}
-                    {showReplyInput && (
-                        <div className="mt-2">
-                            <CommentInput
-                                brickId={brickId}
-                                parentId={comment.id}
-                                placeholder={`Reply to @${comment.user.username}...`}
-                                autoFocus
-                                onCancel={() => setShowReplyInput(false)}
-                                onSuccess={() => {
-                                    setShowReplyInput(false);
-                                    setShowReplies(true);
-                                }}
-                            />
-                        </div>
-                    )}
-
                     {/* Nested replies */}
-                    {showReplies && hasReplies && (
+                    {isExpanded && hasReplies && (
                         <div className="mt-1">
                             {(comment.replies as unknown as BrickComment[]).map((reply) => (
                                 <CommentItem
@@ -286,6 +285,22 @@ export function CommentItem({
                                     onShowUpvoters={onShowUpvoters}
                                 />
                             ))}
+                        </div>
+                    )}
+
+                    {/* Reply input */}
+                    {isExpanded && (
+                        <div className="mt-2">
+                            <CommentInput
+                                brickId={brickId}
+                                parentId={comment.id}
+                                placeholder={`Reply to @${comment.user.username}...`}
+                                autoFocus
+                                onCancel={() => setIsExpanded(false)}
+                                onSuccess={() => {
+                                    // Keep expanded to show the new reply
+                                }}
+                            />
                         </div>
                     )}
                 </div>
@@ -302,6 +317,19 @@ export function CommentItem({
                 cancelText="Cancel"
                 type="danger"
                 isLoading={deleteMutation.isPending}
+            />
+
+            {/* Edit comment confirm popup */}
+            <ConfirmPopup
+                isOpen={showEditConfirm}
+                onClose={() => setShowEditConfirm(false)}
+                onConfirm={confirmEdit}
+                title="Save Changes"
+                message="Are you sure you want to save the changes to your comment?"
+                confirmText="Save"
+                cancelText="Cancel"
+                type="info"
+                isLoading={editMutation.isPending}
             />
         </div>
     );

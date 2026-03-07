@@ -8,6 +8,7 @@ import { Zap, Globe, Lock, Type, FileText, Navigation, RotateCcw } from 'lucide-
 import { Input, Textarea } from '@/components/ui';
 import { AddressSearchField } from '@/components/upload';
 import { RealtimeBrickPreviewCard, AddressMapPicker } from '@/components/camera';
+import { EmojiPickerButton } from '@/components/shared';
 import { useLocationReverse } from '@/hooks/apis/location.api';
 import { useSwal } from '@/hooks/useSwal';
 import { getAvatarUrl } from '@/utils/cloudinary';
@@ -252,27 +253,57 @@ export function RealtimeUploadForm({
 
                         <div className="grid grid-cols-1 gap-5">
                             {/* Title */}
-                            <Input
-                                label="Title"
-                                {...register('title')}
-                                leftIcon={<Type className="size-4" />}
-                                variant="compact"
-                                placeholder="Name your realtime capture..."
-                                error={errors.title?.message}
-                                required
-                                disabled={isSubmitting}
-                            />
+                            <div className="relative z-10 focus-within:z-50">
+                                <Input
+                                    label="Title"
+                                    {...register('title')}
+                                    leftIcon={<Type className="size-4" />}
+                                    variant="compact"
+                                    placeholder="Name your realtime capture..."
+                                    error={errors.title?.message}
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                <div className="absolute right-2 top-[37px]">
+                                    <EmojiPickerButton
+                                        onEmojiSelect={(emoji) =>
+                                            setValue('title', (watchedTitle || '') + emoji, {
+                                                shouldValidate: true,
+                                            })
+                                        }
+                                        className="size-7"
+                                        position="top"
+                                    />
+                                </div>
+                            </div>
 
                             {/* Description */}
-                            <Textarea
-                                label="Description"
-                                {...register('description')}
-                                rows={3}
-                                variant="compact"
-                                placeholder="Describe this moment (optional)..."
-                                error={errors.description?.message}
-                                disabled={isSubmitting}
-                            />
+                            <div className="relative z-10 focus-within:z-50">
+                                <Textarea
+                                    label="Description"
+                                    {...register('description')}
+                                    rows={3}
+                                    variant="compact"
+                                    placeholder="Describe this moment (optional)..."
+                                    error={errors.description?.message}
+                                    disabled={isSubmitting}
+                                />
+                                <div className="absolute right-2 bottom-2">
+                                    <EmojiPickerButton
+                                        onEmojiSelect={(emoji) =>
+                                            setValue(
+                                                'description',
+                                                (watchedDescription || '') + emoji,
+                                                {
+                                                    shouldValidate: true,
+                                                },
+                                            )
+                                        }
+                                        className="size-7"
+                                        position="top"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Geo Coordinates (read-only / locked for realtime) */}

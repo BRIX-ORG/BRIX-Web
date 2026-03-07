@@ -74,7 +74,10 @@ export function BrickVoteBar({ brickId, voteStatus, onShowUpvoters }: BrickVoteB
                 {voteMutation.isPending ? (
                     <Loader2 className="size-3.5 animate-spin" />
                 ) : (
-                    <ArrowBigUp className="size-4" />
+                    <ArrowBigUp
+                        className="size-4"
+                        fill={userVote === 1 ? 'currentColor' : 'none'}
+                    />
                 )}
                 <span>{upvotes}</span>
             </button>
@@ -107,7 +110,7 @@ export function BrickVoteBar({ brickId, voteStatus, onShowUpvoters }: BrickVoteB
                         : 'text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-transparent',
                 )}
             >
-                <ArrowBigDown className="size-4" />
+                <ArrowBigDown className="size-4" fill={userVote === -1 ? 'currentColor' : 'none'} />
                 <span>{downvotes}</span>
             </button>
         </div>

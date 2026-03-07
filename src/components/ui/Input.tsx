@@ -49,7 +49,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 )}
                 <div className="relative group">
                     {leftIcon && (
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center z-10">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center z-10 pointer-events-none">
                             {leftIcon}
                         </div>
                     )}
@@ -72,7 +72,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                         {...props}
                     />
                     {rightIcon && !isPassword && (
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center">
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors size-5 flex items-center justify-center z-10">
                             {rightIcon}
                         </div>
                     )}

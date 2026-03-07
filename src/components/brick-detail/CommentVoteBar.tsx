@@ -63,7 +63,7 @@ export function CommentVoteBar({ commentId, voteStatus, onShowUpvoters }: Commen
                     userVote === 1 ? 'text-primary' : 'text-muted-foreground/60 hover:text-primary',
                 )}
             >
-                <ArrowBigUp className="size-3.5" />
+                <ArrowBigUp className="size-3.5" fill={userVote === 1 ? 'currentColor' : 'none'} />
             </button>
 
             <button
@@ -90,7 +90,10 @@ export function CommentVoteBar({ commentId, voteStatus, onShowUpvoters }: Commen
                         : 'text-muted-foreground/60 hover:text-destructive',
                 )}
             >
-                <ArrowBigDown className="size-3.5" />
+                <ArrowBigDown
+                    className="size-3.5"
+                    fill={userVote === -1 ? 'currentColor' : 'none'}
+                />
             </button>
 
             {voteMutation.isPending && (

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useReducer } from 'react';
 import { X, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 import type { FollowUser } from '@/types/user.types';
 import { useGetFollowers, useGetFollowing } from '@/hooks/apis/user.api';
 import { FollowUserItem } from '@/components/artist';
@@ -131,7 +132,14 @@ export function FollowersModalContent({
             <div className="relative w-full max-w-md bg-background border border-primary/20 rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,238,255,0.1)]">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10">
-                    <h2 className="text-sm font-bold uppercase tracking-widest">{idOrUsername}</h2>
+                    <Link
+                        href={`/dashboard/artist/${idOrUsername}`}
+                        className="hover:text-primary transition-colors"
+                    >
+                        <h2 className="text-sm font-bold uppercase tracking-widest">
+                            {idOrUsername}
+                        </h2>
+                    </Link>
                     <button
                         onClick={onClose}
                         className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
