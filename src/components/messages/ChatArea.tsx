@@ -384,6 +384,9 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
                 onSend={handleSend}
                 onTyping={handleTyping}
                 onStopTyping={handleStopTyping}
+                onClick={() => {
+                    if (conversationId) markRead.mutate(conversationId);
+                }}
                 isSending={sendMessage.isPending}
             />
         </section>

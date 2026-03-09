@@ -293,6 +293,7 @@ export function useGetTotalUnread() {
             return response.data.data;
         },
         enabled: status === 'authenticated',
+        refetchInterval: 30_000, // Fallback: re-sync every 30s in case socket misses an event
     });
 }
 

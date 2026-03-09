@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { ApiClientProvider } from '@/providers/ApiClientProvider';
+import { ChatSocketProvider } from '@/providers/ChatSocketProvider';
 import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
 
@@ -79,8 +80,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className={`${fontsVariables.join(' ')} antialiased`} suppressHydrationWarning>
                 <QueryProvider>
                     <ApiClientProvider>
-                        {children}
-                        <LoadingSpinner />
+                        <ChatSocketProvider>
+                            {children}
+                            <LoadingSpinner />
+                        </ChatSocketProvider>
                     </ApiClientProvider>
                 </QueryProvider>
                 <ToastContainer

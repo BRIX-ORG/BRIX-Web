@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Loader2, MessageCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useChatStore } from '@/stores/chat-store';
-import { useGetConversations } from '@/hooks/apis/message.api';
+import { useGetConversations, useMarkConversationRead } from '@/hooks/apis/message.api';
 import { useChatSocket } from '@/providers/ChatSocketProvider';
 import { ContactItem } from '@/components/messages';
 
@@ -34,6 +34,12 @@ export function ContactsSidebar() {
     const conversations = useChatStore((s) => s.conversations);
     const currentConversationId = useChatStore((s) => s.currentConversationId);
     const setCurrentConversation = useChatStore((s) => s.setCurrentConversation);
+    const markRead = useMarkConversationRead();
+
+    const handleConversationSelect = (id: string) => {
+        setCurrentConversation(id);
+        markRead.mutate(id);
+    };
 
     const onlineConversations = conversationOrder.filter(
         (id) => conversations[id]?.partner.isOnline,
@@ -71,7 +77,7 @@ export function ContactsSidebar() {
                                 conversation={conversations[id]}
                                 isActive={id === currentConversationId}
                                 currentUserId={currentUserId}
-                                onClick={() => setCurrentConversation(id)}
+                                onClick={() => handleConversationSelect(id)}
                             />
                         ))}
                     </div>
@@ -100,7 +106,7 @@ export function ContactsSidebar() {
                                 conversation={conversations[id]}
                                 isActive={id === currentConversationId}
                                 currentUserId={currentUserId}
-                                onClick={() => setCurrentConversation(id)}
+                                onClick={() => handleConversationSelect(id)}
                             />
                         ))}
                     </div>

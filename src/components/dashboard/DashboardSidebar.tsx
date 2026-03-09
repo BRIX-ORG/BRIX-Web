@@ -258,7 +258,14 @@ export function DashboardSidebar({
                                             item={item}
                                             pathname={pathname}
                                             isCollapsed={isCollapsed}
-                                            onClose={onClose}
+                                            onClose={() => {
+                                                onClose();
+                                                if (item.href === '/messages') {
+                                                    useChatStore
+                                                        .getState()
+                                                        .setCurrentConversation(null);
+                                                }
+                                            }}
                                             badge={
                                                 item.href === '/messages' ? totalUnread : undefined
                                             }

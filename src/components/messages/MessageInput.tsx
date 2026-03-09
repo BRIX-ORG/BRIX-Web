@@ -32,6 +32,7 @@ interface MessageInputProps {
     onSend: (data: { content?: string; images?: File[]; voice?: File; file?: File }) => void;
     onTyping?: () => void;
     onStopTyping?: () => void;
+    onClick?: () => void;
     disabled?: boolean;
     isSending?: boolean;
 }
@@ -40,6 +41,7 @@ export function MessageInput({
     onSend,
     onTyping,
     onStopTyping,
+    onClick,
     disabled,
     isSending,
 }: MessageInputProps) {
@@ -222,7 +224,10 @@ export function MessageInput({
     const hasAttachment = images.length > 0 || attachedFile || voice.audioFile;
 
     return (
-        <div className="relative p-4 bg-background/80 backdrop-blur-md border-t border-border">
+        <div
+            className="relative p-4 bg-background/80 backdrop-blur-md border-t border-border"
+            onClick={onClick}
+        >
             {/* Emoji Picker */}
             {showEmojiPicker && (
                 <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50">

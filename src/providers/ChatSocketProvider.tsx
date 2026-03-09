@@ -98,7 +98,19 @@ export function ChatSocketProvider({ children }: ChatSocketProviderProps) {
         // ─── Socket Event Handlers → Store Actions ──────────
 
         socket.on('newMessage', (message: SocketNewMessageEvent) => {
-            useChatStore.getState().addMessage(message.conversationId, message);
+            const storeState = useChatStore.getState();
+            const conv = storeState.conversations[message.conversationId];
+            const isCurrentConv = storeState.currentConversationId === message.conversationId;
+
+            storeState.addMessage(message.conversationId, message);
+
+            // addMessage only increments totalUnread when the conversation already exists in the store.
+            // If conversations haven't been loaded yet (e.g. user is on dashboard, not /messages),
+            // we need to increment totalUnread manually here.
+            if (!conv && !isCurrentConv) {
+                const newState = useChatStore.getState();
+                newState.setTotalUnread(newState.totalUnread + 1);
+            }
         });
 
         socket.on('messageUpdated', (message: SocketMessageUpdatedEvent) => {
