@@ -79,6 +79,7 @@ const nextConfig: NextConfig = {
         styledComponents: true,
         removeConsole: process.env.NODE_ENV === 'production',
     },
+    // devIndicators: false,
 };
 
 export default nextConfig;

@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { X, Upload, Plus, Trash2, Loader2, Palette } from 'lucide-react';
 import { AxiosError } from 'axios';
 import { HexColorPicker } from 'react-colorful';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { cn } from '@/utils/classnames';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
@@ -35,12 +36,24 @@ function ColorPickerField({
     onChange: (value: string) => void;
 }) {
     const [isOpen, setIsOpen] = useState(false);
+    const [rect, setRect] = useState<DOMRect | null>(null);
     const ref = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
         if (!ref.current?.contains(e.relatedTarget as Node)) {
+            // Check if focus went to portal
+            const portal = document.getElementById('color-picker-container');
+            if (portal && portal.contains(e.relatedTarget as Node)) return;
             setIsOpen(false);
         }
+    };
+
+    const toggleOpen = () => {
+        if (!isOpen && buttonRef.current) {
+            setRect(buttonRef.current.getBoundingClientRect());
+        }
+        setIsOpen(!isOpen);
     };
 
     return (
@@ -49,8 +62,9 @@ function ColorPickerField({
                 {label}
             </label>
             <button
+                ref={buttonRef}
                 type="button"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={toggleOpen}
                 className="flex items-center gap-2 w-full bg-muted/30 border border-border/50 rounded-lg px-2.5 py-2 text-sm hover:border-primary/40 transition-colors cursor-pointer"
             >
                 <div
@@ -62,18 +76,37 @@ function ColorPickerField({
                 </span>
                 <Palette className="size-3 text-muted-foreground ml-auto shrink-0" />
             </button>
-            {isOpen && (
-                <div className="absolute z-50 top-full mt-2 left-0 bg-background/95 backdrop-blur-xl border border-border/50 rounded-xl p-3 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-                    <HexColorPicker color={value || '#1a1a1a'} onChange={onChange} />
-                    <input
-                        type="text"
-                        value={value}
-                        onChange={(e) => onChange(e.target.value)}
-                        placeholder="#1a1a1a"
-                        className="mt-2 w-full bg-muted/30 border border-border/30 rounded px-2 py-1.5 text-xs font-mono text-foreground focus:outline-none focus:border-primary/40 transition-colors"
-                    />
-                </div>
-            )}
+            {isOpen &&
+                rect &&
+                createPortal(
+                    <div
+                        id="color-picker-container"
+                        className="fixed z-10000 bg-zinc-950/95 backdrop-blur-2xl border border-primary/40 rounded-xl p-3 shadow-[0_0_50px_rgba(0,238,255,0.2)] animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200"
+                        style={{
+                            top: rect.bottom + 8,
+                            left: rect.left,
+                            width: 220, // Match picker width
+                        }}
+                    >
+                        <HexColorPicker color={value || '#1a1a1a'} onChange={onChange} />
+                        <div className="mt-3 space-y-2">
+                            <div className="flex items-center gap-2">
+                                <div
+                                    className="size-4 rounded border border-white/20"
+                                    style={{ backgroundColor: value || '#1a1a1a' }}
+                                />
+                                <input
+                                    type="text"
+                                    value={value}
+                                    onChange={(e) => onChange(e.target.value)}
+                                    placeholder="#1a1a1a"
+                                    className="flex-1 bg-muted/20 border border-border/30 rounded px-2 py-1.5 text-[10px] font-mono text-foreground focus:outline-none focus:border-primary/40 transition-colors"
+                                />
+                            </div>
+                        </div>
+                    </div>,
+                    document.body,
+                )}
         </div>
     );
 }
@@ -85,7 +118,9 @@ export function CreateAlbumModal({ isOpen, onClose }: CreateAlbumModalProps) {
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [backgroundColor, setBackgroundColor] = useState('');
+    const [bgColor1, setBgColor1] = useState('#1a1a2e');
+    const [bgColor2, setBgColor2] = useState('#16213e');
+    const [bgColor3, setBgColor3] = useState('#0f3460');
     const [titleColor, setTitleColor] = useState('');
     const [descriptionColor, setDescriptionColor] = useState('');
     const [imageItems, setImageItems] = useState<ImageItem[]>([]);
@@ -145,7 +180,7 @@ export function CreateAlbumModal({ isOpen, onClose }: CreateAlbumModalProps) {
             await createAlbumMutation.mutateAsync({
                 name: name.trim(),
                 description: description.trim() || undefined,
-                backgroundColor: backgroundColor || undefined,
+                background: [bgColor1, bgColor2, bgColor3],
                 titleColor: titleColor || undefined,
                 descriptionColor: descriptionColor || undefined,
                 items: imageItems.map((item) => ({
@@ -173,7 +208,9 @@ export function CreateAlbumModal({ isOpen, onClose }: CreateAlbumModalProps) {
         imageItems.forEach((item) => URL.revokeObjectURL(item.preview));
         setName('');
         setDescription('');
-        setBackgroundColor('');
+        setBgColor1('#1a1a2e');
+        setBgColor2('#16213e');
+        setBgColor3('#0f3460');
         setTitleColor('');
         setDescriptionColor('');
         setImageItems([]);
@@ -252,24 +289,49 @@ export function CreateAlbumModal({ isOpen, onClose }: CreateAlbumModalProps) {
                         </div>
                     </div>
 
-                    {/* Theme Colors */}
+                    {/* Ether Colors */}
                     <div className="border-t border-border/20 pt-4">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-3">
-                            Album Theme Colors
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1">
+                            Ether Colors
+                        </p>
+                        <p className="text-[9px] text-muted-foreground/60 mb-3">
+                            3 colors blended in the LiquidEther background animation
                         </p>
                         <div className="grid grid-cols-3 gap-3">
                             <ColorPickerField
-                                label="Background"
-                                value={backgroundColor}
-                                onChange={setBackgroundColor}
+                                label="Color 1"
+                                value={bgColor1}
+                                onChange={setBgColor1}
                             />
                             <ColorPickerField
-                                label="Title"
+                                label="Color 2"
+                                value={bgColor2}
+                                onChange={setBgColor2}
+                            />
+                            <ColorPickerField
+                                label="Color 3"
+                                value={bgColor3}
+                                onChange={setBgColor3}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Text Colors */}
+                    <div className="border-t border-border/20 pt-4">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1">
+                            Text Colors
+                        </p>
+                        <p className="text-[9px] text-muted-foreground/60 mb-3">
+                            Color applied to title and description text in the album view
+                        </p>
+                        <div className="grid grid-cols-2 gap-3">
+                            <ColorPickerField
+                                label="Title Color"
                                 value={titleColor}
                                 onChange={setTitleColor}
                             />
                             <ColorPickerField
-                                label="Description"
+                                label="Description Color"
                                 value={descriptionColor}
                                 onChange={setDescriptionColor}
                             />

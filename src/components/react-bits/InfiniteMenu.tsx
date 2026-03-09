@@ -844,6 +844,12 @@ class InfiniteGridMenu {
             this.onControlUpdate(deltaTime),
         );
 
+        // Center the first item on load
+        if (this.instancePositions.length > 0) {
+            const firstPos = vec3.normalize(vec3.create(), this.instancePositions[0]);
+            quat.rotationTo(this.control.orientation, firstPos, this.control.snapDirection);
+        }
+
         this.updateCameraMatrix();
         this.updateProjectionMatrix();
 
@@ -1123,9 +1129,16 @@ const defaultItems: MenuItem[] = [
 interface InfiniteMenuProps {
     items?: MenuItem[];
     scale?: number;
+    titleColor?: string;
+    descriptionColor?: string;
 }
 
-const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [], scale = 1.0 }) => {
+const InfiniteMenu: FC<InfiniteMenuProps> = ({
+    items = [],
+    scale = 1.0,
+    titleColor,
+    descriptionColor,
+}) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(
         null,
     ) as MutableRefObject<HTMLCanvasElement | null>;
@@ -1186,8 +1199,10 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [], scale = 1.0 }) => {
 
             {activeItem && (
                 <>
+                    {/* ── Desktop layout (md+): side-by-side at center ── */}
                     <h2
                         className={`
+          hidden md:block
           select-none
           absolute
           font-black
@@ -1205,12 +1220,14 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [], scale = 1.0 }) => {
                   : 'opacity-100 pointer-events-auto duration-500'
           }
         `}
+                        style={titleColor ? { color: titleColor } : undefined}
                     >
                         {activeItem.title}
                     </h2>
 
                     <p
                         className={`
+          hidden md:block
           select-none
           absolute
           max-w-[10ch]
@@ -1225,9 +1242,38 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items = [], scale = 1.0 }) => {
                   : 'opacity-100 pointer-events-auto duration-500 translate-x-[-90%] -translate-y-1/2'
           }
         `}
+                        style={descriptionColor ? { color: descriptionColor } : undefined}
                     >
                         {activeItem.description}
                     </p>
+
+                    {/* ── Mobile layout (< md): stacked bottom bar ── */}
+                    <div
+                        className={`
+          md:hidden
+          absolute bottom-24 left-0 right-0
+          px-4 space-y-1
+          transition-all ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
+          ${
+              isMoving
+                  ? 'opacity-0 pointer-events-none duration-100 translate-y-2'
+                  : 'opacity-100 pointer-events-auto duration-500 translate-y-0'
+          }
+        `}
+                    >
+                        <h2
+                            className="select-none font-black text-2xl leading-tight line-clamp-2"
+                            style={titleColor ? { color: titleColor } : undefined}
+                        >
+                            {activeItem.title}
+                        </h2>
+                        <p
+                            className="select-none text-sm leading-snug line-clamp-3 opacity-80"
+                            style={descriptionColor ? { color: descriptionColor } : undefined}
+                        >
+                            {activeItem.description}
+                        </p>
+                    </div>
 
                     <div
                         onClick={handleButtonClick}

@@ -18,7 +18,7 @@ export interface Album {
     userId: string;
     name: string;
     description: string | null;
-    backgroundColor: string | null;
+    background: [string, string, string] | null;
     titleColor: string | null;
     descriptionColor: string | null;
     items: AlbumItem[];

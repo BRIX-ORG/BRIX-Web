@@ -56,7 +56,7 @@ export function useCreateAlbum() {
         mutationFn: async (data: {
             name: string;
             description?: string;
-            backgroundColor?: string;
+            background?: [string, string, string];
             titleColor?: string;
             descriptionColor?: string;
             items: { title: string; description: string }[];
@@ -66,7 +66,9 @@ export function useCreateAlbum() {
             formData.append('name', data.name);
 
             if (data.description) formData.append('description', data.description);
-            if (data.backgroundColor) formData.append('backgroundColor', data.backgroundColor);
+            if (data.background) {
+                data.background.forEach((color) => formData.append('background', color));
+            }
             if (data.titleColor) formData.append('titleColor', data.titleColor);
             if (data.descriptionColor) formData.append('descriptionColor', data.descriptionColor);
 

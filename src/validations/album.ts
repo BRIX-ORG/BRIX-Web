@@ -26,7 +26,7 @@ export const updateAlbumSchema = z.object({
         .max(500, 'Description must be at most 500 characters')
         .optional()
         .or(z.literal('')),
-    backgroundColor: z.string().optional(),
+    background: z.tuple([z.string(), z.string(), z.string()]).optional(),
     titleColor: z.string().optional(),
     descriptionColor: z.string().optional(),
 });
