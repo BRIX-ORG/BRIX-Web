@@ -2,10 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Bell, Camera, Menu } from 'lucide-react';
+import { Search, Camera, Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { BrixBrandLogo } from '@/components/shared';
 import { getAvatarUrl } from '@/utils/cloudinary';
+import { NotificationPopover } from '@/components/notifications/NotificationPopover';
 
 const navLinks = [
     { href: '/dashboard/feed', label: 'Feed', active: true },
@@ -83,10 +84,8 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                         <span className="hidden sm:inline">Camera</span>
                     </Link>
 
-                    {/* Notifications */}
-                    <button className="size-9 flex items-center justify-center rounded border border-border bg-muted hover:bg-muted/80 transition-colors">
-                        <Bell className="size-4" />
-                    </button>
+                    {/* Notifications Bell — with realtime popover */}
+                    <NotificationPopover />
 
                     {/* User Avatar */}
                     <Link

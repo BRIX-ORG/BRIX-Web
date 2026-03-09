@@ -5,6 +5,7 @@ import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { ApiClientProvider } from '@/providers/ApiClientProvider';
 import { ChatSocketProvider } from '@/providers/ChatSocketProvider';
+import { NotificationSocketProvider } from '@/providers/NotificationSocketProvider';
 import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
 
@@ -81,8 +82,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <QueryProvider>
                     <ApiClientProvider>
                         <ChatSocketProvider>
-                            {children}
-                            <LoadingSpinner />
+                            <NotificationSocketProvider>
+                                {children}
+                                <LoadingSpinner />
+                            </NotificationSocketProvider>
                         </ChatSocketProvider>
                     </ApiClientProvider>
                 </QueryProvider>

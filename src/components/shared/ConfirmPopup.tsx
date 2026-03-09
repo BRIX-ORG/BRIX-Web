@@ -67,7 +67,7 @@ export function ConfirmPopup({
     const Icon = config.icon;
 
     return (
-        <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
+        <div className="fixed top-0 left-0 w-full h-full z-99999 flex items-center justify-center p-4 overflow-hidden">
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
