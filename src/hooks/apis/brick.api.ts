@@ -9,6 +9,7 @@ import type {
     BrickUpvoter,
     BrickVoteStatus,
     GlbBrick,
+    NewsfeedLocation,
     PaginatedBricksResponse,
     PaginatedCommentsResponse,
     RealtimeSession,
@@ -45,6 +46,112 @@ export function useGetUserBricks(idOrUsername: string, tagType?: BrickTagType, l
         },
         initialPageParam: 0,
         enabled: !!idOrUsername,
+    });
+}
+
+/**
+ * Get global newsfeed bricks (sorted by popularity/trending) with optional filters
+ */
+export function useGetNewsfeedBricks(
+    filters?: { tagType?: BrickTagType; timeRange?: string; isPublic?: boolean },
+    limit: number = 20,
+) {
+    return useInfiniteQuery({
+        queryKey: ['newsfeedBricks', filters],
+        queryFn: async ({ pageParam = 0 }) => {
+            const params = new URLSearchParams();
+            params.set('limit', limit.toString());
+            params.set('offset', pageParam.toString());
+
+            if (filters?.tagType) params.set('tagType', filters.tagType);
+            if (filters?.timeRange) params.set('timeRange', filters.timeRange);
+            if (filters?.isPublic !== undefined)
+                params.set('isPublic', filters.isPublic.toString());
+
+            const response = await apiClient.get<ApiResponse<PaginatedBricksResponse>>(
+                `/api/bricks/newsfeed?${params.toString()}`,
+            );
+            return response.data.data;
+        },
+        getNextPageParam: (lastPage) => {
+            const nextOffset = lastPage.offset + lastPage.limit;
+            return nextOffset < lastPage.total ? nextOffset : undefined;
+        },
+        initialPageParam: 0,
+    });
+}
+
+/**
+ * Get newsfeed bricks from followed users (sorted newest first)
+ */
+export function useGetFollowingBricks(
+    filters?: { tagType?: BrickTagType; isPublic?: boolean },
+    limit: number = 20,
+) {
+    return useInfiniteQuery({
+        queryKey: ['followingBricks', filters],
+        queryFn: async ({ pageParam = 0 }) => {
+            const params = new URLSearchParams();
+            params.set('limit', limit.toString());
+            params.set('offset', pageParam.toString());
+
+            if (filters?.tagType) params.set('tagType', filters.tagType);
+            if (filters?.isPublic !== undefined)
+                params.set('isPublic', filters.isPublic.toString());
+
+            const response = await apiClient.get<ApiResponse<PaginatedBricksResponse>>(
+                `/api/bricks/newsfeed/following?${params.toString()}`,
+            );
+            return response.data.data;
+        },
+        getNextPageParam: (lastPage) => {
+            const nextOffset = lastPage.offset + lastPage.limit;
+            return nextOffset < lastPage.total ? nextOffset : undefined;
+        },
+        initialPageParam: 0,
+    });
+}
+
+/**
+ * Get lightweight location data for all public bricks
+ */
+export function useGetNewsfeedLocations(filters?: { tagType?: BrickTagType; isPublic?: boolean }) {
+    return useQuery({
+        queryKey: ['newsfeedLocations', filters],
+        queryFn: async () => {
+            const params = new URLSearchParams();
+            if (filters?.tagType) params.set('tagType', filters.tagType);
+            if (filters?.isPublic !== undefined)
+                params.set('isPublic', filters.isPublic.toString());
+
+            const response = await apiClient.get<ApiResponse<NewsfeedLocation[]>>(
+                `/api/bricks/newsfeed/locations?${params.toString()}`,
+            );
+            return response.data.data;
+        },
+    });
+}
+
+/**
+ * Get lightweight location data for current user's bricks
+ */
+export function useGetNewsfeedLocationsMe(filters?: {
+    tagType?: BrickTagType;
+    isPublic?: boolean;
+}) {
+    return useQuery({
+        queryKey: ['newsfeedLocationsMe', filters],
+        queryFn: async () => {
+            const params = new URLSearchParams();
+            if (filters?.tagType) params.set('tagType', filters.tagType);
+            if (filters?.isPublic !== undefined)
+                params.set('isPublic', filters.isPublic.toString());
+
+            const response = await apiClient.get<ApiResponse<NewsfeedLocation[]>>(
+                `/api/bricks/newsfeed/locations/me?${params.toString()}`,
+            );
+            return response.data.data;
+        },
     });
 }
 

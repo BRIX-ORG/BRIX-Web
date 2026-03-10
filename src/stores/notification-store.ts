@@ -9,6 +9,7 @@ interface NotificationState {
 
 interface NotificationActions {
     setNotifications: (notifications: NotificationGroup[]) => void;
+    mergeNotifications: (notifications: NotificationGroup[]) => void;
     addNotification: (notification: NotificationGroup) => void;
     updateNotification: (update: SocketNotificationUpdatedEvent) => void;
     removeNotification: (id: string) => void;
@@ -42,6 +43,17 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
             map[n.id] = n;
         }
         set({ notifications: map, order: sortOrder(map) });
+    },
+
+    mergeNotifications: (notifications) => {
+        if (!Array.isArray(notifications)) return;
+        set((state) => {
+            const map = { ...state.notifications };
+            for (const n of notifications) {
+                map[n.id] = n;
+            }
+            return { notifications: map, order: sortOrder(map) };
+        });
     },
 
     addNotification: (notification) => {

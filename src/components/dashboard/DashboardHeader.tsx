@@ -2,17 +2,19 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+// import { usePathname } from 'next/navigation';
 import { Search, Camera, Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { BrixBrandLogo } from '@/components/shared';
+// import { cn } from '@/utils/classnames';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { NotificationPopover } from '@/components/notifications/NotificationPopover';
 
-const navLinks = [
-    { href: '/dashboard/feed', label: 'Feed', active: true },
-    { href: '/dashboard/trending', label: 'Trending' },
-    { href: '/dashboard/vault', label: 'Vault' },
-];
+// const navLinks = [
+//     { href: '/dashboard', label: 'Map' },
+//     { href: '/dashboard/trending', label: 'Trending' },
+//     { href: '/dashboard/vault', label: 'Vault' },
+// ];
 
 interface DashboardHeaderProps {
     onMenuClick?: () => void;
@@ -20,6 +22,7 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
     const { data: session } = useSession();
+    // const pathname = usePathname();
     const user = session?.user;
     const avatarUrl = user ? getAvatarUrl(user.avatar, user.gender) : null;
 
@@ -62,17 +65,24 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
             <div className="flex items-center gap-3 md:gap-6">
                 {/* Navigation Links */}
-                <nav className="hidden xl:flex items-center gap-6 text-sm font-medium uppercase tracking-widest text-muted-foreground">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={`hover:text-primary transition-colors ${link.active ? 'text-primary' : ''}`}
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-                </nav>
+                {/* <nav className="hidden xl:flex items-center gap-6 text-sm font-medium uppercase tracking-widest text-muted-foreground">
+                    {navLinks.map((link) => {
+                        const isActive = pathname?.startsWith(link.href) || false;
+                        return (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={cn(
+                                    'hover:text-primary transition-colors',
+                                    isActive &&
+                                        'text-primary border-b-2 border-primary -mb-[2px] pb-[10px]',
+                                )}
+                            >
+                                {link.label}
+                            </Link>
+                        );
+                    })}
+                </nav> */}
 
                 <div className="flex gap-2 md:gap-3 border-l border-border pl-3 md:pl-6">
                     {/* Camera Button */}

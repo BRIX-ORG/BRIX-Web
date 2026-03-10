@@ -118,6 +118,14 @@ export interface PaginatedBricksResponse {
     offset: number;
 }
 
+// Minimal brick information for map markers
+export interface NewsfeedLocation {
+    id: string;
+    latitude: number;
+    longitude: number;
+    tagType: BrickTagType;
+}
+
 // Upload Art Brick response
 export type UploadArtBrickResponse = ApiResponse<Brick>;
 

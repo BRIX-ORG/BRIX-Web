@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import type { PaginatedNotifications } from '@/types/notification.types';
 import type { ApiResponse } from '@/types/api.types';
@@ -22,6 +22,31 @@ export function useNotifications(params: { limit?: number; offset?: number } = {
                 },
             );
             return response.data.data;
+        },
+    });
+}
+
+export function useInfiniteNotifications(params: { limit?: number } = { limit: 20 }) {
+    return useInfiniteQuery({
+        queryKey: [...notificationKeys.lists(), 'infinite', params],
+        queryFn: async ({ pageParam = 0 }) => {
+            const response = await apiClient.get<ApiResponse<PaginatedNotifications>>(
+                '/api/notifications',
+                {
+                    params: {
+                        ...params,
+                        offset: pageParam,
+                    },
+                },
+            );
+            return response.data.data;
+        },
+        initialPageParam: 0,
+        getNextPageParam: (lastPage) => {
+            if (lastPage.data.length === lastPage.limit) {
+                return lastPage.offset + lastPage.limit;
+            }
+            return undefined;
         },
     });
 }

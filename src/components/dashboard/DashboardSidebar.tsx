@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import {
-    LayoutDashboard,
     Compass,
     Database,
     Network,
@@ -12,8 +11,6 @@ import {
     TrendingUp,
     DollarSign,
     Upload,
-    ImageIcon,
-    Users,
     Shield,
     ChevronLeft,
     ChevronRight,
@@ -21,6 +18,8 @@ import {
     BookImage,
     X,
     Loader2,
+    MapPin,
+    Camera,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { cn } from '@/utils/classnames';
@@ -47,18 +46,23 @@ export type SidebarGroup = {
 
 const sidebarGroups: SidebarGroup[] = [
     {
-        title: 'Main',
+        title: 'Overview',
         items: [
             {
-                title: 'Dashboard',
+                title: 'Map',
                 href: '/dashboard',
-                icon: LayoutDashboard,
+                icon: MapPin,
             },
             {
-                title: 'Feed',
-                href: '/dashboard/feed',
+                title: 'Trending',
+                href: '/dashboard/trending',
                 icon: Compass,
             },
+        ],
+    },
+    {
+        title: 'Library',
+        items: [
             {
                 title: 'Archive',
                 href: '/dashboard/archive',
@@ -69,6 +73,11 @@ const sidebarGroups: SidebarGroup[] = [
                 href: '/dashboard/albums',
                 icon: BookImage,
             },
+        ],
+    },
+    {
+        title: 'Connect',
+        items: [
             {
                 title: 'Messages',
                 href: '/messages',
@@ -82,7 +91,7 @@ const sidebarGroups: SidebarGroup[] = [
         ],
     },
     {
-        title: 'Analytics',
+        title: 'Insights',
         items: [
             {
                 title: 'Reports',
@@ -108,19 +117,9 @@ const sidebarGroups: SidebarGroup[] = [
                 icon: Upload,
             },
             {
-                title: 'Assets',
-                href: '/dashboard/assets',
-                icon: ImageIcon,
-            },
-        ],
-    },
-    {
-        title: 'Management',
-        items: [
-            {
-                title: 'Users',
-                href: '/dashboard/users',
-                icon: Users,
+                title: 'Camera',
+                href: '/camera',
+                icon: Camera,
             },
         ],
     },
@@ -243,7 +242,7 @@ export function DashboardSidebar({
                     </div>
 
                     {/* Navigation Groups */}
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                         {sidebarGroups.map((group) => (
                             <div key={group.title} className="mb-4">
                                 {!isCollapsed && (

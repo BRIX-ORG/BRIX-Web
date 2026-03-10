@@ -4,23 +4,36 @@ import { Bell, CheckCheck, Inbox, Loader2 } from 'lucide-react';
 import { NotificationItem } from '@/components/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
 import {
-    useNotifications,
+    useInfiniteNotifications,
     useMarkAllNotificationsAsRead,
     useDeleteNotification,
     useMarkNotificationAsRead,
 } from '@/hooks/apis/notification.api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ConfirmPopup, Portal } from '@/components/shared';
+import { cn } from '@/utils/classnames';
 
 export default function NotificationsPage() {
     const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
-    const { notifications, order, unreadCount, markAllAsRead } = useNotificationStore();
+    const { notifications, order, unreadCount, markAllAsRead, mergeNotifications } =
+        useNotificationStore();
 
-    // Fetch notifications (limit to 50 for the full page for now)
-    const { isLoading } = useNotifications({ limit: 50 });
+    // Fetch notifications infinitely
+    const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
+        useInfiniteNotifications({ limit: 20 });
     const markAllReadMutation = useMarkAllNotificationsAsRead();
     const deleteMutation = useDeleteNotification();
     const markReadMutation = useMarkNotificationAsRead();
+
+    // Sync newly fetched pages to store
+    useEffect(() => {
+        if (data?.pages) {
+            const allFetched = data.pages.flatMap((page) => page.data);
+            if (allFetched.length > 0) {
+                mergeNotifications(allFetched);
+            }
+        }
+    }, [data, mergeNotifications]);
 
     const handleMarkAllRead = () => {
         markAllReadMutation.mutate();
@@ -141,12 +154,38 @@ export default function NotificationsPage() {
                             </div>
                         ))}
 
-                        <div className="py-16 flex flex-col items-center gap-4 text-center">
-                            <div className="h-px w-20 bg-linear-to-r from-transparent via-white/10 to-transparent" />
-                            <p className="text-[10px] font-mono text-muted-foreground/40 uppercase tracking-[0.4em] font-black">
-                                End of Stream — Signal Stable
-                            </p>
-                        </div>
+                        {hasNextPage && (
+                            <div className="flex justify-center pt-8">
+                                <button
+                                    type="button"
+                                    onClick={() => fetchNextPage()}
+                                    disabled={isFetchingNextPage}
+                                    className={cn(
+                                        'group relative px-8 py-3 border text-xs font-bold uppercase tracking-[0.25em] transition-all duration-300 cursor-pointer',
+                                        'border-brix-primary/30 text-brix-primary/70 hover:border-brix-primary hover:text-brix-primary hover:shadow-[0_0_20px_rgba(0,238,255,0.2)]',
+                                        'disabled:opacity-50 disabled:cursor-not-allowed text-center z-10 bg-background/50 backdrop-blur-md rounded-sm',
+                                    )}
+                                >
+                                    {isFetchingNextPage ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <Loader2 className="size-3.5 animate-spin" />
+                                            Syncing...
+                                        </span>
+                                    ) : (
+                                        'Load More Signals'
+                                    )}
+                                </button>
+                            </div>
+                        )}
+
+                        {!hasNextPage && order.length > 0 && (
+                            <div className="py-16 flex flex-col items-center gap-4 text-center">
+                                <div className="h-px w-20 bg-linear-to-r from-transparent via-white/10 to-transparent" />
+                                <p className="text-[10px] font-mono text-muted-foreground/40 uppercase tracking-[0.4em] font-black">
+                                    End of Stream — Signal Stable
+                                </p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
