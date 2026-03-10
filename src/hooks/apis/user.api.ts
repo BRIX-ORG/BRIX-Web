@@ -1,7 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import type { ApiResponse, User } from '@/types/auth.types';
-import type { FollowActionResponse, FollowListResponse } from '@/types/user.types';
+import type {
+    FollowActionResponse,
+    FollowListResponse,
+    PaginatedTopUsersResponse,
+} from '@/types/user.types';
 import type { UpdateProfileInput, UpdatePasswordInput } from '@/validations/user';
 import { updateUserProfile } from '@/lib/auth-actions';
 
@@ -218,5 +222,54 @@ export function useGetFollowing(idOrUsername: string, limit?: number, offset = 0
             return response.data.data;
         },
         enabled: !!idOrUsername,
+    });
+}
+
+/**
+ * Get top users sorted by their total followers count
+ */
+export function useGetTopUsers(limit: number = 10) {
+    return useInfiniteQuery({
+        queryKey: ['topUsers'],
+        queryFn: async ({ pageParam = 0 }) => {
+            const params = new URLSearchParams();
+            params.set('limit', limit.toString());
+            params.set('offset', pageParam.toString());
+
+            const response = await apiClient.get<ApiResponse<PaginatedTopUsersResponse>>(
+                `/api/follows/top-users?${params.toString()}`,
+            );
+            return response.data.data;
+        },
+        getNextPageParam: (lastPage: PaginatedTopUsersResponse) => {
+            const nextOffset = lastPage.offset + (lastPage.limit || 0);
+            return nextOffset < lastPage.total ? nextOffset : undefined;
+        },
+        initialPageParam: 0,
+    });
+}
+
+/**
+ * Get follow recommendations (friends of friends)
+ */
+export function useGetFollowRecommendations(limit: number = 10) {
+    return useInfiniteQuery({
+        queryKey: ['followRecommendations'],
+        queryFn: async ({ pageParam = 0 }) => {
+            const params = new URLSearchParams();
+            params.set('limit', limit.toString());
+            params.set('offset', pageParam.toString());
+
+            const response = await apiClient.get<ApiResponse<FollowListResponse>>(
+                '/api/follows/recommendations',
+                { params },
+            );
+            return response.data.data;
+        },
+        getNextPageParam: (lastPage: FollowListResponse) => {
+            const nextOffset = lastPage.offset + (lastPage.limit || 0);
+            return nextOffset < lastPage.total ? nextOffset : undefined;
+        },
+        initialPageParam: 0,
     });
 }

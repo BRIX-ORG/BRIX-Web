@@ -1,4 +1,5 @@
 import type { ApiResponse } from './api.types';
+import type { TopAuthor } from './user.types';
 
 // Media stored in MinIO (original file)
 export interface BrickMedia {
@@ -226,4 +227,10 @@ export interface RealtimeSession {
 export interface RealtimeUploadResult {
     message: string;
     sessionId: string;
+}
+export interface PaginatedTopAuthorsResponse {
+    data: TopAuthor[];
+    total: number;
+    limit: number | null;
+    offset: number;
 }

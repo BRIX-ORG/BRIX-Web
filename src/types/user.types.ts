@@ -40,6 +40,7 @@ export interface User {
     verifiedAt: string | null;
     createdAt: string;
     updatedAt: string;
+    totalFollowers?: number;
 }
 
 /** User item returned in followers/following lists */
@@ -48,11 +49,13 @@ export interface FollowUser {
     username: string;
     fullName: string;
     avatar: CloudinaryImage | null;
+    background: CloudinaryImage | null;
     gender: Gender;
     role: 'USER' | 'ADMIN';
     provider: 'LOCAL' | 'GOOGLE';
     shortDescription: string | null;
     isFollowing: boolean;
+    totalFollowers?: number;
 }
 
 /** Paginated response for followers/following lists */
@@ -66,4 +69,22 @@ export interface FollowListResponse {
 /** Response from follow/unfollow actions */
 export interface FollowActionResponse {
     isFollowing: boolean;
+}
+
+/** Top author returned by /api/bricks/top-authors */
+export interface TopAuthor extends User {
+    totalVotes: number;
+    isFollowing: boolean;
+}
+
+/** Top user returned by /api/follows/top-users */
+export interface TopUser extends FollowUser {
+    totalFollowers: number;
+}
+
+export interface PaginatedTopUsersResponse {
+    data: TopUser[];
+    total: number;
+    limit: number | null;
+    offset: number;
 }

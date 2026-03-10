@@ -104,10 +104,10 @@ export function TrendingGallery() {
 
     // Call both hooks but only enable the active one for proper caching and performance
     const newsfeedQuery = useGetNewsfeedBricks(
-        { tagType: queryTagType, timeRange: queryTimeRange },
+        { tagType: queryTagType, timeRange: queryTimeRange, isPublic: true },
         20,
     );
-    const followingQuery = useGetFollowingBricks({ tagType: queryTagType }, 20);
+    const followingQuery = useGetFollowingBricks({ tagType: queryTagType, isPublic: true }, 20);
 
     const activeQuery = feedType === 'RECOMMEND' ? newsfeedQuery : followingQuery;
     const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } = activeQuery;

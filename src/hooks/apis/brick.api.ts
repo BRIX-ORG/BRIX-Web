@@ -14,6 +14,7 @@ import type {
     PaginatedCommentsResponse,
     RealtimeSession,
     RealtimeUploadResult,
+    PaginatedTopAuthorsResponse,
 } from '@/types/brick.types';
 import type {
     UploadArtBrickFormInput,
@@ -649,5 +650,29 @@ export function useUploadRealtimeBrick() {
             queryClient.invalidateQueries({ queryKey: ['bricks'] });
             queryClient.invalidateQueries({ queryKey: ['userBricks'] });
         },
+    });
+}
+
+/**
+ * Get top authors by total upvotes of their bricks
+ */
+export function useGetTopAuthors(limit: number = 10) {
+    return useInfiniteQuery({
+        queryKey: ['topAuthors'],
+        queryFn: async ({ pageParam = 0 }) => {
+            const params = new URLSearchParams();
+            params.set('limit', limit.toString());
+            params.set('offset', pageParam.toString());
+
+            const response = await apiClient.get<ApiResponse<PaginatedTopAuthorsResponse>>(
+                `/api/bricks/top-authors?${params.toString()}`,
+            );
+            return response.data.data;
+        },
+        getNextPageParam: (lastPage: PaginatedTopAuthorsResponse) => {
+            const nextOffset = lastPage.offset + (lastPage.limit || 0);
+            return nextOffset < lastPage.total ? nextOffset : undefined;
+        },
+        initialPageParam: 0,
     });
 }
