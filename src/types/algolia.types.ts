@@ -32,7 +32,8 @@ export interface AlgoliaUserRecord {
     avatar: AlgoliaMediaObject | null;
     background: AlgoliaMediaObject | null;
     gender: 'MALE' | 'FEMALE' | 'OTHER';
-    _geoloc?: GeoFilter;
+    // _geoloc?: GeoFilter;
+    _geoloc?: { lat: number; lng: number };
     _highlightResult?: {
         fullname?: AlgoliaHighlightValue;
         username?: AlgoliaHighlightValue;

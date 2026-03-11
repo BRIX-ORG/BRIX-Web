@@ -1303,3 +1303,44 @@ export {
 };
 
 export type { MapRef };
+
+/**
+ * A headless component that hooks into the MapContext and listens for moveend/zoomend
+ * to report the current bounding box [nLat, nLng, sLat, sLng].
+ */
+export function MapBoundsListener({
+    onChange,
+}: {
+    onChange: (bounds: [number, number, number, number] | null) => void;
+}) {
+    const { map } = useMap();
+
+    useEffect(() => {
+        if (!map) return;
+
+        const handleMoveEnd = () => {
+            const bounds = map.getBounds();
+            if (bounds) {
+                onChange([
+                    bounds.getNorthEast().lat,
+                    bounds.getNorthEast().lng,
+                    bounds.getSouthWest().lat,
+                    bounds.getSouthWest().lng,
+                ]);
+            }
+        };
+
+        // Fire once on mount combined with timeout ensuring it paints
+        const t = setTimeout(handleMoveEnd, 500);
+
+        map.on('moveend', handleMoveEnd);
+        map.on('zoomend', handleMoveEnd);
+        return () => {
+            clearTimeout(t);
+            map.off('moveend', handleMoveEnd);
+            map.off('zoomend', handleMoveEnd);
+        };
+    }, [map, onChange]);
+
+    return null;
+}
