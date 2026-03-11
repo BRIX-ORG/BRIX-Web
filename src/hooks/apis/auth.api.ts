@@ -4,25 +4,26 @@ import { signInWithPopup, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth, providerMap } from '@/providers/firebase';
 import type {
     RegisterRequest,
-    RegisterResponse,
     ForgotPasswordRequest,
-    ForgotPasswordResponse,
+    ForgotPasswordResponseData,
     VerifyOtpRequest,
-    VerifyOtpResponse,
+    VerifyOtpResponseData,
     ResetPasswordRequest,
-    ResetPasswordResponse,
+    ResetPasswordResponseData,
     LoginRequest,
     SendEmailVerificationRequest,
-    SendEmailVerificationResponse,
+    SendEmailVerificationResponseData,
     VerifyEmailRequest,
-    VerifyEmailResponse,
+    VerifyEmailResponseData,
+    AuthResponseData,
 } from '@/types/auth.types';
+import type { ApiResponse } from '@/types/api.types';
 
 const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 // Direct API calls (without auth interceptor for public endpoints)
 const authApi = {
-    register: async (data: RegisterRequest): Promise<RegisterResponse> => {
+    register: async (data: RegisterRequest): Promise<ApiResponse<AuthResponseData>> => {
         const response = await fetch(`${API_BASE}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -45,7 +46,9 @@ const authApi = {
         });
     },
 
-    forgotPassword: async (data: ForgotPasswordRequest): Promise<ForgotPasswordResponse> => {
+    forgotPassword: async (
+        data: ForgotPasswordRequest,
+    ): Promise<ApiResponse<ForgotPasswordResponseData>> => {
         const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -57,7 +60,7 @@ const authApi = {
         return response.json();
     },
 
-    verifyOtp: async (data: VerifyOtpRequest): Promise<VerifyOtpResponse> => {
+    verifyOtp: async (data: VerifyOtpRequest): Promise<ApiResponse<VerifyOtpResponseData>> => {
         const response = await fetch(`${API_BASE}/api/auth/verify-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -69,7 +72,9 @@ const authApi = {
         return response.json();
     },
 
-    resetPassword: async (data: ResetPasswordRequest): Promise<ResetPasswordResponse> => {
+    resetPassword: async (
+        data: ResetPasswordRequest,
+    ): Promise<ApiResponse<ResetPasswordResponseData>> => {
         const response = await fetch(`${API_BASE}/api/auth/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -84,7 +89,7 @@ const authApi = {
     // Email Verification - Send OTP
     sendEmailVerification: async (
         data: SendEmailVerificationRequest,
-    ): Promise<SendEmailVerificationResponse> => {
+    ): Promise<ApiResponse<SendEmailVerificationResponseData>> => {
         const response = await fetch(`${API_BASE}/api/auth/verify-email/send`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -98,7 +103,9 @@ const authApi = {
     },
 
     // Email Verification - Verify OTP
-    verifyEmail: async (data: VerifyEmailRequest): Promise<VerifyEmailResponse> => {
+    verifyEmail: async (
+        data: VerifyEmailRequest,
+    ): Promise<ApiResponse<VerifyEmailResponseData>> => {
         const response = await fetch(`${API_BASE}/api/auth/verify-email/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

@@ -1,5 +1,3 @@
-import type { ApiResponse } from './api.types';
-
 // Address object structure from LocationIQ
 export interface LocationAddress {
     name?: string;
@@ -44,7 +42,6 @@ export interface LocationAutocompleteRequest {
 }
 
 // Autocomplete Response
-export type LocationAutocompleteResponse = ApiResponse<LocationSuggestion[]>;
 
 // Reverse Geocoding Request Parameters
 export interface LocationReverseRequest {
@@ -77,4 +74,3 @@ export interface LocationReverseData {
 }
 
 // Reverse Geocoding Response
-export type LocationReverseResponse = ApiResponse<LocationReverseData>;

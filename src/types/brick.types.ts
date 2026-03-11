@@ -1,4 +1,3 @@
-import type { ApiResponse } from './api.types';
 import type { TopAuthor } from './user.types';
 
 // Media stored in MinIO (original file)
@@ -128,10 +127,8 @@ export interface NewsfeedLocation {
 }
 
 // Upload Art Brick response
-export type UploadArtBrickResponse = ApiResponse<Brick>;
 
 // Upload GLB Brick response
-export type UploadGlbBrickResponse = ApiResponse<GlbBrick>;
 
 // ─── Brick Detail (GET /api/bricks/{id}) ────────────────────────
 

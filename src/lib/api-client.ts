@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { updateSession } from '@/lib/auth-actions';
-import type { RefreshResponse } from '@/types/auth.types';
+import type { AuthResponseData } from '@/types/auth.types';
+import type { ApiResponse } from '@/types/api.types';
 
 // Create axios instance
 export const apiClient = axios.create({
@@ -110,7 +111,7 @@ async function refreshAccessToken(): Promise<string | null> {
             return null;
         }
 
-        const data = (await response.json()) as RefreshResponse;
+        const data = (await response.json()) as ApiResponse<AuthResponseData>;
 
         if (data.data) {
             const {

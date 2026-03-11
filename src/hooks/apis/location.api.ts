@@ -2,10 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import type {
     LocationAutocompleteRequest,
-    LocationAutocompleteResponse,
+    LocationSuggestion,
     LocationReverseRequest,
-    LocationReverseResponse,
+    LocationReverseData,
 } from '@/types/location.types';
+import type { ApiResponse } from '@/types/api.types';
 
 /**
  * Search for location suggestions as the user types
@@ -38,7 +39,7 @@ export function useLocationAutocomplete(
                 queryParams.append('lang', params.lang);
             }
 
-            const response = await apiClient.get<LocationAutocompleteResponse>(
+            const response = await apiClient.get<ApiResponse<LocationSuggestion[]>>(
                 `/api/location/autocomplete?${queryParams.toString()}`,
             );
             return response.data.data;
@@ -74,7 +75,7 @@ export function useLocationReverse(params: LocationReverseRequest, enabled: bool
                 queryParams.append('normalizeaddress', params.normalizeaddress.toString());
             }
 
-            const response = await apiClient.get<LocationReverseResponse>(
+            const response = await apiClient.get<ApiResponse<LocationReverseData>>(
                 `/api/location/reverse?${queryParams.toString()}`,
             );
             return response.data.data;

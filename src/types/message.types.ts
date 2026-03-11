@@ -1,5 +1,4 @@
 import type { CloudinaryImage, Gender } from './user.types';
-import type { ApiResponse } from './api.types';
 
 // ─── Conversation Partner ───────────────────────────────────────
 
@@ -124,21 +123,6 @@ export interface PaginatedFilesResponse {
     limit: number;
     offset: number;
 }
-
-// ─── API Responses ──────────────────────────────────────────────
-
-export type ConversationListResponse = ApiResponse<PaginatedConversationsResponse>;
-export type ConversationDetailResponse = ApiResponse<Conversation>;
-export type MessageListResponse = ApiResponse<PaginatedMessagesResponse>;
-export type SendMessageResponse = ApiResponse<Message>;
-export type EditMessageResponse = ApiResponse<Message>;
-export type MarkReadResponse = ApiResponse<{ markedAsRead: number }>;
-export type UnreadCountResponse = ApiResponse<{ unreadCount: number }>;
-export type TotalUnreadResponse = ApiResponse<{ totalUnread: number }>;
-export type ReactionResponse = ApiResponse<{
-    messageId: string;
-    reactions: MessageReactions;
-}>;
 
 // ─── Socket Events ──────────────────────────────────────────────
 

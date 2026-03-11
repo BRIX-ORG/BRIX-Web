@@ -23,32 +23,23 @@ export interface RegisterRequest {
     password: string;
 }
 
-export type RegisterResponse = ApiResponse<AuthResponseData>;
-
 // Login
 export interface LoginRequest {
     identifier: string; // email or username
     password: string;
 }
 
-export type LoginResponse = ApiResponse<AuthResponseData>;
-
 // Refresh Token
-export type RefreshResponse = ApiResponse<AuthResponseData>;
 
 // Logout
 export interface LogoutResponseData {
     message: string;
 }
 
-export type LogoutResponse = ApiResponse<LogoutResponseData>;
-
 // Google OAuth
 export interface GoogleAuthRequest {
     idToken: string;
 }
-
-export type GoogleAuthResponse = ApiResponse<AuthResponseData>;
 
 // Forgot Password
 export interface ForgotPasswordRequest {
@@ -59,8 +50,6 @@ export interface ForgotPasswordResponseData {
     message: string;
 }
 
-export type ForgotPasswordResponse = ApiResponse<ForgotPasswordResponseData>;
-
 // Verify OTP (Password Reset)
 export interface VerifyOtpRequest {
     email: string;
@@ -70,8 +59,6 @@ export interface VerifyOtpRequest {
 export interface VerifyOtpResponseData {
     resetToken: string;
 }
-
-export type VerifyOtpResponse = ApiResponse<VerifyOtpResponseData>;
 
 // Reset Password
 export interface ResetPasswordRequest {
@@ -84,8 +71,6 @@ export interface ResetPasswordResponseData {
     message: string;
 }
 
-export type ResetPasswordResponse = ApiResponse<ResetPasswordResponseData>;
-
 // Email Verification - Send OTP
 export interface SendEmailVerificationRequest {
     email: string;
@@ -94,8 +79,6 @@ export interface SendEmailVerificationRequest {
 export interface SendEmailVerificationResponseData {
     message: string;
 }
-
-export type SendEmailVerificationResponse = ApiResponse<SendEmailVerificationResponseData>;
 
 // Email Verification - Verify OTP
 export interface VerifyEmailRequest {
@@ -106,8 +89,6 @@ export interface VerifyEmailRequest {
 export interface VerifyEmailResponseData {
     message: string;
 }
-
-export type VerifyEmailResponse = ApiResponse<VerifyEmailResponseData>;
 
 // NextAuth Type Extensions
 // These extend NextAuth's built-in types to include our custom fields
