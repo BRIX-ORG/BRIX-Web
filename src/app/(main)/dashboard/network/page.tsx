@@ -3,7 +3,7 @@
 import { Users, Star, UserCheck, Sparkles } from 'lucide-react';
 import { useGetFollowRecommendations, useGetTopUsers } from '@/hooks/apis/user.api';
 import { useGetTopAuthors } from '@/hooks/apis/brick.api';
-import { UserCard } from '@/components/network';
+import { UserCard, UserMap } from '@/components/network';
 import { cn } from '@/utils/classnames';
 
 export default function NetworkPage() {
@@ -51,6 +51,8 @@ export default function NetworkPage() {
                     </p>
                 </div>
             </div>
+
+            <UserMap />
 
             {/* Recommendations Grid - "For You" */}
             <section className="space-y-6">

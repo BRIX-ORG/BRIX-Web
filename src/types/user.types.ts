@@ -22,6 +22,13 @@ export interface UserAddress {
     country: string;
 }
 
+// User Location for Maps
+export interface UserLocation {
+    id: string;
+    latitude: number;
+    longitude: number;
+}
+
 // User Model
 export interface User {
     id: string;

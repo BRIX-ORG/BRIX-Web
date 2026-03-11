@@ -5,6 +5,7 @@ import type {
     FollowActionResponse,
     FollowListResponse,
     PaginatedTopUsersResponse,
+    UserLocation,
 } from '@/types/user.types';
 import type { UpdateProfileInput, UpdatePasswordInput } from '@/validations/user';
 import { updateUserProfile } from '@/lib/auth-actions';
@@ -271,5 +272,19 @@ export function useGetFollowRecommendations(limit: number = 10) {
             return nextOffset < lastPage.total ? nextOffset : undefined;
         },
         initialPageParam: 0,
+    });
+}
+
+/**
+ * Get all user locations for map tracking
+ */
+export function useGetUserLocations() {
+    return useQuery({
+        queryKey: ['userLocations'],
+        queryFn: async () => {
+            const response =
+                await apiClient.get<ApiResponse<UserLocation[]>>('/api/users/locations');
+            return response.data.data;
+        },
     });
 }

@@ -54,7 +54,7 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
             <div className="flex-1 p-3 flex items-start justify-center">
                 <div
                     className={cn(
-                        'w-full max-w-sm bg-background/95 border rounded-lg overflow-hidden backdrop-blur-xl transition-all duration-500',
+                        'w-full max-w-sm bg-background/95 border rounded-lg overflow-hidden transition-all duration-500',
                         hasContent
                             ? 'border-primary/40 shadow-[0_0_30px_rgba(0,238,255,0.15)] group-hover:shadow-[0_0_50px_rgba(0,238,255,0.25)]'
                             : 'border-border/30 border-dashed opacity-60',
