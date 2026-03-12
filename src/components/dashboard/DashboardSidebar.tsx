@@ -242,7 +242,7 @@ export function DashboardSidebar({
                     </div>
 
                     {/* Navigation Groups */}
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar">
                         {sidebarGroups.map((group) => (
                             <div key={group.title} className="mb-4">
                                 {!isCollapsed && (

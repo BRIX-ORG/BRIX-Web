@@ -192,7 +192,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (!isOpen) return null;
 
     const modal = (
-        <div className="fixed inset-0 z-[9999] flex flex-col">
+        <div className="fixed inset-0 z-9999 flex flex-col">
             {/* Backdrop */}
             <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" onClick={onClose} />
 

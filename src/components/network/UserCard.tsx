@@ -72,14 +72,14 @@ export function UserCard({ user, className }: UserCardProps) {
                         className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
                     />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-background/90 to-transparent" />
             </div>
 
             <div className="relative z-10 flex flex-col px-5 pb-6 -mt-10">
                 {/* Avatar Section */}
                 <div className="flex items-end justify-between mb-4">
                     <div className="relative group/avatar">
-                        <div className="absolute -inset-1 bg-gradient-to-br from-primary via-purple-500 to-blue-500 rounded-2xl opacity-40 group-hover/avatar:opacity-100 blur-sm transition duration-500" />
+                        <div className="absolute -inset-1 bg-linear-to-br from-primary via-purple-500 to-blue-500 rounded-2xl opacity-40 group-hover/avatar:opacity-100 blur-sm transition duration-500" />
                         <div className="relative size-20 rounded-2xl overflow-hidden border-2 border-background bg-muted shadow-2xl">
                             <Image
                                 src={getCloudinaryAvatar(
@@ -167,7 +167,7 @@ export function UserCard({ user, className }: UserCardProps) {
             </div>
 
             {/* Glowing Border Animation on Hover */}
-            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_15px_rgba(0,238,255,0.5)]" />
+            <div className="absolute inset-x-0 bottom-0 h-[2px] bg-linear-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_15px_rgba(0,238,255,0.5)]" />
         </Link>
     );
 }

@@ -39,7 +39,7 @@ export default function NetworkPage() {
         <div className="container mx-auto py-8 px-4 lg:px-8 space-y-12">
             {/* Header Section */}
             <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/10 via-purple-500/5 to-transparent rounded-3xl blur-2xl opacity-50" />
+                <div className="absolute -inset-4 bg-linear-to-r from-primary/10 via-purple-500/5 to-transparent rounded-3xl blur-2xl opacity-50" />
                 <div className="relative flex flex-col gap-2">
                     <h1 className="text-4xl font-black text-foreground tracking-tighter uppercase italic flex items-center gap-3">
                         <UserCheck className="size-8 text-primary animate-pulse" />
@@ -128,13 +128,13 @@ export default function NetworkPage() {
                     ) : (
                         <>
                             {authorsList.map((author) => (
-                                <UserCard key={author.id} user={author} className="flex-shrink-0" />
+                                <UserCard key={author.id} user={author} className="shrink-0" />
                             ))}
                             {hasNextPageAuthors && (
                                 <button
                                     onClick={() => fetchNextAuthors()}
                                     disabled={isFetchingAuthors}
-                                    className="flex-shrink-0 min-w-[200px] h-72 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/10 transition-all group/more"
+                                    className="shrink-0 min-w-[200px] h-72 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/10 transition-all group/more"
                                 >
                                     <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover/more:scale-110 transition-transform">
                                         <Sparkles className="size-5" />
@@ -174,13 +174,13 @@ export default function NetworkPage() {
                     ) : (
                         <>
                             {usersList.map((user) => (
-                                <UserCard key={user.id} user={user} className="flex-shrink-0" />
+                                <UserCard key={user.id} user={user} className="shrink-0" />
                             ))}
                             {hasNextPageUsers && (
                                 <button
                                     onClick={() => fetchNextUsers()}
                                     disabled={isFetchingUsers}
-                                    className="flex-shrink-0 min-w-[200px] h-72 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/10 transition-all group/more"
+                                    className="shrink-0 min-w-[200px] h-72 rounded-2xl border-2 border-dashed border-primary/20 bg-primary/5 flex flex-col items-center justify-center gap-3 hover:border-primary/40 hover:bg-primary/10 transition-all group/more"
                                 >
                                     <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover/more:scale-110 transition-transform">
                                         <Users className="size-5" />

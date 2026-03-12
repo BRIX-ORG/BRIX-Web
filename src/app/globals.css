@@ -39,25 +39,27 @@
 /* ============================
    Base Styles
    ============================ */
-* {
-    box-sizing: border-box;
-}
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
 
-html {
-    overflow-x: hidden;
-}
+    html {
+        overflow-x: hidden;
+    }
 
-body {
-    font-family: var(--font-body);
-    background-color: #050505;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+    body {
+        font-family: var(--font-body);
+        background-color: var(--color-brix-bg-dark); /* fallback */
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
 
-img {
-    user-select: none;
+    img {
+        user-select: none;
+    }
 }
 
 /* ============================
@@ -172,32 +174,32 @@ img {
     body {
         @apply bg-background text-foreground;
     }
-}
 
-/* ============================
-   Scrollbar Styling
-   ============================ */
-*::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
+    /* ============================
+       Scrollbar Styling
+       ============================ */
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 
-*::-webkit-scrollbar-track {
-    background: var(--muted);
-}
+    *::-webkit-scrollbar-track {
+        background: var(--muted);
+    }
 
-*::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 4px;
-}
+    *::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 4px;
+    }
 
-*::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary);
-}
+    *::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary);
+    }
 
-* {
-    scrollbar-color: var(--primary) var(--muted);
-    scrollbar-width: thin;
+    * {
+        scrollbar-color: var(--primary) var(--muted);
+        scrollbar-width: thin;
+    }
 }
 
 /* ============================
