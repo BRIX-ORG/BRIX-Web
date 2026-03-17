@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Camera, Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { BrixBrandLogo } from '@/components/shared';
+import { BrixBrandLogo, LanguageSwitcher } from '@/components/shared';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { NotificationPopover } from '@/components/notifications/NotificationPopover';
 import { SearchModal } from '@/components/search';
@@ -70,6 +70,9 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
                 <div className="flex items-center gap-3 md:gap-6">
                     <div className="flex gap-2 md:gap-3 border-l border-border pl-3 md:pl-6">
+                        {/* Language Switcher */}
+                        <LanguageSwitcher />
+
                         {/* Mobile search icon */}
                         <button
                             onClick={() => setIsSearchOpen(true)}

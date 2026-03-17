@@ -114,7 +114,9 @@
 /* ============================
    Dark Theme (Default for BRIX)
    ============================ */
-.dark {
+:root,
+.dark,
+[data-theme='dark'] {
     --background: #050505;
     --foreground: #ffffff;
     --muted: #1a1a1a;
@@ -133,6 +135,31 @@
     --card-foreground: #ffffff;
     --popover: #0a0f0f;
     --popover-foreground: #ffffff;
+}
+
+/* ============================
+   Light Theme
+   ============================ */
+.light,
+[data-theme='light'] {
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #0ea5e9;
+    --primary: #0ea5e9;
+    --primary-foreground: #ffffff;
+    --secondary: #8b5cf6;
+    --secondary-foreground: #ffffff;
+    --accent: #8b5cf6;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+    --card: #f8fafc;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
 }
 
 /* ============================
@@ -247,6 +274,17 @@
 /* Vertical Text */
 .vertical-text {
     writing-mode: vertical-rl;
+}
+
+/* Cloud Move Animation for Theme Toggle */
+@keyframes cloud-move {
+    0%,
+    100% {
+        transform: translateX(-60%);
+    }
+    50% {
+        transform: translateX(-40%);
+    }
 }
 
 /* Hide Scrollbar */

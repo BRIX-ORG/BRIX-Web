@@ -87,7 +87,7 @@ export function GlbPreviewCard({
     return (
         <div
             className={cn(
-                'bg-muted border border-border flex flex-col overflow-hidden sticky top-8',
+                'bg-background border border-border flex flex-col overflow-hidden sticky top-8',
                 className,
             )}
         >
@@ -298,11 +298,11 @@ export function GlbPreviewCard({
                                 </MapMarker>
                             </Map>
                         </div>
-                        <div className="bg-black/40 px-3 py-1.5 flex items-center justify-between">
+                        <div className="bg-muted px-3 py-1.5 flex items-center justify-between border-t border-border">
                             <span className="text-[9px] font-mono text-secondary/60 uppercase tracking-widest">
                                 GEO_LOCK
                             </span>
-                            <span className="text-[9px] font-mono text-foreground/60">
+                            <span className="text-[9px] font-mono text-foreground/80">
                                 {latitude!.toFixed(4)}, {longitude!.toFixed(4)}
                             </span>
                         </div>
@@ -311,7 +311,7 @@ export function GlbPreviewCard({
             )}
 
             {/* Footer */}
-            <div className="p-4 bg-black/40 border-t border-border">
+            <div className="p-4 bg-muted border-t border-border">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-bold text-muted-foreground">
                         PREVIEW_STATUS

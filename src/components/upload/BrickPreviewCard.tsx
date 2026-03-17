@@ -56,10 +56,13 @@ export function BrickPreviewCard({
 
     return (
         <div
-            className={cn('bg-muted border border-border flex flex-col overflow-hidden', className)}
+            className={cn(
+                'bg-background border border-border flex flex-col overflow-hidden',
+                className,
+            )}
         >
             {/* Header */}
-            <div className="p-4 border-b border-border flex items-center justify-between">
+            <div className="p-4 border-b border-border flex items-center justify-between bg-muted/50">
                 <h2 className="text-sm font-bold tracking-[0.2em] uppercase flex items-center gap-2">
                     <span className="size-2 bg-secondary animate-pulse" />
                     Live Preview
@@ -225,11 +228,11 @@ export function BrickPreviewCard({
                                 </MapMarker>
                             </Map>
                         </div>
-                        <div className="bg-black/40 px-3 py-1.5 flex items-center justify-between">
+                        <div className="bg-muted/80 px-3 py-1.5 flex items-center justify-between border-t border-border">
                             <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">
                                 GEO_LOCK
                             </span>
-                            <span className="text-[9px] font-mono text-foreground/60">
+                            <span className="text-[9px] font-mono text-foreground/80">
                                 {latitude!.toFixed(4)}, {longitude!.toFixed(4)}
                             </span>
                         </div>
@@ -238,7 +241,7 @@ export function BrickPreviewCard({
             )}
 
             {/* Footer */}
-            <div className="p-4 bg-black/40 border-t border-border">
+            <div className="p-4 bg-muted/80 border-t border-border">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-bold text-muted-foreground">
                         PREVIEW_STATUS

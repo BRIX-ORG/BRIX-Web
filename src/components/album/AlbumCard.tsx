@@ -55,9 +55,9 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
     };
 
     return (
-        <div className="group relative bg-zinc-950/80 backdrop-blur-xl border border-primary/20 rounded-xl overflow-hidden hover:border-primary/40 transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,238,255,0.12)] flex flex-col h-full">
+        <div className="group relative bg-background/80 backdrop-blur-xl border border-primary/20 rounded-xl overflow-hidden hover:border-primary/40 transition-all duration-500 hover:shadow-[0_0_30px_rgba(var(--primary),0.12)] flex flex-col h-full">
             {/* Thumbnail */}
-            <div className="relative aspect-4/3 bg-muted/10 overflow-hidden">
+            <div className="relative aspect-4/3 bg-muted/30 overflow-hidden">
                 {itemCount > 0 ? (
                     <div className="absolute inset-0 p-4" onClick={(e) => e.stopPropagation()}>
                         <Stack
@@ -75,7 +75,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                 )}
 
                 {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-linear-to-t from-zinc-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 {/* Item count badge */}
                 <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-primary/20 backdrop-blur-md border border-primary/30 rounded-full px-2 py-0.5">
@@ -92,7 +92,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                             e.stopPropagation();
                             setShowMenu(!showMenu);
                         }}
-                        className="size-8 flex items-center justify-center bg-zinc-900/80 backdrop-blur-md border border-white/10 rounded-full text-muted-foreground hover:text-primary hover:border-primary/40 transition-all cursor-pointer"
+                        className="size-8 flex items-center justify-center bg-background/80 backdrop-blur-md border border-border/50 rounded-full text-muted-foreground hover:text-primary hover:border-primary/40 transition-all cursor-pointer"
                     >
                         <MoreHorizontal className="size-4" />
                     </button>
@@ -103,7 +103,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                                 className="fixed inset-0 z-10"
                                 onClick={() => setShowMenu(false)}
                             />
-                            <div className="absolute right-0 top-10 z-20 w-40 bg-zinc-900/95 backdrop-blur-2xl border border-primary/20 rounded-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                            <div className="absolute right-0 top-10 z-20 w-40 bg-background/95 backdrop-blur-2xl border border-primary/20 rounded-lg shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
                                 <button
                                     onClick={() => {
                                         setShowMenu(false);
@@ -142,13 +142,13 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
             </div>
 
             {/* Info */}
-            <div className="p-4 flex flex-col flex-1 min-h-0">
+            <div className="p-4 flex flex-col flex-1 min-h-0 bg-background/50">
                 <div className="space-y-2 mb-4">
-                    <h3 className="font-bold text-sm text-zinc-100 tracking-tight truncate group-hover:text-primary transition-colors">
+                    <h3 className="font-bold text-sm text-foreground tracking-tight truncate group-hover:text-primary transition-colors">
                         {album.name}
                     </h3>
                     {album.description && (
-                        <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                             {album.description}
                         </p>
                     )}

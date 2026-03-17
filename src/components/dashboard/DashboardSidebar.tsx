@@ -24,7 +24,7 @@ import {
 import { useEffect } from 'react';
 import { cn } from '@/utils/classnames';
 import { SidebarItem } from '@/components/dashboard';
-import { BrixBrandLogo } from '@/components/shared';
+import { BrixBrandLogo, ThemeToggle } from '@/components/shared';
 import { useLogout } from '@/hooks/apis/auth.api';
 import { useGetTotalUnread } from '@/hooks/apis/message.api';
 import { useToast } from '@/hooks/useToast';
@@ -297,6 +297,9 @@ export function DashboardSidebar({
                                 </div>
                             </div>
                         )}
+
+                        {/* Theme Toggle */}
+                        <ThemeToggle isCollapsed={isCollapsed} />
 
                         {/* Bottom Items */}
                         <ul className="space-y-1 mb-2">

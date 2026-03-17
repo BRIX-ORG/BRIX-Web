@@ -3,14 +3,28 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { Database, Search, Filter, Loader2 } from 'lucide-react';
+import { cn } from '@/utils/classnames';
 import { useGetUserBricks } from '@/hooks/apis/brick.api';
 import { BrickDetailModal } from '@/components/brick-detail';
-import { ArchiveBrickCard, ArchiveSkeleton } from '@/components/archive';
+import {
+    ArchiveBrickCard,
+    ArchiveSkeleton,
+    ArchiveFilterPopup,
+    ArchiveFilters,
+} from '@/components/archive';
 
 export default function ArchivePage() {
     const { data: session } = useSession();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedBrickId, setSelectedBrickId] = useState<string | undefined>(undefined);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [filters, setFilters] = useState<ArchiveFilters>({
+        tagType: 'ALL',
+        mediaType: 'ALL',
+        isPublic: 'ALL',
+        dateFilterType: 'none',
+        dateFilterValue: '',
+    });
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
     const userId = session?.user?.id;
@@ -25,15 +39,61 @@ export default function ArchivePage() {
     const allBricks = useMemo(() => data?.pages.flatMap((page) => page.data) ?? [], [data]);
 
     const filteredBricks = useMemo(() => {
-        if (!searchQuery.trim()) return allBricks;
-        const q = searchQuery.toLowerCase();
-        return allBricks.filter(
-            (b) =>
-                b.title.toLowerCase().includes(q) ||
-                b.description?.toLowerCase().includes(q) ||
-                b.tagType.toLowerCase().includes(q),
-        );
-    }, [allBricks, searchQuery]);
+        let result = allBricks;
+
+        // Search Query Filter
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            result = result.filter(
+                (b) =>
+                    b.title.toLowerCase().includes(q) ||
+                    b.description?.toLowerCase().includes(q) ||
+                    b.tagType.toLowerCase().includes(q),
+            );
+        }
+
+        // Tag Type Filter
+        if (filters.tagType && filters.tagType !== 'ALL') {
+            result = result.filter((b) => b.tagType === filters.tagType);
+        }
+
+        // Media Type Filter
+        if (filters.mediaType && filters.mediaType !== 'ALL') {
+            result = result.filter((b) => b.mediaType === filters.mediaType);
+        }
+
+        // Visibility Filter
+        if (filters.isPublic !== undefined && filters.isPublic !== 'ALL') {
+            result = result.filter((b) => b.isPublic === filters.isPublic);
+        }
+
+        // Date Filter
+        if (filters.dateFilterType !== 'none' && filters.dateFilterValue.trim() !== '') {
+            const val = filters.dateFilterValue.trim();
+            result = result.filter((b) => {
+                const date = new Date(b.createdAt);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear().toString();
+
+                if (filters.dateFilterType === 'day') {
+                    // Expected format: DD/MM/YYYY
+                    return val === `${day}/${month}/${year}`;
+                }
+                if (filters.dateFilterType === 'month') {
+                    // Expected format: MM/YYYY
+                    return val === `${month}/${year}`;
+                }
+                if (filters.dateFilterType === 'year') {
+                    // Expected format: YYYY
+                    return val === year;
+                }
+                return true;
+            });
+        }
+
+        return result;
+    }, [allBricks, searchQuery, filters]);
 
     // Handle infinite scroll
     useEffect(() => {
@@ -84,9 +144,29 @@ export default function ArchivePage() {
                             className="bg-background/50 border border-primary/20 rounded-full py-2 pl-10 pr-4 text-xs w-64 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
                         />
                     </div>
-                    <button className="p-2 border border-primary/20 rounded-full hover:bg-primary/10 text-primary transition-colors">
-                        <Filter className="size-4" />
-                    </button>
+                    <div className="relative">
+                        <button
+                            onClick={() => setIsFilterOpen(!isFilterOpen)}
+                            className={cn(
+                                'p-2 border rounded-full transition-all duration-300',
+                                isFilterOpen ||
+                                    filters.tagType !== 'ALL' ||
+                                    filters.mediaType !== 'ALL' ||
+                                    filters.isPublic !== 'ALL'
+                                    ? 'bg-primary/20 border-primary/40 text-primary shadow-[0_0_15px_rgba(var(--primary),0.2)]'
+                                    : 'border-primary/20 hover:bg-primary/10 text-primary',
+                            )}
+                        >
+                            <Filter className="size-4" />
+                        </button>
+
+                        <ArchiveFilterPopup
+                            isOpen={isFilterOpen}
+                            filters={filters}
+                            onFiltersChange={setFilters}
+                            onClose={() => setIsFilterOpen(false)}
+                        />
+                    </div>
                 </div>
             </div>
 
