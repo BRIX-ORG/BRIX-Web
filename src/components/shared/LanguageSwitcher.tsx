@@ -20,13 +20,13 @@ export function LanguageSwitcher() {
             onClick={handleToggleLanguage}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="relative flex items-center gap-2 px-3 py-1.5 rounded bg-muted border border-border hover:border-primary/40 transition-all duration-300 ease-out hover:shadow-md hover:shadow-primary/10 active:scale-95 group overflow-hidden"
+            className="relative flex items-center gap-1 sm:gap-2 px-1.5 sm:px-3 py-1.5 rounded sm:rounded bg-transparent sm:bg-muted border-0 sm:border border-border sm:hover:border-primary/40 transition-all duration-300 ease-out sm:hover:shadow-md sm:hover:shadow-primary/10 active:scale-95 group overflow-hidden"
             aria-label={`Switch to ${language === 'VI' ? 'English' : 'Vietnamese'}`}
         >
-            {/* Globe icon with spin animation on hover */}
+            {/* Globe icon with spin animation on hover - hidden on mobile */}
             <Globe
                 className={cn(
-                    'size-4 text-primary transition-transform duration-700',
+                    'size-4 text-primary transition-transform duration-700 hidden sm:block',
                     isHovered ? 'rotate-180' : 'rotate-0',
                 )}
             />
@@ -65,8 +65,8 @@ export function LanguageSwitcher() {
                 </div>
             </div>
 
-            {/* Language code badge */}
-            <span className="text-[10px] font-bold text-foreground uppercase tracking-wider min-w-[24px]">
+            {/* Language code badge - hidden on mobile */}
+            <span className="text-[10px] font-bold text-foreground uppercase tracking-wider min-w-[24px] hidden sm:block">
                 {language}
             </span>
 
