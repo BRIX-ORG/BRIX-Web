@@ -7,6 +7,7 @@ import {
     RoadmapSection,
     Footer,
     LightningBackground,
+    WalletCarousel,
 } from '@/components/landing';
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
                 <MapSection />
                 <ArtistHub />
                 <RoadmapSection />
+                <WalletCarousel />
             </main>
 
             <Footer />

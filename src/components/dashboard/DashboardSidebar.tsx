@@ -24,7 +24,7 @@ import {
 import { useEffect } from 'react';
 import { cn } from '@/utils/classnames';
 import { SidebarItem } from '@/components/dashboard';
-import { BrixBrandLogo, ThemeToggle } from '@/components/shared';
+import { BrixBrandLogo, ThemeToggle, LanguageSwitcher } from '@/components/shared';
 import { useLogout } from '@/hooks/apis/auth.api';
 import { useGetTotalUnread } from '@/hooks/apis/message.api';
 import { useToast } from '@/hooks/useToast';
@@ -220,9 +220,7 @@ export function DashboardSidebar({
                     >
                         {isCollapsed ? (
                             <div className="flex items-center justify-center shrink-0">
-                                {/* Stable wrapper */}
                                 <div className="size-8 flex items-center justify-center">
-                                    {/* Rotated icon */}
                                     <div className="size-8 bg-primary flex items-center justify-center rounded-sm rotate-45 origin-center">
                                         <div className="size-4 bg-background -rotate-45 origin-center" />
                                     </div>
@@ -232,13 +230,15 @@ export function DashboardSidebar({
                             <BrixBrandLogo href="/dashboard" size="sm" animated />
                         )}
 
-                        {/* Mobile Close Button */}
-                        <button
-                            onClick={onClose}
-                            className="lg:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                            <X className="size-5" />
-                        </button>
+                        <div className="flex items-center gap-2 lg:hidden">
+                            <LanguageSwitcher />
+                            <button
+                                onClick={onClose}
+                                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                                <X className="size-5" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Navigation Groups */}

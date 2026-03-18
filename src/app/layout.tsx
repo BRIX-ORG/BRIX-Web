@@ -6,6 +6,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { ApiClientProvider } from '@/providers/ApiClientProvider';
 import { ChatSocketProvider } from '@/providers/ChatSocketProvider';
 import { NotificationSocketProvider } from '@/providers/NotificationSocketProvider';
+import { Web3Provider } from '@/providers/Web3Provider';
 import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
 
@@ -79,16 +80,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
             <body className={`${fontsVariables.join(' ')} antialiased`} suppressHydrationWarning>
-                <QueryProvider>
-                    <ApiClientProvider>
-                        <ChatSocketProvider>
-                            <NotificationSocketProvider>
-                                {children}
-                                <LoadingSpinner />
-                            </NotificationSocketProvider>
-                        </ChatSocketProvider>
-                    </ApiClientProvider>
-                </QueryProvider>
+                <Web3Provider>
+                    <QueryProvider>
+                        <ApiClientProvider>
+                            <ChatSocketProvider>
+                                <NotificationSocketProvider>
+                                    {children}
+                                    <LoadingSpinner />
+                                </NotificationSocketProvider>
+                            </ChatSocketProvider>
+                        </ApiClientProvider>
+                    </QueryProvider>
+                </Web3Provider>
                 <ToastContainer
                     position="top-right"
                     autoClose={4000}

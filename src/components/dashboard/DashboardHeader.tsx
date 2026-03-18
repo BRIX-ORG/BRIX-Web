@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Camera, Menu } from 'lucide-react';
@@ -10,6 +10,10 @@ import { BrixBrandLogo, LanguageSwitcher } from '@/components/shared';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { NotificationPopover } from '@/components/notifications/NotificationPopover';
 import { SearchModal } from '@/components/search';
+
+const WalletButton = dynamic(() => import('@/components/wallet').then((mod) => mod.WalletButton), {
+    ssr: false,
+});
 
 interface DashboardHeaderProps {
     onMenuClick?: () => void;
@@ -24,7 +28,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
     return (
         <>
-            <header className="sticky top-0 z-30 flex items-center justify-between border-b border-primary/20 bg-background/80 backdrop-blur-md px-4 md:px-6 py-3">
+            <header className="sticky top-0 z-30 flex items-center justify-between border-b border-primary/20 bg-background/80 backdrop-blur-md px-3 md:px-6 py-3">
                 <div className="flex items-center gap-4 md:gap-8">
                     {/* Mobile Menu Button */}
                     <button
@@ -33,10 +37,9 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                     >
                         <Menu className="size-6" />
                     </button>
-
                     {/* Logo - visible on mobile */}
-                    <div className="lg:hidden">
-                        <BrixBrandLogo href="/dashboard" size="sm" animated />
+                    <div className="lg:hidden shrink-0">
+                        <BrixBrandLogo href="/dashboard" size="xs" animated />
                     </div>
 
                     {/* Page Title - visible on desktop */}
@@ -69,9 +72,11 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 </div>
 
                 <div className="flex items-center gap-3 md:gap-6">
-                    <div className="flex gap-2 md:gap-3 border-l border-border pl-3 md:pl-6">
-                        {/* Language Switcher */}
-                        <LanguageSwitcher />
+                    <div className="flex items-center gap-2 md:gap-3 border-l border-border pl-3 md:pl-6">
+                        {/* Language Switcher - Hidden on mobile to save space */}
+                        <div className="hidden sm:flex items-center">
+                            <LanguageSwitcher />
+                        </div>
 
                         {/* Mobile search icon */}
                         <button
@@ -85,11 +90,14 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                         {/* Camera Button */}
                         <Link
                             href="/camera"
-                            className="flex items-center gap-2 bg-primary text-primary-foreground px-3 md:px-4 py-1.5 rounded text-xs font-bold uppercase tracking-tighter hover:brightness-110 transition-all"
+                            className="flex items-center gap-2 bg-primary text-primary-foreground px-3 md:px-4 py-1.5 rounded text-xs font-bold uppercase tracking-tighter hover:brightness-110 transition-all h-9"
                         >
                             <Camera className="size-4" />
                             <span className="hidden sm:inline">Camera</span>
                         </Link>
+
+                        {/* Wallet Button */}
+                        <WalletButton />
 
                         {/* Notifications Bell */}
                         <NotificationPopover />

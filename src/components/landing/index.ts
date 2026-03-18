@@ -6,3 +6,5 @@ export { ArtistHub } from './ArtistHub';
 export { RoadmapSection } from './RoadmapSection';
 export { Footer } from './Footer';
 export { LightningBackground } from './LightningBackground';
+export { SupportedWalletsModal } from './SupportedWalletsModal';
+export { WalletCarousel } from './WalletCarousel';

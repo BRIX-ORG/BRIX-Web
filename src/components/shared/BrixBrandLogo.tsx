@@ -3,7 +3,7 @@ import { cn } from '@/utils/classnames';
 
 interface BrixBrandLogoProps {
     href?: string;
-    size?: 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg';
     animated?: boolean;
     className?: string;
 }
@@ -15,6 +15,12 @@ export function BrixBrandLogo({
     className,
 }: BrixBrandLogoProps) {
     const sizeClasses = {
+        xs: {
+            wrapper: 'gap-1.5',
+            icon: 'size-5',
+            inner: 'size-2.5',
+            text: 'text-base',
+        },
         sm: {
             wrapper: 'gap-2',
             icon: 'size-6',

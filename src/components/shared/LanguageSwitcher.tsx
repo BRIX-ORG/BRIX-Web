@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
             onClick={handleToggleLanguage}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="relative flex items-center gap-1 sm:gap-2 px-1.5 sm:px-3 py-1.5 rounded sm:rounded bg-transparent sm:bg-muted border-0 sm:border border-border sm:hover:border-primary/40 transition-all duration-300 ease-out sm:hover:shadow-md sm:hover:shadow-primary/10 active:scale-95 group overflow-hidden"
+            className="relative flex items-center gap-1 sm:gap-2 px-1.5 sm:px-3 py-1.5 rounded sm:rounded bg-transparent sm:bg-muted border-0 sm:border border-border sm:hover:border-primary/40 transition-all duration-300 ease-out sm:hover:shadow-md sm:hover:shadow-primary/10 active:scale-95 group overflow-hidden h-9"
             aria-label={`Switch to ${language === 'VI' ? 'English' : 'Vietnamese'}`}
         >
             {/* Globe icon with spin animation on hover - hidden on mobile */}

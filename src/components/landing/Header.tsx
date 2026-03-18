@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { BrixBrandLogo } from '@/components/shared';
+import { SupportedWalletsModal } from '@/components/landing';
 
 const navLinks = [
     { href: '#concept', label: 'The Concept' },
@@ -14,6 +15,7 @@ const navLinks = [
 
 export function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [isWalletsModalOpen, setIsWalletsModalOpen] = useState(false);
 
     return (
         <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-primary/20">
@@ -39,8 +41,11 @@ export function Header() {
                     <button className="px-6 py-2 bg-primary text-primary-foreground font-display font-bold text-xs uppercase tracking-widest hover:bg-white transition-all glow-cyan">
                         Launch App
                     </button>
-                    <button className="hidden sm:block px-6 py-2 border border-secondary text-secondary font-display font-bold text-xs uppercase tracking-widest hover:bg-secondary/10 transition-all">
-                        Connect Wallet
+                    <button
+                        onClick={() => setIsWalletsModalOpen(true)}
+                        className="hidden sm:block px-6 py-2 border border-secondary text-secondary font-display font-bold text-xs uppercase tracking-widest hover:bg-secondary/10 transition-all"
+                    >
+                        Supported Wallets
                     </button>
 
                     {/* Mobile Menu Toggle */}
@@ -70,6 +75,11 @@ export function Header() {
                     </nav>
                 </div>
             )}
+            {/* Supported Wallets Modal */}
+            <SupportedWalletsModal
+                isOpen={isWalletsModalOpen}
+                onClose={() => setIsWalletsModalOpen(false)}
+            />
         </header>
     );
 }
