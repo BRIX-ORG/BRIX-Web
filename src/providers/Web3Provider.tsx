@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, createConfig, WagmiProvider } from 'wagmi';
 import type { Chain } from 'wagmi/chains';
@@ -42,32 +42,44 @@ const amoy: Chain = {
     testnet: true,
 };
 
-const connectors = connectorsForWallets(
-    [
-        {
-            groupName: 'Recommended',
-            wallets: [rainbowWallet, metaMaskWallet, trustWallet, braveWallet, coinbaseWallet],
-        },
-    ],
-    {
-        appName: 'BRIX',
-        projectId: process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || 'YOUR_PROJECT_ID',
-    },
-);
+const connectors =
+    typeof window !== 'undefined'
+        ? connectorsForWallets(
+              [
+                  {
+                      groupName: 'Recommended',
+                      wallets: [
+                          rainbowWallet,
+                          metaMaskWallet,
+                          trustWallet,
+                          braveWallet,
+                          coinbaseWallet,
+                      ],
+                  },
+              ],
+              {
+                  appName: 'BRIX',
+                  projectId: process.env.NEXT_PUBLIC_REOWN_PROJECT_ID || 'YOUR_PROJECT_ID',
+              },
+          )
+        : [];
 
-export const config = createConfig({
-    connectors,
-    chains: [polygon, amoy, mainnet, arbitrum, optimism, sepolia],
-    transports: {
-        [polygon.id]: http(),
-        [amoy.id]: http(),
-        [mainnet.id]: http(),
-        [arbitrum.id]: http(),
-        [optimism.id]: http(),
-        [sepolia.id]: http(),
-    },
-    ssr: true,
-});
+export const config =
+    typeof window !== 'undefined'
+        ? createConfig({
+              connectors,
+              chains: [polygon, amoy, mainnet, arbitrum, optimism, sepolia],
+              transports: {
+                  [polygon.id]: http(),
+                  [amoy.id]: http(),
+                  [mainnet.id]: http(),
+                  [arbitrum.id]: http(),
+                  [optimism.id]: http(),
+                  [sepolia.id]: http(),
+              },
+              ssr: true,
+          })
+        : null;
 
 // Type declaration for wagmi v3
 declare module 'wagmi' {
@@ -81,6 +93,12 @@ interface Web3ProviderProps {
 }
 
 export function Web3Provider({ children }: Web3ProviderProps) {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        // eslint-disable-next-line
+        setMounted(true);
+    }, []);
+
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -91,6 +109,10 @@ export function Web3Provider({ children }: Web3ProviderProps) {
                 },
             }),
     );
+
+    if (!mounted || !config) {
+        return <>{children}</>;
+    }
 
     return (
         <WagmiProvider config={config}>
