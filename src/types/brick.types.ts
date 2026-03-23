@@ -247,3 +247,33 @@ export interface PaginatedTopAuthorsResponse {
     limit: number | null;
     offset: number;
 }
+
+export interface UserBrickStats {
+    totalBricksUploaded: number;
+    ipfsBricksUploaded: number;
+    onchainBricks: number;
+    totalUpvotes: number;
+    totalDonationsReceived: string;
+    bricksByTagType: {
+        REALTIME: number;
+        ART: number;
+        PRODUCT: number;
+    };
+}
+
+export interface OnchainActivity {
+    id: string;
+    brickId: string;
+    type: string;
+    txHash: string;
+    gasUsed: string;
+    status: string;
+    createdAt: string;
+}
+
+export interface PaginatedOnchainActivitiesResponse {
+    data: OnchainActivity[];
+    total: number;
+    limit: number;
+    offset: number;
+}

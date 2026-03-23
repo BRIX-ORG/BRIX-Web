@@ -2,7 +2,7 @@
 
 import { Loader2, AlertCircle } from 'lucide-react';
 import type { BrickDonation } from '@/types/brick.types';
-import { DonationList } from './DonationList';
+import { DonationList } from '@/components/brick-detail';
 
 interface DonationSectionProps {
     isConnected: boolean;

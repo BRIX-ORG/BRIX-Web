@@ -13,9 +13,8 @@ import {
     ArtistSidebar,
     ArtistGallery,
     ArtistData,
-    ArtistStats,
-    ActivityItem,
     FollowersModal,
+    ActivitiesModal,
 } from '@/components/artist';
 import {
     useGetUser,
@@ -25,43 +24,10 @@ import {
     useGetFollowing,
     useCheckFollow,
 } from '@/hooks/apis/user.api';
+import { useGetUserStats } from '@/hooks/apis/brick.api';
+import { useGetOnchainActivities } from '@/hooks/apis/onchain.api';
 import { getConversationByPartner } from '@/hooks/apis/message.api';
 import { useChatStore } from '@/stores/chat-store';
-
-// ─── Mock data for sections without API yet ────────────────────────
-
-const mockStats: ArtistStats = {
-    digitalAssets: 42804,
-    assetsGrowth: '+12.4%',
-    validated: 1209,
-    rank: 14,
-    rankPercentile: 'Top 1%',
-};
-
-// TODO: replace with API when available
-const mockActivity: ActivityItem[] = [
-    {
-        id: '1',
-        type: 'mint',
-        code: 'MINTED_0X2938',
-        description: 'Asset "Neon_Void_04" deployed to BRIX layer 2.',
-        time: '2m ago',
-    },
-    {
-        id: '2',
-        type: 'transfer',
-        code: 'TRANSFER_READY',
-        description: 'Licensing rights transferred to @VEX_CORP.',
-        time: '45m ago',
-    },
-    {
-        id: '3',
-        type: 'verify',
-        code: 'VERIFICATION_PASS',
-        description: 'New geolocation data verified for Batch #19.',
-        time: '4h ago',
-    },
-];
 
 // ─── Default avatar for users without one ──────────────────────────
 const SIDEBAR_FOLLOWERS_LIMIT = 12;
@@ -93,6 +59,14 @@ export default function ArtistProfilePage() {
     const profileUserId = isOwnProfile ? undefined : profileUser?.id;
     const { data: followStatus } = useCheckFollow(profileUserId);
     const isFollowing = followStatus?.isFollowing ?? false;
+
+    // ─── Stats and Activities ──────────────────────────────
+    const { data: statsData } = useGetUserStats(id);
+    const { data: activitiesData } = useGetOnchainActivities(id, 5);
+    const activitiesList = activitiesData?.pages[0]?.data || [];
+    const totalActivities = activitiesData?.pages[0]?.total || 0;
+
+    const [showActivitiesModal, setShowActivitiesModal] = useState(false);
 
     // ─── Follow / Unfollow (optimistic cache update) ───────
     const followMutation = useFollowUser();
@@ -222,12 +196,13 @@ export default function ArtistProfilePage() {
                 onFollowingClick={openFollowingModal}
             />
 
-            {/* TODO: replace mockStats with API when available */}
-            <ArtistStatsGrid stats={mockStats} />
+            <ArtistStatsGrid stats={statsData} />
 
             <div className="grid grid-cols-12 gap-8">
                 <ArtistSidebar
-                    activities={mockActivity}
+                    activities={activitiesList}
+                    totalActivities={totalActivities}
+                    onViewAllActivities={() => setShowActivitiesModal(true)}
                     followers={sidebarFollowers}
                     totalFollowers={totalFollowers}
                     onViewAllFollowers={openFollowersModal}
@@ -250,6 +225,13 @@ export default function ArtistProfilePage() {
                 initialTab={modalTab}
                 followersCount={totalFollowers}
                 followingCount={totalFollowing}
+            />
+
+            {/* Activities Modal */}
+            <ActivitiesModal
+                isOpen={showActivitiesModal}
+                onClose={() => setShowActivitiesModal(false)}
+                idOrUsername={id}
             />
         </div>
     );

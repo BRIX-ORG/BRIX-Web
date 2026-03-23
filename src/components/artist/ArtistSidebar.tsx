@@ -2,16 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Database, MapPin, Users } from 'lucide-react';
 import type { FollowUser } from '@/types/user.types';
+import type { OnchainActivity } from '@/types/brick.types';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui/Map';
-
-export interface ActivityItem {
-    id: string;
-    type: 'mint' | 'transfer' | 'verify';
-    code: string;
-    description: string;
-    time: string;
-}
+import { timeAgo } from '@/utils/time';
 
 // Keep for backward compatibility
 export interface Collaborator {
@@ -26,7 +20,9 @@ interface LocationInfo {
 }
 
 interface ArtistSidebarProps {
-    activities: ActivityItem[];
+    activities: OnchainActivity[];
+    totalActivities?: number;
+    onViewAllActivities?: () => void;
     followers: FollowUser[];
     totalFollowers: number;
     onViewAllFollowers?: () => void;
@@ -35,6 +31,8 @@ interface ArtistSidebarProps {
 
 export function ArtistSidebar({
     activities,
+    totalActivities,
+    onViewAllActivities,
     followers,
     totalFollowers,
     onViewAllFollowers,
@@ -50,20 +48,40 @@ export function ArtistSidebar({
                     <Database className="size-4" /> Node Activity
                 </h3>
                 <div className="space-y-4 border-l border-primary/20 pl-4 py-2">
-                    {activities.map((activity) => (
-                        <div key={activity.id} className="space-y-1">
-                            <p
-                                className={`text-[11px] font-mono ${activity.type === 'transfer' ? 'text-secondary' : 'text-primary'}`}
-                            >
-                                {activity.code}
-                            </p>
-                            <p className="text-xs text-muted-foreground">{activity.description}</p>
-                            <p className="text-[9px] font-mono text-muted-foreground/50 uppercase">
-                                {activity.time}
-                            </p>
-                        </div>
-                    ))}
+                    {activities.length === 0 ? (
+                        <p className="text-xs text-muted-foreground font-mono">
+                            No onchain activity yet
+                        </p>
+                    ) : (
+                        activities.map((activity) => (
+                            <div key={activity.id} className="space-y-1">
+                                <p
+                                    className={`text-[11px] font-mono ${activity.type === 'DONATE' ? 'text-secondary' : 'text-primary'}`}
+                                >
+                                    {activity.type}_{activity.brickId.substring(0, 8).toUpperCase()}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    {activity.type === 'MINT'
+                                        ? 'Asset verified and deployed.'
+                                        : 'Received donation block.'}
+                                </p>
+                                <p className="text-[9px] font-mono text-muted-foreground/50 uppercase">
+                                    {timeAgo(activity.createdAt)}
+                                </p>
+                            </div>
+                        ))
+                    )}
                 </div>
+                {activities.length > 0 &&
+                    totalActivities !== undefined &&
+                    totalActivities > activities.length && (
+                        <button
+                            onClick={onViewAllActivities}
+                            className="w-full py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground hover:text-primary border border-primary/20 hover:border-primary/50 transition-colors rounded-lg bg-muted/50 cursor-pointer"
+                        >
+                            View All Activities ({totalActivities})
+                        </button>
+                    )}
             </div>
 
             {/* Location Mini Map */}

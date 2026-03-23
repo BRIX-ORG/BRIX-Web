@@ -1,11 +1,67 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
+# Supported configuration for Dependabot version 2
 version: 2
+
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
+    # 1. Maintain dependencies for Node.js (supports pnpm via "npm" ecosystem)
+    - package-ecosystem: 'npm'
+      directory: '/'
+
+      # Schedule: Check for updates once a week on Monday morning
+      schedule:
+          interval: 'weekly'
+          day: 'monday'
+          time: '09:00'
+          timezone: 'Asia/Ho_Chi_Minh'
+
+      # Lower limit since we are grouping updates naturally, reducing PR noise
+      open-pull-requests-limit: 5
+
+      # Prevent automatic major updates so you can handle breaking changes manually
+      ignore:
+          - dependency-name: '*'
+            update-types:
+                - 'version-update:semver-major'
+
+      # Intelligent Grouping
+      # Note: Dependabot processes groups top-to-bottom.
+      # Specific groups MUST be placed before catch-all groups.
+      groups:
+          # Group 1: UI Frameworks & Components (Evaluated first)
+          ui-components:
+              patterns:
+                  - '@radix-ui/*'
+                  - 'tailwindcss*'
+                  - 'tailwind-merge'
+                  - 'lucide-react'
+                  - 'clsx'
+
+          # Group 2: Development Tooling (Evaluated second)
+          # Groups ESLint, Prettier, TypeScript, etc.
+          dev-tooling:
+              dependency-type: 'development'
+
+          # Group 3: Catch-all for remaining Minor and Patch updates (Evaluated last)
+          # Groups all non-breaking updates across all other dependencies into a single PR
+          minor-and-patch-updates:
+              patterns:
+                  - '*'
+              update-types:
+                  - 'minor'
+                  - 'patch'
+
+    # 2. Maintain GitHub Actions
+    - package-ecosystem: 'github-actions'
+      directory: '/'
+
+      # Actions rarely change, checking monthly is sufficient
+      schedule:
+          interval: 'monthly'
+          day: 'monday'
+          time: '09:00'
+          timezone: 'Asia/Ho_Chi_Minh'
+
+      # Group all action updates into a single PR to keep the history clean
+      groups:
+          actions-updates:
+              patterns:
+                  - '*'
