@@ -44,7 +44,12 @@ export interface BrickMetadata {
     rawExif: Record<string, unknown> | null;
     modelData: Record<string, unknown> | null;
     hashSha256: string | null;
+    ipfsCid: string | null;
+    imageCid: string | null;
     onChainTx: string | null;
+    contractAddr: string | null;
+    onChainStatus: string | null;
+    onChainId: number | null;
     verifiedAt: string | null;
 }
 
@@ -171,6 +176,17 @@ export interface BrickVoteStatus {
     upvoteCount: number;
     downvoteCount: number;
     score: number;
+}
+
+// ─── Brick Donations ────────────────────────────────────────────
+
+export interface BrickDonation {
+    id: string;
+    brickId: string;
+    fromAddress: string;
+    amount: string;
+    txHash: string;
+    createdAt: string;
 }
 
 // ─── Brick Upvoter ──────────────────────────────────────────────

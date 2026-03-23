@@ -8,3 +8,8 @@ export { CommentInput } from './CommentInput';
 export { CommentVoteBar } from './CommentVoteBar';
 export { UpvotersModal } from './UpvotersModal';
 export { ShareButton } from './ShareButton';
+export { OnchainPanel } from './OnchainPanel';
+export { IpfsStep } from './IpfsStep';
+export { MintStep } from './MintStep';
+export { DonationSection } from './DonationSection';
+export { DonationList } from './DonationList';

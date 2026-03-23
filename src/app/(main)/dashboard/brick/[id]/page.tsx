@@ -35,9 +35,11 @@ import {
     CommentSection,
     UpvotersModal,
     ShareButton,
+    OnchainPanel,
 } from '@/components/brick-detail';
 import { ConfirmPopup } from '@/components/shared';
 import { Map, MapMarker, MarkerContent, MapControls } from '@/components/ui/Map';
+import { useOnchainSocket } from '@/hooks/useOnchainSocket';
 
 export default function BrickPage() {
     const { id } = useParams<{ id: string }>();
@@ -48,6 +50,9 @@ export default function BrickPage() {
 
     const { data: brick, isLoading } = useGetBrickDetail(id);
     const { data: voteStatus } = useGetBrickVotes(id);
+
+    // Socket hook dể update React Query runtime khi có event
+    useOnchainSocket(id);
 
     const isOwner = !!currentUserId && currentUserId === brick?.user?.id;
 
@@ -464,6 +469,11 @@ export default function BrickPage() {
                                     </p>
                                 )}
                             </div>
+                        )}
+
+                        {/* Render OnchainPanel for REALTIME bricks (both owners + viewers) */}
+                        {brick.tagType === 'REALTIME' && brick.metadata?.verifiedAt && (
+                            <OnchainPanel brick={brick} isOwner={isOwner} />
                         )}
 
                         {/* Vote bar + Share */}

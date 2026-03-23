@@ -268,6 +268,10 @@ export function useGetBrickDetail(brickId: string | undefined) {
             return response.data.data;
         },
         enabled: !!brickId,
+        refetchInterval: (query) => {
+            const data = query.state?.data as BrickDetail | undefined;
+            return data?.metadata?.onChainStatus === 'pending' ? 3000 : false;
+        },
     });
 }
 

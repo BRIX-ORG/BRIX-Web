@@ -6,6 +6,7 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { ApiClientProvider } from '@/providers/ApiClientProvider';
 import { ChatSocketProvider } from '@/providers/ChatSocketProvider';
 import { NotificationSocketProvider } from '@/providers/NotificationSocketProvider';
+import { OnchainSocketProvider } from '@/providers/OnchainSocketProvider';
 import { Web3Provider } from '@/providers/Web3Provider';
 import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
@@ -85,8 +86,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <ApiClientProvider>
                             <ChatSocketProvider>
                                 <NotificationSocketProvider>
-                                    {children}
-                                    <LoadingSpinner />
+                                    <OnchainSocketProvider>
+                                        {children}
+                                        <LoadingSpinner />
+                                    </OnchainSocketProvider>
                                 </NotificationSocketProvider>
                             </ChatSocketProvider>
                         </ApiClientProvider>

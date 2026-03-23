@@ -590,6 +590,8 @@ class App {
     }
 
     onTouchDown(e: MouseEvent | TouchEvent) {
+        if (this.container && !this.container.contains(e.target as Node)) return;
+
         this.isDown = true;
         this.hasMoved = false;
         this.scroll.position = this.scroll.current;
@@ -614,6 +616,8 @@ class App {
     }
 
     onTouchUp(e: MouseEvent | TouchEvent) {
+        if (!this.isDown) return;
+
         this.isDown = false;
         this.onCheck();
 

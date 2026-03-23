@@ -22,6 +22,7 @@ import {
     Camera,
 } from 'lucide-react';
 import { useEffect } from 'react';
+import { useDisconnect } from 'wagmi';
 import { cn } from '@/utils/classnames';
 import { SidebarItem } from '@/components/dashboard';
 import { BrixBrandLogo, ThemeToggle, LanguageSwitcher } from '@/components/shared';
@@ -154,6 +155,7 @@ export function DashboardSidebar({
     const totalUnread = useChatStore((s) => s.totalUnread);
     const setTotalUnread = useChatStore((s) => s.setTotalUnread);
     const logoutMutation = useLogout();
+    const disconnect = useDisconnect();
 
     const { data: unreadData } = useGetTotalUnread();
 
@@ -167,6 +169,7 @@ export function DashboardSidebar({
         try {
             showLoading('Signing out...');
             await logoutMutation.mutateAsync();
+            await disconnect.mutateAsync();
             hideLoading();
             success('Signed out successfully');
             router.push('/login');

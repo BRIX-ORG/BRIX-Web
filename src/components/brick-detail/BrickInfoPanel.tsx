@@ -13,6 +13,7 @@ import { useUpdateBrick } from '@/hooks/apis/brick.api';
 import { useToast } from '@/hooks/useToast';
 import { updateBrickSchema } from '@/validations/brick';
 import { ConfirmPopup } from '@/components/shared';
+import { OnchainPanel } from '@/components/brick-detail';
 
 interface BrickInfoPanelProps {
     brick: BrickDetail;
@@ -305,6 +306,11 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                         </p>
                     )}
                 </div>
+            )}
+
+            {/* Render OnchainPanel for REALTIME bricks (both owners + viewers) */}
+            {brick.tagType === 'REALTIME' && brick.metadata?.verifiedAt && (
+                <OnchainPanel brick={brick} isOwner={isOwner} />
             )}
 
             {/* Save edit confirm popup */}

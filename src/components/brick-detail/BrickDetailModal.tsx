@@ -60,13 +60,22 @@ export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+            <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                }}
+            />
 
             {/* Modal container */}
             <div className="relative w-full max-w-5xl max-h-[95vh] bg-background/95 border border-primary/30 rounded-xl overflow-hidden shadow-[0_0_60px_rgba(0,238,255,0.15)] backdrop-blur-xl animate-in fade-in zoom-in-95 duration-300 flex flex-col">
                 {/* Close button */}
                 <button
-                    onClick={onClose}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onClose();
+                    }}
                     className="absolute top-3 right-3 z-20 p-1.5 bg-background/80 border border-primary/20 rounded-full hover:bg-muted transition-colors cursor-pointer"
                 >
                     <X className="size-4 text-foreground" />
