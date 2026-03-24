@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Bell, CheckCheck, Inbox, Loader2 } from 'lucide-react';
 import { NotificationItem } from '@/components/notifications';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -14,6 +16,9 @@ import { ConfirmPopup, Portal } from '@/components/shared';
 import { cn } from '@/utils/classnames';
 
 export default function NotificationsPage() {
+    const t = useTranslations('notifications');
+    const tc = useTranslations('common');
+
     const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
     const { notifications, order, unreadCount, markAllAsRead, mergeNotifications } =
         useNotificationStore();
@@ -61,20 +66,20 @@ export default function NotificationsPage() {
                     <div className="space-y-2">
                         <div className="flex items-center gap-2 text-[10px] font-mono text-brix-primary uppercase tracking-[0.4em] animate-pulse">
                             <span className="size-1.5 rounded-full bg-brix-primary shadow-[0_0_8px_rgba(0,238,255,0.8)]" />
-                            Live_Feed_Active
+                            {t('feedStatus.active')}
                         </div>
                         <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase flex items-center gap-4">
-                            Notifications
+                            {t('title')}
                         </h1>
                         <div className="flex items-center gap-4 text-muted-foreground font-mono text-[10px] uppercase tracking-widest pt-1">
                             <span>[UNIT_ID]: DASH_NOTI_01</span>
                             <span className="size-1 rounded-full bg-white/10" />
                             {unreadCount > 0 ? (
                                 <span className="text-brix-primary font-bold">
-                                    {unreadCount} UNREAD_SIGNALS
+                                    {t('unreadSignals', { count: unreadCount })}
                                 </span>
                             ) : (
-                                'STATUS_CLEAR'
+                                t('feedStatus.clear')
                             )}
                         </div>
                     </div>
@@ -91,7 +96,7 @@ export default function NotificationsPage() {
                                 ) : (
                                     <CheckCheck className="size-3" />
                                 )}
-                                Mark All Read
+                                {t('actions.markAllRead')}
                             </button>
                         )}
                     </div>
@@ -113,10 +118,10 @@ export default function NotificationsPage() {
                         </div>
                         <div className="space-y-1">
                             <p className="text-xs uppercase tracking-[0.4em] text-brix-primary font-black animate-pulse">
-                                Syncing_Neural_Network
+                                {t('loading.title')}
                             </p>
                             <p className="text-[10px] font-mono text-muted-foreground uppercase opacity-50">
-                                Establishing encrypted handshakes...
+                                {t('loading.description')}
                             </p>
                         </div>
                     </div>
@@ -130,11 +135,10 @@ export default function NotificationsPage() {
                             </div>
                         </div>
                         <h3 className="text-lg font-black uppercase tracking-[0.2em] text-foreground">
-                            Signals Terminated
+                            {t('empty.title')}
                         </h3>
                         <p className="text-xs text-muted-foreground mt-4 leading-relaxed font-mono uppercase tracking-tighter opacity-70">
-                            Your verification node is currently idle. Notifications about your
-                            bricks and network activity will appear here once detected.
+                            {t('empty.description')}
                         </p>
                     </div>
                 ) : (
@@ -169,10 +173,10 @@ export default function NotificationsPage() {
                                     {isFetchingNextPage ? (
                                         <span className="flex items-center justify-center gap-2">
                                             <Loader2 className="size-3.5 animate-spin" />
-                                            Syncing...
+                                            {tc('syncing')}
                                         </span>
                                     ) : (
-                                        'Load More Signals'
+                                        t('actions.loadMore')
                                     )}
                                 </button>
                             </div>
@@ -182,7 +186,7 @@ export default function NotificationsPage() {
                             <div className="py-16 flex flex-col items-center gap-4 text-center">
                                 <div className="h-px w-20 bg-linear-to-r from-transparent via-white/10 to-transparent" />
                                 <p className="text-[10px] font-mono text-muted-foreground/40 uppercase tracking-[0.4em] font-black">
-                                    End of Stream — Signal Stable
+                                    {t('feedStatus.end')}
                                 </p>
                             </div>
                         )}
@@ -202,9 +206,9 @@ export default function NotificationsPage() {
                             setDeleteConfirmId(null);
                         }
                     }}
-                    title="Delete Notification"
-                    message="Are you sure you want to delete this notification? This action cannot be undone."
-                    confirmText="Delete"
+                    title={t('deleteConfirm.title')}
+                    message={t('deleteConfirm.message')}
+                    confirmText={tc('delete')}
                     type="danger"
                     isLoading={deleteMutation.isPending}
                 />

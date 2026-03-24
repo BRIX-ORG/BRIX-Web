@@ -10,9 +10,11 @@ import { ConfirmPopup } from '@/components/shared';
 import { useSwal } from '@/hooks/useSwal';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import type { Album } from '@/types/album.types';
 
 export default function AlbumsPage() {
+    const t = useTranslations('albums');
     const { data: session } = useSession();
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
@@ -29,11 +31,11 @@ export default function AlbumsPage() {
     const handleDelete = async () => {
         if (!deletingAlbum) return;
         try {
-            showLoading('Deleting album...');
+            showLoading(t('delete.loading'));
             await deleteAlbumMutation.mutateAsync(deletingAlbum.id);
             hideLoading();
             setDeletingAlbum(null);
-            swal.success('Album Deleted', 'Your album has been deleted successfully.');
+            swal.success(t('delete.success'), t('delete.successDesc'));
         } catch (err) {
             hideLoading();
             const errorMessage =
@@ -41,7 +43,7 @@ export default function AlbumsPage() {
                     ? err.response?.data?.message || err.message
                     : err instanceof Error
                       ? err.message
-                      : 'Failed to delete album';
+                      : t('delete.error');
             toastError(errorMessage);
         }
     };
@@ -56,11 +58,11 @@ export default function AlbumsPage() {
                     <div className="flex items-center gap-3 text-primary">
                         <BookImage className="size-6" />
                         <h1 className="text-2xl font-bold tracking-tight uppercase">
-                            Album Studio
+                            {t('title')}
                         </h1>
                     </div>
                     <p className="text-muted-foreground text-sm font-mono uppercase tracking-[0.2em] opacity-70">
-                        {albums.length} Albums / Share with Friends
+                        {t('subtitle', { count: albums.length })}
                     </p>
                 </div>
 
@@ -69,7 +71,7 @@ export default function AlbumsPage() {
                     className="flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:brightness-110 rounded-sm shadow-[0_0_12px_rgba(0,238,255,0.3)] transition-all cursor-pointer"
                 >
                     <Plus className="size-4" />
-                    New Album
+                    {t('newAlbum')}
                 </button>
             </div>
 
@@ -92,16 +94,14 @@ export default function AlbumsPage() {
                     <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                         <BookImage className="size-8 text-primary/40" />
                     </div>
-                    <h3 className="text-lg font-bold text-foreground">No Albums Yet</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                        Create your first album to share with friends.
-                    </p>
+                    <h3 className="text-lg font-bold text-foreground">{t('empty.title')}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{t('empty.description')}</p>
                     <button
                         onClick={() => setShowCreateModal(true)}
                         className="flex items-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-wider bg-primary text-primary-foreground hover:brightness-110 rounded-sm shadow-[0_0_12px_rgba(0,238,255,0.3)] transition-all cursor-pointer"
                     >
                         <Plus className="size-4" />
-                        Create Album
+                        {t('empty.button')}
                     </button>
                 </div>
             )}
@@ -117,9 +117,9 @@ export default function AlbumsPage() {
                 isOpen={!!deletingAlbum}
                 onClose={() => setDeletingAlbum(null)}
                 onConfirm={handleDelete}
-                title="Delete Album"
-                message={`Are you sure you want to delete "${deletingAlbum?.name}"? This will permanently remove all images from the album.`}
-                confirmText="Delete"
+                title={t('delete.confirm.title')}
+                message={t('delete.confirm.message', { name: deletingAlbum?.name || '' })}
+                confirmText={t('delete.confirm.confirmText')}
                 type="danger"
                 isLoading={deleteAlbumMutation.isPending}
             />

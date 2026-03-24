@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Eye, EyeOff, Loader2, MapPin, Pencil, X } from 'lucide-react';
@@ -21,6 +22,7 @@ interface BrickInfoPanelProps {
 }
 
 export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) {
+    const t = useTranslations('brickDetail.page');
     const toast = useToast();
     const updateBrickMutation = useUpdateBrick();
 
@@ -48,7 +50,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
             isPublic: editIsPublic,
         });
         if (!parsed.success) {
-            const firstError = parsed.error.issues[0]?.message ?? 'Invalid input';
+            const firstError = parsed.error.issues[0]?.message ?? t('messages.invalidInput');
             toast.error(firstError);
             return;
         }
@@ -69,12 +71,12 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
             },
             {
                 onSuccess: () => {
-                    toast.success('Brick updated successfully');
+                    toast.success(t('messages.success'));
                     setIsEditing(false);
                     setShowSaveConfirm(false);
                 },
                 onError: () => {
-                    toast.error('Failed to update brick');
+                    toast.error(t('messages.error'));
                     setShowSaveConfirm(false);
                 },
             },
@@ -126,7 +128,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                             className="ml-1 italic"
                             title={`Edited ${formatDateTime(brick.updatedAt)}`}
                         >
-                            (edited)
+                            ({t('edited')})
                         </span>
                     )}
                 </span>
@@ -137,7 +139,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                 <div className="space-y-2.5">
                     <div>
                         <label className="text-[8px] text-primary/60 uppercase font-bold mb-1 block">
-                            Title
+                            {t('title')}
                         </label>
                         <input
                             type="text"
@@ -150,7 +152,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                     </div>
                     <div>
                         <label className="text-[8px] text-primary/60 uppercase font-bold mb-1 block">
-                            Description
+                            {t('description')}
                         </label>
                         <textarea
                             value={editDescription}
@@ -163,7 +165,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                     </div>
                     <div className="flex items-center gap-2">
                         <label className="text-[8px] text-primary/60 uppercase font-bold">
-                            Visibility
+                            {t('visibility')}
                         </label>
                         <button
                             type="button"
@@ -177,11 +179,11 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                         >
                             {editIsPublic ? (
                                 <>
-                                    <Eye className="size-3" /> Public
+                                    <Eye className="size-3" /> {t('public')}
                                 </>
                             ) : (
                                 <>
-                                    <EyeOff className="size-3" /> Private
+                                    <EyeOff className="size-3" /> {t('private')}
                                 </>
                             )}
                         </button>
@@ -196,7 +198,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                             {updateBrickMutation.isPending && (
                                 <Loader2 className="size-3 animate-spin" />
                             )}
-                            Save
+                            {t('save')}
                         </button>
                         <button
                             type="button"
@@ -204,7 +206,7 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                             className="flex items-center gap-1 px-2.5 py-1 rounded-sm text-[11px] font-bold text-muted-foreground hover:text-foreground border border-border hover:border-foreground/20 transition-all cursor-pointer"
                         >
                             <X className="size-3" />
-                            Cancel
+                            {t('cancel')}
                         </button>
                     </div>
                 </div>
@@ -224,13 +226,17 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
             {/* Coordinates grid */}
             <div className="grid grid-cols-2 gap-2">
                 <div className="bg-primary/5 border border-primary/20 p-2 rounded-sm">
-                    <p className="text-[8px] text-primary/60 uppercase font-bold">Latitude</p>
+                    <p className="text-[8px] text-primary/60 uppercase font-bold">
+                        {t('latitude')}
+                    </p>
                     <p className="text-[10px] font-mono text-foreground truncate">
                         {formatCoord(brick.latitude, 'N', 'S')}
                     </p>
                 </div>
                 <div className="bg-primary/5 border border-primary/20 p-2 rounded-sm">
-                    <p className="text-[8px] text-primary/60 uppercase font-bold">Longitude</p>
+                    <p className="text-[8px] text-primary/60 uppercase font-bold">
+                        {t('longitude')}
+                    </p>
                     <p className="text-[10px] font-mono text-foreground truncate">
                         {formatCoord(brick.longitude, 'E', 'W')}
                     </p>
@@ -254,9 +260,11 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                     {brick.mediaType}
                 </span>
                 {(isEditing ? editIsPublic : brick.isPublic) ? (
-                    <span className="text-[10px] text-primary/60 font-mono">PUBLIC</span>
+                    <span className="text-[10px] text-primary/60 font-mono">{t('public')}</span>
                 ) : (
-                    <span className="text-[10px] text-muted-foreground/60 font-mono">PRIVATE</span>
+                    <span className="text-[10px] text-muted-foreground/60 font-mono">
+                        {t('private')}
+                    </span>
                 )}
             </div>
 
@@ -286,8 +294,8 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                             )}
                         >
                             {brick.metadata?.verifiedAt
-                                ? 'VERIFICATION PASSED'
-                                : 'VERIFICATION FAILED'}
+                                ? t('verificationPassed')
+                                : t('verificationFailed')}
                         </span>
                     </div>
                     {brick.metadata?.verifiedAt && (
@@ -318,10 +326,10 @@ export function BrickInfoPanel({ brick, isOwner = false }: BrickInfoPanelProps) 
                 isOpen={showSaveConfirm}
                 onClose={() => setShowSaveConfirm(false)}
                 onConfirm={confirmSaveEdit}
-                title="Save Changes"
-                message="Are you sure you want to update this brick? Your changes will be visible to everyone."
-                confirmText="Save"
-                cancelText="Cancel"
+                title={t('confirmSave.title')}
+                message={t('confirmSave.message')}
+                confirmText={t('confirmSave.confirmText')}
+                cancelText={t('cancel')}
                 type="info"
                 isLoading={updateBrickMutation.isPending}
             />

@@ -3,20 +3,22 @@
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import { SettingsBanner, ProfileForm, PasswordForm } from '@/components/settings';
 
 export default function SettingsPage() {
+    const t = useTranslations('settings');
     const { data: session, status } = useSession();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
 
     useEffect(() => {
         if (status === 'loading') {
-            showLoading('Loading settings...');
+            showLoading(t('messages.loading'));
         } else {
             hideLoading();
         }
-    }, [status, showLoading, hideLoading]);
+    }, [status, showLoading, hideLoading, t]);
 
     if (status === 'loading') {
         return null;
@@ -25,7 +27,7 @@ export default function SettingsPage() {
     if (!session?.user) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <p className="text-muted-foreground">Please sign in to access settings</p>
+                <p className="text-muted-foreground">{t('messages.signInRequired')}</p>
             </div>
         );
     }

@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { ImageIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/utils/classnames';
 import { formatCoord, formatTimestamp } from '@/utils/brick';
 import { getDefaultAvatar } from '@/utils/cloudinary';
@@ -19,6 +20,7 @@ interface NewsfeedBrickCardProps {
 }
 
 export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCardProps) {
+    const t = useTranslations('search'); // Use 'search' namespace for card common keys
     const imageUrl = brick.watermark?.url || brick.media?.url;
     const hasImage = !!imageUrl;
     const hasContent = hasImage || brick.title || brick.description;
@@ -43,10 +45,10 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
             <div className="p-3 border-b border-border flex items-center justify-between">
                 <h2 className="text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-2">
                     <span className="size-2 bg-secondary animate-pulse" />
-                    {brick.tagType} BRIX
+                    {brick.tagType} {t('card.brick')}
                 </h2>
                 <span className="text-[9px] font-mono text-primary/50 uppercase tracking-widest">
-                    ID: {brick.id.slice(0, 8)}
+                    {t('card.id')}: {brick.id.slice(0, 8)}
                 </span>
             </div>
 
@@ -93,7 +95,7 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
                                         <ImageIcon className="size-8 text-muted-foreground/20" />
                                     </div>
                                     <span className="text-[10px] text-muted-foreground/40 uppercase tracking-widest font-mono">
-                                        NO IMAGE
+                                        {t('card.noImage')}
                                     </span>
                                 </div>
                             )}
@@ -108,7 +110,7 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
                                 <h3 className="text-sm font-bold tracking-tight text-foreground uppercase truncate flex-1 leading-tight">
                                     {brick.title || (
                                         <span className="text-muted-foreground/30 italic font-normal normal-case">
-                                            Untitled Brick
+                                            {t('card.untitled')}
                                         </span>
                                     )}
                                 </h3>
@@ -127,7 +129,7 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
                         <div className="grid grid-cols-2 gap-2">
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
-                                    Latitude
+                                    {t('card.latitude')}
                                 </p>
                                 <p className="text-[10px] font-mono text-foreground truncate">
                                     {formatCoord(brick.latitude, 'N', 'S')}
@@ -135,7 +137,7 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
                             </div>
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
-                                    Longitude
+                                    {t('card.longitude')}
                                 </p>
                                 <p className="text-[10px] font-mono text-foreground truncate">
                                     {formatCoord(brick.longitude, 'E', 'W')}
@@ -147,7 +149,7 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
                         {brick.address && brick.address !== 'string' && (
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
-                                    Location
+                                    {t('card.location')}
                                 </p>
                                 <p className="text-[10px] font-mono text-foreground truncate">
                                     {brick.address}
@@ -167,7 +169,9 @@ export function NewsfeedBrickCard({ brick, className, onClick }: NewsfeedBrickCa
                             <div className="flex-1 min-w-0">
                                 <p className="text-xs font-bold tracking-tight text-foreground truncate">
                                     {brick.user?.fullName || username || (
-                                        <span className="text-muted-foreground/30">Anonymous</span>
+                                        <span className="text-muted-foreground/30">
+                                            {t('card.anonymous')}
+                                        </span>
                                     )}
                                 </p>
                                 <p className="text-[9px] text-primary/60 font-bold uppercase tracking-widest truncate">

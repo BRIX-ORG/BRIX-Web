@@ -1,4 +1,5 @@
 import { Shield } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface TrustScoreBannerProps {
     currentScore?: number;
@@ -13,6 +14,7 @@ export function TrustScoreBanner({
     requirement = 750,
     level = 4,
 }: TrustScoreBannerProps) {
+    const t = useTranslations('vault.trust');
     const percentage = (currentScore / maxScore) * 100;
 
     return (
@@ -20,19 +22,15 @@ export function TrustScoreBanner({
             <div className="flex flex-col gap-1 z-10">
                 <div className="flex items-center gap-2">
                     <Shield className="size-5 text-primary" />
-                    <h3 className="text-lg font-bold">System Trust Score</h3>
+                    <h3 className="text-lg font-bold">{t('title')}</h3>
                 </div>
-                <p className="text-muted-foreground text-sm">
-                    Your security clearance is currently{' '}
-                    <span className="text-primary font-bold">Level {level}</span>. Requirements for
-                    Encrypted Vaults met.
-                </p>
+                <p className="text-muted-foreground text-sm">{t('description', { level })}</p>
             </div>
             <div className="flex flex-col items-end gap-2 z-10">
                 <div className="flex items-center gap-6">
                     <div className="text-right">
                         <p className="text-muted-foreground text-[10px] uppercase font-bold tracking-widest">
-                            Current Score
+                            {t('current')}
                         </p>
                         <p className="text-2xl font-bold text-primary font-mono">
                             {currentScore}/{maxScore}
@@ -40,7 +38,7 @@ export function TrustScoreBanner({
                     </div>
                     <div className="text-right">
                         <p className="text-muted-foreground text-[10px] uppercase font-bold tracking-widest">
-                            Requirement
+                            {t('requirement')}
                         </p>
                         <p className="text-2xl font-bold text-secondary font-mono">
                             {requirement}+

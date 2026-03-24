@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { X, Loader2 } from 'lucide-react';
 import type { BrickUpvoter } from '@/types/brick.types';
 import { useGetBrickUpvoters, useGetCommentUpvoters } from '@/hooks/apis/brick.api';
@@ -45,6 +46,7 @@ function UpvoterRow({ upvoter }: { upvoter: BrickUpvoter }) {
 }
 
 export function UpvotersModal({ isOpen, onClose, targetId, type }: UpvotersModalProps) {
+    const t = useTranslations('onchain.upvoters');
     const brickQuery = useGetBrickUpvoters(type === 'brick' && isOpen ? targetId : undefined);
     const commentQuery = useGetCommentUpvoters(type === 'comment' && isOpen ? targetId : undefined);
 
@@ -69,7 +71,7 @@ export function UpvotersModal({ isOpen, onClose, targetId, type }: UpvotersModal
             <div className="relative w-full max-w-sm bg-background border border-primary/20 rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,238,255,0.1)]">
                 {/* Header */}
                 <div className="flex items-center justify-between px-5 py-3 border-b border-primary/10">
-                    <h3 className="text-xs font-bold uppercase tracking-widest">Upvoters</h3>
+                    <h3 className="text-xs font-bold uppercase tracking-widest">{t('title')}</h3>
                     <button
                         onClick={onClose}
                         className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
@@ -86,9 +88,7 @@ export function UpvotersModal({ isOpen, onClose, targetId, type }: UpvotersModal
                         </div>
                     ) : !upvoters || upvoters.length === 0 ? (
                         <div className="flex items-center justify-center py-10">
-                            <p className="text-sm text-muted-foreground font-mono">
-                                No upvoters yet
-                            </p>
+                            <p className="text-sm text-muted-foreground font-mono">{t('empty')}</p>
                         </div>
                     ) : (
                         upvoters.map((u) => <UpvoterRow key={u.id} upvoter={u} />)

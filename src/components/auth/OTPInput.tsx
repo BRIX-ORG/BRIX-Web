@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface OTPInputProps {
     length?: number;
@@ -17,6 +18,7 @@ export function OTPInput({
     disabled = false,
     autoFocus = true,
 }: OTPInputProps) {
+    const t = useTranslations('auth');
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
     const firstInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -138,7 +140,7 @@ export function OTPInput({
                         focus:outline-none focus:border-primary focus:shadow-[0_0_15px_rgba(0,238,255,0.3)]
                         disabled:opacity-50 disabled:cursor-not-allowed
                         transition-all duration-200"
-                    aria-label={`Digit ${idx + 1}`}
+                    aria-label={`${t('otpInput.ariaLabel')} ${idx + 1}`}
                 />
             ))}
         </div>

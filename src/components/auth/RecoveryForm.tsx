@@ -18,10 +18,12 @@ import { useSwal } from '@/hooks/useSwal';
 import { useToast } from '@/hooks/useToast';
 import { OTPInput } from '@/components/auth';
 import { Input } from '@/components/ui';
+import { useTranslations } from 'next-intl';
 
 type RecoveryStep = 'email' | 'otp' | 'reset';
 
 export function RecoveryForm() {
+    const t = useTranslations('auth');
     const router = useRouter();
     const { success: toastSuccess, error: toastError } = useToast();
     const swal = useSwal();
@@ -79,17 +81,17 @@ export function RecoveryForm() {
     // Step 1: Request OTP
     const handleEmailSubmit = async (data: ForgotPasswordFormData) => {
         try {
-            swal.showLoading('Sending recovery code...');
+            swal.showLoading(t('recoveryForm.emailStep.loading'));
             await forgotPasswordMutation.mutateAsync(data);
             swal.close();
 
             setRecoveryEmail(data.email);
             setCurrentStep('otp');
             setSecondsLeft(300);
-            toastSuccess('Recovery code sent to your email!');
+            toastSuccess(t('recoveryForm.emailStep.success'));
         } catch (err) {
             swal.close();
-            toastError('Failed to send recovery code. Please try again.');
+            toastError(t('recoveryForm.emailStep.error'));
             console.error('Forgot password error:', err);
         }
     };
@@ -99,7 +101,7 @@ export function RecoveryForm() {
         if (otp.length !== 6 || !recoveryEmail) return;
 
         try {
-            swal.showLoading('Verifying code...');
+            swal.showLoading(t('recoveryForm.otpStep.loading'));
             const response = await verifyOtpMutation.mutateAsync({
                 email: recoveryEmail,
                 otp,
@@ -109,13 +111,16 @@ export function RecoveryForm() {
             if (response.data?.resetToken) {
                 setResetToken(response.data.resetToken);
                 setCurrentStep('reset');
-                toastSuccess('Code verified successfully!');
+                toastSuccess(t('recoveryForm.otpStep.success'));
             } else {
                 throw new Error('Invalid response');
             }
         } catch (err) {
             swal.close();
-            await swal.error('Invalid Code', 'The code you entered is incorrect or expired.');
+            await swal.error(
+                t('recoveryForm.otpStep.invalidCode'),
+                t('recoveryForm.otpStep.invalidCodeDesc'),
+            );
             setOtp('');
             console.error('Verify OTP error:', err);
         }
@@ -127,16 +132,16 @@ export function RecoveryForm() {
         setIsResending(true);
 
         try {
-            swal.showLoading('Resending code...');
+            swal.showLoading(t('recoveryForm.otpStep.resending'));
             await forgotPasswordMutation.mutateAsync({ email: recoveryEmail });
             swal.close();
 
             setSecondsLeft(300);
             setOtp('');
-            toastSuccess('New recovery code sent!');
+            toastSuccess(t('recoveryForm.otpStep.resendSuccess'));
         } catch (err) {
             swal.close();
-            toastError('Failed to resend code. Please try again.');
+            toastError(t('recoveryForm.otpStep.resendError'));
             console.error('Resend OTP error:', err);
         } finally {
             setIsResending(false);
@@ -146,13 +151,13 @@ export function RecoveryForm() {
     // Step 3: Reset Password
     const handleResetPassword = async (data: ResetPasswordFormData) => {
         if (!recoveryEmail || !resetToken) {
-            toastError('Session expired. Please start over.');
+            toastError(t('recoveryForm.resetStep.sessionExpired'));
             handleBack();
             return;
         }
 
         try {
-            swal.showLoading('Resetting password...');
+            swal.showLoading(t('recoveryForm.resetStep.loading'));
             await resetPasswordMutation.mutateAsync({
                 email: recoveryEmail,
                 resetToken,
@@ -160,12 +165,18 @@ export function RecoveryForm() {
             });
             swal.close();
 
-            await swal.success('Password Reset!', 'Your password has been reset successfully.');
+            await swal.success(
+                t('recoveryForm.resetStep.successTitle'),
+                t('recoveryForm.resetStep.success'),
+            );
             clearRecovery();
             router.push('/login');
         } catch (err) {
             swal.close();
-            await swal.error('Reset Failed', 'Failed to reset password. Please try again.');
+            await swal.error(
+                t('recoveryForm.resetStep.errorTitle'),
+                t('recoveryForm.resetStep.error'),
+            );
             console.error('Reset password error:', err);
         }
     };
@@ -187,12 +198,12 @@ export function RecoveryForm() {
         return (
             <form className="space-y-6" onSubmit={emailForm.handleSubmit(handleEmailSubmit)}>
                 <Input
-                    label="Registered_Email"
+                    label={t('recoveryForm.emailStep.label')}
                     type="email"
                     {...emailForm.register('email')}
                     disabled={forgotPasswordMutation.isPending}
                     leftIcon={<Mail className="size-5" />}
-                    placeholder="name@company.com"
+                    placeholder={t('recoveryForm.emailStep.placeholder')}
                     error={emailForm.formState.errors.email?.message}
                 />
 
@@ -205,7 +216,7 @@ export function RecoveryForm() {
                         <Loader2 className="size-4 animate-spin" />
                     ) : (
                         <>
-                            <span>Send Recovery Code</span>
+                            <span>{t('recoveryForm.emailStep.submit')}</span>
                             <ArrowRight className="size-4" />
                         </>
                     )}
@@ -217,7 +228,7 @@ export function RecoveryForm() {
                         className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors flex items-center gap-1 group"
                     >
                         <ChevronLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-                        Back to Login
+                        {t('recoveryForm.emailStep.back')}
                     </Link>
                 </div>
             </form>
@@ -230,7 +241,7 @@ export function RecoveryForm() {
             <div className="space-y-6">
                 <div className="text-center">
                     <p className="text-muted-foreground text-sm mb-2">
-                        Enter the 6-digit code sent to
+                        {t('recoveryForm.otpStep.instruction')}
                     </p>
                     <p className="text-primary font-mono font-bold">{recoveryEmail}</p>
                 </div>
@@ -247,7 +258,7 @@ export function RecoveryForm() {
                         <Loader2 className="size-4 animate-spin" />
                     ) : (
                         <>
-                            <span>Verify Code</span>
+                            <span>{t('recoveryForm.otpStep.submit')}</span>
                             <ArrowRight className="size-4" />
                         </>
                     )}
@@ -255,7 +266,7 @@ export function RecoveryForm() {
 
                 <div className="text-center space-y-3">
                     <p className="text-sm text-muted-foreground">
-                        Didn&apos;t receive the code?{' '}
+                        {t('recoveryForm.otpStep.resendPrompt')}{' '}
                         <button
                             type="button"
                             onClick={handleResendOtp}
@@ -263,11 +274,11 @@ export function RecoveryForm() {
                             className="text-primary hover:underline disabled:text-muted-foreground disabled:no-underline inline-flex items-center gap-1"
                         >
                             <RefreshCw className={`size-3 ${isResending ? 'animate-spin' : ''}`} />
-                            Resend
+                            {t('recoveryForm.otpStep.resendAction')}
                         </button>
                     </p>
                     <p className="text-xs text-muted-foreground">
-                        Code expires in{' '}
+                        {t('recoveryForm.otpStep.expiry')}{' '}
                         <span className="text-primary font-mono font-bold">
                             {mm}:{ss}
                         </span>
@@ -281,7 +292,7 @@ export function RecoveryForm() {
                         className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors flex items-center gap-1 group"
                     >
                         <ChevronLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-                        Back
+                        {t('recoveryForm.otpStep.back')}
                     </button>
                 </div>
             </div>
@@ -294,28 +305,28 @@ export function RecoveryForm() {
             <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                 <p className="text-xs text-primary font-mono flex items-center gap-2">
                     <span className="size-2 rounded-full bg-primary animate-pulse" />
-                    VERIFIED_ACCESS_GRANTED
+                    {t('recoveryForm.resetStep.granted')}
                 </p>
             </div>
 
             <Input
-                label="New_Security_Key"
+                label={t('recoveryForm.resetStep.newPassword.label')}
                 type="password"
                 {...resetForm.register('newPassword')}
                 disabled={resetPasswordMutation.isPending}
                 leftIcon={<Lock className="size-5" />}
-                placeholder="••••••••••••"
+                placeholder={t('recoveryForm.resetStep.newPassword.placeholder')}
                 error={resetForm.formState.errors.newPassword?.message}
                 showPasswordToggle
             />
 
             <Input
-                label="Confirm_New_Key"
+                label={t('recoveryForm.resetStep.confirmPassword.label')}
                 type="password"
                 {...resetForm.register('confirmPassword')}
                 disabled={resetPasswordMutation.isPending}
                 leftIcon={<Lock className="size-5" />}
-                placeholder="••••••••••••"
+                placeholder={t('recoveryForm.resetStep.confirmPassword.placeholder')}
                 error={resetForm.formState.errors.confirmPassword?.message}
                 showPasswordToggle
             />
@@ -329,7 +340,7 @@ export function RecoveryForm() {
                     <Loader2 className="size-4 animate-spin" />
                 ) : (
                     <>
-                        <span>Reset Password</span>
+                        <span>{t('recoveryForm.resetStep.submit')}</span>
                         <ArrowRight className="size-4" />
                     </>
                 )}
@@ -342,7 +353,7 @@ export function RecoveryForm() {
                     className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors flex items-center gap-1 group"
                 >
                     <ChevronLeft className="size-4 group-hover:-translate-x-1 transition-transform" />
-                    Back
+                    {t('recoveryForm.resetStep.back')}
                 </button>
             </div>
         </form>

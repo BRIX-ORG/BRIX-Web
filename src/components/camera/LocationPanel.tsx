@@ -1,5 +1,6 @@
 import { GeolocationData } from '@/hooks/useGeolocation';
 import { DataStream } from '@/components/camera';
+import { useTranslations } from 'next-intl';
 
 interface LocationPanelProps {
     location: GeolocationData;
@@ -21,6 +22,7 @@ const GPS_DATA_STREAM = [
 ];
 
 export function LocationPanel({ location, isLoading, error }: LocationPanelProps) {
+    const t = useTranslations('camera.LocationPanel');
     const formatCoord = (val: number | null, dir: string) => {
         if (val === null) return '--';
         const abs = Math.abs(val);
@@ -33,19 +35,23 @@ export function LocationPanel({ location, isLoading, error }: LocationPanelProps
             {/* Location Data Box */}
             <div className="border-l-2 border-primary pl-4 py-2 bg-background/60 backdrop-blur-md">
                 <div className="text-[10px] uppercase opacity-50 mb-1 tracking-widest font-bold">
-                    Location_Data
+                    {t('label')}
                 </div>
                 <div className="text-xs space-y-1 text-primary font-mono">
                     {error ? (
                         <p className="text-destructive text-[9px]">{error}</p>
                     ) : isLoading ? (
-                        <p className="animate-pulse">ACQUIRING_GPS...</p>
+                        <p className="animate-pulse">{t('acquiring')}</p>
                     ) : (
                         <>
                             <p>LAT: {formatCoord(location.latitude, 'NS')}</p>
                             <p>LNG: {formatCoord(location.longitude, 'EW')}</p>
-                            <p>ALT: {location.altitude?.toFixed(2) ?? '--'}M MSL</p>
-                            <p>ACC: {location.accuracy?.toFixed(2) ?? '--'}M</p>
+                            <p>
+                                {t('alt')}: {location.altitude?.toFixed(2) ?? '--'}M MSL
+                            </p>
+                            <p>
+                                {t('acc')}: {location.accuracy?.toFixed(2) ?? '--'}M
+                            </p>
                         </>
                     )}
                 </div>

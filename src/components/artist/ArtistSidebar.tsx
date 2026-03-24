@@ -6,6 +6,7 @@ import type { OnchainActivity } from '@/types/brick.types';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { Map, MapMarker, MarkerContent, MarkerTooltip, MapControls } from '@/components/ui/Map';
 import { timeAgo } from '@/utils/time';
+import { useTranslations } from 'next-intl';
 
 // Keep for backward compatibility
 export interface Collaborator {
@@ -38,6 +39,7 @@ export function ArtistSidebar({
     onViewAllFollowers,
     location,
 }: ArtistSidebarProps) {
+    const t = useTranslations('artist.sidebar');
     const remainingCount = totalFollowers - followers.length;
 
     return (
@@ -45,13 +47,11 @@ export function ArtistSidebar({
             {/* Node Activity */}
             <div className="space-y-4">
                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-primary/60">
-                    <Database className="size-4" /> Node Activity
+                    <Database className="size-4" /> {t('nodeActivity')}
                 </h3>
                 <div className="space-y-4 border-l border-primary/20 pl-4 py-2">
                     {activities.length === 0 ? (
-                        <p className="text-xs text-muted-foreground font-mono">
-                            No onchain activity yet
-                        </p>
+                        <p className="text-xs text-muted-foreground font-mono">{t('noActivity')}</p>
                     ) : (
                         activities.map((activity) => (
                             <div key={activity.id} className="space-y-1">
@@ -62,8 +62,8 @@ export function ArtistSidebar({
                                 </p>
                                 <p className="text-xs text-muted-foreground">
                                     {activity.type === 'MINT'
-                                        ? 'Asset verified and deployed.'
-                                        : 'Received donation block.'}
+                                        ? t('activityMint')
+                                        : t('activityDonate')}
                                 </p>
                                 <p className="text-[9px] font-mono text-muted-foreground/50 uppercase">
                                     {timeAgo(activity.createdAt)}
@@ -79,7 +79,7 @@ export function ArtistSidebar({
                             onClick={onViewAllActivities}
                             className="w-full py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground hover:text-primary border border-primary/20 hover:border-primary/50 transition-colors rounded-lg bg-muted/50 cursor-pointer"
                         >
-                            View All Activities ({totalActivities})
+                            {t('viewAllActivities', { count: totalActivities })}
                         </button>
                     )}
             </div>
@@ -88,7 +88,7 @@ export function ArtistSidebar({
             {location && (
                 <div className="space-y-3">
                     <h3 className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-primary/60">
-                        <MapPin className="size-3.5" /> Location
+                        <MapPin className="size-3.5" /> {t('location')}
                     </h3>
                     <div className="relative w-full h-56 rounded-lg overflow-hidden border border-primary/10">
                         <Map
@@ -122,13 +122,13 @@ export function ArtistSidebar({
             {/* Followers */}
             <div className="space-y-4">
                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-primary/60">
-                    <Users className="size-4" /> Followers
+                    <Users className="size-4" /> {t('followers')}
                     {totalFollowers > 0 && (
                         <span className="text-muted-foreground">({totalFollowers})</span>
                     )}
                 </h3>
                 {followers.length === 0 ? (
-                    <p className="text-xs text-muted-foreground font-mono">No followers yet</p>
+                    <p className="text-xs text-muted-foreground font-mono">{t('noFollowers')}</p>
                 ) : (
                     <div className="flex flex-wrap gap-2">
                         {followers.map((follower) => (

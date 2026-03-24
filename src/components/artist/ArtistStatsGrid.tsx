@@ -1,11 +1,14 @@
 import type { UserBrickStats } from '@/types/brick.types';
 import { Layers, ShieldCheck, HeartPulse } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface ArtistStatsGridProps {
     stats?: UserBrickStats | null;
 }
 
 export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
+    const t = useTranslations('artist.stats');
+
     return (
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Box 1: Digital Assets Issued */}
@@ -16,7 +19,7 @@ export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
                 <div className="flex justify-between items-start mb-6 relative z-10">
                     <p className="text-[10px] sm:text-xs font-mono text-primary/80 uppercase tracking-widest font-semibold flex items-center gap-2">
                         <Layers className="size-4 text-primary" />
-                        Assets Issued
+                        {t('assetsIssued')}
                     </p>
                 </div>
 
@@ -26,10 +29,10 @@ export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                         <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-medium tracking-wider">
-                            IPFS
+                            {t('ipfs')}
                         </span>
                         <span className="text-[11px] sm:text-xs font-mono text-muted-foreground font-semibold">
-                            {stats?.ipfsBricksUploaded || 0} Assets Stored
+                            {stats?.ipfsBricksUploaded || 0} {t('assetsStored')}
                         </span>
                     </div>
                 </div>
@@ -42,7 +45,7 @@ export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
                 <div className="flex justify-between items-start mb-6 relative z-10">
                     <p className="text-[10px] sm:text-xs font-mono text-secondary/80 uppercase tracking-widest font-semibold flex items-center gap-2">
                         <ShieldCheck className="size-4 text-secondary" />
-                        Blockchain Validated
+                        {t('blockchainValidated')}
                     </p>
                 </div>
 
@@ -52,10 +55,10 @@ export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                         <span className="px-2 py-0.5 rounded-full bg-secondary/10 border border-secondary/20 text-[10px] font-mono text-secondary font-medium tracking-wider">
-                            ON-CHAIN
+                            {t('onChain')}
                         </span>
                         <span className="text-[11px] sm:text-xs font-mono text-muted-foreground font-semibold">
-                            Metadata Verified
+                            {t('metadataVerified')}
                         </span>
                     </div>
                 </div>
@@ -68,7 +71,7 @@ export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
                 <div className="flex justify-between items-start mb-6 relative z-10">
                     <p className="text-[10px] sm:text-xs font-mono text-primary/80 uppercase tracking-widest font-semibold flex items-center gap-2">
                         <HeartPulse className="size-4 text-primary" />
-                        Community Support
+                        {t('communitySupport')}
                     </p>
                 </div>
 
@@ -78,15 +81,17 @@ export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
                             {(stats?.totalUpvotes || 0).toLocaleString()}
                         </p>
                         <span className="text-sm font-semibold text-muted-foreground/60 tracking-wider uppercase font-mono">
-                            Votes
+                            {t('votes')}
                         </span>
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                         <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-medium tracking-wider">
-                            SUPPORT
+                            {t('support')}
                         </span>
                         <span className="text-[11px] sm:text-xs font-mono text-muted-foreground font-semibold">
-                            {(stats?.totalDonationsReceived || 0).toLocaleString()} POL Received
+                            {t('polReceived', {
+                                amount: (stats?.totalDonationsReceived || 0).toLocaleString(),
+                            })}
                         </span>
                     </div>
                 </div>

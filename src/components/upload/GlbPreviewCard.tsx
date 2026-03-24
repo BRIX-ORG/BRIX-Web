@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Box, Loader2, RefreshCw, RotateCcw } from 'lucide-react';
 import { Map, MapMarker, MarkerContent } from '@/components/ui';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 const ModelViewer = dynamic(() => import('@/components/react-bits/ModelViewer'), {
     ssr: false,
@@ -14,7 +15,7 @@ const ModelViewer = dynamic(() => import('@/components/react-bits/ModelViewer'),
             <div className="flex flex-col items-center gap-3">
                 <Loader2 className="size-8 animate-spin text-primary/40" />
                 <span className="text-[10px] font-mono text-muted-foreground/40 tracking-widest uppercase">
-                    Loading 3D Engine...
+                    LOADING_3D_ENGINE
                 </span>
             </div>
         </div>
@@ -56,6 +57,7 @@ export function GlbPreviewCard({
     avatarUrl,
     className,
 }: GlbPreviewCardProps) {
+    const t = useTranslations('uploads.preview');
     const [refreshKey, setRefreshKey] = useState(0);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -95,7 +97,7 @@ export function GlbPreviewCard({
             <div className="p-4 border-b border-border flex items-center justify-between">
                 <h2 className="text-sm font-bold tracking-[0.2em] uppercase flex items-center gap-2">
                     <span className="size-2 bg-secondary animate-pulse" />
-                    Live Preview
+                    {t('livePreview')}
                 </h2>
                 <span className="text-[9px] font-mono text-secondary/50 uppercase tracking-widest">
                     BRIX_3D

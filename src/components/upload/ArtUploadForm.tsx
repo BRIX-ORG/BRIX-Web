@@ -20,11 +20,13 @@ import { useLocationReverse } from '@/hooks/apis/location.api';
 import { useUploadArtBrick } from '@/hooks/apis/brick.api';
 import { useSwal } from '@/hooks/useSwal';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { uploadArtBrickSchema, type UploadArtBrickFormInput } from '@/validations/brick';
 import type { LocationSuggestion } from '@/types/location.types';
 
 export function ArtUploadForm() {
+    const t = useTranslations('uploads');
     const router = useRouter();
     const swal = useSwal();
     const showLoading = useUIStore((state) => state.showLoading);
@@ -188,17 +190,17 @@ export function ArtUploadForm() {
 
     const onSubmit = async (data: UploadArtBrickFormInput) => {
         if (!selectedFile) {
-            swal.error('Error', 'Please select an image file to upload');
+            swal.error('Error', t('messages.selectImage'));
             return;
         }
 
         try {
-            showLoading('Uploading art brick...');
+            showLoading(t('messages.uploadingArt'));
             const result = await uploadArtBrick.mutateAsync({
                 file: selectedFile,
                 ...data,
             });
-            swal.success('Success', 'Art brick uploaded successfully!');
+            swal.success('Success', t('messages.successArt'));
             // Reset form
             reset();
             setSelectedFile(null);
@@ -206,10 +208,7 @@ export function ArtUploadForm() {
             router.push(`/dashboard/brick/${result.id}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            swal.error(
-                'Upload Failed',
-                error?.response?.data?.message || 'Failed to upload art brick',
-            );
+            swal.error('Upload Failed', error?.response?.data?.message || t('messages.errorArt'));
         } finally {
             hideLoading();
         }
@@ -247,7 +246,7 @@ export function ArtUploadForm() {
                                 className="absolute bottom-4 right-4 z-10 bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 text-[10px] font-bold tracking-widest uppercase flex items-center gap-2 transition-all backdrop-blur-sm"
                             >
                                 <X className="size-3" />
-                                Remove
+                                {t('form.remove')}
                             </button>
                         </div>
                     ) : (
@@ -260,11 +259,11 @@ export function ArtUploadForm() {
                         <div className="flex items-center gap-3 pb-4 border-b border-border">
                             <FileText className="size-4 text-primary" />
                             <h3 className="text-sm font-bold tracking-[0.2em] uppercase">
-                                Brick Metadata
+                                {t('form.metadata')}
                             </h3>
                             <div className="flex-1" />
                             <span className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest">
-                                required fields marked *
+                                {t('form.required')}
                             </span>
                         </div>
 
@@ -272,11 +271,11 @@ export function ArtUploadForm() {
                             {/* Title */}
                             <div className="relative z-10 focus-within:z-50">
                                 <Input
-                                    label="Title"
+                                    label={t('form.title')}
                                     {...register('title')}
                                     leftIcon={<Type className="size-4" />}
                                     variant="compact"
-                                    placeholder="Give your brick a title..."
+                                    placeholder={t('form.titlePlaceholder')}
                                     error={errors.title?.message}
                                     required
                                     disabled={uploadArtBrick.isPending}
@@ -297,11 +296,11 @@ export function ArtUploadForm() {
                             {/* Description */}
                             <div className="relative z-10 focus-within:z-50">
                                 <Textarea
-                                    label="Description"
+                                    label={t('form.description')}
                                     {...register('description')}
                                     rows={3}
                                     variant="compact"
-                                    placeholder="Describe this moment (optional)..."
+                                    placeholder={t('form.descPlaceholder')}
                                     error={errors.description?.message}
                                     disabled={uploadArtBrick.isPending}
                                 />

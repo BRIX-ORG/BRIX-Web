@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Map, MapMarker, MarkerContent, MapControls } from '@/components/ui/Map';
 
 export interface GeoMapPickerProps {
@@ -12,6 +13,7 @@ export interface GeoMapPickerProps {
 }
 
 export function GeoMapPicker({ center, markerPos, zoom, onPick }: GeoMapPickerProps) {
+    const t = useTranslations('search');
     const mapRef = useRef<import('@/components/ui/Map').MapRef | null>(null);
 
     // Attach a click listener to the MapLibre instance via imperative ref
@@ -47,7 +49,7 @@ export function GeoMapPicker({ center, markerPos, zoom, onPick }: GeoMapPickerPr
             {!markerPos && (
                 <div className="absolute inset-0 flex items-end justify-center pb-3 pointer-events-none">
                     <div className="bg-background/80 backdrop-blur-sm border border-border rounded-lg px-3 py-1.5 text-[11px] text-muted-foreground">
-                        Click to set search center
+                        {t('geo.instruction')}
                     </div>
                 </div>
             )}

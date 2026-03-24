@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import type { Gender } from '@/types/user.types';
 import { getAvatarUrl, type CloudinaryImage } from '@/utils/cloudinary';
+import { useTranslations } from 'next-intl';
 
 export interface ArtistData {
     id: string;
@@ -56,6 +57,8 @@ export function ArtistHeroSection({
     onFollowingClick,
     onShareClick,
 }: ArtistHeroSectionProps) {
+    const t = useTranslations('artist.hero');
+
     return (
         <section className="relative group">
             {/* Main Container with subtle outer glow */}
@@ -115,7 +118,7 @@ export function ArtistHeroSection({
                                 <div className="hidden md:flex items-center gap-2 bg-primary/10 border border-primary/20 px-3 py-1 rounded-sm">
                                     <Shield className="size-3.5 text-primary" />
                                     <span className="text-[10px] font-mono font-bold text-primary uppercase">
-                                        TRUST_LEVEL: {artist.trustScore}%
+                                        {t('trustLevel', { score: artist.trustScore })}
                                     </span>
                                 </div>
                             </div>
@@ -138,7 +141,7 @@ export function ArtistHeroSection({
                                     className="group/stat flex flex-col items-start cursor-pointer transition-transform hover:scale-105"
                                 >
                                     <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest group-hover/stat:text-primary transition-colors flex items-center gap-1.5">
-                                        <Users className="size-3" /> Followers
+                                        <Users className="size-3" /> {t('followers')}
                                     </span>
                                     <span className="text-xl font-bold font-mono tracking-tighter">
                                         {artist.followersCount.toLocaleString()}
@@ -150,7 +153,7 @@ export function ArtistHeroSection({
                                     className="group/stat flex flex-col items-start cursor-pointer transition-transform hover:scale-105"
                                 >
                                     <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest group-hover/stat:text-primary transition-colors">
-                                        Following
+                                        {t('following')}
                                     </span>
                                     <span className="text-xl font-bold font-mono tracking-tighter">
                                         {artist.followingCount.toLocaleString()}
@@ -168,7 +171,7 @@ export function ArtistHeroSection({
                                 className="group/btn flex items-center justify-center gap-3 px-8 py-4 bg-white/5 border border-white/10 text-white rounded-sm font-black uppercase text-xs tracking-widest hover:bg-primary/10 hover:border-primary/40 transition-all cursor-pointer shadow-lg"
                             >
                                 <Pencil className="size-4 group-hover/btn:text-primary transition-colors" />
-                                Edit Profile
+                                {t('editProfile')}
                             </button>
                         ) : (
                             <>
@@ -183,7 +186,7 @@ export function ArtistHeroSection({
                                         ) : (
                                             <UserCheck className="size-4" />
                                         )}
-                                        Following
+                                        {t('followingButton')}
                                     </button>
                                 ) : (
                                     <button
@@ -196,23 +199,23 @@ export function ArtistHeroSection({
                                         ) : (
                                             <UserPlus className="size-4" />
                                         )}
-                                        Follow artist
+                                        {t('followArtist')}
                                     </button>
                                 )}
                                 <button
                                     onClick={onChat}
                                     className="flex items-center justify-center gap-3 px-8 py-4 bg-white/10 hover:bg-white/15 border border-white/10 text-white rounded-sm font-black uppercase text-xs tracking-widest transition-all cursor-pointer shadow-lg"
                                 >
-                                    <MessageSquare className="size-4" /> Open Chat
+                                    <MessageSquare className="size-4" /> {t('openChat')}
                                 </button>
                             </>
                         )}
                         <button
                             onClick={onShareClick}
-                            title="Share Profile"
+                            title={t('shareTooltip')}
                             className="flex items-center justify-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-sm font-black uppercase text-xs tracking-widest transition-all cursor-pointer shadow-lg"
                         >
-                            <Share2 className="size-4" /> Share
+                            <Share2 className="size-4" /> {t('share')}
                         </button>
                     </div>
                 </div>

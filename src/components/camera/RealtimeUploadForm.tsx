@@ -5,6 +5,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useSession } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Zap, Globe, Lock, Type, FileText, Navigation, RotateCcw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Input, Textarea } from '@/components/ui';
 import { AddressSearchField } from '@/components/upload';
 import { RealtimeBrickPreviewCard, AddressMapPicker } from '@/components/camera';
@@ -49,6 +50,7 @@ export function RealtimeUploadForm({
     capturedPreviewUrl,
     sessionId,
 }: RealtimeUploadFormProps) {
+    const t = useTranslations('camera.RealtimeUploadForm');
     const swal = useSwal();
     const { data: session } = useSession();
     const user = session?.user;
@@ -178,9 +180,11 @@ export function RealtimeUploadForm({
 
                 if (distance > MAX_ADDRESS_DISTANCE_KM) {
                     swal.error(
-                        'Address Too Far',
-                        `The selected address is ${distance.toFixed(1)} km away from your capture location. ` +
-                            `Maximum allowed distance is ${MAX_ADDRESS_DISTANCE_KM} km.`,
+                        t('alerts.addressTooFar'),
+                        t('alerts.addressTooFarDesc', {
+                            distance: distance.toFixed(1),
+                            limit: MAX_ADDRESS_DISTANCE_KM,
+                        }),
                     );
                     return;
                 }
@@ -191,7 +195,7 @@ export function RealtimeUploadForm({
             setAddressQuery(location.display_name);
             setIsAddressTyping(false);
         },
-        [setValue, defaultLatitude, defaultLongitude, swal],
+        [setValue, defaultLatitude, defaultLongitude, swal, t],
     );
 
     const handleAddressClear = useCallback(() => {
@@ -213,12 +217,14 @@ export function RealtimeUploadForm({
     const handleMapPickTooFar = useCallback(
         (distance: number) => {
             swal.error(
-                'Location Too Far',
-                `The selected location is ${distance.toFixed(1)} km away from your capture point. ` +
-                    `Maximum allowed distance is ${MAX_ADDRESS_DISTANCE_KM} km.`,
+                t('alerts.locationTooFar'),
+                t('alerts.locationTooFarDesc', {
+                    distance: distance.toFixed(1),
+                    limit: MAX_ADDRESS_DISTANCE_KM,
+                }),
             );
         },
-        [swal],
+        [swal, t],
     );
 
     // ─── Reset address to original GPS reverse geocode ────────────
@@ -243,11 +249,11 @@ export function RealtimeUploadForm({
                         <div className="flex items-center gap-3 pb-4 border-b border-border">
                             <FileText className="size-4 text-primary" />
                             <h3 className="text-sm font-bold tracking-[0.2em] uppercase">
-                                Brick Metadata
+                                {t('metadataHeader')}
                             </h3>
                             <div className="flex-1" />
                             <span className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest">
-                                required fields marked *
+                                {t('requiredFields')}
                             </span>
                         </div>
 
@@ -255,11 +261,11 @@ export function RealtimeUploadForm({
                             {/* Title */}
                             <div className="relative z-10 focus-within:z-50">
                                 <Input
-                                    label="Title"
+                                    label={t('title.label')}
                                     {...register('title')}
                                     leftIcon={<Type className="size-4" />}
                                     variant="compact"
-                                    placeholder="Name your realtime capture..."
+                                    placeholder={t('title.placeholder')}
                                     error={errors.title?.message}
                                     required
                                     disabled={isSubmitting}
@@ -280,11 +286,11 @@ export function RealtimeUploadForm({
                             {/* Description */}
                             <div className="relative z-10 focus-within:z-50">
                                 <Textarea
-                                    label="Description"
+                                    label={t('description.label')}
                                     {...register('description')}
                                     rows={3}
                                     variant="compact"
-                                    placeholder="Describe this moment (optional)..."
+                                    placeholder={t('description.placeholder')}
                                     error={errors.description?.message}
                                     disabled={isSubmitting}
                                 />
@@ -311,18 +317,18 @@ export function RealtimeUploadForm({
                             <div className="flex items-center gap-3 pb-4 border-b border-border">
                                 <Navigation className="size-4 text-secondary" />
                                 <h3 className="text-sm font-bold tracking-[0.2em] uppercase">
-                                    Geo Coordinates
+                                    {t('geoHeader')}
                                 </h3>
                                 <div className="flex-1" />
                                 <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest flex items-center gap-1.5">
                                     <span className="size-1.5 bg-primary rounded-full animate-pulse" />
-                                    GPS_LOCKED
+                                    {t('gpsLocked')}
                                 </span>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <Input
-                                    label="Latitude"
+                                    label={t('lat')}
                                     type="number"
                                     step="any"
                                     leftIcon={<Navigation className="size-4" />}
@@ -331,7 +337,7 @@ export function RealtimeUploadForm({
                                     disabled
                                 />
                                 <Input
-                                    label="Longitude"
+                                    label={t('lng')}
                                     type="number"
                                     step="any"
                                     leftIcon={<Navigation className="size-4" />}
@@ -342,8 +348,7 @@ export function RealtimeUploadForm({
                             </div>
 
                             <p className="text-[9px] text-muted-foreground/50 font-mono uppercase tracking-wider">
-                                Coordinates are locked to the capture location and cannot be
-                                modified.
+                                {t('coordsLocked')}
                             </p>
                         </div>
 
@@ -368,10 +373,10 @@ export function RealtimeUploadForm({
                                         onClick={handleResetAddress}
                                         disabled={isSubmitting}
                                         className="shrink-0 mb-0.5 flex items-center gap-1.5 px-3 py-3 border border-border text-muted-foreground text-[10px] font-bold uppercase tracking-widest hover:text-primary hover:border-primary/40 transition-colors disabled:opacity-50"
-                                        title="Reset to GPS address"
+                                        title={t('resetTooltip')}
                                     >
                                         <RotateCcw className="size-3.5" />
-                                        Reset
+                                        {t('reset')}
                                     </button>
                                 )}
                             </div>
@@ -402,12 +407,12 @@ export function RealtimeUploadForm({
                             {isPublic ? (
                                 <>
                                     <Globe className="size-3.5 text-primary" />
-                                    <span>Public</span>
+                                    <span>{t('visibility.public')}</span>
                                 </>
                             ) : (
                                 <>
                                     <Lock className="size-3.5 text-secondary" />
-                                    <span>Private</span>
+                                    <span>{t('visibility.private')}</span>
                                 </>
                             )}
                         </button>
@@ -418,7 +423,7 @@ export function RealtimeUploadForm({
                             disabled={isSubmitting}
                             className="glow-button bg-linear-to-r from-primary to-secondary px-12 py-4 text-primary-foreground text-sm font-black tracking-[0.25em] uppercase flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span>{isSubmitting ? 'Uploading...' : 'Verify & Upload'}</span>
+                            <span>{isSubmitting ? t('submitting') : t('submit')}</span>
                             <Zap className="size-4" />
                         </button>
                     </div>

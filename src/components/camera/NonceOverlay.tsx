@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
 import { useRealtimeSessionStore } from '@/stores/realtime-session-store';
+import { useTranslations } from 'next-intl';
 
 /**
  * Draw the BRIX diamond logo in the center of a QR code on a canvas.
@@ -43,6 +44,7 @@ function drawLogoOnCanvas(ctx: CanvasRenderingContext2D, size: number) {
  * knows what will be embedded into the captured image.
  */
 export function QROverlay() {
+    const t = useTranslations('camera.QROverlay');
     const { qrToken, status } = useRealtimeSessionStore();
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -74,14 +76,14 @@ export function QROverlay() {
             {/* QR Badge */}
             <div className="border border-primary/60 bg-background/80 backdrop-blur-md p-2.5 glow-cyan">
                 <div className="text-[8px] uppercase tracking-widest text-muted-foreground mb-1 font-bold text-center">
-                    Challenge QR
+                    {t('label')}
                 </div>
                 <canvas ref={canvasRef} className="block" />
             </div>
 
             {/* Instruction */}
             <div className="text-[8px] uppercase tracking-widest text-muted-foreground max-w-40 text-right">
-                QR will be embedded into image pixels on capture
+                {t('instruction')}
             </div>
         </div>
     );

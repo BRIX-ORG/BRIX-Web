@@ -1,17 +1,19 @@
 'use client';
 
 import { ArtUploadForm, UploadTabs } from '@/components/upload';
+import { useTranslations } from 'next-intl';
 
 export default function UploadsPage() {
+    const t = useTranslations('uploads');
     return (
         <div className="p-8 max-w-350 mx-auto w-full">
             {/* Page Header */}
             <div className="w-full mb-8">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tighter mb-2 italic">
-                    BRIX_IMAGE_UPLOAD_CENTER
+                    {t('title')}
                 </h1>
                 <p className="text-primary text-xs tracking-[0.3em] font-medium uppercase opacity-80">
-                    High-Tech Neural Art Processing Protocol v2.4.0
+                    {t('subtitle')}
                 </p>
             </div>
 
@@ -41,7 +43,9 @@ export default function UploadsPage() {
                 </div>
                 <div className="h-24 border border-border flex items-center justify-center p-2 relative">
                     <div className="absolute inset-2 border border-primary/10" />
-                    <span className="text-[10px] font-black tracking-tighter">AUTHENTIC_BRIX</span>
+                    <span className="text-[10px] font-black tracking-tighter">
+                        {t('authentic')}
+                    </span>
                 </div>
             </div>
         </div>

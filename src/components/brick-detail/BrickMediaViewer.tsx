@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { Box, ImagePlus, Loader2, RefreshCw, RotateCcw, Trash2 } from 'lucide-react';
 import type { BrickDetail } from '@/types/brick.types';
@@ -10,18 +11,23 @@ import { useDeleteBrickThumbnail, useAddBrickThumbnails } from '@/hooks/apis/bri
 import { useToast } from '@/hooks/useToast';
 import { ConfirmPopup } from '@/components/shared';
 
-const ModelViewer = dynamic(() => import('@/components/react-bits/ModelViewer'), {
-    ssr: false,
-    loading: () => (
+const ModelLoading = () => {
+    const t = useTranslations('brickDetail.media');
+    return (
         <div className="w-full h-full flex items-center justify-center bg-muted/40">
             <div className="flex flex-col items-center gap-2">
                 <Loader2 className="size-6 animate-spin text-primary/40" />
                 <span className="text-[9px] font-mono text-muted-foreground/40 tracking-widest uppercase">
-                    Loading 3D...
+                    {t('loading3d')}
                 </span>
             </div>
         </div>
-    ),
+    );
+};
+
+const ModelViewer = dynamic(() => import('@/components/react-bits/ModelViewer'), {
+    ssr: false,
+    loading: ModelLoading,
 });
 
 const ACCEPTED_IMAGE_TYPES = 'image/jpeg,image/png,image/webp';
@@ -33,6 +39,8 @@ interface BrickMediaViewerProps {
 }
 
 export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerProps) {
+    const t = useTranslations('brickDetail.media');
+    const tp = useTranslations('brickDetail.page');
     const toast = useToast();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,7 +89,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
 
     const requestDeleteThumbnail = (publicId: string) => {
         if (thumbnails.length <= 1) {
-            toast.error('Cannot delete the last thumbnail');
+            toast.error(t('thumbnails.lastDeleteError'));
             return;
         }
         setDeleteConfirmId(publicId);
@@ -93,7 +101,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
             { brickId: brick.id, publicId: deleteConfirmId },
             {
                 onSuccess: () => {
-                    toast.success('Thumbnail deleted');
+                    toast.success(t('thumbnails.deleted'));
                     setDeleteConfirmId(null);
                     // Adjust active index if needed
                     if (activeThumbIndex >= thumbnails.length - 1) {
@@ -101,7 +109,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                     }
                 },
                 onError: () => {
-                    toast.error('Failed to delete thumbnail');
+                    toast.error(t('thumbnails.deleteError'));
                     setDeleteConfirmId(null);
                 },
             },
@@ -114,20 +122,20 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
 
         const remaining = MAX_THUMBNAILS - thumbnails.length;
         if (remaining <= 0) {
-            toast.error(`Maximum ${MAX_THUMBNAILS} thumbnails allowed`);
+            toast.error(t('thumbnails.maxReached', { n: MAX_THUMBNAILS }));
             return;
         }
 
         const selected = Array.from(files).slice(0, remaining);
         if (files.length > remaining) {
-            toast.error(`Only ${remaining} more thumbnail(s) can be added`);
+            toast.error(t('thumbnails.onlyRemaining', { n: remaining }));
         }
 
         addThumbnailsMutation.mutate(
             { brickId: brick.id, files: selected },
             {
-                onSuccess: () => toast.success('Thumbnail(s) added'),
-                onError: () => toast.error('Failed to add thumbnail(s)'),
+                onSuccess: () => toast.success(t('thumbnails.added')),
+                onError: () => toast.error(t('thumbnails.addError')),
             },
         );
 
@@ -184,7 +192,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                                 onClick={handleToggle3D}
                                 className="bg-muted/80 hover:bg-muted text-foreground px-2 py-0.5 text-[10px] font-bold rounded-full cursor-pointer"
                             >
-                                IMG
+                                {t('img')}
                             </button>
                         </div>
 
@@ -192,7 +200,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                             <div className="absolute bottom-2 left-2 flex items-center gap-1.5 bg-background/60 backdrop-blur-sm px-2 py-1 rounded-full z-10">
                                 <RotateCcw className="size-3 text-muted-foreground" />
                                 <span className="text-[9px] font-mono text-muted-foreground">
-                                    Drag to rotate
+                                    {t('dragToRotate')}
                                 </span>
                             </div>
                         )}
@@ -218,7 +226,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                             <div className="w-full h-87.5 flex flex-col items-center justify-center gap-2">
                                 <Box className="size-12 text-muted-foreground/20" />
                                 <span className="text-xs text-muted-foreground/40 font-mono">
-                                    NO PREVIEW
+                                    {t('noPreview')}
                                 </span>
                             </div>
                         )}
@@ -233,7 +241,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                                 <div className="opacity-0 group-hover/overlay:opacity-100 transition-opacity flex flex-col items-center gap-1">
                                     <Box className="size-10 text-secondary" />
                                     <span className="text-sm font-bold text-secondary tracking-widest uppercase">
-                                        View 3D
+                                        {t('view3d')}
                                     </span>
                                 </div>
                             </button>
@@ -285,7 +293,7 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                                     onClick={() => requestDeleteThumbnail(thumb.publicId)}
                                     disabled={deleteThumbnailMutation.isPending}
                                     className="absolute -top-1.5 -right-1.5 z-10 size-4 flex items-center justify-center rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover/thumb:opacity-100 transition-opacity cursor-pointer hover:brightness-110 disabled:opacity-50"
-                                    title="Delete thumbnail"
+                                    title={t('thumbnails.delete')}
                                 >
                                     {deleteThumbnailMutation.isPending ? (
                                         <Loader2 className="size-2.5 animate-spin" />
@@ -331,10 +339,10 @@ export function BrickMediaViewer({ brick, isOwner = false }: BrickMediaViewerPro
                 isOpen={!!deleteConfirmId}
                 onClose={() => setDeleteConfirmId(null)}
                 onConfirm={confirmDeleteThumbnail}
-                title="Delete Thumbnail"
-                message="Are you sure you want to delete this thumbnail? This action cannot be undone."
-                confirmText="Delete"
-                cancelText="Cancel"
+                title={t('thumbnails.delete')}
+                message={t('thumbnails.deleteConfirmMessage')}
+                confirmText={tp('cancel')}
+                cancelText={tp('cancel')}
                 type="danger"
                 isLoading={deleteThumbnailMutation.isPending}
             />

@@ -12,8 +12,10 @@ import {
     ArchiveFilterPopup,
     ArchiveFilters,
 } from '@/components/archive';
+import { useTranslations } from 'next-intl';
 
 export default function ArchivePage() {
+    const t = useTranslations('archive');
     const { data: session } = useSession();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedBrickId, setSelectedBrickId] = useState<string | undefined>(undefined);
@@ -125,11 +127,11 @@ export default function ArchivePage() {
                     <div className="flex items-center gap-3 text-primary">
                         <Database className="size-6" />
                         <h1 className="text-2xl font-bold tracking-tight uppercase">
-                            Archive Repository
+                            {t('title')}
                         </h1>
                     </div>
                     <p className="text-muted-foreground text-sm font-mono uppercase tracking-[0.2em] opacity-70">
-                        {allBricks.length} Total Deployed Bricks / Network Verified
+                        {t('subtitle', { count: allBricks.length })}
                     </p>
                 </div>
 
@@ -138,7 +140,7 @@ export default function ArchivePage() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                         <input
                             type="text"
-                            placeholder="Search repository..."
+                            placeholder={t('searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="bg-background/50 border border-primary/20 rounded-full py-2 pl-10 pr-4 text-xs w-64 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
@@ -188,10 +190,8 @@ export default function ArchivePage() {
                     <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                         <Database className="size-8 text-primary/40" />
                     </div>
-                    <h3 className="text-lg font-bold text-foreground">Empty Repository</h3>
-                    <p className="text-sm text-muted-foreground">
-                        No bricks found in your local archive.
-                    </p>
+                    <h3 className="text-lg font-bold text-foreground">{t('empty.title')}</h3>
+                    <p className="text-sm text-muted-foreground">{t('empty.description')}</p>
                 </div>
             )}
 
@@ -201,7 +201,7 @@ export default function ArchivePage() {
                     <div className="flex items-center gap-3 text-primary animate-pulse">
                         <Loader2 className="size-5 animate-spin" />
                         <span className="text-xs font-bold uppercase tracking-widest">
-                            Accessing Next Block...
+                            {t('loading')}
                         </span>
                     </div>
                 )}

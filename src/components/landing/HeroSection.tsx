@@ -1,9 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import { ShieldCheck, Play } from 'lucide-react';
 import Link from 'next/link';
 import ScrambledText from '@/components/react-bits/ScrambledText';
+import { useTranslations } from 'next-intl';
 
 export function HeroSection() {
+    const t = useTranslations('landing');
     return (
         <section className="relative min-h-screen flex items-center pt-20 cyber-grid overflow-hidden">
             {/* Gradient Overlay */}
@@ -20,18 +24,18 @@ export function HeroSection() {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 w-fit">
                         <ShieldCheck className="size-4 text-primary" />
                         <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary">
-                            Immutable Data Protocol v1.0.4
+                            {t('HeroSection.status')}
                         </span>
                     </div>
 
                     {/* Headline */}
-                    <h1 className="font-display text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase">
-                        Build Your <br />
+                    <h1 className="font-display text-6xl md:text-8xl font-black leading-[1.1] tracking-tighter uppercase">
+                        {t('HeroSection.headline.part1')} <br />
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">
-                            Truth
+                            {t('HeroSection.headline.highlight')}
                         </span>
                         , <br />
-                        Block by Block.
+                        {t('HeroSection.headline.part2')}
                     </h1>
 
                     {/* Description */}
@@ -41,10 +45,8 @@ export function HeroSection() {
                         duration={1.2}
                         speed={0.5}
                         scrambleChars=".:"
-                    >
-                        The first immutable image repository with integrated GPS and temporal
-                        verification. Captured, hashed, and anchored forever on the block.
-                    </ScrambledText>
+                        text={t('HeroSection.description')}
+                    />
 
                     {/* CTAs */}
                     <div className="flex flex-wrap gap-4 pt-4">
@@ -52,14 +54,14 @@ export function HeroSection() {
                             href="/login"
                             className="flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground font-display font-black text-sm uppercase tracking-widest hover:translate-x-1 hover:-translate-y-1 transition-transform border-r-4 border-b-4 border-white"
                         >
-                            Get Started
+                            {t('HeroSection.cta.getStarted')}
                         </Link>
                         <Link
                             href="/introduction"
                             className="h-14 px-8 border border-border text-foreground font-display font-bold text-sm uppercase tracking-widest hover:bg-muted transition-colors flex items-center gap-2"
                         >
                             <Play className="size-4" />
-                            Explore BRIX
+                            {t('HeroSection.cta.explore')}
                         </Link>
                     </div>
                 </div>
@@ -83,21 +85,29 @@ export function HeroSection() {
                             <div className="absolute inset-0 flex flex-col justify-between p-6 bg-black/20 pointer-events-none">
                                 <div className="flex justify-between items-start">
                                     <div className="font-mono text-[10px] bg-black/60 backdrop-blur-md p-2 border border-border">
-                                        <p className="text-primary">LAT: 35.6895° N</p>
-                                        <p className="text-primary">LNG: 139.6917° E</p>
+                                        <p className="text-primary">
+                                            {t('HeroSection.overlay.lat')}
+                                        </p>
+                                        <p className="text-primary">
+                                            {t('HeroSection.overlay.lng')}
+                                        </p>
                                     </div>
                                     <div className="font-mono text-[10px] bg-black/60 backdrop-blur-md p-2 border border-border text-right uppercase">
-                                        <p className="text-muted-foreground">Hash: 0x82f...a92</p>
-                                        <p className="text-secondary">Verified</p>
+                                        <p className="text-muted-foreground">
+                                            {t('HeroSection.overlay.hash')}
+                                        </p>
+                                        <p className="text-secondary">
+                                            {t('HeroSection.overlay.verified')}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="w-full flex justify-between items-end">
                                     <div className="bg-black/60 backdrop-blur-md p-3 border border-border">
                                         <p className="font-display font-bold text-lg uppercase tracking-wider">
-                                            Shibuya Crossing
+                                            {t('HeroSection.overlay.location')}
                                         </p>
                                         <p className="font-mono text-[10px] text-muted-foreground italic">
-                                            UNIX: 1715693422
+                                            {t('HeroSection.overlay.unix')}
                                         </p>
                                     </div>
                                     <div className="size-12 border border-primary/50 flex items-center justify-center">

@@ -1,12 +1,14 @@
 'use client';
 
 import { useRealtimeSessionStore, CAPTURE_PHASE_SECONDS } from '@/stores/realtime-session-store';
+import { useTranslations } from 'next-intl';
 
 /**
  * Circular countdown shown on the camera viewfinder during capture phase.
  * Displays the remaining seconds within the 30s capture window.
  */
 export function SessionCountdown() {
+    const t = useTranslations('camera.SessionCountdown');
     const { countdown, status, expiresIn } = useRealtimeSessionStore();
 
     if (status !== 'active') return null;
@@ -69,7 +71,7 @@ export function SessionCountdown() {
 
             {/* Label */}
             <span className="text-[9px] uppercase tracking-widest text-primary/50 font-bold">
-                Capture in {CAPTURE_PHASE_SECONDS}s
+                {t('label', { seconds: CAPTURE_PHASE_SECONDS })}
             </span>
         </div>
     );

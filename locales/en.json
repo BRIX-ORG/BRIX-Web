@@ -1,0 +1,1485 @@
+{
+    "landing": {
+        "Header": {
+            "navLinks": {
+                "concept": "The Concept",
+                "artistHub": "Artist Hub",
+                "map": "Real-Time Map",
+                "roadmap": "Roadmap"
+            },
+            "launchApp": "Launch App",
+            "supportedWallets": "Supported Wallets",
+            "language": "Language"
+        },
+        "HeroSection": {
+            "status": "Immutable Data Protocol v1.0.4",
+            "headline": {
+                "part1": "Build Your",
+                "highlight": "Truth",
+                "part2": "Block by Block."
+            },
+            "description": "The first immutable image repository with integrated GPS and temporal verification. Captured, hashed, and anchored forever on the block.",
+            "cta": {
+                "getStarted": "Get Started",
+                "explore": "Explore BRIX"
+            },
+            "overlay": {
+                "lat": "LAT: 35.6895° N",
+                "lng": "LNG: 139.6917° E",
+                "hash": "Hash: 0x82f...a92",
+                "verified": "Verified",
+                "location": "Shibuya Crossing",
+                "unix": "UNIX: 1715693422"
+            }
+        },
+        "ArtistHub": {
+            "header": "Artist Hub Showcase",
+            "cta": "Enter the Hub"
+        },
+        "FeaturesSection": {
+            "header": {
+                "title": "Core",
+                "highlight": "Architectures"
+            },
+            "authenticity": {
+                "title": "Total Authenticity",
+                "desc": "Every image is an encrypted block on the chain. Our proprietary hashing algorithm captures raw sensor data to ensure no pixel has been modified since capture.",
+                "cta": "View Whitepaper"
+            },
+            "gps": {
+                "title": "GPS Verification",
+                "desc": "Integrated location metadata for every block. Precise geolocation ensures context and provenance for journalism and art."
+            },
+            "temporal": {
+                "title": "Temporal Proof",
+                "desc": "Immutable Unix timestamps anchored at the moment of capture. Time cannot be falsified on the BRIX ledger."
+            },
+            "concept": {
+                "title": "The Concept",
+                "desc": "Digital assets are no longer ephemeral. BRIX treats photography as physical evidence, hard-coded into the digital fabric of the web.",
+                "cta": "Explorer Nodes"
+            }
+        },
+        "MapSection": {
+            "title": "Real-Time",
+            "highlight": "Map",
+            "desc": "Tracking global verifications in real-time.",
+            "badges": {
+                "nodes": "1,204 LIVE NODES",
+                "uploads": "42 UPLOADS/MIN"
+            },
+            "tooltipSuffix": "active nodes",
+            "overlay": {
+                "title": "Live Stream",
+                "event1": "User_8292 verified in Berlin",
+                "event2": "New block mined: 0x921...F1",
+                "event3": "Artist_Neo uploaded \"Neon_Rain\""
+            }
+        },
+        "RoadmapSection": {
+            "title": "Development",
+            "highlight": "Timeline",
+            "milestones": {
+                "m1": {
+                    "status": "COMPLETED",
+                    "title": "Protocol Genesis",
+                    "desc": "Deployment of the immutable storage layer and metadata hashing core."
+                },
+                "m2": {
+                    "status": "IN PROGRESS",
+                    "title": "Global Mesh Mapping",
+                    "desc": "Launching the real-time map interface and artist verification hub."
+                },
+                "m3": {
+                    "status": "PLANNED",
+                    "title": "Decentralized Rendering",
+                    "desc": "Implementation of P2P image processing and distribution nodes."
+                }
+            }
+        },
+        "WalletCarousel": {
+            "badge": "Reliable Infrastructure",
+            "title": "Trusted by the World's Leading",
+            "highlight": "Wallets"
+        },
+        "Footer": {
+            "links": {
+                "privacy": "Privacy Policy",
+                "terms": "Terms of Service",
+                "docs": "Documentation"
+            },
+            "copyright": "© 2026 BRIX Immutable Network. All Rights Verified."
+        },
+        "SupportedWalletsModal": {
+            "badge": "Web3 Integration",
+            "title": "Supported",
+            "highlight": "Wallets",
+            "titleSuffix": "& Assets",
+            "desc": "BRIX is built on the Polygon Network for high-speed, low-cost verification. Connect your favorite wallet to start sealing your truth on the block.",
+            "sections": {
+                "verifiedWallets": "Verified Wallets",
+                "paymentSupport": "Payment Support"
+            },
+            "wallets": {
+                "metamask": "Browser extension & Mobile App",
+                "trust": "Secure multi-chain mobile wallet",
+                "brave": "Native secure browser wallet",
+                "coinbase": "Connect directly to your account"
+            },
+            "assets": {
+                "polygon": "Polygon Ecosystem",
+                "stablecoins": "USD Stablecoins",
+                "ethereum": "Ethereum Asset"
+            },
+            "infra": {
+                "title": "Fast & Immutable",
+                "desc": "All transactions are executed on the Polygon Network (Amoy Testnet for trial) ensuring near-instant hashing and temporal anchoring with minimal gas fees."
+            },
+            "footer": {
+                "audited": "Audited Infrastructure",
+                "gotIt": "Got It"
+            }
+        }
+    },
+    "common": {
+        "votes": "votes",
+        "comments": "comments",
+        "unknownCoords": "Unknown Coordinates",
+        "loading": "Loading...",
+        "syncing": "Syncing...",
+        "processing": "Processing...",
+        "loadMore": "Load More",
+        "delete": "Delete",
+        "follow": "Follow",
+        "unfollow": "Unfollow",
+        "public": "Public",
+        "private": "Private",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "revenue": "Revenue",
+        "cover": "Cover"
+    },
+    "network": {
+        "title": "Network",
+        "description": "Expand your creative circle. Discover top authors, trending users, and personalized recommendations based on your preferences.",
+        "sections": {
+            "recommendations": {
+                "title": "Recommended For You",
+                "empty": {
+                    "title": "No recommendations yet",
+                    "description": "Start following more people to get better suggestions"
+                },
+                "loadMore": "Load More Suggestions"
+            },
+            "topAuthors": {
+                "title": "Global Top Authors",
+                "viewMore": "View More Authors"
+            },
+            "topUsers": {
+                "title": "Global Top Users",
+                "viewMore": "View More Users"
+            },
+            "explorers": {
+                "title": "Global Explorers"
+            }
+        },
+        "userCard": {
+            "noBio": "No bio available...",
+            "stats": {
+                "brix": "BRIX",
+                "followers": "FLWS"
+            }
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "unreadSignals": "{count} UNREAD_SIGNALS",
+        "feedStatus": {
+            "active": "Live_Feed_Active",
+            "clear": "STATUS_CLEAR",
+            "end": "End of Stream — Signal Stable"
+        },
+        "actions": {
+            "markAllRead": "Mark All Read",
+            "loadMore": "Load More Signals"
+        },
+        "loading": {
+            "title": "Syncing_Neural_Network",
+            "description": "Establishing encrypted handshakes..."
+        },
+        "empty": {
+            "title": "Signals Terminated",
+            "description": "Your verification node is currently idle. Notifications about your bricks and network activity will appear here once detected."
+        },
+        "deleteConfirm": {
+            "title": "Delete Notification",
+            "message": "Are you sure you want to delete this notification? This action cannot be undone."
+        },
+        "popover": {
+            "new": "NEW",
+            "quiet": "Everything is quiet",
+            "noNotifs": "No notifications yet",
+            "seeAll": "See all activity →"
+        },
+        "types": {
+            "UPVOTE_BRICK": "upvoted your brick",
+            "UPVOTE_COMMENT": "upvoted your comment",
+            "COMMENT_BRICK": "commented on your brick",
+            "REPLY_COMMENT": "replied to your comment",
+            "FOLLOW": "started following you",
+            "default": "interacted with you",
+            "others": "and {count} other{count, plural, one {} other {s}}"
+        }
+    },
+    "realtime": {
+        "title": "Realtime Assets",
+        "description": "Monitor your continuously-distributed content, track metadata verification across the blockchain, and trace incoming POL donations in real-time.",
+        "filters": {
+            "all": "All Assets",
+            "onchain": "Verified",
+            "ipfs_uploaded": "IPFS Stored",
+            "pending": "Processing",
+            "failed": "Failed"
+        },
+        "status": {
+            "onchain": "VERIFIED ON-CHAIN",
+            "ipfs_uploaded": "IPFS DISTRIBUTED",
+            "failed": "FAILED VERIFICATION",
+            "pending": "PROCESSING QUEUE",
+            "captured": "CAPTURED ASSET"
+        },
+        "revenue": {
+            "label": "Revenue",
+            "cannotEarn": "Cannot Earn",
+            "distributeToEarn": "Distribute to Earn",
+            "mintToEarn": "Mint to Earn"
+        },
+        "revenueStatus": {
+            "failed": "Failed",
+            "captured": "Captured",
+            "ipfs_uploaded": "IPFS Uploaded",
+            "pending": "Pending"
+        },
+        "card": {
+            "noContent": "No Content Available",
+            "untitled": "Untitled Brick"
+        },
+        "defaultAssetTitle": "Untitled Asset",
+        "empty": {
+            "title": "No Realtime Assets Found",
+            "description": "You don't have any realtime assets matching the current filter. Assets uploaded via Camera will appear here."
+        },
+        "actions": {
+            "loadMore": "Load Older Assets"
+        },
+        "stats": {
+            "totalRealtime": {
+                "label": "Total Realtime",
+                "subtext": "Assets captured in realtime"
+            },
+            "revenue": {
+                "label": "Revenue Generated",
+                "subtext": "Across all assets"
+            },
+            "onchain": {
+                "label": "Blockchain Verified",
+                "subtext": "Minted on Polygon"
+            },
+            "ipfs": {
+                "label": "IPFS Stored",
+                "subtext": "Decentralized storage"
+            }
+        },
+        "donations": {
+            "title": "Donation Stream",
+            "subtext": "Live chronological feed",
+            "empty": {
+                "title": "No Streams Yet",
+                "description": "Incoming POL transactions will appear here continuously."
+            },
+            "loadPrevious": "Load Previous"
+        }
+    },
+    "auth": {
+        "common": {
+            "or": "OR",
+            "privacy": "Global_Privacy",
+            "terms": "Term_Protocols",
+            "copyright": "©2026_BRIX_GRID",
+            "gender": {
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            }
+        },
+        "login": {
+            "title": "Initialize_Session",
+            "subtitle": "Secure protocol active"
+        },
+        "signup": {
+            "title": "Create_Account",
+            "subtitle": "Join the BRIX network"
+        },
+        "recovery": {
+            "title": "Recover_Access",
+            "subtitle": "Reset your credentials"
+        },
+        "tabs": {
+            "login": "Login",
+            "signup": "Sign Up"
+        },
+        "visualPanel": {
+            "status": "System_Status: Online",
+            "infra": "BRIX_INFRASTRUCTURE_V4.2"
+        },
+        "loginForm": {
+            "identifier": {
+                "label": "Access_ID",
+                "placeholder": "ENTER_EMAIL_OR_USERNAME"
+            },
+            "password": {
+                "label": "Security_Key",
+                "placeholder": "••••••••••••"
+            },
+            "recoverLink": "Recover_Access?",
+            "submit": "Initialize_Session",
+            "loading": "Authenticating...",
+            "messages": {
+                "success": "Login successful! Redirecting...",
+                "error": "Invalid credentials. Please try again."
+            }
+        },
+        "signupForm": {
+            "username": {
+                "label": "User_Alias",
+                "placeholder": "UNIQUE_USERNAME"
+            },
+            "fullName": {
+                "label": "Full_Name",
+                "placeholder": "ENTER_YOUR_FULL_NAME"
+            },
+            "email": {
+                "label": "Access_ID",
+                "placeholder": "ENTER_EMAIL_IDENTITY"
+            },
+            "phone": {
+                "label": "Phone_Contact",
+                "placeholder": "0912345678"
+            },
+            "gender": {
+                "label": "Identity_Type"
+            },
+            "password": {
+                "label": "Security_Key",
+                "placeholder": "••••••••••••"
+            },
+            "confirmPassword": {
+                "label": "Confirm_Key",
+                "placeholder": "••••••••••••"
+            },
+            "submit": "Create_Account",
+            "loading": "Creating Account...",
+            "messages": {
+                "success": "Account created successfully! Redirecting...",
+                "error": "Registration failed. Email or username may already exist."
+            }
+        },
+        "recoveryForm": {
+            "emailStep": {
+                "label": "Registered_Email",
+                "placeholder": "name@company.com",
+                "submit": "Send Recovery Code",
+                "back": "Back to Login",
+                "loading": "Sending recovery code...",
+                "success": "Recovery code sent to your email!",
+                "error": "Failed to send recovery code. Please try again."
+            },
+            "otpStep": {
+                "instruction": "Enter the 6-digit code sent to",
+                "submit": "Verify Code",
+                "resendPrompt": "Didn't receive the code?",
+                "resendAction": "Resend",
+                "expiry": "Code expires in",
+                "back": "Back",
+                "loading": "Verifying code...",
+                "resending": "Resending code...",
+                "success": "Code verified successfully!",
+                "resendSuccess": "New recovery code sent!",
+                "resendError": "Failed to resend code. Please try again.",
+                "invalidCode": "Invalid Code",
+                "invalidCodeDesc": "The code you entered is incorrect or expired."
+            },
+            "resetStep": {
+                "granted": "VERIFIED_ACCESS_GRANTED",
+                "newPassword": {
+                    "label": "New_Security_Key",
+                    "placeholder": "••••••••••••"
+                },
+                "confirmPassword": {
+                    "label": "Confirm_New_Key",
+                    "placeholder": "••••••••••••"
+                },
+                "submit": "Reset Password",
+                "back": "Back",
+                "loading": "Resetting password...",
+                "success": "Your password has been reset successfully!",
+                "successTitle": "Password Reset!",
+                "error": "Failed to reset password. Please try again.",
+                "errorTitle": "Reset Failed",
+                "sessionExpired": "Session expired. Please start over."
+            }
+        },
+        "socialAuth": {
+            "google": {
+                "label": "Google_Auth",
+                "loading": "Connecting to Google...",
+                "success": "Signed in with Google successfully!",
+                "error": "Google authentication failed. Please try again.",
+                "cancelled": "Sign in cancelled. Please try again."
+            },
+            "github": {
+                "label": "GitHub_Auth"
+            },
+            "twitter": {
+                "label": "Twitter_Auth"
+            },
+            "common": {
+                "connecting": "Connecting...",
+                "networkError": "Network error. Please check your connection.",
+                "notAvailable": "authentication is not yet available."
+            }
+        },
+        "otpInput": {
+            "ariaLabel": "Digit"
+        }
+    },
+    "camera": {
+        "page": {
+            "dashboard": "Dashboard",
+            "backToDashboard": "Dashboard",
+            "locationRequired": "Location Required",
+            "locationDenied": "Location permission denied",
+            "locationUnavailable": "Location unavailable",
+            "locationInstruction": "Please enable Location in your browser settings to use this feature.",
+            "cameraLoading": "Requesting camera access...",
+            "systemStatus": {
+                "idleReady": "SYSTEM READY: AWAITING_SESSION",
+                "idleLoading": "SYSTEM: LOADING_CAMERA_RESOURCE...",
+                "idleError": "SYSTEM ERROR: CAMERA_UNAVAILABLE",
+                "idleInit": "SYSTEM: INITIALIZING...",
+                "requesting": "SYSTEM: REQUESTING_SESSION...",
+                "active": "SESSION_ACTIVE: QR_READY | TTL_{seconds}s",
+                "capturingForm": "CAPTURE_COMPLETE: FORM_TTL_{seconds}s",
+                "capturingProcessing": "SYSTEM: PROCESSING_CAPTURE...",
+                "uploading": "SYSTEM: UPLOADING_TO_QUEUE...",
+                "success": "UPLOAD_QUEUED: PROCESSING_ASYNC...",
+                "expired": "SESSION_EXPIRED: REQUEST_NEW_SESSION",
+                "error": "SYSTEM ERROR: {error}",
+                "unknown": "SYSTEM: UNKNOWN_STATE"
+            },
+            "footer": {
+                "mode": "REC_MODE: REALTIME_CAPTURE",
+                "enc": "ENC: BRIX_SECURE_V1",
+                "ver": "VER: 4.0.22_STABLE",
+                "copyright": "© BRIX_SYSTEMS"
+            },
+            "alerts": {
+                "sessionError": "Session Error",
+                "sessionErrorDesc": "Failed to create capture session. Please try again.",
+                "uploading": "Uploading realtime brick...",
+                "success": "Photo Queued!",
+                "successDesc": "Your photo is being processed. It will appear in your gallery shortly.",
+                "uploadFailed": "Upload Failed",
+                "uploadFailedDesc": "Session may have expired. Please try again."
+            },
+            "preview": {
+                "backToDashboard": "Back to Dashboard",
+                "cancelUpload": "Cancel Upload",
+                "sessionExpired": "Session Expired",
+                "sessionExpiredDesc": "Your upload time has run out. Please start a new capture session.",
+                "newSession": "New Session",
+                "lat": "LAT",
+                "lng": "LNG",
+                "session": "SESSION",
+                "retake": "Retake Photo"
+            },
+            "cancelConfirm": {
+                "title": "Cancel Upload?",
+                "message": "Are you sure you want to discard this photo and go back to capture? Your current photo and form data will be lost.",
+                "confirmText": "Discard & Retake",
+                "cancelText": "Keep Editing",
+                "cancelButton": "Cancel Upload"
+            },
+            "successOverlay": {
+                "title": "Photo Queued Successfully",
+                "desc": "Your brick is being processed asynchronously..."
+            },
+            "buttons": {
+                "acquiringLocation": "Acquiring Location...",
+                "locationRequired": "Location Required",
+                "startSession": "Start Capture Session",
+                "newSession": "New Session",
+                "retry": "Retry",
+                "creatingSession": "Creating session..."
+            }
+        },
+        "AddressMapPicker": {
+            "label": "Pick on Map",
+            "withinRange": "within range",
+            "tooFar": "too far",
+            "instruction": "Click on the map to pick a nearby address (max {distance} km from capture point)."
+        },
+        "FormCountdown": {
+            "label": "Upload Deadline"
+        },
+        "HashPanel": {
+            "label": "Authenticity_Hash"
+        },
+        "LocationPanel": {
+            "label": "Location_Data",
+            "acquiring": "ACQUIRING_GPS...",
+            "alt": "ALT",
+            "acc": "ACC"
+        },
+        "QROverlay": {
+            "label": "Challenge QR",
+            "instruction": "QR will be embedded into image pixels on capture"
+        },
+        "RealtimeBrickPreviewCard": {
+            "header": "Live Preview",
+            "badge": "BRIX_CARD",
+            "realtime": "REALTIME",
+            "hash": "HASH",
+            "noCapture": "No Capture Yet",
+            "untitled": "Untitled Brick",
+            "noDescription": "No description provided. Add one to verify asset metadata.",
+            "lat": "Latitude",
+            "lng": "Longitude",
+            "location": "Location",
+            "artist": "Verified Artist",
+            "cta": "Full Metadata Analysis",
+            "statusLabel": "PREVIEW_STATUS",
+            "rendering": "RENDERING",
+            "awaitingData": "AWAITING_DATA",
+            "tagType": "TAG_TYPE",
+            "tagValue": "REALTIME_BRICK"
+        },
+        "RealtimeUploadForm": {
+            "metadataHeader": "Brick Metadata",
+            "requiredFields": "required fields marked *",
+            "title": {
+                "label": "Title",
+                "placeholder": "Name your realtime capture..."
+            },
+            "description": {
+                "label": "Description",
+                "placeholder": "Describe this moment (optional)..."
+            },
+            "geoHeader": "Geo Coordinates",
+            "gpsLocked": "GPS_LOCKED",
+            "lat": "Latitude",
+            "lng": "Longitude",
+            "coordsLocked": "Coordinates are locked to the capture location and cannot be modified.",
+            "reset": "Reset",
+            "resetTooltip": "Reset to GPS address",
+            "visibility": {
+                "public": "Public",
+                "private": "Private"
+            },
+            "submit": "Verify & Upload",
+            "submitting": "Uploading...",
+            "alerts": {
+                "addressTooFar": "Address Too Far",
+                "addressTooFarDesc": "The selected address is {distance} km away from your capture location. Maximum allowed distance is {limit} km.",
+                "locationTooFar": "Location Too Far",
+                "locationTooFarDesc": "The selected location is {distance} km away from your capture point. Maximum allowed distance is {limit} km."
+            }
+        },
+        "SessionCountdown": {
+            "label": "Capture in {seconds}s"
+        }
+    },
+    "messages": {
+        "page": {
+            "title": "Messages"
+        },
+        "MessagesHeader": {
+            "nav": {
+                "map": "MAP",
+                "trending": "TRENDING",
+                "archive": "ARCHIVE",
+                "messages": "MESSAGES",
+                "network": "NETWORK"
+            },
+            "searchPlaceholder": "CMD+K TO SEARCH"
+        },
+        "ChatArea": {
+            "editedToast": "Message edited",
+            "editFailedToast": "Failed to edit message",
+            "deletedToast": "Message deleted",
+            "deleteFailedToast": "Failed to delete message",
+            "today": "TODAY",
+            "yesterday": "YESTERDAY",
+            "selectConversation": "Select a conversation",
+            "locale": "en"
+        },
+        "ContactsSidebar": {
+            "activeSessions": "Active Sessions",
+            "noActiveSessions": "No active sessions",
+            "offline": "Offline",
+            "noOfflineContacts": "No offline contacts",
+            "loadMore": "Load more",
+            "noConversations": "No conversations yet"
+        },
+        "MessageInput": {
+            "recording": "Recording {duration}",
+            "placeholder": "TRANSMIT SECURE DATA...",
+            "sending": "SENDING",
+            "send": "SEND"
+        },
+        "UserInfoSidebar": {
+            "noConversation": "No conversation selected",
+            "metadata": "RELATIONSHIP_METADATA",
+            "online": "ONLINE",
+            "lastSeen": "Last seen {time}",
+            "offline": "OFFLINE",
+            "sharedMedia": "Shared Media",
+            "noSharedMedia": "No shared media",
+            "sharedFiles": "Shared Files",
+            "noSharedFiles": "No shared files",
+            "deleteConversation": "DELETE_CONVERSATION",
+            "deleteConfirm": {
+                "title": "Delete conversation?",
+                "message": "This conversation will be hidden from your inbox. Messages are not permanently deleted.",
+                "confirmText": "Delete"
+            }
+        },
+        "ChatHeader": {
+            "typing": "typing",
+            "online": "Online",
+            "lastSeen": "Last seen {time}",
+            "offline": "Offline",
+            "userInfo": "User info"
+        }
+    },
+    "album": {
+        "loading": "Loading Album",
+        "notFound": "Album Not Found",
+        "notFoundDesc": "This album may have been deleted or the link is invalid.",
+        "share": "Share",
+        "copied": "Copied",
+        "explore": "Drag to explore",
+        "photos": "{count} photos",
+        "poweredBy": "POWERED BY",
+        "items": "{count} ITEMS",
+        "successShare": "Album link copied to clipboard!"
+    },
+    "introduction": {
+        "nav": {
+            "back": "Back",
+            "dashboard": "Dashboard"
+        },
+        "header": {
+            "title": "Discover",
+            "highlight": "BRIX"
+        },
+        "footer": {
+            "status": "PROTOCOL_STATUS",
+            "networkOnline": "NETWORK ONLINE",
+            "version": "VERSION"
+        },
+        "explore": "Drag to explore • Click to learn more",
+        "cards": {
+            "origin": {
+                "title": "THE BRIX ORIGIN",
+                "desc": "Welcome to the era of authentic photography. Build your digital truth, block by block."
+            },
+            "reality": {
+                "title": "PURE REALITY",
+                "desc": "Zero filters. Zero AI manipulation. Every shot is a raw fragment of time captured forever."
+            },
+            "geo": {
+                "title": "GEO-STAMPED",
+                "desc": "Every \"Brix\" is anchored in space and time using precise GPS metadata and MapCN integration."
+            },
+            "trust": {
+                "title": "ON-CHAIN TRUST",
+                "desc": "Secure your legacy. Premium photos are hashed and pushed to the blockchain for eternal proof."
+            },
+            "studio": {
+                "title": "ARTIST STUDIO",
+                "desc": "A dedicated web hub for digital creators to verify their process and showcase authentic masterpieces."
+            },
+            "connect": {
+                "title": "CONNECT RAW",
+                "desc": "Share your unfiltered life with friends. No social pressure, just real, unedited connections."
+            },
+            "storage": {
+                "title": "HYBRID STORAGE",
+                "desc": "The freedom to choose. Flexible cloud storage for daily snaps, or immutable on-chain archiving."
+            },
+            "start": {
+                "title": "START BUILDING",
+                "desc": "The future of image ownership is here. Join BRIX and reclaim the truth in your lens."
+            }
+        }
+    },
+    "verifyEmail": {
+        "title": "Verify Your Email",
+        "subtitle": "We need to verify your email address to continue.",
+        "initialState": {
+            "instruction": "Click the button below to receive a 6-digit verification code at your email address.",
+            "submit": "Send Verification Code",
+            "sending": "Sending..."
+        },
+        "otpState": {
+            "instruction": "Enter the 6-digit code sent to your email",
+            "submit": "Verify Email",
+            "verifying": "Verifying...",
+            "resendPrompt": "Didn't receive the code?",
+            "resendAction": "Resend",
+            "expiry": "Code expires in"
+        },
+        "logout": "Sign out and use a different account",
+        "alerts": {
+            "sending": "Sending verification code...",
+            "sent": "Verification code sent to your email!",
+            "sendFailed": "Failed to send verification email",
+            "verifying": "Verifying code...",
+            "verified": "Email Verified!",
+            "verifiedDesc": "Your email has been verified successfully.",
+            "verifyFailed": "Verification Failed",
+            "verifyFailedDesc": "Invalid or expired verification code"
+        }
+    },
+    "albums": {
+        "title": "Album Studio",
+        "subtitle": "{count} Albums / Share with Friends",
+        "newAlbum": "New Album",
+        "delete": {
+            "loading": "Deleting album...",
+            "success": "Album Deleted",
+            "successDesc": "Your album has been deleted successfully.",
+            "error": "Failed to delete album",
+            "confirm": {
+                "title": "Delete Album",
+                "message": "Are you sure you want to delete \"{name}\"? This will permanently remove all images from the album.",
+                "confirmText": "Delete"
+            }
+        },
+        "empty": {
+            "title": "No Albums Yet",
+            "description": "Create your first album to share with friends.",
+            "button": "Create Album"
+        },
+        "card": {
+            "menu": {
+                "edit": "Edit Album",
+                "share": "Share Link",
+                "delete": "Delete Album"
+            },
+            "copied": "Album link copied to clipboard!",
+            "copiedButton": "Copied",
+            "shareButton": "Share"
+        },
+        "createModal": {
+            "title": "Create New Album",
+            "subtitle": "Max 10 images per album",
+            "fields": {
+                "name": {
+                    "label": "Album Name *",
+                    "placeholder": "Enter album name..."
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "Add a description..."
+                }
+            },
+            "etherColors": {
+                "title": "Ether Colors",
+                "subtitle": "3 colors blended in the LiquidEther background animation",
+                "labels": ["Color 1", "Color 2", "Color 3"]
+            },
+            "textColors": {
+                "title": "Text Colors",
+                "subtitle": "Color applied to title and description text in the album view",
+                "labels": {
+                    "title": "Title Color",
+                    "description": "Description Color"
+                }
+            },
+            "images": {
+                "label": "Images ({count}/10)",
+                "button": "Add Images",
+                "placeholder": {
+                    "title": "Click to upload images",
+                    "subtitle": "PNG, JPG, WEBP up to 10 images"
+                },
+                "item": {
+                    "titlePlaceholder": "Title for page {n}",
+                    "descPlaceholder": "Description for page {n}"
+                }
+            },
+            "footer": {
+                "cancel": "Cancel",
+                "submitting": "Creating...",
+                "submit": "Create Album"
+            }
+        }
+    },
+    "dashboard": {
+        "filters": {
+            "globalMap": "Global Map",
+            "myFootprints": "My Footprints",
+            "tags": {
+                "ALL": "ALL",
+                "REALTIME": "REALTIME",
+                "ART": "ART",
+                "PRODUCT": "PRODUCT"
+            }
+        },
+        "hover": {
+            "noAsset": "NO ASSET",
+            "untitledNode": "Untitled Node",
+            "lat": "Lat",
+            "lon": "Lon",
+            "location": "Location"
+        }
+    },
+    "artist": {
+        "page": {
+            "loading": "Loading profile..."
+        },
+        "hero": {
+            "trustLevel": "TRUST_LEVEL: {score}%",
+            "followers": "Followers",
+            "following": "Following",
+            "editProfile": "Edit Profile",
+            "followArtist": "Follow artist",
+            "followingButton": "Following",
+            "openChat": "Open Chat",
+            "share": "Share",
+            "shareTooltip": "Share Profile"
+        },
+        "stats": {
+            "assetsIssued": "Assets Issued",
+            "assetsStored": "Assets Stored",
+            "blockchainValidated": "Blockchain Validated",
+            "metadataVerified": "Metadata Verified",
+            "communitySupport": "Community Support",
+            "votes": "Votes",
+            "polReceived": "{amount} POL Received",
+            "ipfs": "IPFS",
+            "onChain": "ON-CHAIN",
+            "support": "SUPPORT"
+        },
+        "sidebar": {
+            "nodeActivity": "Node Activity",
+            "noActivity": "No onchain activity yet",
+            "activityMint": "Asset verified and deployed.",
+            "activityDonate": "Received donation block.",
+            "viewAllActivities": "View All Activities ({count})",
+            "location": "Location",
+            "followers": "Followers",
+            "noFollowers": "No followers yet"
+        },
+        "activities": {
+            "title": "Onchain Activities",
+            "totalRecords": "Total {count} Records Found",
+            "noActivities": "No onchain activities found.",
+            "mintDesc": "Asset successfully verified and deployed to on-chain.",
+            "donateDesc": "Received donation support from community."
+        },
+        "followers": {
+            "followersTab": "Followers ({count})",
+            "followingTab": "Following ({count})",
+            "noFollowers": "No followers yet",
+            "noFollowing": "Not following anyone"
+        },
+        "gallery": {
+            "loadMore": "Load More",
+            "loading": "Loading...",
+            "noBricks": "No bricks found"
+        },
+        "tabs": {
+            "realtime": "Realtime",
+            "art": "Art",
+            "product": "Product"
+        },
+        "card": {
+            "noImage": "NO IMAGE",
+            "hash": "HASH",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "location": "Location"
+        },
+        "share": {
+            "title": "BRIX ID",
+            "alias": "Alias",
+            "trustLevel": "Trust Level",
+            "scanCTA": "Scan to visit profile"
+        }
+    },
+    "archive": {
+        "title": "Archive Repository",
+        "subtitle": "{count} Total Deployed Bricks / Network Verified",
+        "searchPlaceholder": "Search repository...",
+        "empty": {
+            "title": "Empty Repository",
+            "description": "No bricks found in your local archive."
+        },
+        "loading": "Accessing Next Block...",
+        "card": {
+            "sequenceCode": "Sequence Code",
+            "originCoord": "Origin Coord",
+            "at": "AT: {timestamp}",
+            "verified": "Verified"
+        },
+        "filters": {
+            "title": "Repository Filters",
+            "tagType": "Tag Type",
+            "mediaFormat": "Media Format",
+            "visibility": "Visibility",
+            "dateFilter": "Date Filter",
+            "all": "All",
+            "placeholders": {
+                "day": "DD/MM/YYYY",
+                "month": "MM/YYYY",
+                "year": "YYYY"
+            },
+            "clearAll": "Clear All",
+            "footer": "Selective Archiving"
+        }
+    },
+    "brickDetail": {
+        "page": {
+            "loading": "Accessing Block Data...",
+            "notFound": "Brick Not Found",
+            "notFoundDesc": "The requested asset may have been moved, deleted, or is currently being re-indexed.",
+            "back": "Back",
+            "edit": "Edit",
+            "save": "Save",
+            "cancel": "Cancel",
+            "location": "Location",
+            "public": "PUBLIC",
+            "private": "PRIVATE",
+            "verificationPassed": "VERIFICATION PASSED",
+            "verificationFailed": "VERIFICATION FAILED",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "title": "Title",
+            "description": "Description",
+            "visibility": "Visibility",
+            "edited": "edited",
+            "voteBar": {
+                "viewUpvoters": "View upvoters"
+            },
+            "confirmSave": {
+                "title": "Save Changes?",
+                "message": "Are you sure you want to update the metadata for this brick?",
+                "confirmText": "Save Changes"
+            },
+            "messages": {
+                "invalidInput": "Invalid input",
+                "success": "Brick updated successfully",
+                "error": "Failed to update brick"
+            }
+        },
+        "media": {
+            "loading3d": "Loading 3D Rendering Engine...",
+            "img": "IMG",
+            "dragToRotate": "Drag to rotate",
+            "noPreview": "NO PREVIEW AVAILABLE",
+            "view3d": "View 3D Asset",
+            "thumbnails": {
+                "delete": "Delete thumbnail",
+                "maxReached": "Maximum {n} thumbnails allowed",
+                "onlyRemaining": "Only {n} more thumbnail(s) can be added",
+                "lastDeleteError": "Cannot delete the last thumbnail",
+                "deleteError": "Failed to delete thumbnail",
+                "added": "Thumbnail(s) added",
+                "addError": "Failed to add thumbnail(s)",
+                "deleted": "Thumbnail deleted",
+                "deleteConfirmMessage": "Are you sure you want to delete this thumbnail? This action cannot be undone."
+            }
+        },
+        "upvotersModal": {
+            "title": "Upvoters",
+            "empty": "No upvoters yet"
+        }
+    },
+    "comments": {
+        "title": "Comments ({count})",
+        "noComments": "No comments yet. Be the first!",
+        "placeholder": "Write a comment...",
+        "input": {
+            "placeholder": "Write a comment...",
+            "replyPlaceholder": "Reply to @{username}...",
+            "preview": "Previewing markdown..."
+        },
+        "item": {
+            "edited": "edited",
+            "menu": {
+                "edit": "Edit",
+                "delete": "Delete"
+            },
+            "actions": {
+                "reply": "Reply",
+                "replies": "{count} reply",
+                "repliesPlural": "{count} replies"
+            },
+            "deleteConfirm": {
+                "title": "Delete Comment",
+                "message": "Are you sure you want to delete this comment? This action cannot be undone.",
+                "confirmText": "Delete"
+            },
+            "editForm": {
+                "save": "Save Changes",
+                "cancel": "Cancel"
+            }
+        },
+        "voteBar": {
+            "viewUpvoters": "View upvoters"
+        }
+    },
+    "onchain": {
+        "dashboardTitle": "On-Chain Dashboard",
+        "viewTx": "View TX",
+        "toast": {
+            "ipfsComplete": "IPFS distribution complete! You can now mint on-chain.",
+            "mintComplete": "Brick minted on-chain! 🎉",
+            "processingIpfs": "Transaction confirmed. Processing distribution...",
+            "connectWallet": "Please connect wallet first",
+            "ipfsSubmitted": "IPFS payment transaction submitted!",
+            "ipfsFailed": "IPFS payment failed: {error}",
+            "missingCid": "Missing IPFS CID or wallet not connected",
+            "mintSubmitted": "Mint transaction submitted!",
+            "mintFailed": "Minting failed: {error}",
+            "donateDataMissing": "Cannot donate — missing data or wallet not connected",
+            "donateSubmitted": "Donation transaction submitted!",
+            "donateFailed": "Donation failed: {error}"
+        },
+        "share": {
+            "button": "Share",
+            "label": "Share",
+            "title": "Share Link",
+            "copy": "Copy",
+            "copied": "Copied",
+            "toast": {
+                "success": "Link copied to clipboard!",
+                "error": "Failed to copy link"
+            }
+        },
+        "ipfsStep": {
+            "title": "Distribute to IPFS",
+            "description": "Step 1: Distribute your verified image to the decentralized IPFS network to ensure permanent storage.",
+            "button": "Distribute to IPFS ({fee} POL)",
+            "processing": "Processing...",
+            "waiting": "Initialising IPFS distribution. Please wait..."
+        },
+        "mintStep": {
+            "title": "Mint On-Chain",
+            "live": "Live",
+            "assetVerified": "IPFS Asset Verified",
+            "explorer": "Explorer",
+            "cid": "CID: {cid}",
+            "description": "Step 2: Mint your brick on Polygon Amoy to make it official and enable support.",
+            "button": "Mint on Polygon",
+            "minting": "Minting...",
+            "verifying": "Verifying on-chain mint..."
+        },
+        "donation": {
+            "title": "Support Artist",
+            "placeholder": "Amount (POL)",
+            "button": "Support",
+            "connectWarning": "Connect your wallet to support the artist.",
+            "recentHeader": "Recent Support",
+            "explorer": "Explorer"
+        }
+    },
+    "settings": {
+        "tabs": {
+            "profile": "Profile",
+            "password": "Security"
+        },
+        "identity": {
+            "title": "Identity Management",
+            "description": "Update your public persona and contact information on the BRIX protocol.",
+            "fullName": "Full Name",
+            "phone": "Phone Identity",
+            "username": "Username (Immutable)",
+            "email": "Email Address (Immutable)",
+            "gender": "Gender",
+            "bio": "Short Description / Bio",
+            "location": "Location / Address",
+            "preview": "Location Preview",
+            "options": {
+                "male": "Male",
+                "female": "Female",
+                "other": "Other"
+            }
+        },
+        "security": {
+            "title": "Security & Authentication",
+            "description": "Manage your access credentials and encryption keys.",
+            "changePassword": "Change Access Password",
+            "currentPassword": "Current Password",
+            "newPassword": "New Password",
+            "confirmPassword": "Confirm New Password"
+        },
+        "actions": {
+            "save": "Save Profile",
+            "saving": "Saving...",
+            "updatePassword": "Update Password",
+            "updating": "Updating...",
+            "changeBanner": "Change Banner",
+            "uploading": "Uploading..."
+        },
+        "messages": {
+            "loading": "Loading settings...",
+            "signInRequired": "Please sign in to access settings",
+            "updateProfileSuccess": "Profile updated successfully!",
+            "updateProfileError": "Failed to update profile",
+            "updatePasswordSuccess": "Password updated successfully!",
+            "updatePasswordError": "Failed to update password",
+            "uploadAvatar": "Uploading avatar...",
+            "uploadAvatarSuccess": "Avatar updated successfully!",
+            "uploadAvatarError": "Failed to upload avatar",
+            "uploadBanner": "Uploading banner...",
+            "uploadBannerSuccess": "Banner updated successfully!",
+            "uploadBannerError": "Failed to upload banner",
+            "invalidImage": "Please select an image file",
+            "imageTooLarge": "Image size must be less than {size}MB"
+        }
+    },
+    "search": {
+        "placeholder": "Search users, bricks, locations...",
+        "tabs": {
+            "all": "All",
+            "bricks": "Bricks",
+            "people": "People"
+        },
+        "dateFilters": {
+            "all": "All Time",
+            "day": "Today",
+            "month": "This Month",
+            "year": "This Year"
+        },
+        "geo": {
+            "label": "Geo Filter",
+            "instruction": "Click on map to pick location",
+            "radiusKm": "{radius}km",
+            "radiusM": "{radius}m",
+            "clear": "Clear Location"
+        },
+        "empty": {
+            "title": "No Search Query",
+            "description": "Enter a keyword or pick a location to start searching."
+        },
+        "noResults": {
+            "title": "No Results Found",
+            "description": "Try a different keyword or filter parameters."
+        },
+        "sections": {
+            "people": "Profiles Found",
+            "bricks": "Bricks Found"
+        },
+        "footer": {
+            "poweredBy": "Search powered by Algolia Neural Network",
+            "resultsCount": "{count} results found"
+        },
+        "attributes": {
+            "fullname": "fullname",
+            "username": "username"
+        },
+        "card": {
+            "brick": "BRIX",
+            "id": "ID",
+            "noImage": "No Image",
+            "untitled": "Untitled",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "location": "Location",
+            "anonymous": "Anonymous"
+        }
+    },
+    "trending": {
+        "title": "GLOBAL PULSE",
+        "description": "The architectural heartbeat of the network. Real-time visual verification and high-density artistic expression.",
+        "tabs": {
+            "recommend": "For You",
+            "following": "Following"
+        },
+        "tags": {
+            "all": "All",
+            "realtime": "Realtime",
+            "art": "Art",
+            "product": "Product"
+        },
+        "empty": {
+            "title": "No bricks found in this feed.",
+            "description": "Try adjusting your filters."
+        },
+        "widget": {
+            "title": "Global Activity",
+            "live": "Live",
+            "syncStatus": "Sync Status",
+            "stable": "STABLE",
+            "activeNodes": "Active Nodes"
+        },
+        "risingArtists": {
+            "title": "RISING ARTISTS",
+            "authors": "Top Authors",
+            "users": "Top Users",
+            "empty": "No rising artists found.",
+            "flws": "followers"
+        },
+        "actions": {
+            "loadMore": "Load More",
+            "loading": "Loading..."
+        }
+    },
+    "uploads": {
+        "title": "BRIX_IMAGE_UPLOAD_CENTER",
+        "subtitle": "High-Tech Neural Art Processing Protocol v2.4.0",
+        "authentic": "AUTHENTIC_BRIX",
+        "tabs": {
+            "art": "Art Upload",
+            "model": "Model Upload"
+        },
+        "form": {
+            "metadata": "Brick Metadata",
+            "modelMetadata": "Model Metadata",
+            "required": "required fields marked *",
+            "title": "Title",
+            "titlePlaceholder": "Give your brick a title...",
+            "modelTitlePlaceholder": "Name your 3D model...",
+            "description": "Description",
+            "descPlaceholder": "Describe this moment (optional)...",
+            "modelDescPlaceholder": "Describe your 3D model (optional)...",
+            "noFile": "No file selected",
+            "noFiles": "No files selected",
+            "uploading": "Uploading...",
+            "remove": "Remove",
+            "thumbnails": "Thumbnails",
+            "addThumbnails": "Add Thumbnail Images (1-5)",
+            "addMore": "Add More ({count} remaining)",
+            "limitReached": "Maximum 5 thumbnails allowed",
+            "glbFile": "3D Model File",
+            "glbFormat": ".GLB FORMAT",
+            "dropGlb": "Drop GLB File Here",
+            "clickBrowse": "Or click to browse",
+            "selectGlb": "Select GLB File",
+            "initAsset": "Initialize Asset Link",
+            "dropArtDesc": "Drop digital art artifacts or select from local storage. Neon Cyan grid monitoring active for integrity.",
+            "selectFile": "Select File",
+            "addressLabel": "Address",
+            "addressPlaceholder": "Search for an address or auto-detected from GPS...",
+            "geoTitle": "Geo Coordinates",
+            "gpsLocked": "GPS_LOCKED",
+            "latLabel": "Latitude",
+            "lngLabel": "Longitude",
+            "latPlaceholder": "-90 to 90",
+            "lngPlaceholder": "-180 to 180",
+            "noThumbnails": "No Thumbnails Added",
+            "readyForBlockchain": "Ready For Blockchain",
+            "verifyUpload": "Verify & Upload",
+            "modelModule": "MODEL_UPLOAD_MODULE",
+            "modelUnderDev": "3D Model Processing Pipeline — Under Development",
+            "phase3Coming": "Coming Soon — Phase 3"
+        },
+        "messages": {
+            "selectImage": "Please select an image file to upload",
+            "selectGlb": "Please select a GLB model file",
+            "addThumbnail": "Please add at least 1 thumbnail image",
+            "uploadingArt": "Uploading art brick...",
+            "uploadingModel": "Uploading 3D model...",
+            "successArt": "Art brick uploaded successfully!",
+            "successModel": "3D model brick uploaded successfully!",
+            "errorArt": "Failed to upload art brick",
+            "errorModel": "Failed to upload 3D model"
+        },
+        "analysis": {
+            "title": "Metadata Analysis",
+            "imageStream": "Image Stream Data",
+            "rawExif": "Raw EXIF Stream",
+            "systemLogs": "System Logs",
+            "processing": "Processing file...",
+            "waiting": "Waiting for file initialization...",
+            "listening": "Listening on port 8080...",
+            "integrity": "INTEGRITY_CHECK",
+            "pending": "PENDING",
+            "latency": "NETWORK_LATENCY",
+            "resolution": "RESOLUTION",
+            "bitDepth": "BIT_DEPTH",
+            "colorSpace": "COLOR_SPACE",
+            "genHash": "GEN_HASH",
+            "timestamp": "TIMESTAMP",
+            "geoTag": "GEO_TAG",
+            "aiProbability": "AI_PROBABILITY",
+            "artifactScan": "ARTIFACT_SCAN",
+            "noAnomalies": "NO_ANOMALIES"
+        },
+        "preview": {
+            "loadingEngine": "Loading 3D Engine...",
+            "reloadingEngine": "Reloading 3D Engine...",
+            "livePreview": "Live Preview",
+            "brixCard": "BRIX_CARD v1.0",
+            "artTag": "ART",
+            "refresh3d": "Refresh 3D model",
+            "rendering": "RENDERING",
+            "awaitingData": "AWAITING_DATA",
+            "previewStatus": "PREVIEW_STATUS",
+            "tagType": "TAG_TYPE",
+            "artBrick": "ART_BRICK",
+            "geoLock": "GEO_LOCK",
+            "fullMetadata": "Full Metadata Analysis",
+            "dragRotate": "Drag to rotate",
+            "noModel": "No Model Loaded",
+            "noImage": "No Image Selected",
+            "untitledModel": "Untitled Model",
+            "untitledBrick": "Untitled Brick",
+            "noDescription": "No description provided.",
+            "noDescriptionVerify": "No description provided. Add one to verify asset metadata.",
+            "creators": {
+                "model": "3D Creator",
+                "art": "Verified Artist"
+            },
+            "status": {
+                "loaded": "MODEL_LOADED",
+                "loading": "LOADING_MODEL",
+                "awaiting": "AWAITING_DATA",
+                "rendering": "RENDERING"
+            }
+        }
+    },
+    "vault": {
+        "audit": {
+            "title": "Live Security Audit",
+            "live": "LIVE",
+            "search": "Search logs...",
+            "nodeStatus": "Node Status",
+            "encryptedConnection": "Encrypted Connection",
+            "uptime": "Uptime",
+            "traffic": "Traffic"
+        },
+        "trust": {
+            "title": "System Trust Score",
+            "description": "Your security clearance is currently Level {level}. Requirements for Encrypted Vaults met.",
+            "current": "Current Score",
+            "requirement": "Requirement"
+        },
+        "sections": {
+            "folders": "Vault Folders",
+            "recent": "Recent Private Content"
+        },
+        "actions": {
+            "filter": "Filter",
+            "createNew": "Create New"
+        },
+        "folder": {
+            "foldersTag": "FOLDERS",
+            "decrypt": "DECRYPT",
+            "protocolV1": "PROTOCOL_V1",
+            "protocolV2": "PROTOCOL_V2",
+            "encrypted": "ENCRYPTED",
+            "protected": "PROTECTED"
+        },
+        "content": {
+            "encryptedData": "ENCRYPTED_DATA",
+            "decrypt": "DECRYPT",
+            "contentType": "CONTENT_TYPE",
+            "fileSize": "FILE_SIZE"
+        },
+        "onChainLocked": "On-Chain Locked",
+        "encrypted": "Encrypted",
+        "filesCount": "{count} Files • {size}",
+        "types": {
+            "sensitive": "SENSITIVE_CONTENT",
+            "onChain": "ON_CHAIN_LEDGER",
+            "biometric": "BIOMETRIC_LOCKED"
+        },
+        "authOnChain": "Auth On-Chain",
+        "decryptToView": "Decrypt to View"
+    },
+    "shared": {
+        "loading": "Processing...",
+        "systemProcessing": "SYSTEM_PROCESSING",
+        "confirm": {
+            "defaultTitle": "Are you sure?",
+            "confirm": "Confirm",
+            "cancel": "Cancel"
+        },
+        "detail": {
+            "authentic": "AUTHENTIC",
+            "hash": "HASH",
+            "verifiedAsset": "Verified Asset",
+            "description": "Captured via verified optical sensor. No post-processing detected. Geometry consistent with location metadata.",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "fullAnalysis": "Full Metadata Analysis",
+            "north": "N",
+            "south": "S",
+            "east": "E",
+            "west": "W"
+        }
+    },
+    "wallet": {
+        "connect": "Connect",
+        "disconnect": "Disconnect",
+        "linked": "Linked",
+        "unlinked": "Unlinked",
+        "current": "Current Wallet",
+        "yourWallets": "Your Linked Wallets",
+        "copy": "Copy Address",
+        "explorer": "View on Explorer",
+        "verifiedOwner": "Verified Account Owner",
+        "notLinkedMsg": "Wallet connected but not linked.",
+        "linkWallet": "Link This Wallet",
+        "linkSuccess": "Wallet linked successfully!",
+        "linkError": "Failed to link wallet. It might already be linked to another account."
+    },
+    "navigation": {
+        "header": {
+            "explore": "Explore",
+            "searchPlaceholder": "Search users & bricks...",
+            "camera": "Camera",
+            "userAvatar": "User avatar"
+        },
+        "sidebar": {
+            "groups": {
+                "overview": "Overview",
+                "library": "Library",
+                "connect": "Connect",
+                "insights": "Insights"
+            },
+            "items": {
+                "map": "Map",
+                "trending": "Trending",
+                "archive": "Archive",
+                "albums": "Albums",
+                "messages": "Messages",
+                "network": "Network",
+                "reports": "Reports",
+                "verificationStats": "Verification Stats",
+                "uploadTrends": "Upload Trends",
+                "revenue": "Revenue",
+                "uploads": "Uploads",
+                "realtime": "Realtime",
+                "camera": "Camera",
+                "settings": "Settings",
+                "logout": "Logout",
+                "signingOut": "Signing out..."
+            },
+            "status": {
+                "title": "Network Status",
+                "nodesActive": "NODES_ACTIVE",
+                "blocksVer": "BLOCKS_VER"
+            },
+            "messages": {
+                "signOutSuccess": "Signed out successfully",
+                "signOutError": "Failed to sign out"
+            }
+        }
+    }
+}

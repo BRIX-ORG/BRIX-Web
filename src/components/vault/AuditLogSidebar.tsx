@@ -2,6 +2,7 @@
 
 import { Search } from 'lucide-react';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 export interface AuditLogEntry {
     id: string;
@@ -21,24 +22,25 @@ export function AuditLogSidebar({
     nodeUptime = '99.99%',
     traffic = '2.4 TB',
 }: AuditLogSidebarProps) {
+    const t = useTranslations('vault.audit');
     return (
         <aside className="w-80 border-l border-border flex flex-col bg-background/40 backdrop-blur-xl">
             {/* Header */}
             <div className="p-6 border-b border-border">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-bold uppercase tracking-widest text-primary">
-                        Live Security Audit
+                        {t('title')}
                     </h3>
                     <div className="flex items-center gap-1.5">
                         <span className="size-2 bg-primary rounded-full animate-pulse" />
-                        <span className="text-[10px] text-primary/70 font-mono">LIVE</span>
+                        <span className="text-[10px] text-primary/70 font-mono">{t('live')}</span>
                     </div>
                 </div>
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <input
                         className="w-full bg-muted/50 border border-border rounded text-xs font-mono pl-10 pr-3 py-2 placeholder:text-muted-foreground/50 focus:ring-primary focus:border-primary outline-none"
-                        placeholder="Search logs..."
+                        placeholder={t('search')}
                         type="text"
                     />
                 </div>
@@ -72,19 +74,19 @@ export function AuditLogSidebar({
             <div className="p-6 bg-muted/50 border-t border-border">
                 <div className="flex items-center justify-between mb-4">
                     <span className="text-[10px] text-muted-foreground uppercase font-bold">
-                        Node Status
+                        {t('nodeStatus')}
                     </span>
                     <span className="text-[10px] text-primary uppercase font-bold">
-                        Encrypted Connection
+                        {t('encryptedConnection')}
                     </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                     <div className="bg-muted rounded p-2 text-center">
-                        <p className="text-[8px] text-muted-foreground uppercase">Uptime</p>
+                        <p className="text-[8px] text-muted-foreground uppercase">{t('uptime')}</p>
                         <p className="text-xs font-mono">{nodeUptime}</p>
                     </div>
                     <div className="bg-muted rounded p-2 text-center">
-                        <p className="text-[8px] text-muted-foreground uppercase">Traffic</p>
+                        <p className="text-[8px] text-muted-foreground uppercase">{t('traffic')}</p>
                         <p className="text-xs font-mono">{traffic}</p>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Share2, Check, Copy, Link2 } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
 import { cn } from '@/utils/classnames';
@@ -15,6 +16,7 @@ export function ShareButton({ brickId, className }: ShareButtonProps) {
     const [copied, setCopied] = useState(false);
     const popoverRef = useRef<HTMLDivElement>(null);
     const toast = useToast();
+    const t = useTranslations('onchain.share');
 
     const shareUrl =
         typeof window !== 'undefined' ? `${window.location.origin}/dashboard/brick/${brickId}` : '';
@@ -34,13 +36,13 @@ export function ShareButton({ brickId, className }: ShareButtonProps) {
         try {
             await navigator.clipboard.writeText(shareUrl);
             setCopied(true);
-            toast.success('Link copied to clipboard!');
+            toast.success(t('toast.success'));
             setTimeout(() => {
                 setCopied(false);
                 setIsOpen(false);
             }, 1500);
         } catch {
-            toast.error('Failed to copy link');
+            toast.error(t('toast.error'));
         }
     };
 
@@ -52,7 +54,7 @@ export function ShareButton({ brickId, className }: ShareButtonProps) {
                 className="flex items-center gap-1.5 px-2 py-1 rounded-sm text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-primary hover:bg-primary/10 border border-transparent transition-all cursor-pointer"
             >
                 <Share2 className="size-3.5" />
-                Share
+                {t('button')}
             </button>
 
             {isOpen && (
@@ -60,7 +62,7 @@ export function ShareButton({ brickId, className }: ShareButtonProps) {
                     <div className="flex items-center gap-2 mb-2">
                         <Link2 className="size-3.5 text-primary shrink-0" />
                         <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                            Share Link
+                            {t('title')}
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -84,12 +86,12 @@ export function ShareButton({ brickId, className }: ShareButtonProps) {
                             {copied ? (
                                 <>
                                     <Check className="size-3" />
-                                    Copied
+                                    {t('copied')}
                                 </>
                             ) : (
                                 <>
                                     <Copy className="size-3" />
-                                    Copy
+                                    {t('copy')}
                                 </>
                             )}
                         </button>

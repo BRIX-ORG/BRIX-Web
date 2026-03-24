@@ -14,7 +14,7 @@ export interface ScrambledTextProps {
     scrambleChars?: string;
     className?: string;
     style?: React.CSSProperties;
-    children: React.ReactNode;
+    text: string;
 }
 
 const ScrambledText: React.FC<ScrambledTextProps> = ({
@@ -24,7 +24,7 @@ const ScrambledText: React.FC<ScrambledTextProps> = ({
     scrambleChars = '.:',
     className = '',
     style = {},
-    children,
+    text,
 }) => {
     const rootRef = useRef<HTMLDivElement | null>(null);
 
@@ -76,7 +76,7 @@ const ScrambledText: React.FC<ScrambledTextProps> = ({
     return (
         <div ref={rootRef}>
             <p className={className} style={style}>
-                {children}
+                {text}
             </p>
         </div>
     );

@@ -5,6 +5,7 @@ import { X, Loader2, Database, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useGetOnchainActivities } from '@/hooks/apis/onchain.api';
 import { timeAgo } from '@/utils/time';
+import { useTranslations } from 'next-intl';
 
 interface ActivitiesModalContentProps {
     onClose: () => void;
@@ -14,6 +15,7 @@ interface ActivitiesModalContentProps {
 const PAGE_SIZE = 20;
 
 export function ActivitiesModalContent({ onClose, idOrUsername }: ActivitiesModalContentProps) {
+    const t = useTranslations('artist.activities');
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
@@ -56,7 +58,7 @@ export function ActivitiesModalContent({ onClose, idOrUsername }: ActivitiesModa
                     <div className="flex items-center gap-2 text-primary">
                         <Database className="size-5" />
                         <h2 className="text-sm font-bold uppercase tracking-widest">
-                            Onchain Activities
+                            {t('title')}
                         </h2>
                     </div>
                     <button
@@ -69,7 +71,7 @@ export function ActivitiesModalContent({ onClose, idOrUsername }: ActivitiesModa
 
                 <div className="bg-muted py-2 px-6 border-b border-primary/5">
                     <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
-                        Total {totalCount.toLocaleString()} Records Found
+                        {t('totalRecords', { count: totalCount.toLocaleString() })}
                     </p>
                 </div>
 
@@ -86,7 +88,7 @@ export function ActivitiesModalContent({ onClose, idOrUsername }: ActivitiesModa
                     ) : activities.length === 0 ? (
                         <div className="flex items-center justify-center py-12">
                             <p className="text-sm text-muted-foreground font-mono">
-                                No onchain activities found.
+                                {t('noActivities')}
                             </p>
                         </div>
                     ) : (
@@ -121,8 +123,8 @@ export function ActivitiesModalContent({ onClose, idOrUsername }: ActivitiesModa
                                     <div className="space-y-1">
                                         <p className="text-[13px] text-muted-foreground">
                                             {activity.type === 'MINT'
-                                                ? 'Asset successfully verified and deployed to on-chain.'
-                                                : 'Received donation support from community.'}
+                                                ? t('mintDesc')
+                                                : t('donateDesc')}
                                         </p>
                                         <p className="text-[10px] font-mono text-muted-foreground/60">
                                             {timeAgo(activity.createdAt)}

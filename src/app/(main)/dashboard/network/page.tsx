@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Users, Star, UserCheck, Sparkles } from 'lucide-react';
 import { useGetFollowRecommendations, useGetTopUsers } from '@/hooks/apis/user.api';
 import { useGetTopAuthors } from '@/hooks/apis/brick.api';
@@ -7,6 +8,9 @@ import { UserCard, UserMap } from '@/components/network';
 import { cn } from '@/utils/classnames';
 
 export default function NetworkPage() {
+    const t = useTranslations('network');
+    const tc = useTranslations('common');
+
     const {
         data: recommendations,
         isLoading: isLoadingRecs,
@@ -43,11 +47,10 @@ export default function NetworkPage() {
                 <div className="relative flex flex-col gap-2">
                     <h1 className="text-4xl font-black text-foreground tracking-tighter uppercase italic flex items-center gap-3">
                         <UserCheck className="size-8 text-primary animate-pulse" />
-                        Network
+                        {t('title')}
                     </h1>
                     <p className="text-muted-foreground/80 max-w-2xl font-medium">
-                        Expand your creative circle. Discover top authors, trending users, and
-                        personalized recommendations based on your preferences.
+                        {t('description')}
                     </p>
                 </div>
             </div>
@@ -59,7 +62,7 @@ export default function NetworkPage() {
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2 uppercase tracking-widest">
                         <Sparkles className="size-5 text-primary" />
-                        Recommended For You
+                        {t('sections.recommendations.title')}
                     </h2>
                 </div>
 
@@ -82,10 +85,10 @@ export default function NetworkPage() {
                     <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-primary/10 rounded-2xl bg-primary/5">
                         <Users className="size-12 text-primary/20 mb-4" />
                         <p className="text-muted-foreground font-medium uppercase tracking-widest text-sm">
-                            No recommendations yet
+                            {t('sections.recommendations.empty.title')}
                         </p>
                         <p className="text-muted-foreground/60 text-xs text-center mt-1">
-                            Start following more people to get better suggestions
+                            {t('sections.recommendations.empty.description')}
                         </p>
                     </div>
                 )}
@@ -97,7 +100,9 @@ export default function NetworkPage() {
                             disabled={isFetchingRecs}
                             className="px-6 py-2 rounded-xl bg-primary/10 border border-primary/20 text-xs font-bold uppercase tracking-widest text-primary hover:bg-primary/20 transition-all disabled:opacity-50"
                         >
-                            {isFetchingRecs ? 'Loading...' : 'Load More Suggestions'}
+                            {isFetchingRecs
+                                ? tc('loading')
+                                : t('sections.recommendations.loadMore')}
                         </button>
                     </div>
                 )}
@@ -108,7 +113,7 @@ export default function NetworkPage() {
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2 uppercase tracking-widest">
                         <Star className="size-5 text-primary" />
-                        Global Top Authors
+                        {t('sections.topAuthors.title')}
                     </h2>
                 </div>
 
@@ -140,7 +145,9 @@ export default function NetworkPage() {
                                         <Sparkles className="size-5" />
                                     </div>
                                     <span className="text-xs font-bold uppercase tracking-widest text-primary/70">
-                                        {isFetchingAuthors ? 'Loading...' : 'View More Authors'}
+                                        {isFetchingAuthors
+                                            ? tc('loading')
+                                            : t('sections.topAuthors.viewMore')}
                                     </span>
                                 </button>
                             )}
@@ -154,7 +161,7 @@ export default function NetworkPage() {
                 <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2 uppercase tracking-widest">
                         <Users className="size-5 text-primary" />
-                        Global Top Users
+                        {t('sections.topUsers.title')}
                     </h2>
                 </div>
 
@@ -186,7 +193,9 @@ export default function NetworkPage() {
                                         <Users className="size-5" />
                                     </div>
                                     <span className="text-xs font-bold uppercase tracking-widest text-primary/70">
-                                        {isFetchingUsers ? 'Loading...' : 'View More Users'}
+                                        {isFetchingUsers
+                                            ? tc('loading')
+                                            : t('sections.topUsers.viewMore')}
                                     </span>
                                 </button>
                             )}

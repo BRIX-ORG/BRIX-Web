@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -34,6 +35,7 @@ export function CommentItem({
     depth = 0,
     onShowUpvoters,
 }: CommentItemProps) {
+    const t = useTranslations('comments');
     const [isExpanded, setIsExpanded] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editContent, setEditContent] = useState(comment.content);
@@ -121,7 +123,7 @@ export function CommentItem({
                             <span className="text-[10px] text-muted-foreground/50">
                                 {timeAgo(comment.createdAt)}
                                 {comment.updatedAt !== comment.createdAt && (
-                                    <span className="ml-0.5 italic">(edited)</span>
+                                    <span className="ml-0.5 italic">({t('edited')})</span>
                                 )}
                             </span>
 
@@ -151,7 +153,7 @@ export function CommentItem({
                                                     className="flex items-center gap-2 px-3 py-1.5 text-xs w-full hover:bg-muted/50 cursor-pointer"
                                                 >
                                                     <Pencil className="size-3" />
-                                                    Edit
+                                                    {t('edit')}
                                                 </button>
                                                 <button
                                                     type="button"
@@ -162,7 +164,7 @@ export function CommentItem({
                                                     className="flex items-center gap-2 px-3 py-1.5 text-xs w-full hover:bg-destructive/10 text-destructive cursor-pointer"
                                                 >
                                                     <Trash2 className="size-3" />
-                                                    Delete
+                                                    {t('delete')}
                                                 </button>
                                             </div>
                                         </>
@@ -188,7 +190,7 @@ export function CommentItem({
                                     disabled={editMutation.isPending}
                                     className="text-[10px] font-bold text-primary hover:underline cursor-pointer"
                                 >
-                                    Save
+                                    {t('save')}
                                 </button>
                                 <button
                                     type="button"
@@ -198,7 +200,7 @@ export function CommentItem({
                                     }}
                                     className="text-[10px] text-muted-foreground hover:underline cursor-pointer"
                                 >
-                                    Cancel
+                                    {t('cancel')}
                                 </button>
                             </div>
                         </div>
@@ -250,7 +252,7 @@ export function CommentItem({
                                 )}
                             >
                                 <MessageCircle className="size-3" />
-                                Reply
+                                {t('reply')}
                             </button>
                         )}
 
@@ -266,8 +268,7 @@ export function CommentItem({
                                 ) : (
                                     <ChevronDown className="size-3" />
                                 )}
-                                {comment.replyCount}{' '}
-                                {comment.replyCount === 1 ? 'reply' : 'replies'}
+                                {t('replyCount', { count: comment.replyCount })}
                             </button>
                         )}
                     </div>
@@ -294,7 +295,7 @@ export function CommentItem({
                             <CommentInput
                                 brickId={brickId}
                                 parentId={comment.id}
-                                placeholder={`Reply to @${comment.user.username}...`}
+                                placeholder={t('replyTo', { name: comment.user.username })}
                                 autoFocus
                                 onCancel={() => setIsExpanded(false)}
                                 onSuccess={() => {
@@ -311,10 +312,10 @@ export function CommentItem({
                 isOpen={showDeleteConfirm}
                 onClose={() => setShowDeleteConfirm(false)}
                 onConfirm={confirmDelete}
-                title="Delete Comment"
-                message="Are you sure you want to delete this comment? This action cannot be undone."
-                confirmText="Delete"
-                cancelText="Cancel"
+                title={t('confirmDelete.title')}
+                message={t('confirmDelete.message')}
+                confirmText={t('confirmDelete.confirm')}
+                cancelText={t('confirmDelete.cancel')}
                 type="danger"
                 isLoading={deleteMutation.isPending}
             />
@@ -324,10 +325,10 @@ export function CommentItem({
                 isOpen={showEditConfirm}
                 onClose={() => setShowEditConfirm(false)}
                 onConfirm={confirmEdit}
-                title="Save Changes"
-                message="Are you sure you want to save the changes to your comment?"
-                confirmText="Save"
-                cancelText="Cancel"
+                title={t('confirmEdit.title')}
+                message={t('confirmEdit.message')}
+                confirmText={t('confirmEdit.confirm')}
+                cancelText={t('confirmEdit.cancel')}
                 type="info"
                 isLoading={editMutation.isPending}
             />

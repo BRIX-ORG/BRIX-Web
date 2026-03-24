@@ -9,6 +9,7 @@ import { cn } from '@/utils/classnames';
 import { formatCoord, formatTimestamp } from '@/utils/brick';
 import { ArtistGalleryTabs, ArtistBricksGrid } from '@/components/artist';
 import { BrickDetailModal } from '@/components/brick-detail';
+import { useTranslations } from 'next-intl';
 
 interface ArtistGalleryProps {
     idOrUsername: string;
@@ -34,6 +35,7 @@ function brickToMasonryItem(brick: UserBrick): MasonryItem {
 }
 
 function LoadMoreButton({ isFetching, onClick }: { isFetching: boolean; onClick: () => void }) {
+    const t = useTranslations('artist.gallery');
     return (
         <div className="flex justify-center pt-8">
             <button
@@ -49,10 +51,10 @@ function LoadMoreButton({ isFetching, onClick }: { isFetching: boolean; onClick:
                 {isFetching ? (
                     <span className="flex items-center gap-2">
                         <Loader2 className="size-3.5 animate-spin" />
-                        Loading...
+                        {t('loading')}
                     </span>
                 ) : (
-                    'Load More'
+                    t('loadMore')
                 )}
             </button>
         </div>
@@ -85,13 +87,14 @@ function MasonrySkeleton() {
 }
 
 function EmptyState() {
+    const t = useTranslations('artist.gallery');
     return (
         <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="size-20 border-2 border-dashed border-muted-foreground/20 rounded-lg flex items-center justify-center">
                 <span className="text-2xl text-muted-foreground/30">∅</span>
             </div>
             <p className="text-sm text-muted-foreground/60 font-mono uppercase tracking-widest">
-                No bricks found
+                {t('noBricks')}
             </p>
         </div>
     );

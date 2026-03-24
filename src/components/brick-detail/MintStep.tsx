@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Loader2, CheckCircle2, ExternalLink } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 
@@ -22,6 +23,7 @@ export function MintStep({
     onChainTx,
     isMintTxConfirmed,
 }: MintStepProps) {
+    const t = useTranslations('onchain.mintStep');
     const isIpfsReady = status === 'ipfs_uploaded';
     const isOnChain = status === 'onchain';
 
@@ -40,10 +42,10 @@ export function MintStep({
                 >
                     {isOnChain ? <CheckCircle2 className="size-3" /> : '2'}
                 </div>
-                <h4 className="text-xs font-bold text-foreground">Mint On-Chain</h4>
+                <h4 className="text-xs font-bold text-foreground">{t('title')}</h4>
                 {isOnChain && (
                     <span className="text-[9px] bg-green-500/10 text-green-400 font-bold px-1.5 py-0.5 rounded-full uppercase tracking-tighter shadow-sm border border-green-500/10">
-                        Live
+                        {t('live')}
                     </span>
                 )}
             </div>
@@ -53,7 +55,7 @@ export function MintStep({
                 <div className="bg-primary/10 hover:bg-primary/20 border border-primary/20 p-2.5 rounded-lg space-y-1.5 transition-colors group">
                     <div className="flex items-center justify-between">
                         <p className="text-[10px] font-bold text-primary uppercase tracking-tighter">
-                            IPFS Asset Verified
+                            {t('assetVerified')}
                         </p>
                         {onChainTx && (
                             <a
@@ -62,13 +64,13 @@ export function MintStep({
                                 rel="noreferrer"
                                 className="text-[8px] text-primary/60 hover:text-primary flex items-center gap-0.5 transition-colors"
                             >
-                                Explorer <ExternalLink className="size-2" />
+                                {t('explorer')} <ExternalLink className="size-2" />
                             </a>
                         )}
                     </div>
                     <div className="flex items-center gap-1.5 min-w-0">
                         <span className="text-[10px] font-mono text-muted-foreground truncate group-hover:text-primary/70">
-                            CID: {ipfsCid}
+                            {t('cid', { cid: ipfsCid || '' })}
                         </span>
                         <CheckCircle2 className="size-3 text-green-500/60 shrink-0" />
                     </div>
@@ -78,8 +80,7 @@ export function MintStep({
                 {isOwner && isIpfsReady && !isMintTxConfirmed && (
                     <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                         <p className="text-[11px] text-muted-foreground leading-relaxed">
-                            Step 2: Mint your brick on Polygon Amoy to make it official and enable
-                            support.
+                            {t('description')}
                         </p>
                         <button
                             onClick={onMint}
@@ -87,7 +88,7 @@ export function MintStep({
                             className="w-full h-9 bg-primary text-primary-foreground hover:brightness-110 rounded-lg text-xs font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
                         >
                             {isMinting && <Loader2 className="size-3.5 animate-spin" />}
-                            {isMinting ? 'Minting...' : 'Mint on Polygon'}
+                            {isMinting ? t('minting') : t('button')}
                         </button>
                     </div>
                 )}
@@ -97,7 +98,7 @@ export function MintStep({
                     <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/10 rounded-lg animate-pulse">
                         <Loader2 className="size-3.5 animate-spin text-primary" />
                         <span className="text-[11px] text-muted-foreground font-medium">
-                            Verifying on-chain mint...
+                            {t('verifying')}
                         </span>
                     </div>
                 )}

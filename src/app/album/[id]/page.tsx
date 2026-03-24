@@ -7,6 +7,7 @@ import { Loader2, Share2 } from 'lucide-react';
 import { BrixBrandLogo } from '@/components/shared';
 import { useGetAlbumById } from '@/hooks/apis/album.api';
 import { useToast } from '@/hooks/useToast';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 // Dynamic imports to avoid SSR issues
@@ -29,6 +30,7 @@ export default function AlbumViewPage() {
 
     const { data: album, isLoading, error } = useGetAlbumById(albumId);
     const { success } = useToast();
+    const t = useTranslations('album');
     const [copied, setCopied] = useState(false);
 
     // Map album items to InfiniteMenu format
@@ -55,7 +57,7 @@ export default function AlbumViewPage() {
             const url = window.location.href;
             await navigator.clipboard.writeText(url);
             setCopied(true);
-            success('Album link copied to clipboard!');
+            success(t('successShare'));
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error('Failed to copy link:', err);
@@ -68,7 +70,7 @@ export default function AlbumViewPage() {
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="size-8 text-primary animate-spin" />
                     <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">
-                        Loading Album...
+                        {t('loading')}...
                     </p>
                 </div>
             </div>
@@ -82,10 +84,8 @@ export default function AlbumViewPage() {
                     <div className="size-16 rounded-full bg-destructive/10 flex items-center justify-center">
                         <span className="text-2xl">📸</span>
                     </div>
-                    <h2 className="text-lg font-bold text-foreground">Album Not Found</h2>
-                    <p className="text-sm text-muted-foreground max-w-xs">
-                        This album may have been deleted or the link is invalid.
-                    </p>
+                    <h2 className="text-lg font-bold text-foreground">{t('notFound')}</h2>
+                    <p className="text-sm text-muted-foreground max-w-xs">{t('notFoundDesc')}</p>
                 </div>
             </div>
         );
@@ -131,7 +131,7 @@ export default function AlbumViewPage() {
                             </div>
                         )}
                     </div>
-                    <span className="ml-0.5">{copied ? 'Copied' : 'Share'}</span>
+                    <span className="ml-0.5">{copied ? t('copied') : t('share')}</span>
                 </button>
             </header>
 
@@ -155,7 +155,7 @@ export default function AlbumViewPage() {
                     </p>
                 )}
                 <p className="text-xs text-muted-foreground font-mono mt-2">
-                    Drag to explore • {album.items.length} photos
+                    {t('explore')} • {t('photos', { count: album.items.length })}
                 </p>
             </div>
 
@@ -173,17 +173,17 @@ export default function AlbumViewPage() {
             <div className="fixed bottom-6 left-6 right-6 z-40 hidden md:flex items-end justify-between pointer-events-none">
                 <div className="bg-background/30 backdrop-blur-md border border-border/50 p-4 pointer-events-auto">
                     <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
-                        POWERED BY
+                        {t('poweredBy')}
                     </p>
                     <span className="text-xs font-mono text-primary">BRIX ALBUM</span>
                 </div>
 
                 <div className="bg-background/30 backdrop-blur-md border border-border/50 p-4 text-right pointer-events-auto">
                     <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1">
-                        PHOTOS
+                        {t('items', { count: '' }).split(' ')[0]}
                     </p>
                     <span className="text-xs font-mono text-primary">
-                        {album.items.length} ITEMS
+                        {t('items', { count: album.items.length })}
                     </span>
                 </div>
             </div>

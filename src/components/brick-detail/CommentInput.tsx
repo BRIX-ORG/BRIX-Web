@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { ImagePlus, Send, X, Loader2, Smile } from 'lucide-react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -26,11 +27,12 @@ const ACCEPTED_TYPES = 'image/jpeg,image/png,image/webp';
 export function CommentInput({
     brickId,
     parentId,
-    placeholder = 'Write a comment...',
+    placeholder,
     autoFocus = false,
     onCancel,
     onSuccess,
 }: CommentInputProps) {
+    const t = useTranslations('comments');
     const [content, setContent] = useState('');
     const [images, setImages] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
@@ -201,7 +203,7 @@ export function CommentInput({
                         adjustHeight();
                     }}
                     onKeyDown={handleKeyDown}
-                    placeholder={placeholder}
+                    placeholder={placeholder || t('placeholder')}
                     autoFocus={autoFocus}
                     rows={1}
                     className={cn(

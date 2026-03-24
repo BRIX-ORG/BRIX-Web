@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 interface AuthTabsProps {
     activeTab: 'login' | 'signup';
 }
 
 export function AuthTabs({ activeTab }: AuthTabsProps) {
+    const t = useTranslations('auth');
     return (
         <div className="flex mb-10 bg-muted p-1 rounded-sm">
             <Link
@@ -15,7 +17,7 @@ export function AuthTabs({ activeTab }: AuthTabsProps) {
                         : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
-                Login
+                {t('tabs.login')}
             </Link>
             <Link
                 href="/signup"
@@ -25,7 +27,7 @@ export function AuthTabs({ activeTab }: AuthTabsProps) {
                         : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
-                Sign Up
+                {t('tabs.signup')}
             </Link>
         </div>
     );

@@ -22,6 +22,7 @@ import { timeAgo, formatDateTime } from '@/utils/time';
 import { formatCoord } from '@/utils/brick';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { useToast } from '@/hooks/useToast';
+import { useTranslations } from 'next-intl';
 import {
     useGetBrickDetail,
     useGetBrickVotes,
@@ -42,6 +43,8 @@ import { Map, MapMarker, MarkerContent, MapControls } from '@/components/ui/Map'
 import { useOnchainSocket } from '@/hooks/useOnchainSocket';
 
 export default function BrickPage() {
+    const t = useTranslations('brickDetail.page');
+    const tc = useTranslations('common');
     const { id } = useParams<{ id: string }>();
     const router = useRouter();
     const { data: session } = useSession();
@@ -86,7 +89,7 @@ export default function BrickPage() {
             isPublic: editIsPublic,
         });
         if (!parsed.success) {
-            const firstError = parsed.error.issues[0]?.message ?? 'Invalid input';
+            const firstError = parsed.error.issues[0]?.message ?? t('messages.invalidInput');
             toast.error(firstError);
             return;
         }
@@ -108,12 +111,12 @@ export default function BrickPage() {
             },
             {
                 onSuccess: () => {
-                    toast.success('Brick updated successfully');
+                    toast.success(t('messages.success'));
                     setIsEditing(false);
                     setShowSaveConfirm(false);
                 },
                 onError: () => {
-                    toast.error('Failed to update brick');
+                    toast.error(t('messages.error'));
                     setShowSaveConfirm(false);
                 },
             },
@@ -172,7 +175,12 @@ export default function BrickPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="size-10 animate-spin text-primary" />
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="size-10 animate-spin text-primary" />
+                    <p className="text-xs text-primary animate-pulse tracking-widest uppercase font-mono">
+                        {t('loading')}
+                    </p>
+                </div>
             </div>
         );
     }
@@ -180,13 +188,13 @@ export default function BrickPage() {
     if (!brick) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-                <p className="text-sm text-muted-foreground font-mono">Brick not found</p>
+                <p className="text-sm text-muted-foreground font-mono">{t('notFound')}</p>
                 <button
                     type="button"
                     onClick={() => router.back()}
                     className="text-xs text-primary hover:underline cursor-pointer"
                 >
-                    Go back
+                    {t('back')}
                 </button>
             </div>
         );
@@ -202,7 +210,7 @@ export default function BrickPage() {
                     className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
                     <ArrowLeft className="size-4" />
-                    Back
+                    {t('back')}
                 </button>
                 <div className="flex-1" />
                 <div className="flex items-center gap-2">
@@ -213,18 +221,18 @@ export default function BrickPage() {
                             className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                         >
                             <Pencil className="size-3" />
-                            Edit
+                            {t('edit')}
                         </button>
                     )}
                     {(isEditing ? editIsPublic : brick.isPublic) ? (
                         <span className="flex items-center gap-1 text-[10px] text-primary/60 font-mono">
                             <Eye className="size-3" />
-                            PUBLIC
+                            {t('public')}
                         </span>
                     ) : (
                         <span className="flex items-center gap-1 text-[10px] text-muted-foreground/60 font-mono">
                             <EyeOff className="size-3" />
-                            PRIVATE
+                            {t('private')}
                         </span>
                     )}
                     <span className="bg-primary/80 text-primary-foreground px-2 py-0.5 text-[10px] font-bold rounded-full">
@@ -242,7 +250,9 @@ export default function BrickPage() {
                                     : 'bg-red-500/10 border-red-500/40 text-red-400',
                             )}
                         >
-                            {brick.metadata?.verifiedAt ? '● VERIFIED' : '○ UNVERIFIED'}
+                            {brick.metadata?.verifiedAt
+                                ? `● ${t('verificationPassed')}`
+                                : `○ ${t('verificationFailed')}`}
                         </span>
                     )}
                 </div>
@@ -294,7 +304,7 @@ export default function BrickPage() {
                                         className="ml-1 italic"
                                         title={`Edited ${formatDateTime(brick.updatedAt)}`}
                                     >
-                                        (edited)
+                                        ({t('edited')})
                                     </span>
                                 )}
                             </span>
@@ -305,7 +315,7 @@ export default function BrickPage() {
                             <div className="space-y-3">
                                 <div>
                                     <label className="text-[10px] text-primary/60 uppercase font-bold mb-1 block">
-                                        Title
+                                        {t('title')}
                                     </label>
                                     <input
                                         type="text"
@@ -318,7 +328,7 @@ export default function BrickPage() {
                                 </div>
                                 <div>
                                     <label className="text-[10px] text-primary/60 uppercase font-bold mb-1 block">
-                                        Description
+                                        {t('description')}
                                     </label>
                                     <textarea
                                         value={editDescription}
@@ -331,7 +341,7 @@ export default function BrickPage() {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <label className="text-[10px] text-primary/60 uppercase font-bold">
-                                        Visibility
+                                        {t('visibility')}
                                     </label>
                                     <button
                                         type="button"
@@ -364,7 +374,7 @@ export default function BrickPage() {
                                         {updateBrickMutation.isPending && (
                                             <Loader2 className="size-3 animate-spin" />
                                         )}
-                                        Save
+                                        {t('save')}
                                     </button>
                                     <button
                                         type="button"
@@ -372,7 +382,7 @@ export default function BrickPage() {
                                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold text-muted-foreground hover:text-foreground border border-border hover:border-foreground/20 transition-all cursor-pointer"
                                     >
                                         <X className="size-3" />
-                                        Cancel
+                                        {t('cancel')}
                                     </button>
                                 </div>
                             </div>
@@ -395,7 +405,7 @@ export default function BrickPage() {
                                 <div className="grid grid-cols-2 gap-2">
                                     <div className="bg-primary/5 border border-primary/20 p-2.5 rounded-sm">
                                         <p className="text-[8px] text-primary/60 uppercase font-bold">
-                                            Latitude
+                                            {t('latitude')}
                                         </p>
                                         <p className="text-[11px] font-mono text-foreground truncate">
                                             {formatCoord(brick.latitude, 'N', 'S')}
@@ -403,7 +413,7 @@ export default function BrickPage() {
                                     </div>
                                     <div className="bg-primary/5 border border-primary/20 p-2.5 rounded-sm">
                                         <p className="text-[8px] text-primary/60 uppercase font-bold">
-                                            Longitude
+                                            {t('longitude')}
                                         </p>
                                         <p className="text-[11px] font-mono text-foreground truncate">
                                             {formatCoord(brick.longitude, 'E', 'W')}
@@ -449,8 +459,8 @@ export default function BrickPage() {
                                         )}
                                     >
                                         {brick.metadata?.verifiedAt
-                                            ? 'VERIFICATION PASSED'
-                                            : 'VERIFICATION FAILED'}
+                                            ? t('verificationPassed')
+                                            : t('verificationFailed')}
                                     </span>
                                 </div>
                                 {brick.metadata?.verifiedAt && (
@@ -512,7 +522,7 @@ export default function BrickPage() {
                                     score < 0 && 'text-destructive',
                                     score === 0 && 'text-muted-foreground',
                                 )}
-                                title="View upvoters"
+                                title={t('voteBar.viewUpvoters')}
                             >
                                 {score > 0 ? `+${score}` : score}
                             </button>
@@ -545,11 +555,13 @@ export default function BrickPage() {
 
                         {/* Stats */}
                         <div className="flex items-center gap-4 text-[10px] text-muted-foreground/50 font-mono">
-                            <span>{brick._count.votes} votes</span>
+                            <span>
+                                {brick._count.votes} {tc('votes')}
+                            </span>
                             <span>&middot;</span>
                             <span className="flex items-center gap-1">
                                 <MessageCircle className="size-3" />
-                                {brick._count.comments} comments
+                                {brick._count.comments} {tc('comments')}
                             </span>
                         </div>
                     </div>
@@ -574,7 +586,7 @@ export default function BrickPage() {
                             <div className="flex items-center gap-2 px-4 py-3 border-b border-primary/10">
                                 <MapPin className="size-4 text-primary" />
                                 <h3 className="text-xs font-bold uppercase tracking-widest">
-                                    Location
+                                    {t('location')}
                                 </h3>
                             </div>
                             <div className="relative w-full h-64">
@@ -619,10 +631,10 @@ export default function BrickPage() {
                 isOpen={showSaveConfirm}
                 onClose={() => setShowSaveConfirm(false)}
                 onConfirm={confirmSaveEdit}
-                title="Save Changes"
-                message="Are you sure you want to update this brick? Your changes will be visible to everyone."
-                confirmText="Save"
-                cancelText="Cancel"
+                title={t('confirmSave.title')}
+                message={t('confirmSave.message')}
+                confirmText={t('save')}
+                cancelText={t('cancel')}
                 type="info"
                 isLoading={updateBrickMutation.isPending}
             />

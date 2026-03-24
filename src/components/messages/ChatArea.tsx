@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { Loader2, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/useToast';
+import { useTranslations } from 'next-intl';
 import { ChatHeader, MessageBubble, BrickMessage, MessageInput } from '@/components/messages';
 import {
     useChatStore,
@@ -34,6 +35,7 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
     const { data: session } = useSession();
     const currentUserId = session?.user?.id;
     const toast = useToast();
+    const t = useTranslations('messages.ChatArea');
 
     const conversation = useCurrentConversation();
     const conversationId = conversation?.id ?? null;
@@ -199,12 +201,12 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
             editMessage.mutate(
                 { messageId, content },
                 {
-                    onSuccess: () => toast.success('Message edited'),
-                    onError: () => toast.error('Failed to edit message'),
+                    onSuccess: () => toast.success(t('editedToast')),
+                    onError: () => toast.error(t('editFailedToast')),
                 },
             );
         },
-        [editMessage, toast],
+        [editMessage, toast, t],
     );
 
     // ─── Delete ─────────────────────────────────────────────
@@ -215,12 +217,12 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
             deleteMessage.mutate(
                 { messageId, conversationId },
                 {
-                    onSuccess: () => toast.success('Message deleted'),
-                    onError: () => toast.error('Failed to delete message'),
+                    onSuccess: () => toast.success(t('deletedToast')),
+                    onError: () => toast.error(t('deleteFailedToast')),
                 },
             );
         },
-        [conversationId, deleteMessage, toast],
+        [conversationId, deleteMessage, toast, t],
     );
 
     // ─── Typing ─────────────────────────────────────────────
@@ -241,10 +243,14 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
         const diff = now.getTime() - date.getTime();
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-        if (days === 0) return 'TODAY';
-        if (days === 1) return 'YESTERDAY';
+        if (days === 0) return t('today');
+        if (days === 1) return t('yesterday');
         return date
-            .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            .toLocaleDateString(t('locale') === 'vi' ? 'vi-VN' : 'en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+            })
             .toUpperCase();
     };
 
@@ -262,7 +268,7 @@ export function ChatArea({ onToggleInfo }: ChatAreaProps) {
             <section className="h-full flex flex-col items-center justify-center bg-background/50">
                 <MessageSquare className="size-12 text-muted-foreground/20 mb-4" />
                 <p className="text-xs font-bold text-muted-foreground/40 uppercase tracking-widest">
-                    Select a conversation
+                    {t('selectConversation')}
                 </p>
             </section>
         );

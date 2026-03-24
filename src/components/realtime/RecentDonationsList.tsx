@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { BrickDonation } from '@/types/brick.types';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowDownLeft, ExternalLink, Info } from 'lucide-react';
@@ -11,6 +12,7 @@ interface RecentDonationsListProps {
 }
 
 export function RecentDonationsList({ donations, onLoadMore, hasMore }: RecentDonationsListProps) {
+    const t = useTranslations('realtime');
     return (
         <div
             className={cn(
@@ -26,11 +28,11 @@ export function RecentDonationsList({ donations, onLoadMore, hasMore }: RecentDo
                         <span className="relative inline-flex rounded-full size-2 bg-emerald-500"></span>
                     </span>
                     <h3 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground">
-                        Donation Stream
+                        {t('donations.title')}
                     </h3>
                 </div>
                 <p className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground/60">
-                    Live chronological feed
+                    {t('donations.subtext')}
                 </p>
             </div>
 
@@ -46,10 +48,10 @@ export function RecentDonationsList({ donations, onLoadMore, hasMore }: RecentDo
                                 <Info className="size-6 text-muted-foreground/50" />
                             </div>
                             <p className="text-sm text-foreground/80 font-bold tracking-widest uppercase">
-                                No Streams Yet
+                                {t('donations.empty.title')}
                             </p>
                             <p className="text-[10px] font-mono text-muted-foreground/50 max-w-[20ch]">
-                                Incoming POL transactions will appear here continuously.
+                                {t('donations.empty.description')}
                             </p>
                         </motion.div>
                     ) : (
@@ -110,7 +112,7 @@ export function RecentDonationsList({ donations, onLoadMore, hasMore }: RecentDo
                         onClick={onLoadMore}
                         className="w-full py-3.5 mt-8 border border-white/5 rounded-xl bg-muted/20 hover:bg-muted/40 hover:border-white/10 text-[10px] tracking-[0.2em] uppercase font-bold text-muted-foreground hover:text-foreground transition-all duration-300"
                     >
-                        Load Previous
+                        {t('donations.loadPrevious')}
                     </motion.button>
                 )}
             </div>

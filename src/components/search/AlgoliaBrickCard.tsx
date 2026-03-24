@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ImageIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/utils/classnames';
 import { getDefaultAvatar } from '@/utils/cloudinary';
 import { timeAgo } from '@/utils/time';
@@ -26,6 +27,7 @@ function Highlight({ value, className }: { value: string | undefined; className?
 }
 
 export function AlgoliaBrickCard({ hit, onClick, className }: AlgoliaBrickCardProps) {
+    const t = useTranslations('search');
     const imageUrl = hit.watermark?.url || hit.thumbnails?.url || hit.media?.url;
     const hasImage = !!imageUrl;
     const hasContent = hasImage || hit.title || hit.description;
@@ -47,10 +49,10 @@ export function AlgoliaBrickCard({ hit, onClick, className }: AlgoliaBrickCardPr
             <div className="p-3 border-b border-border flex items-center justify-between bg-background/50">
                 <h2 className="text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-2">
                     <span className="size-2 bg-secondary animate-pulse rounded-full" />
-                    {hit.tagType} BRIX
+                    {hit.tagType} {t('card.brick')}
                 </h2>
                 <span className="text-[9px] font-mono text-primary/50 uppercase tracking-widest hidden sm:inline-block">
-                    ID: {hit.objectID.slice(0, 8)}
+                    {t('card.id')}: {hit.objectID.slice(0, 8)}
                 </span>
             </div>
 
@@ -87,7 +89,7 @@ export function AlgoliaBrickCard({ hit, onClick, className }: AlgoliaBrickCardPr
                                         <ImageIcon className="size-6 text-muted-foreground/20" />
                                     </div>
                                     <span className="text-[9px] text-muted-foreground/40 uppercase tracking-widest font-mono">
-                                        NO IMAGE
+                                        {t('card.noImage')}
                                     </span>
                                 </div>
                             )}
@@ -105,7 +107,7 @@ export function AlgoliaBrickCard({ hit, onClick, className }: AlgoliaBrickCardPr
                                     ) : (
                                         hit.title || (
                                             <span className="text-muted-foreground/30 italic font-normal normal-case">
-                                                Untitled Brick
+                                                {t('card.untitled')}
                                             </span>
                                         )
                                     )}
@@ -130,7 +132,7 @@ export function AlgoliaBrickCard({ hit, onClick, className }: AlgoliaBrickCardPr
                             <div className="grid grid-cols-2 gap-2">
                                 <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                     <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
-                                        Latitude
+                                        {t('card.latitude')}
                                     </p>
                                     <p className="text-[10px] font-mono text-foreground truncate">
                                         {formatCoord(hit._geoloc.lat, 'N', 'S')}
@@ -138,7 +140,7 @@ export function AlgoliaBrickCard({ hit, onClick, className }: AlgoliaBrickCardPr
                                 </div>
                                 <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                     <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
-                                        Longitude
+                                        {t('card.longitude')}
                                     </p>
                                     <p className="text-[10px] font-mono text-foreground truncate">
                                         {formatCoord(hit._geoloc.lng, 'E', 'W')}

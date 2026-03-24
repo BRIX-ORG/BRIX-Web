@@ -10,20 +10,22 @@ import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
 import { Input } from '@/components/ui';
 import type { Gender } from '@/types/auth.types';
-
-// Gender options with icons and labels
-const genderOptions: { value: Gender; label: string; icon: string }[] = [
-    { value: 'MALE', label: 'Male', icon: '♂' },
-    { value: 'FEMALE', label: 'Female', icon: '♀' },
-    { value: 'OTHER', label: 'Other', icon: '⚧' },
-];
+import { useTranslations } from 'next-intl';
 
 export function SignUpForm() {
+    const t = useTranslations('auth');
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const registerMutation = useRegister();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
+
+    // Gender options with icons and labels
+    const genderOptions: { value: Gender; label: string; icon: string }[] = [
+        { value: 'MALE', label: t('common.gender.male'), icon: '♂' },
+        { value: 'FEMALE', label: t('common.gender.female'), icon: '♀' },
+        { value: 'OTHER', label: t('common.gender.other'), icon: '⚧' },
+    ];
 
     const {
         register,
@@ -45,7 +47,7 @@ export function SignUpForm() {
 
     const onSubmit = async (data: RegisterFormData) => {
         try {
-            showLoading('Creating your account...');
+            showLoading(t('signupForm.loading'));
             await registerMutation.mutateAsync({
                 username: data.username,
                 fullName: data.fullName,
@@ -55,14 +57,12 @@ export function SignUpForm() {
                 password: data.password,
             });
             hideLoading();
-            success('Account created successfully! Redirecting...');
+            success(t('signupForm.messages.success'));
             router.push('/dashboard');
         } catch (err) {
             hideLoading();
             const errorMessage =
-                err instanceof Error
-                    ? err.message
-                    : 'Registration failed. Email or username may already exist.';
+                err instanceof Error ? err.message : t('signupForm.messages.error');
             toastError(errorMessage);
         }
     };
@@ -73,43 +73,43 @@ export function SignUpForm() {
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             {/* Username Field */}
             <Input
-                label="User_Alias"
+                label={t('signupForm.username.label')}
                 type="text"
                 {...register('username')}
                 disabled={isLoading}
                 variant="compact"
                 leftIcon={<User className="size-5" />}
-                placeholder="UNIQUE_USERNAME"
+                placeholder={t('signupForm.username.placeholder')}
                 error={errors.username?.message}
             />
 
             {/* Full Name Field */}
             <Input
-                label="Full_Name"
+                label={t('signupForm.fullName.label')}
                 type="text"
                 {...register('fullName')}
                 disabled={isLoading}
                 variant="compact"
                 leftIcon={<User className="size-5" />}
-                placeholder="ENTER_YOUR_FULL_NAME"
+                placeholder={t('signupForm.fullName.placeholder')}
                 error={errors.fullName?.message}
             />
 
             {/* Email Field */}
             <Input
-                label="Access_ID"
+                label={t('signupForm.email.label')}
                 type="email"
                 {...register('email')}
                 disabled={isLoading}
                 variant="compact"
                 leftIcon={<Mail className="size-5" />}
-                placeholder="ENTER_EMAIL_IDENTITY"
+                placeholder={t('signupForm.email.placeholder')}
                 error={errors.email?.message}
             />
 
             {/* Phone Field */}
             <Input
-                label="Phone_Contact"
+                label={t('signupForm.phone.label')}
                 type="tel"
                 {...register('phone')}
                 disabled={isLoading}
@@ -122,7 +122,7 @@ export function SignUpForm() {
             {/* Gender Field */}
             <div className="space-y-2">
                 <label className="block text-xs font-mono font-medium text-muted-foreground uppercase tracking-[0.2em]">
-                    Identity_Type
+                    {t('signupForm.gender.label')}
                 </label>
                 <Controller
                     name="gender"
@@ -164,26 +164,26 @@ export function SignUpForm() {
 
             {/* Password Field */}
             <Input
-                label="Security_Key"
+                label={t('signupForm.password.label')}
                 type="password"
                 {...register('password')}
                 disabled={isLoading}
                 variant="compact"
                 leftIcon={<Lock className="size-5" />}
-                placeholder="••••••••••••"
+                placeholder={t('signupForm.password.placeholder')}
                 error={errors.password?.message}
                 showPasswordToggle
             />
 
             {/* Confirm Password Field */}
             <Input
-                label="Confirm_Key"
+                label={t('signupForm.confirmPassword.label')}
                 type="password"
                 {...register('confirmPassword')}
                 disabled={isLoading}
                 variant="compact"
                 leftIcon={<Lock className="size-5" />}
-                placeholder="••••••••••••"
+                placeholder={t('signupForm.confirmPassword.placeholder')}
                 error={errors.confirmPassword?.message}
                 showPasswordToggle
             />
@@ -198,11 +198,11 @@ export function SignUpForm() {
                     {isLoading ? (
                         <>
                             <Loader2 className="size-4 animate-spin" />
-                            <span>Creating Account...</span>
+                            <span>{t('signupForm.loading')}</span>
                         </>
                     ) : (
                         <>
-                            <span>Create_Account</span>
+                            <span>{t('signupForm.submit')}</span>
                             <Zap className="size-4" />
                         </>
                     )}

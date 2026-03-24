@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { Mail, ArrowRight, Loader2, RefreshCw, CheckCircle, LogOut } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSendEmailVerification, useVerifyEmail } from '@/hooks/apis/auth.api';
 import { useSwal } from '@/hooks/useSwal';
 import { useToast } from '@/hooks/useToast';
@@ -14,6 +15,7 @@ export default function VerifyEmailPage() {
     const { data: session, status, update } = useSession();
     const { success: toastSuccess, error: toastError } = useToast();
     const swal = useSwal();
+    const t = useTranslations('verifyEmail');
 
     const [otp, setOtp] = useState('');
     const [secondsLeft, setSecondsLeft] = useState(0);
@@ -59,17 +61,16 @@ export default function VerifyEmailPage() {
         if (!session?.user.email) return;
 
         try {
-            swal.showLoading('Sending verification code...');
+            swal.showLoading(t('alerts.sending'));
             await sendVerificationMutation.mutateAsync({ email: session.user.email });
             swal.close();
 
             setSecondsLeft(300); // 5 minutes
             setHasSentInitial(true);
-            toastSuccess('Verification code sent to your email!');
+            toastSuccess(t('alerts.sent'));
         } catch (err) {
             swal.close();
-            const errorMessage =
-                err instanceof Error ? err.message : 'Failed to send verification email';
+            const errorMessage = err instanceof Error ? err.message : t('alerts.sendFailed');
             toastError(errorMessage);
         }
     };
@@ -79,7 +80,7 @@ export default function VerifyEmailPage() {
         if (otp.length !== 6 || !session?.user.email) return;
 
         try {
-            swal.showLoading('Verifying code...');
+            swal.showLoading(t('alerts.verifying'));
             await verifyEmailMutation.mutateAsync({
                 email: session.user.email,
                 otp,
@@ -89,13 +90,12 @@ export default function VerifyEmailPage() {
             // Update session to reflect verified status
             await update({ user: { ...session.user, verifiedAt: new Date().toISOString() } });
 
-            await swal.success('Email Verified!', 'Your email has been verified successfully.');
+            await swal.success(t('alerts.verified'), t('alerts.verifiedDesc'));
             router.push('/dashboard');
         } catch (err) {
             swal.close();
-            const errorMessage =
-                err instanceof Error ? err.message : 'Invalid or expired verification code';
-            await swal.error('Verification Failed', errorMessage);
+            const errorMessage = err instanceof Error ? err.message : t('alerts.verifyFailedDesc');
+            await swal.error(t('alerts.verifyFailed'), errorMessage);
             setOtp('');
         }
     };
@@ -123,10 +123,8 @@ export default function VerifyEmailPage() {
                     <div className="inline-flex items-center justify-center size-20 rounded-full bg-primary/10 border border-primary/20">
                         <Mail className="size-10 text-primary" />
                     </div>
-                    <h1 className="text-2xl font-bold text-foreground">Verify Your Email</h1>
-                    <p className="text-muted-foreground text-sm">
-                        We need to verify your email address to continue.
-                    </p>
+                    <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
+                    <p className="text-muted-foreground text-sm">{t('subtitle')}</p>
                     <p className="text-primary font-mono font-bold">{session.user.email}</p>
                 </div>
 
@@ -137,8 +135,7 @@ export default function VerifyEmailPage() {
                         <div className="space-y-6">
                             <div className="p-4 bg-muted rounded-lg">
                                 <p className="text-sm text-muted-foreground text-center">
-                                    Click the button below to receive a 6-digit verification code at
-                                    your email address.
+                                    {t('initialState.instruction')}
                                 </p>
                             </div>
 
@@ -152,7 +149,7 @@ export default function VerifyEmailPage() {
                                     <Loader2 className="size-4 animate-spin" />
                                 ) : (
                                     <>
-                                        <span>Send Verification Code</span>
+                                        <span>{t('initialState.submit')}</span>
                                         <ArrowRight className="size-4" />
                                     </>
                                 )}
@@ -163,7 +160,7 @@ export default function VerifyEmailPage() {
                         <div className="space-y-6">
                             <div className="text-center">
                                 <p className="text-muted-foreground text-sm mb-2">
-                                    Enter the 6-digit code sent to your email
+                                    {t('otpState.instruction')}
                                 </p>
                             </div>
 
@@ -184,7 +181,7 @@ export default function VerifyEmailPage() {
                                 ) : (
                                     <>
                                         <CheckCircle className="size-4" />
-                                        <span>Verify Email</span>
+                                        <span>{t('otpState.submit')}</span>
                                     </>
                                 )}
                             </button>
@@ -192,7 +189,7 @@ export default function VerifyEmailPage() {
                             {/* Resend & Timer */}
                             <div className="text-center space-y-3">
                                 <p className="text-sm text-muted-foreground">
-                                    Didn&apos;t receive the code?{' '}
+                                    {t('otpState.resendPrompt')}{' '}
                                     <button
                                         type="button"
                                         onClick={handleSendVerification}
@@ -204,12 +201,12 @@ export default function VerifyEmailPage() {
                                         <RefreshCw
                                             className={`size-3 ${sendVerificationMutation.isPending ? 'animate-spin' : ''}`}
                                         />
-                                        Resend
+                                        {t('otpState.resendAction')}
                                     </button>
                                 </p>
                                 {secondsLeft > 0 && (
                                     <p className="text-xs text-muted-foreground">
-                                        Code expires in{' '}
+                                        {t('otpState.expiry')}{' '}
                                         <span className="text-primary font-mono font-bold">
                                             {mm}:{ss}
                                         </span>
@@ -228,7 +225,7 @@ export default function VerifyEmailPage() {
                         className="text-muted-foreground hover:text-destructive text-sm font-medium transition-colors flex items-center gap-2"
                     >
                         <LogOut className="size-4" />
-                        Sign out and use a different account
+                        {t('logout')}
                     </button>
                 </div>
             </div>

@@ -29,6 +29,7 @@ import { useGetUserStats } from '@/hooks/apis/brick.api';
 import { useGetOnchainActivities } from '@/hooks/apis/onchain.api';
 import { getConversationByPartner } from '@/hooks/apis/message.api';
 import { useChatStore } from '@/stores/chat-store';
+import { useTranslations } from 'next-intl';
 
 // ─── Default avatar for users without one ──────────────────────────
 const SIDEBAR_FOLLOWERS_LIMIT = 12;
@@ -112,14 +113,16 @@ export default function ArtistProfilePage() {
         setShowModal(true);
     };
 
+    const t = useTranslations('artist.page');
+
     // ─── Loading state ─────────────────────────────────────
     useEffect(() => {
         if (isProfileLoading) {
-            showLoading('Loading profile...');
+            showLoading(t('loading'));
         } else {
             hideLoading();
         }
-    }, [isProfileLoading, showLoading, hideLoading]);
+    }, [isProfileLoading, showLoading, hideLoading, t]);
 
     // ─── Error state → 404 ──────────────────────────────────
     if (isError && !isProfileLoading) {

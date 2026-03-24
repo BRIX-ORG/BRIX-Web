@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Loader2, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 
@@ -12,6 +13,7 @@ interface IpfsStepProps {
 }
 
 export function IpfsStep({ status, isOwner, isDistributing, onDistribute, fee }: IpfsStepProps) {
+    const t = useTranslations('onchain.ipfsStep');
     const isPending = status === 'pending';
     const isUploaded = status === 'ipfs_uploaded' || status === 'onchain';
 
@@ -30,14 +32,13 @@ export function IpfsStep({ status, isOwner, isDistributing, onDistribute, fee }:
                 >
                     {isUploaded ? <CheckCircle2 className="size-3" /> : '1'}
                 </div>
-                <h4 className="text-xs font-bold text-foreground">Distribute to IPFS</h4>
+                <h4 className="text-xs font-bold text-foreground">{t('title')}</h4>
             </div>
 
             {isOwner && !isUploaded && !isPending && (
                 <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
                     <p className="text-[11px] text-muted-foreground leading-relaxed">
-                        Step 1: Distribute your verified image to the decentralized IPFS network to
-                        ensure permanent storage.
+                        {t('description')}
                     </p>
                     <button
                         onClick={onDistribute}
@@ -49,7 +50,7 @@ export function IpfsStep({ status, isOwner, isDistributing, onDistribute, fee }:
                         ) : (
                             <div className="size-1.5 rounded-full bg-primary animate-pulse group-hover:scale-125 transition-transform" />
                         )}
-                        {isDistributing ? 'Processing...' : `Distribute to IPFS (${fee} POL)`}
+                        {isDistributing ? t('processing') : t('button', { fee })}
                     </button>
                 </div>
             )}
@@ -58,7 +59,7 @@ export function IpfsStep({ status, isOwner, isDistributing, onDistribute, fee }:
                 <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/10 rounded-lg animate-pulse">
                     <Loader2 className="size-3.5 animate-spin text-primary" />
                     <span className="text-[11px] text-muted-foreground font-medium">
-                        Initialising IPFS distribution. Please wait...
+                        {t('waiting')}
                     </span>
                 </div>
             )}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Loader2, MessageCircle } from 'lucide-react';
 import type { BrickComment } from '@/types/brick.types';
 import { useGetBrickComments } from '@/hooks/apis/brick.api';
@@ -13,6 +14,7 @@ interface CommentSectionProps {
 }
 
 export function CommentSection({ brickId, totalComments, currentUserId }: CommentSectionProps) {
+    const t = useTranslations('comments');
     const scrollRef = useRef<HTMLDivElement>(null);
     const [upvoterTarget, setUpvoterTarget] = useState<string | null>(null);
 
@@ -38,7 +40,7 @@ export function CommentSection({ brickId, totalComments, currentUserId }: Commen
             <div className="flex items-center gap-2 px-4 py-3 border-b border-primary/10 shrink-0">
                 <MessageCircle className="size-4 text-primary" />
                 <h3 className="text-xs font-bold uppercase tracking-widest">
-                    Comments ({totalComments})
+                    {t('title', { count: totalComments })}
                 </h3>
             </div>
 
@@ -56,7 +58,7 @@ export function CommentSection({ brickId, totalComments, currentUserId }: Commen
                     <div className="flex flex-col items-center justify-center py-12 gap-2">
                         <MessageCircle className="size-8 text-muted-foreground/20" />
                         <p className="text-xs text-muted-foreground/50 font-mono">
-                            No comments yet. Be the first!
+                            {t('noComments')}
                         </p>
                     </div>
                 ) : (

@@ -7,10 +7,12 @@ import { useChatStore } from '@/stores/chat-store';
 import { useGetConversations, useMarkConversationRead } from '@/hooks/apis/message.api';
 import { useChatSocket } from '@/providers/ChatSocketProvider';
 import { ContactItem } from '@/components/messages';
+import { useTranslations } from 'next-intl';
 
 export function ContactsSidebar() {
     const { data: session } = useSession();
     const currentUserId = session?.user?.id;
+    const t = useTranslations('messages.ContactsSidebar');
 
     const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
         useGetConversations();
@@ -60,7 +62,7 @@ export function ContactsSidebar() {
             <div className="p-4 border-b border-border">
                 <div className="flex items-center justify-between mb-4">
                     <span className="text-[10px] font-bold tracking-widest text-primary/60 uppercase">
-                        Active Sessions
+                        {t('activeSessions')}
                     </span>
                     <div className="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_6px_rgba(0,238,255,0.5)]" />
                 </div>
@@ -83,7 +85,7 @@ export function ContactsSidebar() {
                     </div>
                 ) : (
                     <p className="text-[10px] text-muted-foreground/50 font-mono uppercase tracking-widest text-center py-3">
-                        No active sessions
+                        {t('noActiveSessions')}
                     </p>
                 )}
             </div>
@@ -91,7 +93,7 @@ export function ContactsSidebar() {
             {/* Offline / Inactive */}
             <div className="p-4 flex-1 overflow-y-auto scrollbar-hide">
                 <span className="text-[10px] font-bold tracking-widest text-muted-foreground/50 uppercase mb-4 block">
-                    Offline
+                    {t('offline')}
                 </span>
 
                 {isLoading ? (
@@ -112,7 +114,7 @@ export function ContactsSidebar() {
                     </div>
                 ) : (
                     <p className="text-[10px] text-muted-foreground/50 font-mono uppercase tracking-widest text-center py-3">
-                        No offline contacts
+                        {t('noOfflineContacts')}
                     </p>
                 )}
 
@@ -126,7 +128,7 @@ export function ContactsSidebar() {
                         {isFetchingNextPage ? (
                             <Loader2 className="size-3 animate-spin mx-auto" />
                         ) : (
-                            'Load more'
+                            t('loadMore')
                         )}
                     </button>
                 )}
@@ -137,7 +139,7 @@ export function ContactsSidebar() {
                 <div className="flex-1 flex flex-col items-center justify-center gap-3 p-6">
                     <MessageCircle className="size-8 text-muted-foreground/20" />
                     <p className="text-[10px] text-muted-foreground/50 font-mono uppercase text-center">
-                        No conversations yet
+                        {t('noConversations')}
                     </p>
                 </div>
             )}

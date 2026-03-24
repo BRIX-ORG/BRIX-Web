@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Loader2, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { TrustScoreCircle } from '@/components/messages';
 import { useCurrentConversation } from '@/stores/chat-store';
 import {
@@ -23,6 +24,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
     const conversation = useCurrentConversation();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const deleteConversation = useDeleteConversation();
+    const t = useTranslations('messages.UserInfoSidebar');
 
     const conversationId = conversation?.id;
     const partner = conversation?.partner;
@@ -40,7 +42,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
         return (
             <aside className="w-80 border-l border-border bg-background flex flex-col items-center justify-center p-6">
                 <p className="text-xs text-muted-foreground/40 uppercase tracking-widest">
-                    No conversation selected
+                    {t('noConversation')}
                 </p>
             </aside>
         );
@@ -56,7 +58,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
                 <h3 className="text-[10px] font-black tracking-[0.3em] text-primary/60 uppercase">
-                    RELATIONSHIP_METADATA
+                    {t('metadata')}
                 </h3>
                 {onClose && (
                     <button
@@ -93,10 +95,10 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                         />
                         <span className="text-[10px] font-mono text-muted-foreground">
                             {partner.isOnline
-                                ? 'ONLINE'
+                                ? t('online')
                                 : partner.lastSeenAt
-                                  ? `Last seen ${timeAgo(partner.lastSeenAt)}`
-                                  : 'OFFLINE'}
+                                  ? t('lastSeen', { time: timeAgo(partner.lastSeenAt) })
+                                  : t('offline')}
                         </span>
                     </div>
                 </div>
@@ -109,7 +111,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                 {/* Shared Media */}
                 <div className="border-t border-border pt-6 mb-6">
                     <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">
-                        Shared Media
+                        {t('sharedMedia')}
                     </p>
                     {mediaLoading ? (
                         <div className="flex justify-center py-4">
@@ -134,7 +136,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                         </div>
                     ) : (
                         <p className="text-xs text-muted-foreground/40 text-center py-4">
-                            No shared media
+                            {t('noSharedMedia')}
                         </p>
                     )}
                 </div>
@@ -142,7 +144,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                 {/* Shared Files */}
                 <div className="border-t border-border pt-6 mb-6">
                     <p className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-4">
-                        Shared Files
+                        {t('sharedFiles')}
                     </p>
                     {filesLoading ? (
                         <div className="flex justify-center py-4">
@@ -169,7 +171,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                         </div>
                     ) : (
                         <p className="text-xs text-muted-foreground/40 text-center py-4">
-                            No shared files
+                            {t('noSharedFiles')}
                         </p>
                     )}
                 </div>
@@ -179,7 +181,7 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                     onClick={() => setShowDeleteConfirm(true)}
                     className="mt-auto w-full py-3 border border-destructive/30 bg-destructive/5 text-destructive text-[10px] font-black uppercase tracking-[0.2em] hover:bg-destructive/20 transition-all"
                 >
-                    DELETE_CONVERSATION
+                    {t('deleteConversation')}
                 </button>
             </div>
 
@@ -187,9 +189,9 @@ export function UserInfoSidebar({ onClose }: UserInfoSidebarProps) {
                 isOpen={showDeleteConfirm}
                 onClose={() => setShowDeleteConfirm(false)}
                 onConfirm={handleDeleteConversation}
-                title="Delete conversation?"
-                message="This conversation will be hidden from your inbox. Messages are not permanently deleted."
-                confirmText="Delete"
+                title={t('deleteConfirm.title')}
+                message={t('deleteConfirm.message')}
+                confirmText={t('deleteConfirm.confirmText')}
                 type="danger"
             />
         </aside>

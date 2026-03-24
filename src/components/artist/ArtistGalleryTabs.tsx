@@ -2,12 +2,7 @@
 
 import { Camera, ImageIcon, Package, type LucideIcon } from 'lucide-react';
 import type { BrickTagType } from '@/types/brick.types';
-
-const tabs: { id: BrickTagType; label: string; icon: LucideIcon }[] = [
-    { id: 'REALTIME', label: 'Realtime', icon: Camera },
-    { id: 'ART', label: 'Art', icon: ImageIcon },
-    { id: 'PRODUCT', label: 'Product', icon: Package },
-];
+import { useTranslations } from 'next-intl';
 
 interface ArtistGalleryTabsProps {
     activeTab: BrickTagType;
@@ -15,6 +10,13 @@ interface ArtistGalleryTabsProps {
 }
 
 export function ArtistGalleryTabs({ activeTab, onTabChange }: ArtistGalleryTabsProps) {
+    const t = useTranslations('artist.tabs');
+    const tabs: { id: BrickTagType; label: string; icon: LucideIcon }[] = [
+        { id: 'REALTIME', label: t('realtime'), icon: Camera },
+        { id: 'ART', label: t('art'), icon: ImageIcon },
+        { id: 'PRODUCT', label: t('product'), icon: Package },
+    ];
+
     return (
         <div className="flex items-center gap-8 border-b border-primary/10 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {tabs.map((tab) => {

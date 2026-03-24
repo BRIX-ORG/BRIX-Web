@@ -1,5 +1,4 @@
-'use client';
-
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import { UserPlus, UserMinus, Star, Users as UsersIcon } from 'lucide-react';
@@ -19,6 +18,9 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, className }: UserCardProps) {
+    const t = useTranslations('network.userCard');
+    const tc = useTranslations('common');
+
     const followMutation = useFollowUser();
     const unfollowMutation = useUnfollowUser();
 
@@ -67,7 +69,7 @@ export function UserCard({ user, className }: UserCardProps) {
                 {hasBackground && (
                     <Image
                         src={backgroundUrl!}
-                        alt="Cover"
+                        alt={tc('cover')}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80"
                     />
@@ -99,7 +101,7 @@ export function UserCard({ user, className }: UserCardProps) {
                             <div className="px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 flex items-center gap-1.5 backdrop-blur-md">
                                 <Star className="size-3 text-primary fill-primary/20" />
                                 <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
-                                    {totalVotes} BRIX
+                                    {totalVotes} {t('stats.brix')}
                                 </span>
                             </div>
                         )}
@@ -107,7 +109,7 @@ export function UserCard({ user, className }: UserCardProps) {
                             <div className="px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center gap-1.5 backdrop-blur-md">
                                 <UsersIcon className="size-3 text-purple-400 fill-purple-400/20" />
                                 <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">
-                                    {totalFollowers} FLWS
+                                    {totalFollowers} {t('stats.followers')}
                                 </span>
                             </div>
                         )}
@@ -129,7 +131,7 @@ export function UserCard({ user, className }: UserCardProps) {
                 {/* Description / Bio */}
                 <div className="h-10 mb-6">
                     <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed italic">
-                        {user.shortDescription || 'No bio available...'}
+                        {user.shortDescription || t('noBio')}
                     </p>
                 </div>
 
@@ -150,12 +152,12 @@ export function UserCard({ user, className }: UserCardProps) {
                         ) : isFollowing ? (
                             <>
                                 <UserMinus className="size-3.5" />
-                                Unfollow
+                                {tc('unfollow')}
                             </>
                         ) : (
                             <>
                                 <UserPlus className="size-3.5" />
-                                Follow
+                                {tc('follow')}
                             </>
                         )}
                     </button>

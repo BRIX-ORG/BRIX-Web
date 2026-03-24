@@ -10,8 +10,10 @@ import { useLogin } from '@/hooks/apis/auth.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
 import { Input } from '@/components/ui';
+import { useTranslations } from 'next-intl';
 
 export function LoginForm() {
+    const t = useTranslations('auth');
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const loginMutation = useLogin();
@@ -32,15 +34,14 @@ export function LoginForm() {
 
     const onSubmit = async (data: LoginFormData) => {
         try {
-            showLoading('Authenticating...');
+            showLoading(t('loginForm.loading'));
             await loginMutation.mutateAsync(data);
             hideLoading();
-            success('Login successful! Redirecting...');
+            success(t('loginForm.messages.success'));
             router.push('/dashboard');
         } catch (err) {
             hideLoading();
-            const errorMessage =
-                err instanceof Error ? err.message : 'Invalid credentials. Please try again.';
+            const errorMessage = err instanceof Error ? err.message : t('loginForm.messages.error');
             toastError(errorMessage);
         }
     };
@@ -51,23 +52,23 @@ export function LoginForm() {
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {/* Email/Username Field */}
             <Input
-                label="Access_ID"
+                label={t('loginForm.identifier.label')}
                 type="text"
                 {...register('identifier')}
                 disabled={isLoading}
                 leftIcon={<Mail className="size-5" />}
-                placeholder="ENTER_EMAIL_OR_USERNAME"
+                placeholder={t('loginForm.identifier.placeholder')}
                 error={errors.identifier?.message}
             />
 
             {/* Password Field */}
             <Input
-                label="Security_Key"
+                label={t('loginForm.password.label')}
                 type="password"
                 {...register('password')}
                 disabled={isLoading}
                 leftIcon={<Lock className="size-5" />}
-                placeholder="••••••••••••"
+                placeholder={t('loginForm.password.placeholder')}
                 error={errors.password?.message}
                 showPasswordToggle
             />
@@ -76,7 +77,7 @@ export function LoginForm() {
                 href="/recovery"
                 className="block text-right text-[10px] font-mono text-primary/60 hover:text-primary uppercase tracking-widest transition-colors"
             >
-                Recover_Access?
+                {t('loginForm.recoverLink')}
             </Link>
 
             {/* Submit Button */}
@@ -89,11 +90,11 @@ export function LoginForm() {
                     {isLoading ? (
                         <>
                             <Loader2 className="size-4 animate-spin" />
-                            <span>Authenticating...</span>
+                            <span>{t('loginForm.loading')}</span>
                         </>
                     ) : (
                         <>
-                            <span>Initialize_Session</span>
+                            <span>{t('loginForm.submit')}</span>
                             <Zap className="size-4" />
                         </>
                     )}

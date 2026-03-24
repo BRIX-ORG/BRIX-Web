@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import { MapPin } from 'lucide-react';
 import { Map, useMap, MapMarker, MarkerContent, MapControls } from '@/components/ui';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 const MAX_PICK_DISTANCE_KM = 5;
 
@@ -105,6 +106,7 @@ export function AddressMapPicker({
     disabled,
     className,
 }: AddressMapPickerProps) {
+    const t = useTranslations('camera.AddressMapPicker');
     const [hoveredCoords, setHoveredCoords] = useState<{ lat: number; lng: number } | null>(null);
 
     const markerLat = pickedLatitude ?? originLatitude;
@@ -135,7 +137,7 @@ export function AddressMapPicker({
             {/* Map header */}
             <div className="flex items-center justify-between">
                 <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                    Pick on Map
+                    {t('label')}
                 </label>
                 {hoveredCoords && (
                     <span
@@ -145,7 +147,7 @@ export function AddressMapPicker({
                         )}
                     >
                         {hoverDistance!.toFixed(2)} km{' '}
-                        {hoverIsValid ? '— within range' : '— too far'}
+                        {hoverIsValid ? `— ${t('withinRange')}` : `— ${t('tooFar')}`}
                     </span>
                 )}
             </div>
@@ -205,8 +207,7 @@ export function AddressMapPicker({
             </div>
 
             <p className="text-[9px] text-muted-foreground/50 font-mono uppercase tracking-wider">
-                Click on the map to pick a nearby address (max {MAX_PICK_DISTANCE_KM} km from
-                capture point).
+                {t('instruction', { distance: MAX_PICK_DISTANCE_KM })}
             </p>
         </div>
     );

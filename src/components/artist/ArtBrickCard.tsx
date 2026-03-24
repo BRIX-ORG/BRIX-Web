@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 import type { UserBrick } from '@/types/brick.types';
 import { formatCoord, formatTimestamp, generateHash } from '@/utils/brick';
 
@@ -12,6 +13,7 @@ interface ArtBrickCardProps {
 }
 
 export function ArtBrickCard({ brick, className, onClick }: ArtBrickCardProps) {
+    const t = useTranslations('artist.card');
     const imageUrl = brick.watermark?.url || brick.media?.url;
     const hash = generateHash(brick.title);
     const timestamp = formatTimestamp(brick.createdAt);
@@ -42,7 +44,7 @@ export function ArtBrickCard({ brick, className, onClick }: ArtBrickCardProps) {
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
                             <span className="text-muted-foreground/40 text-xs font-mono">
-                                NO IMAGE
+                                {t('noImage')}
                             </span>
                         </div>
                     )}
@@ -50,7 +52,9 @@ export function ArtBrickCard({ brick, className, onClick }: ArtBrickCardProps) {
                         {brick.tagType}
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background/90 to-transparent p-3">
-                        <p className="text-[10px] font-mono text-primary truncate">HASH: {hash}</p>
+                        <p className="text-[10px] font-mono text-primary truncate">
+                            {t('hash')}: {hash}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -76,13 +80,17 @@ export function ArtBrickCard({ brick, className, onClick }: ArtBrickCardProps) {
                 {/* Coordinates Grid */}
                 <div className="grid grid-cols-2 gap-1">
                     <div className="bg-primary/5 border border-primary/20 p-1.5 rounded">
-                        <p className="text-[8px] text-primary/60 uppercase font-bold">Latitude</p>
+                        <p className="text-[8px] text-primary/60 uppercase font-bold">
+                            {t('latitude')}
+                        </p>
                         <p className="text-[9px] font-mono text-foreground truncate">
                             {formatCoord(brick.latitude, 'N', 'S')}
                         </p>
                     </div>
                     <div className="bg-primary/5 border border-primary/20 p-1.5 rounded">
-                        <p className="text-[8px] text-primary/60 uppercase font-bold">Longitude</p>
+                        <p className="text-[8px] text-primary/60 uppercase font-bold">
+                            {t('longitude')}
+                        </p>
                         <p className="text-[9px] font-mono text-foreground truncate">
                             {formatCoord(brick.longitude, 'E', 'W')}
                         </p>
@@ -93,7 +101,7 @@ export function ArtBrickCard({ brick, className, onClick }: ArtBrickCardProps) {
                 {brick.address && brick.address !== 'string' && (
                     <div className="bg-primary/5 border border-primary/20 p-1.5 rounded">
                         <p className="text-[8px] text-primary/60 uppercase font-bold mb-0.5">
-                            Location
+                            {t('location')}
                         </p>
                         <p className="text-[9px] font-mono text-foreground truncate">
                             {brick.address}

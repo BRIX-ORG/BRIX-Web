@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { ExternalLink } from 'lucide-react';
 import type { BrickDonation } from '@/types/brick.types';
 import { formatDateTime } from '@/utils/time';
@@ -9,12 +10,13 @@ interface DonationListProps {
 }
 
 export function DonationList({ donations }: DonationListProps) {
+    const t = useTranslations('onchain.donation');
     if (donations.length === 0) return null;
 
     return (
         <div className="space-y-2">
             <p className="text-[10px] font-bold text-foreground uppercase tracking-wider">
-                Recent Support
+                {t('recentHeader')}
             </p>
             <div className="max-h-40 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
                 {donations.map((donation) => (
@@ -41,7 +43,7 @@ export function DonationList({ donations }: DonationListProps) {
                                 rel="noreferrer"
                                 className="text-[8px] text-primary/60 hover:text-primary flex items-center gap-0.5 justify-end mt-0.5 transition-colors"
                             >
-                                Explorer <ExternalLink className="size-2" />
+                                {t('explorer')} <ExternalLink className="size-2" />
                             </a>
                         </div>
                     </div>

@@ -21,7 +21,7 @@ export const useThemeStore = create<ThemeStore>()(
     persist(
         (set) => ({
             theme: 'dark', // Default is dark
-            language: 'VI', // Default is VI based on user requirements
+            language: 'ENG', // Default is ENG based on user requirements
 
             setTheme: (theme) => set({ theme }),
             toggleTheme: () =>

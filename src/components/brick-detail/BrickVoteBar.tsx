@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { ArrowBigUp, ArrowBigDown, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 import type { BrickVoteStatus } from '@/types/brick.types';
@@ -13,6 +14,7 @@ interface BrickVoteBarProps {
 }
 
 export function BrickVoteBar({ brickId, voteStatus, onShowUpvoters }: BrickVoteBarProps) {
+    const t = useTranslations('brickDetail.page');
     const voteMutation = useVoteBrick();
     const [optimistic, setOptimistic] = useState<BrickVoteStatus | null>(null);
 
@@ -92,7 +94,7 @@ export function BrickVoteBar({ brickId, voteStatus, onShowUpvoters }: BrickVoteB
                     score < 0 && 'text-destructive',
                     score === 0 && 'text-muted-foreground',
                 )}
-                title="View upvoters"
+                title={t('voteBar.viewUpvoters')}
             >
                 {score > 0 ? `+${score}` : score}
             </button>

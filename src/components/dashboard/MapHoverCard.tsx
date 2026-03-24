@@ -6,12 +6,15 @@ import { Loader2 } from 'lucide-react';
 import { useGetBrickDetail } from '@/hooks/apis/brick.api';
 import { getDefaultAvatar } from '@/utils/cloudinary';
 import { formatCoord, formatTimestamp } from '@/utils/brick';
+import { useTranslations } from 'next-intl';
 
 interface MapHoverCardProps {
     brickId: string;
 }
 
 export function MapHoverCard({ brickId }: MapHoverCardProps) {
+    const t = useTranslations('dashboard.hover');
+    const tShared = useTranslations('shared.detail');
     const { data: brick, isLoading } = useGetBrickDetail(brickId);
 
     const timestamp = useMemo(() => {
@@ -50,7 +53,7 @@ export function MapHoverCard({ brickId }: MapHoverCardProps) {
             ) : (
                 <div className="relative aspect-video w-full bg-primary/5 border-b border-primary/10 flex items-center justify-center">
                     <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest">
-                        NO ASSET
+                        {t('noAsset')}
                     </span>
                 </div>
             )}
@@ -59,7 +62,7 @@ export function MapHoverCard({ brickId }: MapHoverCardProps) {
                 <div>
                     <div className="flex justify-between items-start mb-1 gap-2">
                         <h3 className="text-[11px] font-black tracking-widest text-foreground uppercase truncate flex-1 leading-tight group-hover:text-primary transition-colors">
-                            {brick.title || 'Untitled Node'}
+                            {brick.title || t('untitledNode')}
                         </h3>
                         <span className="text-[9px] text-primary/60 font-mono shrink-0">
                             {timestamp}
@@ -72,18 +75,21 @@ export function MapHoverCard({ brickId }: MapHoverCardProps) {
                     )}
                 </div>
 
-                {/* Coordinates Grid */}
                 <div className="grid grid-cols-2 gap-2">
                     <div className="bg-primary/5 border border-primary/20 p-2 rounded">
-                        <p className="text-[7px] text-primary/60 uppercase font-bold mb-0.5">Lat</p>
+                        <p className="text-[7px] text-primary/60 uppercase font-bold mb-0.5">
+                            {t('lat')}
+                        </p>
                         <p className="text-[9px] font-mono text-foreground truncate">
-                            {formatCoord(brick.latitude, 'N', 'S')}
+                            {formatCoord(brick.latitude, tShared('north'), tShared('south'))}
                         </p>
                     </div>
                     <div className="bg-primary/5 border border-primary/20 p-2 rounded">
-                        <p className="text-[7px] text-primary/60 uppercase font-bold mb-0.5">Lon</p>
+                        <p className="text-[7px] text-primary/60 uppercase font-bold mb-0.5">
+                            {t('lon')}
+                        </p>
                         <p className="text-[9px] font-mono text-foreground truncate">
-                            {formatCoord(brick.longitude, 'E', 'W')}
+                            {formatCoord(brick.longitude, tShared('east'), tShared('west'))}
                         </p>
                     </div>
                 </div>
@@ -92,7 +98,7 @@ export function MapHoverCard({ brickId }: MapHoverCardProps) {
                 {brick.address && brick.address !== 'string' && (
                     <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                         <p className="text-[7px] text-primary/60 uppercase font-bold mb-0.5">
-                            Location
+                            {t('location')}
                         </p>
                         <p className="text-[9px] font-mono text-foreground truncate">
                             {brick.address}

@@ -1,6 +1,7 @@
 'use client';
 
 import { Shield, Zap } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface UploadControlsProps {
     isReady?: boolean;
@@ -15,13 +16,14 @@ export function UploadControls({
     onUpload,
     isUploading = false,
 }: UploadControlsProps) {
+    const t = useTranslations('uploads');
     return (
         <div className="flex flex-wrap items-center justify-between p-6 bg-muted border border-border">
             <div className="flex items-center gap-4">
                 {/* Ready Toggle */}
                 <div className="flex items-center gap-3">
                     <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-                        Ready For Blockchain
+                        {t('form.readyForBlockchain')}
                     </span>
                     <label className="inline-flex items-center cursor-pointer">
                         <input
@@ -40,7 +42,7 @@ export function UploadControls({
                 <div className="flex items-center gap-2">
                     <Shield className="size-4 text-primary" />
                     <span className="text-[10px] font-bold tracking-widest text-primary uppercase">
-                        PHASE 2 READY
+                        {t('preview.phase2Ready')}
                     </span>
                 </div>
             </div>
@@ -51,7 +53,7 @@ export function UploadControls({
                 disabled={isUploading}
                 className="glow-button bg-linear-to-r from-primary to-secondary px-12 py-4 text-primary-foreground text-sm font-black tracking-[0.25em] uppercase flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                <span>{isUploading ? 'Processing...' : 'Verify & Upload'}</span>
+                <span>{isUploading ? t('form.uploading') : t('form.verifyUpload')}</span>
                 <Zap className="size-4" />
             </button>
         </div>

@@ -2,8 +2,10 @@
 
 import { useUIStore } from '@/stores/ui-store';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { useTranslations } from 'next-intl';
 
 export function LoadingSpinner() {
+    const t = useTranslations('shared');
     const isLoading = useUIStore((state) => state.isLoading);
     const loadingMessage = useUIStore((state) => state.loadingMessage);
     usePreventScroll(isLoading);
@@ -36,10 +38,10 @@ export function LoadingSpinner() {
                 {/* Message with BRIX typography */}
                 <div className="text-center space-y-1">
                     <p className="text-xs font-mono text-muted-foreground uppercase tracking-[0.2em]">
-                        SYSTEM_PROCESSING
+                        {t('systemProcessing')}
                     </p>
                     <p className="text-sm font-medium text-foreground">
-                        {loadingMessage || 'Đang xử lý...'}
+                        {loadingMessage || t('loading')}
                     </p>
                 </div>
 

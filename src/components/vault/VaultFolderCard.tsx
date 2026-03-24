@@ -1,5 +1,6 @@
 import { LucideIcon, ChevronRight, Key } from 'lucide-react';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 export interface VaultFolder {
     id: string;
@@ -17,6 +18,7 @@ interface VaultFolderCardProps {
 }
 
 export function VaultFolderCard({ folder, onClick }: VaultFolderCardProps) {
+    const t = useTranslations('vault');
     const isLocked = folder.status === 'locked';
 
     return (
@@ -46,12 +48,12 @@ export function VaultFolderCard({ folder, onClick }: VaultFolderCardProps) {
                             : 'bg-primary/10 border-primary/20 text-primary',
                     )}
                 >
-                    {isLocked ? 'On-Chain Locked' : 'Encrypted'}
+                    {isLocked ? t('onChainLocked') : t('encrypted')}
                 </div>
             </div>
             <h4 className="text-base font-bold mb-1">{folder.title}</h4>
             <p className="text-muted-foreground text-[11px] font-mono mb-4">
-                {folder.fileCount} Files • {folder.size}
+                {t('filesCount', { count: folder.fileCount, size: folder.size })}
             </p>
             <div className="flex items-center justify-between pt-4 border-t border-border">
                 <span className="text-[10px] text-muted-foreground font-mono">

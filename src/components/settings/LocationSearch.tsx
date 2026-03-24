@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Search, MapPin, Loader2, X } from 'lucide-react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useLocationAutocomplete } from '@/hooks/apis/location.api';
+import { useTranslations } from 'next-intl';
 import type { LocationSuggestion } from '@/types/location.types';
 
 interface LocationSearchProps {
@@ -20,13 +21,15 @@ interface LocationSearchProps {
 export const LocationSearch: React.FC<LocationSearchProps> = ({
     onSelect,
     label,
-    placeholder = 'Search for a location...',
+    placeholder,
     defaultValue = '',
     className = '',
     required = false,
     error,
     disabled = false,
 }) => {
+    const t = useTranslations('settings');
+    const displayPlaceholder = placeholder || t('identity.locationPlaceholder');
     const [query, setQuery] = useState(defaultValue);
     const [isUserTyping, setIsUserTyping] = useState(false);
     const debouncedQuery = useDebounce(query, 500);
@@ -94,7 +97,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                             setIsUserTyping(true);
                         }
                     }}
-                    placeholder={placeholder}
+                    placeholder={displayPlaceholder}
                     disabled={disabled}
                     className={`
                         w-full bg-muted border border-border rounded-sm font-cabin text-foreground

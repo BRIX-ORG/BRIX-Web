@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, PanInfo, useMotionValue, useTransform } from 'motion/react';
 import { X, ChevronLeft, ChevronRight, ImageIcon } from 'lucide-react';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 export interface ThumbnailCarouselProps {
     images: { file: File; url: string }[];
@@ -29,6 +30,7 @@ export function ThumbnailCarousel({
     autoplayDelay = 4000,
     className,
 }: ThumbnailCarouselProps) {
+    const t = useTranslations('uploads.form');
     const containerPadding = 8;
     const itemWidth = baseWidth - containerPadding * 2;
     const trackItemOffset = itemWidth + GAP;
@@ -96,7 +98,7 @@ export function ThumbnailCarousel({
             >
                 <ImageIcon className="size-10 text-muted-foreground/20 mb-3" />
                 <span className="text-[10px] text-muted-foreground/40 uppercase tracking-widest font-mono">
-                    No Thumbnails Added
+                    {t('noThumbnails')}
                 </span>
             </div>
         );

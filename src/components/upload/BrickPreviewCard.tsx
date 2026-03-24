@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ImageIcon } from 'lucide-react';
 import { Map, MapMarker, MarkerContent } from '@/components/ui';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 interface BrickPreviewCardProps {
     imageUrl?: string | null;
@@ -35,6 +36,8 @@ export function BrickPreviewCard({
     avatarUrl,
     className,
 }: BrickPreviewCardProps) {
+    const t = useTranslations('uploads.preview');
+    const tc = useTranslations('common');
     const hasImage = !!imageUrl;
     const hasContent = hasImage || title || description;
     const hasCoords = latitude != null && longitude != null && latitude !== 0 && longitude !== 0;
@@ -65,10 +68,10 @@ export function BrickPreviewCard({
             <div className="p-4 border-b border-border flex items-center justify-between bg-muted/50">
                 <h2 className="text-sm font-bold tracking-[0.2em] uppercase flex items-center gap-2">
                     <span className="size-2 bg-secondary animate-pulse" />
-                    Live Preview
+                    {t('livePreview')}
                 </h2>
                 <span className="text-[9px] font-mono text-primary/50 uppercase tracking-widest">
-                    BRIX_CARD
+                    {t('brixCard')}
                 </span>
             </div>
 
@@ -89,13 +92,13 @@ export function BrickPreviewCard({
                                 <>
                                     <Image
                                         src={imageUrl}
-                                        alt={title || 'Preview'}
+                                        alt={title || t('untitledBrick')}
                                         fill
                                         className="object-cover"
                                         unoptimized
                                     />
                                     <div className="absolute top-2 right-2 bg-primary/80 text-primary-foreground px-2 py-0.5 text-[10px] font-bold rounded-full">
-                                        ART
+                                        {t('artTag')}
                                     </div>
                                     <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background/90 to-transparent p-3">
                                         <p className="text-[10px] font-mono text-primary truncate">
@@ -109,7 +112,7 @@ export function BrickPreviewCard({
                                         <ImageIcon className="size-8 text-muted-foreground/20" />
                                     </div>
                                     <span className="text-[10px] text-muted-foreground/40 uppercase tracking-widest font-mono">
-                                        No Image Selected
+                                        {t('noImage')}
                                     </span>
                                 </div>
                             )}
@@ -124,7 +127,7 @@ export function BrickPreviewCard({
                                 <h3 className="text-sm font-bold tracking-tight text-foreground uppercase truncate flex-1 mr-2">
                                     {title || (
                                         <span className="text-muted-foreground/30 italic font-normal normal-case">
-                                            Untitled Brick
+                                            {t('untitledBrick')}
                                         </span>
                                     )}
                                 </h3>
@@ -135,7 +138,7 @@ export function BrickPreviewCard({
                             <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                                 {description || (
                                     <span className="italic text-muted-foreground/30">
-                                        No description provided. Add one to verify asset metadata.
+                                        {t('noDescriptionVerify')}
                                     </span>
                                 )}
                             </p>
@@ -145,7 +148,7 @@ export function BrickPreviewCard({
                         <div className="grid grid-cols-2 gap-2">
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[9px] text-primary/60 uppercase font-bold">
-                                    Latitude
+                                    {tc('latitude')}
                                 </p>
                                 <p className="text-xs font-mono text-foreground">
                                     {formatCoord(latitude, 'N', 'S')}
@@ -153,7 +156,7 @@ export function BrickPreviewCard({
                             </div>
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[9px] text-primary/60 uppercase font-bold">
-                                    Longitude
+                                    {tc('longitude')}
                                 </p>
                                 <p className="text-xs font-mono text-foreground">
                                     {formatCoord(longitude, 'E', 'W')}
@@ -165,7 +168,7 @@ export function BrickPreviewCard({
                         {address && (
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[9px] text-primary/60 uppercase font-bold mb-0.5">
-                                    Location
+                                    {tc('location')}
                                 </p>
                                 <p className="text-xs font-mono text-foreground truncate">
                                     {address}
@@ -193,14 +196,14 @@ export function BrickPreviewCard({
                                     )}
                                 </p>
                                 <p className="text-[9px] text-primary/60 font-bold uppercase tracking-widest">
-                                    Verified Artist
+                                    {t('creators.art')}
                                 </p>
                             </div>
                         </div>
 
                         {/* CTA */}
                         <div className="w-full py-2 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest text-center rounded border border-primary/20">
-                            Full Metadata Analysis
+                            {t('fullMetadata')}
                         </div>
                     </div>
                 </div>
@@ -230,7 +233,7 @@ export function BrickPreviewCard({
                         </div>
                         <div className="bg-muted/80 px-3 py-1.5 flex items-center justify-between border-t border-border">
                             <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">
-                                GEO_LOCK
+                                {t('geoLock')}
                             </span>
                             <span className="text-[9px] font-mono text-foreground/80">
                                 {latitude!.toFixed(4)}, {longitude!.toFixed(4)}
@@ -244,7 +247,7 @@ export function BrickPreviewCard({
             <div className="p-4 bg-muted/80 border-t border-border">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-bold text-muted-foreground">
-                        PREVIEW_STATUS
+                        {t('previewStatus')}
                     </span>
                     <span
                         className={cn(
@@ -252,12 +255,14 @@ export function BrickPreviewCard({
                             hasContent ? 'text-primary' : 'text-muted-foreground/40',
                         )}
                     >
-                        {hasContent ? 'RENDERING' : 'AWAITING_DATA'}
+                        {hasContent ? t('rendering') : t('awaitingData')}
                     </span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-muted-foreground">TAG_TYPE</span>
-                    <span className="text-[10px] font-bold text-secondary">ART_BRICK</span>
+                    <span className="text-[10px] font-bold text-muted-foreground">
+                        {t('tagType')}
+                    </span>
+                    <span className="text-[10px] font-bold text-secondary">{t('artBrick')}</span>
                 </div>
             </div>
         </div>

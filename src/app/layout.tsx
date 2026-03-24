@@ -10,6 +10,7 @@ import { OnchainSocketProvider } from '@/providers/OnchainSocketProvider';
 import { Web3Provider } from '@/providers/Web3Provider';
 import { LoadingSpinner } from '@/components/shared';
 import { fontsVariables } from './fonts';
+import { I18nProvider } from '@/providers/I18nProvider';
 
 export const metadata: Metadata = {
     title: {
@@ -81,20 +82,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" className="dark" suppressHydrationWarning>
             <body className={`${fontsVariables.join(' ')} antialiased`} suppressHydrationWarning>
-                <Web3Provider>
-                    <QueryProvider>
-                        <ApiClientProvider>
-                            <ChatSocketProvider>
-                                <NotificationSocketProvider>
-                                    <OnchainSocketProvider>
-                                        {children}
-                                        <LoadingSpinner />
-                                    </OnchainSocketProvider>
-                                </NotificationSocketProvider>
-                            </ChatSocketProvider>
-                        </ApiClientProvider>
-                    </QueryProvider>
-                </Web3Provider>
+                <I18nProvider>
+                    <Web3Provider>
+                        <QueryProvider>
+                            <ApiClientProvider>
+                                <ChatSocketProvider>
+                                    <NotificationSocketProvider>
+                                        <OnchainSocketProvider>
+                                            {children}
+                                            <LoadingSpinner />
+                                        </OnchainSocketProvider>
+                                    </NotificationSocketProvider>
+                                </ChatSocketProvider>
+                            </ApiClientProvider>
+                        </QueryProvider>
+                    </Web3Provider>
+                </I18nProvider>
                 <ToastContainer
                     position="top-right"
                     autoClose={4000}

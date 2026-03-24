@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { BadgeCheck, Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/utils/classnames';
 
 export interface Artist {
@@ -17,6 +18,7 @@ interface ArtistCardProps {
 }
 
 export function ArtistCard({ artist, onClick }: ArtistCardProps) {
+    const t = useTranslations('search'); // Use 'search' namespace for common 'card' keys
     return (
         <div
             onClick={onClick}
@@ -51,7 +53,7 @@ export function ArtistCard({ artist, onClick }: ArtistCardProps) {
                     {artist.username}
                 </p>
                 <p className="text-primary text-[10px] font-black uppercase tracking-widest">
-                    {artist.brixCount} BRIX
+                    {artist.brixCount} {t('card.brick')}
                 </p>
             </div>
         </div>

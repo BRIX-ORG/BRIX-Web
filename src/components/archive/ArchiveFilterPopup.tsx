@@ -4,6 +4,7 @@ import { X, Check, Calendar } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 import type { BrickMediaType, BrickTagType } from '@/types/brick.types';
 import type { DateFilterType } from '@/types/algolia.types';
+import { useTranslations } from 'next-intl';
 
 export interface ArchiveFilters {
     tagType?: BrickTagType | 'ALL';
@@ -26,6 +27,7 @@ export function ArchiveFilterPopup({
     onClose,
     isOpen,
 }: ArchiveFilterPopupProps) {
+    const t = useTranslations('archive.filters');
     if (!isOpen) return null;
 
     const tagTypes: (BrickTagType | 'ALL')[] = ['ALL', 'ART', 'REALTIME', 'PRODUCT'];
@@ -41,7 +43,7 @@ export function ArchiveFilterPopup({
         <div className="absolute right-0 top-12 z-50 w-72 bg-background/80 backdrop-blur-2xl border border-primary/20 rounded-2xl shadow-2xl p-5 animate-in fade-in zoom-in duration-200 origin-top-right">
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary">
-                    Repository Filters
+                    {t('title')}
                 </h3>
                 <button
                     onClick={onClose}
@@ -55,7 +57,7 @@ export function ArchiveFilterPopup({
                 {/* Tag Type Filter */}
                 <div className="space-y-3">
                     <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-                        Tag Type
+                        {t('tagType')}
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                         {tagTypes.map((type) => (
@@ -79,7 +81,7 @@ export function ArchiveFilterPopup({
                 {/* Media Type Filter */}
                 <div className="space-y-3">
                     <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-                        Media Format
+                        {t('mediaFormat')}
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                         {mediaTypes.map((type) => (
@@ -103,7 +105,7 @@ export function ArchiveFilterPopup({
                 {/* Visibility Filter */}
                 <div className="space-y-3">
                     <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-                        Visibility
+                        {t('visibility')}
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                         {visibilityOptions.map((option) => {
@@ -130,7 +132,7 @@ export function ArchiveFilterPopup({
                 {/* Date Filter */}
                 <div className="space-y-3">
                     <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-                        Date Filter
+                        {t('dateFilter')}
                     </span>
                     <div className="bg-muted/30 border border-primary/5 rounded-xl p-2 space-y-3">
                         <div className="flex items-center gap-1 bg-background/50 rounded-lg p-1">
@@ -152,7 +154,7 @@ export function ArchiveFilterPopup({
                                             : 'text-muted-foreground hover:text-foreground',
                                     )}
                                 >
-                                    {type === 'none' ? 'All' : type}
+                                    {type === 'none' ? t('all') : type}
                                 </button>
                             ))}
                         </div>
@@ -163,10 +165,10 @@ export function ArchiveFilterPopup({
                                     type="text"
                                     placeholder={
                                         filters.dateFilterType === 'day'
-                                            ? 'DD/MM/YYYY'
+                                            ? t('placeholders.day')
                                             : filters.dateFilterType === 'month'
-                                              ? 'MM/YYYY'
-                                              : 'YYYY'
+                                              ? t('placeholders.month')
+                                              : t('placeholders.year')
                                     }
                                     value={filters.dateFilterValue}
                                     onChange={(e) =>
@@ -193,11 +195,9 @@ export function ArchiveFilterPopup({
                     }
                     className="text-[10px] font-bold text-muted-foreground uppercase hover:text-primary transition-colors"
                 >
-                    Clear All
+                    {t('clearAll')}
                 </button>
-                <div className="text-[10px] font-mono text-primary/40 uppercase">
-                    Selective Archiving
-                </div>
+                <div className="text-[10px] font-mono text-primary/40 uppercase">{t('footer')}</div>
             </div>
         </div>
     );

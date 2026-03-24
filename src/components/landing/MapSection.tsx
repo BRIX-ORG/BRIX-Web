@@ -2,6 +2,7 @@
 
 import { Map, MapControls, MapMarker, MarkerContent, MarkerTooltip, useMap } from '@/components/ui';
 import { useEffect, useId } from 'react';
+import { useTranslations } from 'next-intl';
 
 // Hardcoded user locations around the world
 const userLocations = [
@@ -49,25 +50,24 @@ function PulsingMarker({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 
 // Live stream overlay component
 function LiveStreamOverlay() {
+    const t = useTranslations('landing');
     return (
         <div className="absolute top-4 left-4 p-4 bg-black/80 backdrop-blur-xl border border-border hidden lg:block z-10">
             <h4 className="font-display font-bold text-xs uppercase tracking-[0.2em] text-primary mb-3">
-                Live Stream
+                {t('MapSection.overlay.title')}
             </h4>
             <div className="space-y-2">
                 <div className="flex items-center gap-3 opacity-80">
                     <div className="size-1.5 bg-primary rounded-full animate-pulse"></div>
-                    <span className="font-mono text-[9px]">User_8292 verified in Berlin</span>
+                    <span className="font-mono text-[9px]">{t('MapSection.overlay.event1')}</span>
                 </div>
                 <div className="flex items-center gap-3 opacity-80">
                     <div className="size-1.5 bg-secondary rounded-full"></div>
-                    <span className="font-mono text-[9px]">New block mined: 0x921...F1</span>
+                    <span className="font-mono text-[9px]">{t('MapSection.overlay.event2')}</span>
                 </div>
                 <div className="flex items-center gap-3 opacity-80">
                     <div className="size-1.5 bg-primary rounded-full animate-pulse"></div>
-                    <span className="font-mono text-[9px]">
-                        Artist_Neo uploaded &quot;Neon_Rain&quot;
-                    </span>
+                    <span className="font-mono text-[9px]">{t('MapSection.overlay.event3')}</span>
                 </div>
             </div>
         </div>
@@ -144,6 +144,7 @@ function ConnectionsLayer() {
 }
 
 export function MapSection() {
+    const t = useTranslations('landing');
     return (
         <section id="map" className="py-24 bg-background">
             <div className="max-w-7xl mx-auto px-6">
@@ -151,19 +152,18 @@ export function MapSection() {
                 <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-12">
                     <div>
                         <h2 className="font-display text-4xl font-bold uppercase tracking-tight mb-2">
-                            Real-Time <span className="text-secondary">Map</span>
+                            {t('MapSection.title')}{' '}
+                            <span className="text-secondary">{t('MapSection.highlight')}</span>
                         </h2>
-                        <p className="font-body text-muted-foreground">
-                            Tracking global verifications in real-time.
-                        </p>
+                        <p className="font-body text-muted-foreground">{t('MapSection.desc')}</p>
                     </div>
                     <div className="flex gap-4 font-mono text-[10px]">
                         <div className="flex items-center gap-2 px-3 py-1 bg-primary/20 border border-primary/40 rounded-full">
                             <div className="size-2 bg-primary rounded-full animate-ping"></div>
-                            <span>1,204 LIVE NODES</span>
+                            <span>{t('MapSection.badges.nodes')}</span>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1 bg-secondary/20 border border-secondary/40 rounded-full">
-                            <span>42 UPLOADS/MIN</span>
+                            <span>{t('MapSection.badges.uploads')}</span>
                         </div>
                     </div>
                 </div>
@@ -207,7 +207,7 @@ export function MapSection() {
                                                 {location.city}
                                             </p>
                                             <p className="text-[10px] opacity-70">
-                                                {location.users} active nodes
+                                                {location.users} {t('MapSection.tooltipSuffix')}
                                             </p>
                                         </div>
                                     </MarkerTooltip>

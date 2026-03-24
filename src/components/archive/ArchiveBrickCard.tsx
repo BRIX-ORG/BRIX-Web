@@ -6,6 +6,7 @@ import { cn } from '@/utils/classnames';
 import { formatTimestamp } from '@/utils/brick';
 import type { UserBrick } from '@/types/brick.types';
 import ElectricBorder from '@/components/react-bits/ElectricBorder';
+import { useTranslations } from 'next-intl';
 
 interface ArchiveBrickCardProps {
     brick: UserBrick;
@@ -13,6 +14,7 @@ interface ArchiveBrickCardProps {
 }
 
 export function ArchiveBrickCard({ brick, onClick }: ArchiveBrickCardProps) {
+    const t = useTranslations('archive.card');
     const imageUrl = brick.watermark?.url || brick.media?.url;
     const timestamp = formatTimestamp(brick.createdAt);
     const isVerified = brick.tagType === 'REALTIME' && !!brick.metadata?.verifiedAt;
@@ -66,7 +68,7 @@ export function ArchiveBrickCard({ brick, onClick }: ArchiveBrickCardProps) {
                         </span>
                         {isVerified && (
                             <span className="bg-blue-500/20 border border-blue-500/40 text-blue-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.15em] backdrop-blur-md shadow-lg">
-                                Verified
+                                {t('verified')}
                             </span>
                         )}
                     </div>
@@ -81,7 +83,7 @@ export function ArchiveBrickCard({ brick, onClick }: ArchiveBrickCardProps) {
                                 <div className="flex items-center gap-2 mt-1">
                                     <div className="size-1.5 rounded-full bg-primary/50" />
                                     <p className="text-[10px] font-mono text-muted-foreground/90 uppercase tracking-widest leading-none">
-                                        AT: {timestamp}
+                                        {t('at', { timestamp })}
                                     </p>
                                 </div>
                             </div>
@@ -96,7 +98,7 @@ export function ArchiveBrickCard({ brick, onClick }: ArchiveBrickCardProps) {
                 <div className="px-5 py-4 bg-muted/30 border-t border-primary/5 flex justify-between items-center group-hover:bg-primary/5 transition-colors duration-500">
                     <div className="flex flex-col gap-0.5">
                         <span className="text-[8px] text-muted-foreground/50 uppercase font-black tracking-[0.2em]">
-                            Sequence Code
+                            {t('sequenceCode')}
                         </span>
                         <span className="text-[11px] font-mono text-primary/80 font-bold">
                             {brick.mediaType || 'NULL'} / {brick.isPublic ? 'PUBLIC' : 'PRIVATE'}
@@ -104,7 +106,7 @@ export function ArchiveBrickCard({ brick, onClick }: ArchiveBrickCardProps) {
                     </div>
                     <div className="flex flex-col text-right gap-0.5">
                         <span className="text-[8px] text-muted-foreground/50 uppercase font-black tracking-[0.2em]">
-                            Origin Coord
+                            {t('originCoord')}
                         </span>
                         <span className="text-[11px] font-mono text-foreground/80">
                             {brick.latitude

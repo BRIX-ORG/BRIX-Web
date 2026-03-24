@@ -10,6 +10,7 @@ import {
     EncryptedFile,
     AuditLogEntry,
 } from '@/components/vault';
+import { useTranslations } from 'next-intl';
 
 // Mock data
 const mockFolders: VaultFolder[] = [
@@ -142,6 +143,7 @@ const mockLogs: AuditLogEntry[] = [
 ];
 
 export default function VaultPage() {
+    const t = useTranslations('vault');
     return (
         <div className="flex h-[calc(100vh-65px)]">
             {/* Main Content */}
@@ -152,13 +154,15 @@ export default function VaultPage() {
                 {/* Vault Folders Section */}
                 <div>
                     <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-[22px] font-bold tracking-tight">Vault Folders</h2>
+                        <h2 className="text-[22px] font-bold tracking-tight">
+                            {t('sections.folders')}
+                        </h2>
                         <div className="flex gap-2">
                             <button className="px-3 py-1.5 bg-muted hover:bg-muted/80 rounded text-xs border border-border flex items-center gap-2 transition-all">
-                                <Filter className="size-4" /> Filter
+                                <Filter className="size-4" /> {t('actions.filter')}
                             </button>
                             <button className="px-3 py-1.5 bg-muted hover:bg-muted/80 rounded text-xs border border-border flex items-center gap-2 transition-all">
-                                <PlusSquare className="size-4" /> Create New
+                                <PlusSquare className="size-4" /> {t('actions.createNew')}
                             </button>
                         </div>
                     </div>
@@ -172,7 +176,7 @@ export default function VaultPage() {
                 {/* Recent Encrypted Content */}
                 <div className="pb-12">
                     <h2 className="text-[22px] font-bold tracking-tight mb-6">
-                        Recent Private Content
+                        {t('sections.recent')}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {mockFiles.map((file) => (

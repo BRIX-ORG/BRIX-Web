@@ -8,6 +8,7 @@ import ReflectiveCard from '@/components/react-bits/ReflectiveCard';
 import type { ArtistData } from '@/components/artist';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface ArtistShareModalProps {
     isOpen: boolean;
@@ -47,6 +48,7 @@ function drawLogoOnCanvas(ctx: CanvasRenderingContext2D, size: number) {
 }
 
 export function ArtistShareModal({ isOpen, onClose, artist }: ArtistShareModalProps) {
+    const t = useTranslations('artist.share');
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -113,7 +115,7 @@ export function ArtistShareModal({ isOpen, onClose, artist }: ArtistShareModalPr
                                 <div className="flex justify-between items-center border-b border-white/20 pb-3">
                                     <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] px-2.5 py-1 bg-primary/20 text-primary rounded border border-primary/30 uppercase">
                                         <ShieldCheck className="size-3.5" />
-                                        <span>BRIX ID</span>
+                                        <span>{t('title')}</span>
                                     </div>
                                     <span className="text-[10px] font-mono opacity-50 tracking-widest">
                                         {artist.id.slice(0, 8).toUpperCase()}
@@ -151,7 +153,7 @@ export function ArtistShareModal({ isOpen, onClose, artist }: ArtistShareModalPr
                                     <div className="flex flex-col gap-2 pb-1">
                                         <div className="flex flex-col">
                                             <span className="text-[8px] tracking-[0.2em] opacity-60 uppercase">
-                                                Alias
+                                                {t('alias')}
                                             </span>
                                             <span className="font-mono text-xs font-bold tracking-widest text-white">
                                                 @{artist.username}
@@ -159,7 +161,7 @@ export function ArtistShareModal({ isOpen, onClose, artist }: ArtistShareModalPr
                                         </div>
                                         <div className="flex flex-col">
                                             <span className="text-[8px] tracking-[0.2em] opacity-60 uppercase">
-                                                Trust Level
+                                                {t('trustLevel')}
                                             </span>
                                             <span className="font-mono text-xs font-bold tracking-widest text-emerald-400">
                                                 {artist.trustScore}%
@@ -177,7 +179,7 @@ export function ArtistShareModal({ isOpen, onClose, artist }: ArtistShareModalPr
 
                         {/* External Call to action below the card */}
                         <p className="text-xs font-mono tracking-widest uppercase text-muted-foreground bg-background/50 px-4 py-2 rounded-full border border-white/5 backdrop-blur-md">
-                            Scan to visit profile
+                            {t('scanCTA')}
                         </p>
                     </motion.div>
                 </div>

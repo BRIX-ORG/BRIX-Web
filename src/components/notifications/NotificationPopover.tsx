@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Bell, CheckCheck, Inbox } from 'lucide-react';
 import { NotificationItem } from '@/components/notifications';
 import { ConfirmPopup, Portal } from '@/components/shared';
@@ -15,6 +16,8 @@ import {
 } from '@/hooks/apis/notification.api';
 
 export function NotificationPopover() {
+    const t = useTranslations('notifications');
+    const tc = useTranslations('common');
     const [isOpen, setIsOpen] = useState(false);
     const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
@@ -85,10 +88,10 @@ export function NotificationPopover() {
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
                         <h3 className="text-sm font-bold uppercase tracking-widest text-foreground flex items-center gap-2">
-                            Notifications
+                            {t('title')}
                             {unreadCount > 0 && (
                                 <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-muted-foreground font-mono">
-                                    {unreadCount} NEW
+                                    {unreadCount} {t('popover.new')}
                                 </span>
                             )}
                         </h3>
@@ -98,7 +101,7 @@ export function NotificationPopover() {
                                 className="text-[10px] uppercase font-bold text-brix-primary hover:text-white transition-colors flex items-center gap-1"
                             >
                                 <CheckCheck className="size-3" />
-                                Mark all read
+                                {t('actions.markAllRead')}
                             </button>
                         )}
                     </div>
@@ -109,17 +112,17 @@ export function NotificationPopover() {
                             <div className="p-10 flex flex-col items-center justify-center gap-3">
                                 <div className="size-8 border-2 border-brix-primary/20 border-t-brix-primary rounded-full animate-spin" />
                                 <span className="text-xs uppercase tracking-widest text-muted-foreground animate-pulse">
-                                    Syncing...
+                                    {tc('syncing')}
                                 </span>
                             </div>
                         ) : order.length === 0 ? (
                             <div className="p-12 flex flex-col items-center justify-center text-center opacity-40">
                                 <Inbox className="size-10 mb-4 text-muted-foreground" />
                                 <p className="text-sm font-medium uppercase tracking-tight">
-                                    Everything is quiet
+                                    {t('popover.quiet')}
                                 </p>
                                 <p className="text-xs text-muted-foreground mt-1">
-                                    No notifications yet
+                                    {t('popover.noNotifs')}
                                 </p>
                             </div>
                         ) : (
@@ -150,7 +153,7 @@ export function NotificationPopover() {
                         className="block p-3 text-center border-t border-white/10 bg-white/5 hover:bg-brix-primary/10 transition-colors"
                     >
                         <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground hover:text-brix-primary flex items-center justify-center gap-2">
-                            See all activity →
+                            {t('popover.seeAll')}
                         </span>
                     </Link>
                 </div>
@@ -168,9 +171,9 @@ export function NotificationPopover() {
                             setDeleteConfirmId(null);
                         }
                     }}
-                    title="Delete Notification"
-                    message="Are you sure you want to delete this notification? This action cannot be undone."
-                    confirmText="Delete"
+                    title={t('deleteConfirm.title')}
+                    message={t('deleteConfirm.message')}
+                    confirmText={tc('delete')}
                     type="danger"
                     isLoading={deleteMutation.isPending}
                 />

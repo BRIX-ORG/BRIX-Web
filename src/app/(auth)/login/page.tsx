@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { BrixBrandLogo } from '@/components/shared';
 import { AuthTabs, LoginForm, SocialAuthButton } from '@/components/auth';
+import { useTranslations } from 'next-intl';
 
 export default function LoginPage() {
+    const t = useTranslations('auth');
     return (
         <div className="w-full lg:w-2/5 flex flex-col justify-center items-center p-8 md:p-16 lg:p-24 relative bg-background">
             {/* Mobile Header Logo */}
@@ -21,10 +23,10 @@ export default function LoginPage() {
                 {/* Headline */}
                 <div className="mb-8">
                     <h2 className="text-3xl font-bold tracking-tight text-foreground uppercase mb-2">
-                        Initialize_Session
+                        {t('login.title')}
                     </h2>
                     <p className="text-muted-foreground text-sm font-mono tracking-wide uppercase">
-                        Secure protocol active
+                        {t('login.subtitle')}
                     </p>
                 </div>
 
@@ -38,7 +40,7 @@ export default function LoginPage() {
                 <div className="my-8 flex items-center gap-4">
                     <div className="h-px flex-1 bg-border" />
                     <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-                        OR
+                        {t('common.or')}
                     </span>
                     <div className="h-px flex-1 bg-border" />
                 </div>
@@ -49,12 +51,12 @@ export default function LoginPage() {
             {/* Footer Links */}
             <div className="mt-12 flex gap-8 text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                 <Link className="hover:text-primary transition-colors" href="#">
-                    Global_Privacy
+                    {t('common.privacy')}
                 </Link>
                 <Link className="hover:text-primary transition-colors" href="#">
-                    Term_Protocols
+                    {t('common.terms')}
                 </Link>
-                <span className="opacity-40">©2024_BRIX_GRID</span>
+                <span className="opacity-40">{t('common.copyright')}</span>
             </div>
         </div>
     );

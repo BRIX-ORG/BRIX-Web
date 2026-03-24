@@ -13,8 +13,10 @@ import {
 import type { Wallet as WalletType } from '@/types/wallet.types';
 import { cn } from '@/utils/classnames';
 import { toast } from 'react-toastify';
+import { useTranslations } from 'next-intl';
 
 export function WalletButton() {
+    const t = useTranslations('wallet');
     const { status, address } = useConnection();
     const isConnected = status === 'connected';
     const { openConnectModal } = useConnectModal();
@@ -53,13 +55,12 @@ export function WalletButton() {
                 signature: signature,
                 message: nonceData.nonce,
             });
-            toast.success('Wallet linked successfully!');
+            toast.success(t('linkSuccess'));
             setShowDropdown(false);
         } catch (error: unknown) {
             console.error('Failed to link wallet:', error);
             // Provide better feedback if wallet is already linked to another account
-            let errorMessage =
-                'Failed to link wallet. It might already be linked to another account.';
+            let errorMessage = t('linkError');
 
             if (error instanceof Error) {
                 // Check if it's an axios-like error with response data
@@ -91,7 +92,7 @@ export function WalletButton() {
                 className="flex items-center gap-2 bg-primary text-primary-foreground px-3 md:px-4 py-1.5 rounded text-xs font-bold uppercase tracking-tighter hover:brightness-110 transition-all h-9"
             >
                 <Wallet className="size-4" />
-                <span className="hidden sm:inline">Connect</span>
+                <span className="hidden sm:inline">{t('connect')}</span>
             </button>
         );
     }
@@ -115,19 +116,19 @@ export function WalletButton() {
                     )}
                 </div>
                 <span className="hidden sm:inline font-mono tracking-tight">
-                    {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Wallet'}
+                    {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : t('connect')}
                 </span>
                 {isLoadingWallets || isLinking ? (
                     <Loader2 className="size-3.5 animate-spin opacity-50" />
                 ) : linkedWallet ? (
                     <div className="hidden xs:flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-green-500/20 text-[9px] uppercase tracking-wider">
                         <span className="size-1 bg-green-400 rounded-full animate-pulse" />
-                        Linked
+                        {t('linked')}
                     </div>
                 ) : (
                     <div className="hidden xs:flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-yellow-500/20 text-[9px] uppercase tracking-wider">
                         <span className="size-1 bg-yellow-400 rounded-full" />
-                        Unlinked
+                        {t('unlinked')}
                     </div>
                 )}
             </button>
@@ -141,7 +142,7 @@ export function WalletButton() {
                         {address && (
                             <div>
                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2 px-1">
-                                    Current Wallet
+                                    {t('current')}
                                 </p>
                                 <div className="p-3 rounded-lg bg-primary/5 border border-primary/10 space-y-2">
                                     <div className="flex items-center justify-between">
@@ -155,7 +156,7 @@ export function WalletButton() {
                                             <button
                                                 onClick={() => copyToClipboard(address)}
                                                 className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-muted-foreground hover:text-foreground"
-                                                title="Copy Address"
+                                                title={t('copy')}
                                             >
                                                 {copiedAddress === address ? (
                                                     <Check className="size-3 text-green-500" />
@@ -168,7 +169,7 @@ export function WalletButton() {
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-muted-foreground hover:text-foreground"
-                                                title="View on Explorer"
+                                                title={t('explorer')}
                                             >
                                                 <ExternalLink className="size-3" />
                                             </a>
@@ -177,7 +178,7 @@ export function WalletButton() {
                                     {linkedWallet && (
                                         <div className="flex items-center gap-1.5 px-2 py-1 bg-green-500/10 rounded text-[10px] text-green-400 font-medium">
                                             <Check className="size-3" />
-                                            Verified Account Owner
+                                            {t('verifiedOwner')}
                                         </div>
                                     )}
                                 </div>
@@ -187,7 +188,7 @@ export function WalletButton() {
                         {wallets.length > 0 && (
                             <div>
                                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2 px-1">
-                                    Your Linked Wallets
+                                    {t('yourWallets')}
                                 </p>
                                 <div className="space-y-1.5">
                                     {wallets.map((wallet: WalletType) => {
@@ -213,7 +214,7 @@ export function WalletButton() {
                                                             copyToClipboard(wallet.address)
                                                         }
                                                         className="p-1 hover:bg-white/10 rounded transition-colors text-muted-foreground hover:text-foreground"
-                                                        title="Copy Address"
+                                                        title={t('copy')}
                                                     >
                                                         {copiedAddress === wallet.address ? (
                                                             <Check className="size-2.5 text-green-500" />
@@ -246,7 +247,7 @@ export function WalletButton() {
                             <div className="p-2 pt-0">
                                 <div className="px-2 py-2 bg-yellow-500/10 rounded-lg mb-2 border border-yellow-500/20">
                                     <p className="text-[10px] text-yellow-400 font-medium leading-tight">
-                                        Wallet connected but not linked.
+                                        {t('notLinkedMsg')}
                                     </p>
                                 </div>
                                 <button
@@ -259,7 +260,7 @@ export function WalletButton() {
                                     ) : (
                                         <Wallet className="size-3.5" />
                                     )}
-                                    Link This Wallet
+                                    {t('linkWallet')}
                                 </button>
                             </div>
                         )}
@@ -268,7 +269,7 @@ export function WalletButton() {
                             className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-bold text-destructive hover:bg-destructive/10 rounded transition-colors"
                         >
                             <Unlink className="size-4" />
-                            Disconnect
+                            {t('disconnect')}
                         </button>
                     </div>
                 </div>

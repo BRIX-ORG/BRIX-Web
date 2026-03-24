@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { Globe, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Map, MapMarker, MarkerContent } from '@/components/ui';
 import { useGetNewsfeedLocations } from '@/hooks/apis/brick.api';
 
 export function GlobalActivityWidget() {
+    const t = useTranslations('trending');
     const [isExpanded, setIsExpanded] = useState(false);
     const { data: globalLocations = [] } = useGetNewsfeedLocations({ isPublic: true });
 
@@ -31,13 +33,13 @@ export function GlobalActivityWidget() {
                     <div className="flex items-center gap-2">
                         <Globe className="size-5 text-primary" />
                         <h5 className="text-xs font-black uppercase tracking-widest text-foreground">
-                            Global Activity
+                            {t('widget.title')}
                         </h5>
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
                             <span className="size-1.5 bg-primary rounded-full animate-pulse" />
-                            Live
+                            {t('widget.live')}
                         </span>
                         <button
                             onClick={() => setIsExpanded(false)}
@@ -67,15 +69,15 @@ export function GlobalActivityWidget() {
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
                         <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">
-                            Sync Status
+                            {t('widget.syncStatus')}
                         </span>
                         <span className="text-[10px] font-mono bg-primary/10 px-2 py-0.5 rounded text-primary border border-primary/20">
-                            STABLE
+                            {t('widget.stable')}
                         </span>
                     </div>
                     <div className="flex items-center justify-between">
                         <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">
-                            Active Nodes
+                            {t('widget.activeNodes')}
                         </span>
                         <span className="text-[10px] text-foreground font-mono font-bold">
                             {globalLocations.length.toLocaleString()}

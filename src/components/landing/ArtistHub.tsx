@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import ShinyText from '@/components/react-bits/ShinyText';
+import { useTranslations } from 'next-intl';
 
 // Dynamic import to avoid SSR issues with WebGL
 const DomeGallery = dynamic(() => import('@/components/react-bits/DomeGallery'), {
@@ -49,6 +50,7 @@ const artworkImages = [
 ];
 
 export function ArtistHub() {
+    const t = useTranslations('landing');
     return (
         <section id="artist-hub" className="py-24 bg-background/50 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-6">
@@ -56,7 +58,7 @@ export function ArtistHub() {
                 <div className="flex items-center gap-4 mb-16">
                     <span className="h-px flex-1 bg-border"></span>
                     <ShinyText
-                        text="Artist Hub Showcase"
+                        text={t('ArtistHub.header')}
                         speed={2}
                         delay={0}
                         color="#b5b5b5"
@@ -98,7 +100,7 @@ export function ArtistHub() {
                 {/* CTA */}
                 <div className="flex justify-center mt-16">
                     <button className="px-12 py-4 border border-primary text-primary font-display font-bold uppercase tracking-[0.2em] hover:bg-primary hover:text-primary-foreground transition-all">
-                        Enter the Hub
+                        {t('ArtistHub.cta')}
                     </button>
                 </div>
             </div>

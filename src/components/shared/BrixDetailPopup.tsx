@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { useTranslations } from 'next-intl';
 
 // Generate fake hash from image URL
 function generateHash(src: string): string {
@@ -13,21 +14,6 @@ function generateHash(src: string): string {
     }
     const hex = Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
     return `0x${hex.slice(0, 5)}...${hex.slice(-6)}`;
-}
-
-// Generate fake coordinates from hash
-function generateCoords(src: string): { lat: string; lng: string } {
-    let hash = 0;
-    for (let i = 0; i < src.length; i++) {
-        hash = (hash << 3) - hash + src.charCodeAt(i);
-        hash |= 0;
-    }
-    const lat = (Math.abs(hash % 18000) / 100 - 90).toFixed(4);
-    const lng = (Math.abs((hash >> 8) % 36000) / 100 - 180).toFixed(4);
-    return {
-        lat: `${Math.abs(parseFloat(lat)).toFixed(4)}° ${parseFloat(lat) >= 0 ? 'N' : 'S'}`,
-        lng: `${Math.abs(parseFloat(lng)).toFixed(4)}° ${parseFloat(lng) >= 0 ? 'E' : 'W'}`,
-    };
 }
 
 export type SelectedImage = {
@@ -41,6 +27,23 @@ interface BrixDetailPopupProps {
 }
 
 export function BrixDetailPopup({ image, onClose }: BrixDetailPopupProps) {
+    const t = useTranslations('shared.detail');
+
+    // Generate fake coordinates from hash
+    const generateCoords = (src: string): { lat: string; lng: string } => {
+        let hash = 0;
+        for (let i = 0; i < src.length; i++) {
+            hash = (hash << 3) - hash + src.charCodeAt(i);
+            hash |= 0;
+        }
+        const lat = (Math.abs(hash % 18000) / 100 - 90).toFixed(4);
+        const lng = (Math.abs((hash >> 8) % 36000) / 100 - 180).toFixed(4);
+        return {
+            lat: `${Math.abs(parseFloat(lat)).toFixed(4)}° ${parseFloat(lat) >= 0 ? t('north') : t('south')}`,
+            lng: `${Math.abs(parseFloat(lng)).toFixed(4)}° ${parseFloat(lng) >= 0 ? t('east') : t('west')}`,
+        };
+    };
+
     // Prevent background scrolling when popup is open
     usePreventScroll(!!image);
 
@@ -76,11 +79,11 @@ export function BrixDetailPopup({ image, onClose }: BrixDetailPopupProps) {
                             sizes="(max-width: 768px) 100vw, 400px"
                         />
                         <div className="absolute top-2 right-2 bg-primary/80 text-primary-foreground px-2 py-0.5 text-[10px] font-bold rounded-full">
-                            AUTHENTIC
+                            {t('authentic')}
                         </div>
                         <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background/90 to-transparent p-3">
                             <p className="text-[10px] font-mono text-primary truncate">
-                                HASH: {hash}
+                                {t('hash')}: {hash}
                             </p>
                         </div>
                     </div>
@@ -91,15 +94,14 @@ export function BrixDetailPopup({ image, onClose }: BrixDetailPopupProps) {
                     <div>
                         <div className="flex justify-between items-start mb-1">
                             <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
-                                {image.alt || 'Verified Asset'}
+                                {image.alt || t('verifiedAsset')}
                             </h3>
                             <span className="text-[10px] text-primary/60 font-mono">
                                 {timestamp}
                             </span>
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed">
-                            Captured via verified optical sensor. No post-processing detected.
-                            Geometry consistent with location metadata.
+                            {t('description')}
                         </p>
                     </div>
 
@@ -107,13 +109,13 @@ export function BrixDetailPopup({ image, onClose }: BrixDetailPopupProps) {
                     <div className="grid grid-cols-2 gap-2">
                         <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                             <p className="text-[9px] text-primary/60 uppercase font-bold">
-                                Latitude
+                                {t('latitude')}
                             </p>
                             <p className="text-xs font-mono text-foreground">{coords.lat}</p>
                         </div>
                         <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                             <p className="text-[9px] text-primary/60 uppercase font-bold">
-                                Longitude
+                                {t('longitude')}
                             </p>
                             <p className="text-xs font-mono text-foreground">{coords.lng}</p>
                         </div>
@@ -124,7 +126,7 @@ export function BrixDetailPopup({ image, onClose }: BrixDetailPopupProps) {
                         onClick={onClose}
                         className="w-full py-2 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-widest hover:bg-primary/80 transition-all rounded"
                     >
-                        Full Metadata Analysis
+                        {t('fullAnalysis')}
                     </button>
                 </div>
             </div>

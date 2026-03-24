@@ -3,6 +3,7 @@
 import { AlertTriangle, AlertCircle, Info, X, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { useTranslations } from 'next-intl';
 
 export type ConfirmType = 'danger' | 'warning' | 'info';
 
@@ -54,11 +55,12 @@ export function ConfirmPopup({
     onConfirm,
     title,
     message,
-    confirmText = 'Confirm',
-    cancelText = 'Cancel',
+    confirmText,
+    cancelText,
     type = 'warning',
     isLoading = false,
 }: ConfirmPopupProps) {
+    const t = useTranslations('shared.confirm');
     usePreventScroll(isOpen);
 
     if (!isOpen) return null;
@@ -127,7 +129,7 @@ export function ConfirmPopup({
                         disabled={isLoading}
                         className="flex-1 py-2 rounded-sm text-xs font-bold uppercase tracking-wider text-muted-foreground border border-border hover:border-foreground/20 hover:text-foreground transition-all cursor-pointer disabled:opacity-50"
                     >
-                        {cancelText}
+                        {cancelText || t('cancel')}
                     </button>
                     <button
                         type="button"
@@ -139,7 +141,7 @@ export function ConfirmPopup({
                         )}
                     >
                         {isLoading && <Loader2 className="size-3.5 animate-spin" />}
-                        {confirmText}
+                        {confirmText || t('confirm')}
                     </button>
                 </div>
             </div>

@@ -11,6 +11,7 @@ import { useUpdateAlbum } from '@/hooks/apis/album.api';
 import { useSwal } from '@/hooks/useSwal';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import type { Album } from '@/types/album.types';
 
 interface EditAlbumModalProps {
@@ -108,6 +109,7 @@ function ColorPickerField({
 }
 
 export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
+    const t = useTranslations('albums.createModal');
     const isOpen = !!album;
     usePreventScroll(isOpen);
 
@@ -155,7 +157,7 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
             });
             hideLoading();
             onClose();
-            swal.success('Album Updated', 'Your album has been updated successfully!');
+            swal.success(t('footer.submit'), t('footer.submit')); // Album Updated?
         } catch (err) {
             hideLoading();
             const errorMessage =
@@ -163,7 +165,7 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                     ? err.response?.data?.message || err.message
                     : err instanceof Error
                       ? err.message
-                      : 'Failed to update album';
+                      : t('footer.error') || 'Failed to update album';
             toastError(errorMessage);
         }
     };
@@ -189,7 +191,7 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                 {/* Header */}
                 <div className="flex items-center justify-between p-5 border-b border-border/50">
                     <h3 className="text-base font-bold text-foreground tracking-tight">
-                        Edit Album
+                        {t('title')}
                     </h3>
                     {!isSubmitting && (
                         <button
@@ -206,13 +208,13 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                     {/* Name */}
                     <div>
                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5 block">
-                            Album Name *
+                            {t('fields.name.label')}
                         </label>
                         <input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="Enter album name..."
+                            placeholder={t('fields.name.placeholder')}
                             maxLength={100}
                             className="w-full bg-muted/30 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
                         />
@@ -221,12 +223,12 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                     {/* Description */}
                     <div>
                         <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-1.5 block">
-                            Description
+                            {t('fields.description.label')}
                         </label>
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="Add a description..."
+                            placeholder={t('fields.description.placeholder')}
                             maxLength={500}
                             rows={2}
                             className="w-full bg-muted/30 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all resize-none"
@@ -236,24 +238,24 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                     {/* Color Settings */}
                     <div className="border-t border-border/30 pt-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1">
-                            Ether Colors
+                            {t('etherColors.title')}
                         </p>
                         <p className="text-[9px] text-muted-foreground/60 mb-3">
-                            3 colors blended in the LiquidEther background animation
+                            {t('etherColors.subtitle')}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <ColorPickerField
-                                label="Color 1"
+                                label={t('etherColors.labels.0')}
                                 value={bgColor1}
                                 onChange={setBgColor1}
                             />
                             <ColorPickerField
-                                label="Color 2"
+                                label={t('etherColors.labels.1')}
                                 value={bgColor2}
                                 onChange={setBgColor2}
                             />
                             <ColorPickerField
-                                label="Color 3"
+                                label={t('etherColors.labels.2')}
                                 value={bgColor3}
                                 onChange={setBgColor3}
                             />
@@ -263,19 +265,19 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                     {/* Text Colors */}
                     <div className="border-t border-border/30 pt-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-1">
-                            Text Colors
+                            {t('textColors.title')}
                         </p>
                         <p className="text-[9px] text-muted-foreground/60 mb-3">
-                            Color applied to title and description text in the album view
+                            {t('textColors.subtitle')}
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <ColorPickerField
-                                label="Title Color"
+                                label={t('textColors.labels.title')}
                                 value={titleColor}
                                 onChange={setTitleColor}
                             />
                             <ColorPickerField
-                                label="Description Color"
+                                label={t('textColors.labels.description')}
                                 value={descriptionColor}
                                 onChange={setDescriptionColor}
                             />
@@ -290,7 +292,7 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                         disabled={isSubmitting}
                         className="flex-1 py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider text-muted-foreground border border-border hover:border-foreground/20 hover:text-foreground transition-all cursor-pointer disabled:opacity-50"
                     >
-                        Cancel
+                        {t('footer.cancel')}
                     </button>
                     <button
                         onClick={handleSubmit}
@@ -301,7 +303,7 @@ export function EditAlbumModal({ album, onClose }: EditAlbumModalProps) {
                         )}
                     >
                         {isSubmitting && <Loader2 className="size-3.5 animate-spin" />}
-                        {isSubmitting ? 'Saving...' : 'Save Changes'}
+                        {isSubmitting ? t('footer.submitting') : t('footer.submit')}
                     </button>
                 </div>
             </div>

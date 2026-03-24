@@ -16,6 +16,7 @@ import { cn } from '@/utils/classnames';
 import type { Album } from '@/types/album.types';
 import Stack from '@/components/react-bits/Stack';
 import { useToast } from '@/hooks/useToast';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface AlbumCardProps {
     album: Album;
@@ -24,6 +25,8 @@ interface AlbumCardProps {
 }
 
 export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
+    const t = useTranslations('albums.card');
+    const locale = useLocale();
     const [showMenu, setShowMenu] = useState(false);
     const [copied, setCopied] = useState(false);
     const { success } = useToast();
@@ -40,7 +43,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
         />
     ));
 
-    const createdDate = new Date(album.createdAt).toLocaleDateString('en-US', {
+    const createdDate = new Date(album.createdAt).toLocaleDateString(locale, {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
@@ -50,7 +53,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
         const url = `${window.location.origin}/album/${album.id}`;
         await navigator.clipboard.writeText(url);
         setCopied(true);
-        success('Album link copied to clipboard!');
+        success(t('copied'));
         setTimeout(() => setCopied(false), 2000);
     };
 
@@ -112,7 +115,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                                     className="flex items-center gap-2.5 w-full px-3 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors cursor-pointer"
                                 >
                                     <Pencil className="size-3.5" />
-                                    Edit Album
+                                    {t('menu.edit')}
                                 </button>
                                 <button
                                     onClick={() => {
@@ -122,7 +125,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                                     className="flex items-center gap-2.5 w-full px-3 py-2.5 text-xs text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-colors cursor-pointer"
                                 >
                                     <Share2 className="size-3.5" />
-                                    Share Link
+                                    {t('menu.share')}
                                 </button>
                                 <div className="border-t border-white/5" />
                                 <button
@@ -133,7 +136,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                                     className="flex items-center gap-2.5 w-full px-3 py-2.5 text-xs text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
                                 >
                                     <Trash2 className="size-3.5" />
-                                    Delete Album
+                                    {t('menu.delete')}
                                 </button>
                             </div>
                         </>
@@ -173,12 +176,12 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
                         {copied ? (
                             <>
                                 <Check className="size-2.5" />
-                                Copied
+                                {t('copiedButton')}
                             </>
                         ) : (
                             <>
                                 <Copy className="size-2.5" />
-                                Share
+                                {t('shareButton')}
                             </>
                         )}
                     </button>

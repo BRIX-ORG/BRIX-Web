@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { RealtimeBrick } from '@/types/brick.types';
 import { motion } from 'motion/react';
 import { Coins, ImageIcon } from 'lucide-react';
@@ -13,6 +14,8 @@ interface RealtimeBrickCardProps {
 }
 
 export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardProps) {
+    const t = useTranslations('realtime');
+    const tc = useTranslations('common');
     const imageUrl = brick.watermark?.url || brick.media?.url;
     const hash = generateHash(brick.title);
 
@@ -31,24 +34,24 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
     let isBreathing = false;
 
     if (rawStatus === 'onchain') {
-        statusDisplay = 'VERIFIED ON-CHAIN';
+        statusDisplay = t('status.onchain');
         statusColor = 'text-emerald-500';
         statusBgIndicator = 'bg-emerald-500';
     } else if (rawStatus === 'ipfs_uploaded') {
-        statusDisplay = 'IPFS DISTRIBUTED';
+        statusDisplay = t('status.ipfs_uploaded');
         statusColor = 'text-blue-500';
         statusBgIndicator = 'bg-blue-500';
     } else if (rawStatus === 'failed') {
-        statusDisplay = 'FAILED VERIFICATION';
+        statusDisplay = t('status.failed');
         statusColor = 'text-rose-500';
         statusBgIndicator = 'bg-rose-500';
     } else if (rawStatus === 'pending') {
-        statusDisplay = 'PROCESSING QUEUE';
+        statusDisplay = t('status.pending');
         statusColor = 'text-purple-500';
         statusBgIndicator = 'bg-purple-500';
         isBreathing = true;
     } else {
-        statusDisplay = 'CAPTURED ASSET';
+        statusDisplay = t('status.captured');
         statusColor = 'text-amber-500';
         statusBgIndicator = 'bg-amber-500';
         isBreathing = true;
@@ -63,25 +66,25 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
     if (rawStatus === 'failed') {
         revenueDisplay = (
             <p className="text-[9px] font-bold text-rose-500/80 uppercase tracking-wider">
-                Cannot Earn
+                {t('revenueStatus.failed')}
             </p>
         );
     } else if (rawStatus === 'captured') {
         revenueDisplay = (
             <p className="text-[9px] font-bold text-amber-500/80 uppercase tracking-wider">
-                Distribute to Earn
+                {t('revenueStatus.captured')}
             </p>
         );
     } else if (rawStatus === 'ipfs_uploaded') {
         revenueDisplay = (
             <p className="text-[9px] font-bold text-blue-500/80 uppercase tracking-wider">
-                Mint to Earn
+                {t('revenueStatus.ipfs_uploaded')}
             </p>
         );
     } else if (rawStatus === 'pending') {
         revenueDisplay = (
             <p className="text-[9px] font-bold text-purple-500/80 uppercase tracking-wider animate-pulse">
-                Processing...
+                {t('revenueStatus.pending')}
             </p>
         );
     }
@@ -152,7 +155,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                                 <>
                                     <Image
                                         src={imageUrl}
-                                        alt={brick.title || 'Realtime Asset'}
+                                        alt={brick.title || t('defaultAssetTitle')}
                                         fill
                                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 33vw"
@@ -162,7 +165,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                                         {brick.tagType} BRIX
                                     </div>
                                     <div className="absolute top-2 left-2 bg-background/80 backdrop-blur-md text-foreground px-2 py-0.5 text-[9px] font-bold font-mono rounded shadow-sm border border-border/50">
-                                        {brick.isPublic ? 'PUBLIC' : 'PRIVATE'}
+                                        {brick.isPublic ? tc('public') : tc('private')}
                                     </div>
                                 </>
                             ) : (
@@ -171,7 +174,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                                         <ImageIcon className="size-5 text-primary/30" />
                                     </div>
                                     <span className="text-[9px] text-primary/40 uppercase tracking-widest font-mono">
-                                        NO CONTENT
+                                        {t('card.noContent')}
                                     </span>
                                 </div>
                             )}
@@ -185,7 +188,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                                 <h3 className="text-xs font-bold tracking-tight text-foreground uppercase truncate flex-1 group-hover:text-primary transition-colors">
                                     {brick.title || (
                                         <span className="text-muted-foreground/50 italic normal-case font-normal">
-                                            Untitled Asset
+                                            {t('card.untitled')}
                                         </span>
                                     )}
                                 </h3>
@@ -205,7 +208,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                             <div className="grid grid-cols-2 gap-1.5">
                                 <div className="bg-primary/5 border border-primary/10 p-1.5 rounded">
                                     <p className="text-[8px] text-primary/50 uppercase font-bold mb-0.5">
-                                        Latitude
+                                        {tc('latitude')}
                                     </p>
                                     <p className="text-[9px] font-mono text-foreground truncate">
                                         {formatCoord(brick.latitude, 'N', 'S')}
@@ -213,7 +216,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                                 </div>
                                 <div className="bg-primary/5 border border-primary/10 p-1.5 rounded">
                                     <p className="text-[8px] text-primary/50 uppercase font-bold mb-0.5">
-                                        Longitude
+                                        {tc('longitude')}
                                     </p>
                                     <p className="text-[9px] font-mono text-foreground truncate">
                                         {formatCoord(brick.longitude, 'E', 'W')}
@@ -225,7 +228,7 @@ export function RealtimeBrickCard({ brick, index, onClick }: RealtimeBrickCardPr
                                 <div className="flex items-center gap-1.5 text-amber-500/80">
                                     <Coins className="size-3.5" />
                                     <span className="text-[9px] uppercase font-bold tracking-widest">
-                                        Revenue
+                                        {tc('revenue')}
                                     </span>
                                 </div>
                                 {revenueDisplay}

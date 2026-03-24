@@ -12,16 +12,17 @@ import { cn } from '@/utils/classnames';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { useGetTotalUnread } from '@/hooks/apis/message.api';
 import { useChatStore } from '@/stores/chat-store';
-
-const navLinks = [
-    { href: '/dashboard', label: 'MAP' },
-    { href: '/dashboard/trending', label: 'TRENDING' },
-    { href: '/dashboard/archive', label: 'ARCHIVE' },
-    { href: '/messages', label: 'MESSAGES' },
-    { href: '/dashboard/network', label: 'NETWORK' },
-];
+import { useTranslations } from 'next-intl';
 
 export function MessagesHeader() {
+    const t = useTranslations('messages.MessagesHeader');
+    const navLinks = [
+        { href: '/dashboard', label: t('nav.map') },
+        { href: '/dashboard/trending', label: t('nav.trending') },
+        { href: '/dashboard/archive', label: t('nav.archive') },
+        { href: '/messages', label: t('nav.messages') },
+        { href: '/dashboard/network', label: t('nav.network') },
+    ];
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const pathname = usePathname();
     const { data: session } = useSession();
@@ -79,7 +80,7 @@ export function MessagesHeader() {
                     >
                         <Search className="size-4 text-primary mr-2" />
                         <span className="text-[10px] text-muted-foreground/50 font-bold">
-                            CMD+K TO SEARCH
+                            {t('searchPlaceholder')}
                         </span>
                     </button>
 

@@ -1,5 +1,4 @@
-'use client';
-
+import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,29 +8,6 @@ import type { NotificationGroup, NotificationType } from '@/types/notification.t
 import { timeAgo } from '@/utils/time';
 import { getAvatarUrl } from '@/utils/cloudinary';
 
-const TYPE_CONFIG: Record<NotificationType, { icon: React.ReactNode; text: string }> = {
-    UPVOTE_BRICK: {
-        icon: <Heart className="size-3 text-red-500 fill-red-500" />,
-        text: 'upvoted your brick',
-    },
-    UPVOTE_COMMENT: {
-        icon: <Heart className="size-3 text-red-500 fill-red-500" />,
-        text: 'upvoted your comment',
-    },
-    COMMENT_BRICK: {
-        icon: <MessageSquare className="size-3 text-brix-primary fill-brix-primary" />,
-        text: 'commented on your brick',
-    },
-    REPLY_COMMENT: {
-        icon: <MessageSquare className="size-3 text-brix-primary fill-brix-primary" />,
-        text: 'replied to your comment',
-    },
-    FOLLOW: {
-        icon: <UserPlus className="size-3 text-brix-secondary" />,
-        text: 'started following you',
-    },
-};
-
 interface NotificationItemProps {
     notification: NotificationGroup;
     onDelete?: (id: string) => void;
@@ -39,7 +15,36 @@ interface NotificationItemProps {
 }
 
 export function NotificationItem({ notification, onDelete, onClick }: NotificationItemProps) {
+    const t = useTranslations('notifications');
+    const tc = useTranslations('common');
     const router = useRouter();
+
+    const TYPE_CONFIG: Record<NotificationType, { icon: React.ReactNode; text: string }> = useMemo(
+        () => ({
+            UPVOTE_BRICK: {
+                icon: <Heart className="size-3 text-red-500 fill-red-500" />,
+                text: t('types.UPVOTE_BRICK'),
+            },
+            UPVOTE_COMMENT: {
+                icon: <Heart className="size-3 text-red-500 fill-red-500" />,
+                text: t('types.UPVOTE_COMMENT'),
+            },
+            COMMENT_BRICK: {
+                icon: <MessageSquare className="size-3 text-brix-primary fill-brix-primary" />,
+                text: t('types.COMMENT_BRICK'),
+            },
+            REPLY_COMMENT: {
+                icon: <MessageSquare className="size-3 text-brix-primary fill-brix-primary" />,
+                text: t('types.REPLY_COMMENT'),
+            },
+            FOLLOW: {
+                icon: <UserPlus className="size-3 text-brix-secondary" />,
+                text: t('types.FOLLOW'),
+            },
+        }),
+        [t],
+    );
+
     const avatarUrl = useMemo(
         () => getAvatarUrl(notification.lastActor.avatar ?? null, notification.lastActor.gender),
         [notification.lastActor.avatar, notification.lastActor.gender],
@@ -47,7 +52,7 @@ export function NotificationItem({ notification, onDelete, onClick }: Notificati
 
     const config = TYPE_CONFIG[notification.type] ?? {
         icon: <ExternalLink className="size-3 text-muted-foreground" />,
-        text: 'interacted with you',
+        text: t('types.default'),
     };
 
     const handleItemClick = () => {
@@ -110,8 +115,7 @@ export function NotificationItem({ notification, onDelete, onClick }: Notificati
                     </Link>
                     {notification.actorsCount > 1 && (
                         <span className="text-muted-foreground text-xs ml-1">
-                            and {notification.actorsCount - 1} other
-                            {notification.actorsCount > 2 ? 's' : ''}
+                            {t('types.others', { count: notification.actorsCount - 1 })}
                         </span>
                     )}
                     <span className="text-muted-foreground ml-1">{config.text}</span>
@@ -153,7 +157,7 @@ export function NotificationItem({ notification, onDelete, onClick }: Notificati
                         onDelete?.(notification.id);
                     }}
                     className="p-2 rounded-full bg-white/5 hover:bg-destructive hover:text-white transition-all transform hover:scale-110"
-                    title="Delete"
+                    title={tc('delete')}
                 >
                     <Trash2 className="size-4" />
                 </button>

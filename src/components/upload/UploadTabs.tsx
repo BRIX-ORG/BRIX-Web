@@ -3,19 +3,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 interface Tab {
     href: string;
     label: string;
 }
 
-const tabs: Tab[] = [
-    { href: '/dashboard/uploads', label: 'Art Upload' },
-    { href: '/dashboard/uploads/model', label: 'Model Upload' },
-];
-
 export function UploadTabs() {
+    const t = useTranslations('uploads.tabs');
     const pathname = usePathname();
+
+    const tabs: Tab[] = [
+        { href: '/dashboard/uploads', label: t('art') },
+        { href: '/dashboard/uploads/model', label: t('model') },
+    ];
 
     return (
         <div className="w-full flex justify-start mb-6 border-b border-border">

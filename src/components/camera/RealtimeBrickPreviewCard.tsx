@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import Image from 'next/image';
 import { ImageIcon } from 'lucide-react';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 interface RealtimeBrickPreviewCardProps {
     imageUrl?: string | null;
@@ -36,6 +37,7 @@ export function RealtimeBrickPreviewCard({
     avatarUrl,
     className,
 }: RealtimeBrickPreviewCardProps) {
+    const t = useTranslations('camera.RealtimeBrickPreviewCard');
     const hasImage = !!imageUrl;
     const hasContent = hasImage || title || description;
 
@@ -62,10 +64,10 @@ export function RealtimeBrickPreviewCard({
             <div className="p-4 border-b border-border flex items-center justify-between">
                 <h2 className="text-sm font-bold tracking-[0.2em] uppercase flex items-center gap-2">
                     <span className="size-2 bg-secondary animate-pulse" />
-                    Live Preview
+                    {t('header')}
                 </h2>
                 <span className="text-[9px] font-mono text-primary/50 uppercase tracking-widest">
-                    BRIX_CARD
+                    {t('badge')}
                 </span>
             </div>
 
@@ -91,7 +93,7 @@ export function RealtimeBrickPreviewCard({
                                         className="w-full h-full object-cover"
                                     />
                                     <div className="absolute top-2 right-2 bg-secondary/80 text-secondary-foreground px-2 py-0.5 text-[10px] font-bold rounded-full">
-                                        REALTIME
+                                        {t('realtime')}
                                     </div>
                                     {nonce && (
                                         <div className="absolute top-2 left-2 bg-primary/80 text-primary-foreground px-2 py-0.5 text-[10px] font-bold font-mono rounded-full">
@@ -100,7 +102,7 @@ export function RealtimeBrickPreviewCard({
                                     )}
                                     <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background/90 to-transparent p-3">
                                         <p className="text-[10px] font-mono text-primary truncate">
-                                            HASH: {fakeHash}
+                                            {t('hash')}: {fakeHash}
                                         </p>
                                     </div>
                                 </>
@@ -110,7 +112,7 @@ export function RealtimeBrickPreviewCard({
                                         <ImageIcon className="size-8 text-muted-foreground/20" />
                                     </div>
                                     <span className="text-[10px] text-muted-foreground/40 uppercase tracking-widest font-mono">
-                                        No Capture Yet
+                                        {t('noCapture')}
                                     </span>
                                 </div>
                             )}
@@ -125,7 +127,7 @@ export function RealtimeBrickPreviewCard({
                                 <h3 className="text-sm font-bold tracking-tight text-foreground uppercase truncate flex-1 mr-2">
                                     {title || (
                                         <span className="text-muted-foreground/30 italic font-normal normal-case">
-                                            Untitled Brick
+                                            {t('untitled')}
                                         </span>
                                     )}
                                 </h3>
@@ -136,7 +138,7 @@ export function RealtimeBrickPreviewCard({
                             <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                                 {description || (
                                     <span className="italic text-muted-foreground/30">
-                                        No description provided. Add one to verify asset metadata.
+                                        {t('noDescription')}
                                     </span>
                                 )}
                             </p>
@@ -146,7 +148,7 @@ export function RealtimeBrickPreviewCard({
                         <div className="grid grid-cols-2 gap-2">
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[9px] text-primary/60 uppercase font-bold">
-                                    Latitude
+                                    {t('lat')}
                                 </p>
                                 <p className="text-xs font-mono text-foreground">
                                     {formatCoord(latitude, 'N', 'S')}
@@ -154,7 +156,7 @@ export function RealtimeBrickPreviewCard({
                             </div>
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[9px] text-primary/60 uppercase font-bold">
-                                    Longitude
+                                    {t('lng')}
                                 </p>
                                 <p className="text-xs font-mono text-foreground">
                                     {formatCoord(longitude, 'E', 'W')}
@@ -166,7 +168,7 @@ export function RealtimeBrickPreviewCard({
                         {address && (
                             <div className="bg-primary/5 border border-primary/20 p-2 rounded">
                                 <p className="text-[9px] text-primary/60 uppercase font-bold mb-0.5">
-                                    Location
+                                    {t('location')}
                                 </p>
                                 <p className="text-xs font-mono text-foreground truncate">
                                     {address}
@@ -194,14 +196,14 @@ export function RealtimeBrickPreviewCard({
                                     )}
                                 </p>
                                 <p className="text-[9px] text-primary/60 font-bold uppercase tracking-widest">
-                                    Verified Artist
+                                    {t('artist')}
                                 </p>
                             </div>
                         </div>
 
                         {/* CTA */}
                         <div className="w-full py-2 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest text-center rounded border border-primary/20">
-                            Full Metadata Analysis
+                            {t('cta')}
                         </div>
                     </div>
                 </div>
@@ -211,7 +213,7 @@ export function RealtimeBrickPreviewCard({
             <div className="p-4 bg-black/40 border-t border-border">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-bold text-muted-foreground">
-                        PREVIEW_STATUS
+                        {t('statusLabel')}
                     </span>
                     <span
                         className={cn(
@@ -219,12 +221,14 @@ export function RealtimeBrickPreviewCard({
                             hasContent ? 'text-primary' : 'text-muted-foreground/40',
                         )}
                     >
-                        {hasContent ? 'RENDERING' : 'AWAITING_DATA'}
+                        {hasContent ? t('rendering') : t('awaitingData')}
                     </span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-muted-foreground">TAG_TYPE</span>
-                    <span className="text-[10px] font-bold text-secondary">REALTIME_BRICK</span>
+                    <span className="text-[10px] font-bold text-muted-foreground">
+                        {t('tagType')}
+                    </span>
+                    <span className="text-[10px] font-bold text-secondary">{t('tagValue')}</span>
                 </div>
             </div>
         </div>

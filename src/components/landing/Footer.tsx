@@ -1,16 +1,20 @@
+'use client';
+
 import Link from 'next/link';
 import { Terminal, Network } from 'lucide-react';
 import { BrixBrandLogo } from '@/components/shared';
+import { useTranslations } from 'next-intl';
 
 const footerLinks = [
-    { href: '#', label: 'Privacy Policy' },
-    { href: '#', label: 'Terms of Service' },
-    { href: '#', label: 'Documentation' },
+    { href: '#', i18nKey: 'privacy' },
+    { href: '#', i18nKey: 'terms' },
+    { href: '#', i18nKey: 'docs' },
 ];
 
 export function Footer() {
+    const t = useTranslations('landing');
     return (
-        <footer className="py-12  border-t border-border">
+        <footer className="py-12 border-t border-border">
             <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
                 {/* Logo */}
                 <BrixBrandLogo href="/" size="sm" animated />
@@ -19,11 +23,11 @@ export function Footer() {
                 <div className="flex gap-8 font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
                     {footerLinks.map((link) => (
                         <Link
-                            key={link.label}
+                            key={link.i18nKey}
                             href={link.href}
                             className="hover:text-primary transition-colors"
                         >
-                            {link.label}
+                            {t(`Footer.links.${link.i18nKey}`)}
                         </Link>
                     ))}
                 </div>
@@ -47,7 +51,7 @@ export function Footer() {
 
             {/* Copyright */}
             <p className="text-center font-mono text-[9px] text-muted-foreground mt-12 uppercase tracking-[0.5em]">
-                © 2026 BRIX Immutable Network. All Rights Verified.
+                {t('Footer.copyright')}
             </p>
         </footer>
     );

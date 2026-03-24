@@ -2,6 +2,7 @@
 
 import { Upload } from 'lucide-react';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 interface UploadDropzoneProps {
     onFileSelect?: (files: FileList) => void;
@@ -9,6 +10,7 @@ interface UploadDropzoneProps {
 }
 
 export function UploadDropzone({ onFileSelect, className }: UploadDropzoneProps) {
+    const t = useTranslations('uploads.form');
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         if (e.dataTransfer.files?.length) {
@@ -55,15 +57,14 @@ export function UploadDropzone({ onFileSelect, className }: UploadDropzoneProps)
                 </div>
                 <div className="text-center">
                     <p className="text-foreground text-2xl font-bold tracking-[0.15em] mb-4 uppercase">
-                        Initialize Asset Link
+                        {t('initAsset')}
                     </p>
                     <p className="text-muted-foreground text-xs font-normal leading-relaxed max-w-[320px] mx-auto uppercase tracking-tighter">
-                        Drop digital art artifacts or select from local storage. Neon Cyan grid
-                        monitoring active for integrity.
+                        {t('dropArtDesc')}
                     </p>
                 </div>
                 <label className="bg-primary/10 border border-primary text-primary px-10 py-3 text-xs font-bold tracking-[0.2em] uppercase hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer">
-                    Select File
+                    {t('selectFile')}
                     <input
                         type="file"
                         className="hidden"

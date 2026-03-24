@@ -1,10 +1,14 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { RealtimeDashboardClient } from '@/components/realtime';
 
-export const metadata: Metadata = {
-    title: 'Realtime Assets | BRIX',
-    description: 'Manage and monitor your realtime distributed assets.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations('realtime');
+    return {
+        title: `${t('title')} | BRIX`,
+        description: t('description'),
+    };
+}
 
 export default function RealtimeAssetsPage() {
     return (

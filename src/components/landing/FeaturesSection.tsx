@@ -1,15 +1,22 @@
+'use client';
+
 import Image from 'next/image';
 import { Fingerprint, MapPin, Clock, ArrowRight, Shield } from 'lucide-react';
 import ShinyText from '@/components/react-bits/ShinyText';
+import { useTranslations } from 'next-intl';
 
 export function FeaturesSection() {
+    const t = useTranslations('landing');
     return (
         <section id="concept" className="py-24 bg-background/50 relative border-y border-border">
             <div className="max-w-7xl mx-auto px-6">
                 {/* Section Header */}
                 <div className="mb-16">
                     <h2 className="font-display text-4xl font-bold uppercase tracking-tight mb-4">
-                        Core <span className="text-primary">Architectures</span>
+                        {t('FeaturesSection.header.title')}{' '}
+                        <span className="text-primary">
+                            {t('FeaturesSection.header.highlight')}
+                        </span>
                     </h2>
                     <div className="h-1 w-20 bg-primary"></div>
                 </div>
@@ -27,7 +34,7 @@ export function FeaturesSection() {
                             </div>
                             <h3 className="font-display text-2xl font-bold uppercase mb-4">
                                 <ShinyText
-                                    text="Total Authenticity"
+                                    text={t('FeaturesSection.authenticity.title')}
                                     speed={2.5}
                                     delay={0}
                                     color="#ffffff"
@@ -37,16 +44,15 @@ export function FeaturesSection() {
                                 />
                             </h3>
                             <p className="font-body text-muted-foreground max-w-md leading-relaxed">
-                                Every image is an encrypted block on the chain. Our proprietary
-                                hashing algorithm captures raw sensor data to ensure no pixel has
-                                been modified since capture.
+                                {t('FeaturesSection.authenticity.desc')}
                             </p>
                         </div>
                         <a
                             href="#"
                             className="mt-8 flex items-center gap-2 text-primary font-mono text-xs uppercase tracking-widest"
                         >
-                            View Whitepaper <ArrowRight className="size-4" />
+                            {t('FeaturesSection.authenticity.cta')}{' '}
+                            <ArrowRight className="size-4" />
                         </a>
                     </div>
 
@@ -55,7 +61,7 @@ export function FeaturesSection() {
                         <MapPin className="size-10 text-primary mb-6" strokeWidth={1.5} />
                         <h3 className="font-display text-xl font-bold uppercase mb-4">
                             <ShinyText
-                                text="GPS Verification"
+                                text={t('FeaturesSection.gps.title')}
                                 speed={2.5}
                                 delay={0.3}
                                 color="#ffffff"
@@ -65,8 +71,7 @@ export function FeaturesSection() {
                             />
                         </h3>
                         <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                            Integrated location metadata for every block. Precise geolocation
-                            ensures context and provenance for journalism and art.
+                            {t('FeaturesSection.gps.desc')}
                         </p>
                     </div>
 
@@ -75,7 +80,7 @@ export function FeaturesSection() {
                         <Clock className="size-10 text-secondary mb-6" strokeWidth={1.5} />
                         <h3 className="font-display text-xl font-bold uppercase mb-4">
                             <ShinyText
-                                text="Temporal Proof"
+                                text={t('FeaturesSection.temporal.title')}
                                 speed={2.5}
                                 delay={0.6}
                                 color="#ffffff"
@@ -85,8 +90,7 @@ export function FeaturesSection() {
                             />
                         </h3>
                         <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                            Immutable Unix timestamps anchored at the moment of capture. Time cannot
-                            be falsified on the BRIX ledger.
+                            {t('FeaturesSection.temporal.desc')}
                         </p>
                     </div>
 
@@ -103,7 +107,7 @@ export function FeaturesSection() {
                         <div className="flex-1">
                             <h3 className="font-display text-2xl font-bold uppercase mb-4">
                                 <ShinyText
-                                    text="The Concept"
+                                    text={t('FeaturesSection.concept.title')}
                                     speed={2.5}
                                     delay={0.9}
                                     color="#ffffff"
@@ -113,11 +117,10 @@ export function FeaturesSection() {
                                 />
                             </h3>
                             <p className="font-body text-muted-foreground text-sm leading-relaxed mb-4">
-                                Digital assets are no longer ephemeral. BRIX treats photography as
-                                physical evidence, hard-coded into the digital fabric of the web.
+                                {t('FeaturesSection.concept.desc')}
                             </p>
                             <button className="text-xs font-mono uppercase tracking-widest p-2 border border-border hover:border-primary transition-colors">
-                                Explorer Nodes
+                                {t('FeaturesSection.concept.cta')}
                             </button>
                         </div>
                     </div>

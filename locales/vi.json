@@ -1,0 +1,1485 @@
+{
+    "landing": {
+        "Header": {
+            "navLinks": {
+                "concept": "Khái Niệm",
+                "artistHub": "Trung Tâm Nghệ Sĩ",
+                "map": "Bản Đồ",
+                "roadmap": "Lộ Trình"
+            },
+            "launchApp": "Mở Ứng Dụng",
+            "supportedWallets": "Ví Hỗ Trợ",
+            "language": "Ngôn ngữ"
+        },
+        "HeroSection": {
+            "status": "Giao thức dữ liệu bất biến v1.0.4",
+            "headline": {
+                "part1": "Xây Dựng",
+                "highlight": "Sự Thật",
+                "part2": "Của Bạn."
+            },
+            "description": "Kho lưu trữ hình ảnh bất biến đầu tiên tích hợp định vị GPS và xác minh thời gian thực. Dữ liệu được mã hóa và lưu trữ vĩnh viễn trên blockchain.",
+            "cta": {
+                "getStarted": "Bắt Đầu Ngay",
+                "explore": "Khám Phá BRIX"
+            },
+            "overlay": {
+                "lat": "VĨ ĐỘ: 35.6895° B",
+                "lng": "KINH ĐỘ: 139.6917° Đ",
+                "hash": "Mã Hash: 0x82f...a92",
+                "verified": "Đã Xác Minh",
+                "location": "Giao lộ Shibuya",
+                "unix": "UNIX: 1715693422"
+            }
+        },
+        "ArtistHub": {
+            "header": "Trưng Bày Nghệ Sĩ",
+            "cta": "Khám Phá Không Gian Nghệ Thuật"
+        },
+        "FeaturesSection": {
+            "header": {
+                "title": "Kiến Trúc",
+                "highlight": "Cốt Lõi"
+            },
+            "authenticity": {
+                "title": "Xác Thực Toàn Diện",
+                "desc": "Mỗi hình ảnh là một block mã hóa trên chuỗi. Thuật toán của chúng tôi thu thập dữ liệu gốc, đảm bảo tính toàn vẹn đến từng điểm ảnh.",
+                "cta": "Xem Whitepaper"
+            },
+            "gps": {
+                "title": "Xác Thực GPS",
+                "desc": "Metadata định vị địa lý chính xác, đảm bảo bối cảnh trong nhiếp ảnh và báo chí."
+            },
+            "temporal": {
+                "title": "Bằng Chứng Thời Gian",
+                "desc": "Dấu thời gian bất biến cập nhật tại thời điểm chụp. Ngày tháng luôn chân thực nhờ sổ cái mạng lưới của chúng tôi."
+            },
+            "concept": {
+                "title": "Thay Đổi Nhiếp Ảnh",
+                "desc": "Mọi tài sản luôn được trân trọng. BRIX coi nhiếp ảnh như dấu hiệu vật lý vô giá.",
+                "cta": "Tìm Khám Các Block"
+            }
+        },
+        "MapSection": {
+            "title": "Bản Đồ",
+            "highlight": "Trực Tuyến",
+            "desc": "Theo dõi việc xác minh trên toàn cầu theo thời gian thực.",
+            "badges": {
+                "nodes": "1,204 LIVE NODES",
+                "uploads": "42 LƯỢT/PHÚT"
+            },
+            "tooltipSuffix": "node hoạt động",
+            "overlay": {
+                "title": "Luồng Trực Tiếp",
+                "event1": "User_8292 đã tạo block tại Berlin",
+                "event2": "Block mới được tạo ra: 0x921...F1",
+                "event3": "Nghệ sĩ Neo vừa up \"Neon_Rain\""
+            }
+        },
+        "RoadmapSection": {
+            "title": "Lộ Trình",
+            "highlight": "Phát Triển",
+            "milestones": {
+                "m1": {
+                    "status": "ĐÃ HOÀN THÀNH",
+                    "title": "Khởi Tạo Giao Thức",
+                    "desc": "Triển khai hệ thống lưu trữ và lõi giao thức mã hoá hash."
+                },
+                "m2": {
+                    "status": "ĐANG TIẾN HÀNH",
+                    "title": "Hệ Thống Phủ Kín",
+                    "desc": "Triển khai bản đồ sống động, xác thực nhiếp ảnh đa luồng."
+                },
+                "m3": {
+                    "status": "KẾ HOẠCH",
+                    "title": "Render Phi Tập Trung",
+                    "desc": "Quy trình kết nối nhiều ảnh lại với nhau phân tán."
+                }
+            }
+        },
+        "WalletCarousel": {
+            "badge": "Hạ Tầng Tính Minh",
+            "title": "Được Cấp Phép Bởi Tổ Chức Và Các",
+            "highlight": "Ví Hàng Đầu"
+        },
+        "Footer": {
+            "links": {
+                "privacy": "Chính Sách Bảo Mật",
+                "terms": "Điều Khoản Dịch Vụ",
+                "docs": "Tài Liệu Cốt Lõi"
+            },
+            "copyright": "© 2026 BRIX Immutable Network. Mọi Quyền Đã Được Đảm Bảo."
+        },
+        "SupportedWalletsModal": {
+            "badge": "Tích Hợp Web3",
+            "title": "Các Ví Được",
+            "highlight": "Hỗ Trợ",
+            "titleSuffix": "",
+            "desc": "BRIX sử dụng Mạng lưới Polygon để tối ưu phí gas. Giữ lấy Blockchain ngay trong điện thoại bạn.",
+            "sections": {
+                "verifiedWallets": "Ví Xác Thực",
+                "paymentSupport": "Thanh Toán Tích Hợp"
+            },
+            "wallets": {
+                "metamask": "Cài ở trình duyệt/Điện thoại",
+                "trust": "Ví di động bảo mật cao",
+                "brave": "Được tích hợp mặc định trên Brave",
+                "coinbase": "Đồng bộ nhanh nhất trên thị trường"
+            },
+            "assets": {
+                "polygon": "Hệ sinh thái Polygon",
+                "stablecoins": "Tiền Ảo Ổn Định",
+                "ethereum": "Hệ Sinh Thái Lớn (ETH)"
+            },
+            "infra": {
+                "title": "Bất Khả Xâm Phạm",
+                "desc": "Các giao dịch tạo thành hash ở lớp Polygon (Amoy Testnet đối với bản demo), thời gian xác thực siêu nhỏ và tối ưu."
+            },
+            "footer": {
+                "audited": "Kiểm Định Cẩn Thận",
+                "gotIt": "Vào Thôi"
+            }
+        }
+    },
+    "common": {
+        "votes": "lượt bình chọn",
+        "comments": "bình luận",
+        "unknownCoords": "Tọa độ không xác định",
+        "loading": "Đang tải...",
+        "syncing": "Đang đồng bộ...",
+        "processing": "Đang xử lý...",
+        "loadMore": "Tải thêm",
+        "delete": "Xóa",
+        "follow": "Theo dõi",
+        "unfollow": "Bỏ theo dõi",
+        "public": "Công khai",
+        "private": "Riêng tư",
+        "latitude": "Vĩ độ",
+        "longitude": "Kinh độ",
+        "revenue": "Doanh thu",
+        "cover": "Ảnh bìa"
+    },
+    "network": {
+        "title": "Mạng lưới",
+        "description": "Mở rộng vòng kết nối sáng tạo của bạn. Khám phá các tác giả hàng đầu, người dùng đang thịnh hành và các đề xuất được cá nhân hóa dựa trên sở thích của bạn.",
+        "sections": {
+            "recommendations": {
+                "title": "Gợi ý cho bạn",
+                "empty": {
+                    "title": "Chưa có gợi ý nào",
+                    "description": "Hãy bắt đầu theo dõi thêm nhiều người để nhận được những gợi ý tốt hơn"
+                },
+                "loadMore": "Tải thêm gợi ý"
+            },
+            "topAuthors": {
+                "title": "Tác giả hàng đầu thế giới",
+                "viewMore": "Xem thêm tác giả"
+            },
+            "topUsers": {
+                "title": "Người dùng hàng đầu thế giới",
+                "viewMore": "Xem thêm người dùng"
+            },
+            "explorers": {
+                "title": "Nhà thám hiểm toàn cầu"
+            }
+        },
+        "userCard": {
+            "noBio": "Chưa có giới thiệu...",
+            "stats": {
+                "brix": "BRIX",
+                "followers": "THEO DÕI"
+            }
+        }
+    },
+    "notifications": {
+        "title": "Thông báo",
+        "unreadSignals": "{count} TÍN_HIỆU_CHƯA_ĐỌC",
+        "feedStatus": {
+            "active": "Luồng_Trực_Tiếp_Hoạt_ĐỘng",
+            "clear": "TRẠNG_THÁI_SẠCH",
+            "end": "Kết thúc luồng — Tín hiệu ổn định"
+        },
+        "actions": {
+            "markAllRead": "Đánh dấu tất cả đã đọc",
+            "loadMore": "Tải thêm tín hiệu"
+        },
+        "loading": {
+            "title": "Đang đồng bộ mạng nơ-ron",
+            "description": "Đang thiết lập kết nối bảo mật..."
+        },
+        "empty": {
+            "title": "Tín Hiệu Đã Chấm Dứt",
+            "description": "Node xác thực của bạn hiện đang ở trạng thái rảnh. Thông báo về các brick và hoạt động mạng lưới của bạn sẽ xuất hiện ở đây khi được phát hiện."
+        },
+        "deleteConfirm": {
+            "title": "Xóa thông báo",
+            "message": "Bạn có chắc chắn muốn xóa thông báo này không? Hành động này không thể hoàn tác."
+        },
+        "popover": {
+            "new": "MỚI",
+            "quiet": "Mọi thứ đều yên tĩnh",
+            "noNotifs": "Chưa có thông báo nào",
+            "seeAll": "Xem tất cả hoạt động →"
+        },
+        "types": {
+            "UPVOTE_BRICK": "đã bình chọn brick của bạn",
+            "UPVOTE_COMMENT": "đã bình chọn bình luận của bạn",
+            "COMMENT_BRICK": "đã bình luận vào brick của bạn",
+            "REPLY_COMMENT": "đã trả lời bình luận của bạn",
+            "FOLLOW": "đã bắt đầu theo dõi bạn",
+            "default": "đã tương tác với bạn",
+            "others": "và {count} người khác"
+        }
+    },
+    "realtime": {
+        "title": "Tài sản thời gian thực",
+        "description": "Theo dõi nội dung được phân phối liên tục của bạn, theo dõi việc xác minh metadata trên blockchain và theo dõi các khoản ủng hộ POL theo thời gian thực.",
+        "filters": {
+            "all": "Tất cả tài sản",
+            "onchain": "Đã xác minh",
+            "ipfs_uploaded": "Đã lưu IPFS",
+            "pending": "Đang xử lý",
+            "failed": "Thất bại"
+        },
+        "status": {
+            "onchain": "XÁC MINH TRÊN CHUỖI",
+            "ipfs_uploaded": "PHÂN PHỐI IPFS",
+            "failed": "XÁC MINH THẤT BẠI",
+            "pending": "HÀNG ĐỢI XỬ LÝ",
+            "captured": "TÀI SẢN ĐÃ CHỤP"
+        },
+        "revenue": {
+            "label": "Doanh thu",
+            "cannotEarn": "Không thể kiếm được",
+            "distributeToEarn": "Phân phối để kiếm tiền",
+            "mintToEarn": "Mint để kiếm tiền"
+        },
+        "revenueStatus": {
+            "failed": "Thất bại",
+            "captured": "Đã bắt được",
+            "ipfs_uploaded": "Đã tải lên IPFS",
+            "pending": "Đang xử lý"
+        },
+        "card": {
+            "noContent": "KHÔNG CÓ NỘI DUNG",
+            "untitled": "Tài sản chưa đặt tên"
+        },
+        "defaultAssetTitle": "Tài sản chưa đặt tên",
+        "empty": {
+            "title": "Không tìm thấy tài sản thời gian thực",
+            "description": "Bạn không có tài sản thời gian thực nào khớp với bộ lọc hiện tại. Tài sản được tải lên qua Camera sẽ xuất hiện ở đây."
+        },
+        "actions": {
+            "loadMore": "Tải thêm tài sản cũ"
+        },
+        "stats": {
+            "totalRealtime": {
+                "label": "Tổng thời gian thực",
+                "subtext": "Tài sản được chụp thời gian thực"
+            },
+            "revenue": {
+                "label": "Doanh thu đã tạo",
+                "subtext": "Trên tất cả tài sản"
+            },
+            "onchain": {
+                "label": "Xác minh Blockchain",
+                "subtext": "Đã mint trên Polygon"
+            },
+            "ipfs": {
+                "label": "Đã lưu IPFS",
+                "subtext": "Lưu trữ phi tập trung"
+            }
+        },
+        "donations": {
+            "title": "Luồng ủng hộ",
+            "subtext": "Nguồn cấp dữ liệu thời gian thực",
+            "empty": {
+                "title": "Chưa có luồng nào",
+                "description": "Các giao dịch POL đến sẽ xuất hiện ở đây một cách liên tục."
+            },
+            "loadPrevious": "Tải trước đó"
+        }
+    },
+    "auth": {
+        "common": {
+            "or": "HOẶC",
+            "privacy": "Chính sách bảo mật",
+            "terms": "Điều_Khoản_Dịch_Vụ",
+            "copyright": "©2026_BRIX_GRID",
+            "gender": {
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            }
+        },
+        "login": {
+            "title": "Khởi_Tạo_Phiên",
+            "subtitle": "Giao thức bảo mật đang hoạt động"
+        },
+        "signup": {
+            "title": "Tạo_Tài_Khoản",
+            "subtitle": "Tham gia mạng lưới BRIX"
+        },
+        "recovery": {
+            "title": "Khôi_Phục_Truy_Cập",
+            "subtitle": "Đặt lại thông tin đăng nhập của bạn"
+        },
+        "tabs": {
+            "login": "Đăng Nhập",
+            "signup": "Đăng Ký"
+        },
+        "visualPanel": {
+            "status": "Trạng_Thái_Hệ_Thống: Trực Tuyến",
+            "infra": "HẠ_TẦNG_BRIX_V4.2"
+        },
+        "loginForm": {
+            "identifier": {
+                "label": "ID_Truy_Cập",
+                "placeholder": "NHẬP_EMAIL_HOẶC_TÊN_NGƯỜI_DÙNG"
+            },
+            "password": {
+                "label": "Mật khẩu",
+                "placeholder": "••••••••••••"
+            },
+            "recoverLink": "Khôi_Phục_Truy_Cập?",
+            "submit": "Khởi_Tạo_Phiên",
+            "loading": "Đang xác thực...",
+            "messages": {
+                "success": "Đăng nhập thành công! Đang chuyển hướng...",
+                "error": "Thông tin không hợp lệ. Vui lòng thử lại."
+            }
+        },
+        "signupForm": {
+            "username": {
+                "label": "Biệt danh",
+                "placeholder": "TÊN_NGƯỜI_DÙNG_DUY_NHẤT"
+            },
+            "fullName": {
+                "label": "Họ_Tên",
+                "placeholder": "NHẬP_HỌ_VÀ_TÊN_CỦA_BẠN"
+            },
+            "email": {
+                "label": "ID_Truy_Cập",
+                "placeholder": "NHẬP_DANH_TÍNH_EMAIL"
+            },
+            "phone": {
+                "label": "Số_Điện_Thoại",
+                "placeholder": "0912345678"
+            },
+            "gender": {
+                "label": "Giới tính"
+            },
+            "password": {
+                "label": "Mật khẩu",
+                "placeholder": "••••••••••••"
+            },
+            "confirmPassword": {
+                "label": "Xác nhận mật khẩu",
+                "placeholder": "••••••••••••"
+            },
+            "submit": "Tạo_Tài_Khoản",
+            "loading": "Đang tạo tài khoản...",
+            "messages": {
+                "success": "Tạo tài khoản thành công! Đang chuyển hướng...",
+                "error": "Đăng ký thất bại. Email hoặc tên người dùng có thể đã tồn tại."
+            }
+        },
+        "recoveryForm": {
+            "emailStep": {
+                "label": "Email_Đã_Đăng_Ký",
+                "placeholder": "name@company.com",
+                "submit": "Gửi Mã Khôi Phục",
+                "back": "Quay lại Đăng nhập",
+                "loading": "Đang gửi mã khôi phục...",
+                "success": "Mã khôi phục đã được gửi đến email của bạn!",
+                "error": "Không gửi được mã khôi phục. Vui lòng thử lại."
+            },
+            "otpStep": {
+                "instruction": "Nhập mã 6 chữ số được gửi tới",
+                "submit": "Xác Minh Mã",
+                "resendPrompt": "Không nhận được mã?",
+                "resendAction": "Gửi lại",
+                "expiry": "Mã hết hạn sau",
+                "back": "Quay lại",
+                "loading": "Đang xác minh mã...",
+                "resending": "Đang gửi lại mã...",
+                "success": "Xác minh mã thành công!",
+                "resendSuccess": "Mã khôi phục mới đã được gửi!",
+                "resendError": "Không gửi lại được mã. Vui lòng thử lại.",
+                "invalidCode": "Mã Không Hợp Lệ",
+                "invalidCodeDesc": "Mã bạn nhập không chính xác hoặc đã hết hạn."
+            },
+            "resetStep": {
+                "granted": "QUYỀN_TRUY_CẬP_ĐÃ_XÁC_MINH",
+                "newPassword": {
+                    "label": "Mật khẩu mới",
+                    "placeholder": "••••••••••••"
+                },
+                "confirmPassword": {
+                    "label": "Xác nhận mật khẩu mới",
+                    "placeholder": "••••••••••••"
+                },
+                "submit": "Đặt Lại Mật Khẩu",
+                "back": "Quay lại",
+                "loading": "Đang đặt lại mật khẩu...",
+                "success": "Mật khẩu của bạn đã được đặt lại thành công!",
+                "successTitle": "Đặt Lại Mật Khẩu!",
+                "error": "Đặt lại mật khẩu thất bại. Vui lòng thử lại.",
+                "errorTitle": "Đặt Lại Thất Bại",
+                "sessionExpired": "Phiên làm việc đã hết hạn. Vui lòng bắt đầu lại."
+            }
+        },
+        "socialAuth": {
+            "google": {
+                "label": "Xác_Thực_Google",
+                "loading": "Đang kết nối với Google...",
+                "success": "Đăng nhập bằng Google thành công!",
+                "error": "Xác thực Google thất bại. Vui lòng thử lại.",
+                "cancelled": "Đăng nhập đã bị hủy. Vui lòng thử lại."
+            },
+            "github": {
+                "label": "Xác_Thực_GitHub"
+            },
+            "twitter": {
+                "label": "Xác_Thực_Twitter"
+            },
+            "common": {
+                "connecting": "Đang kết nối...",
+                "networkError": "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn.",
+                "notAvailable": "xác thực hiện chưa khả dụng."
+            }
+        },
+        "otpInput": {
+            "ariaLabel": "Chữ số"
+        }
+    },
+    "camera": {
+        "page": {
+            "dashboard": "Bảng điều khiển",
+            "backToDashboard": "Bảng Điều Khiển",
+            "locationRequired": "Yêu Cầu Vị Trí",
+            "locationDenied": "Quyền truy cập vị trí bị từ chối",
+            "locationUnavailable": "Vị trí không khả dụng",
+            "locationInstruction": "Vui lòng bật Vị trí trong cài đặt trình duyệt để sử dụng tính năng này.",
+            "cameraLoading": "Đang yêu cầu truy cập camera...",
+            "systemStatus": {
+                "idleReady": "HỆ THỐNG SẴN SÀNG: ĐANG ĐỢI PHIÊN",
+                "idleLoading": "HỆ THỐNG: ĐANG TẢI TÀI NGUYÊN CAMERA...",
+                "idleError": "LỖI HỆ THỐNG: CAMERA KHÔNG KHẢ DỤNG",
+                "idleInit": "HỆ THỐNG: ĐANG KHỞI TẠO...",
+                "requesting": "HỆ THỐNG: ĐANG YÊU CẦU PHIÊN...",
+                "active": "PHIÊN HOẠT ĐỘNG: QR SẴN SÀNG | {seconds}s",
+                "capturingForm": "CHỤP_HOÀN_TẤT: FORM_TTL_{seconds}s",
+                "capturingProcessing": "HỆ THỐNG: ĐANG XỬ LÝ ẢNH...",
+                "uploading": "HỆ THỐNG: ĐANG TẢI LÊN HÀNG ĐỢI...",
+                "success": "ĐÃ TẢI LÊN: ĐANG XỬ LÝ KHÔNG ĐỒNG BỘ...",
+                "expired": "PHIÊN HẾT HẠN: VUI LÒNG YÊU CẦU PHIÊN MỚI",
+                "error": "LỖI HỆ THỐNG: {error}",
+                "unknown": "HỆ THỐNG: TRẠNG THÁI KHÔNG XÁC ĐỊNH"
+            },
+            "footer": {
+                "mode": "CHẾ_ĐỘ_GHI: CHỤP_THỜI_GIAN_THỰC",
+                "enc": "MÃ_HÓA: BRIX_SECURE_V1",
+                "ver": "PHIÊN_BẢN: 4.0.22_STABLE",
+                "copyright": "© HỆ_THỐNG_BRIX"
+            },
+            "alerts": {
+                "sessionError": "Lỗi Phiên",
+                "sessionErrorDesc": "Không khởi tạo được phiên chụp. Vui lòng thử lại.",
+                "uploading": "Đang tải lên ảnh thời gian thực...",
+                "success": "Đã Thêm Vào Hàng Đợi!",
+                "successDesc": "Ảnh của bạn đang được xử lý. Nó sẽ sớm xuất hiện trong bộ sưu tập.",
+                "uploadFailed": "Tải Lên Thất Bại",
+                "uploadFailedDesc": "Phiên có thể đã hết hạn. Vui lòng thử lại."
+            },
+            "preview": {
+                "backToDashboard": "Quay lại Bảng điều khiển",
+                "cancelUpload": "Hủy Tải Lên",
+                "sessionExpired": "Phiên Hết Hạn",
+                "sessionExpiredDesc": "Thời gian tải lên của bạn đã hết. Vui lòng bắt đầu phiên chụp mới.",
+                "newSession": "Phiên Mới",
+                "lat": "VĨ ĐỘ",
+                "lng": "KINH ĐỘ",
+                "session": "PHIÊN",
+                "retake": "Chụp Lại Ảnh"
+            },
+            "cancelConfirm": {
+                "title": "Hủy Tải Lên?",
+                "message": "Bạn có chắc chắn muốn hủy ảnh này và quay lại màn hình chụp không? Ảnh hiện tại và dữ liệu form sẽ bị mất.",
+                "confirmText": "Hủy & Chụp Lại",
+                "cancelText": "Tiếp Tục Chỉnh Sửa",
+                "cancelButton": "Hủy Tải Lên"
+            },
+            "successOverlay": {
+                "title": "Tải Lên Thành Công",
+                "desc": "Ảnh của bạn đang được xử lý không đồng bộ..."
+            },
+            "buttons": {
+                "acquiringLocation": "Đang Xác Định Vị Trí...",
+                "locationRequired": "Yêu Cầu Vị Trí",
+                "startSession": "Bắt Đầu Phiên Chụp",
+                "newSession": "Phiên Mới",
+                "retry": "Thử Lại",
+                "creatingSession": "Đang tạo phiên..."
+            }
+        },
+        "AddressMapPicker": {
+            "label": "Chọn trên Bản đồ",
+            "withinRange": "trong phạm vi",
+            "tooFar": "quá xa",
+            "instruction": "Nhấp vào bản đồ để chọn địa chỉ gần đó (tối đa {distance} km từ điểm chụp)."
+        },
+        "FormCountdown": {
+            "label": "Thời gian tải lên còn lại"
+        },
+        "HashPanel": {
+            "label": "Mã_Xác_Thực_Hash"
+        },
+        "LocationPanel": {
+            "label": "Dữ_Liệu_Vị_Trí",
+            "acquiring": "ĐANG LẤY GPS...",
+            "alt": "ĐỘ CAO",
+            "acc": "ĐỘ CHÍNH XÁC"
+        },
+        "QROverlay": {
+            "label": "Mã QR Thử Thách",
+            "instruction": "QR sẽ được nhúng vào các điểm ảnh khi chụp"
+        },
+        "RealtimeBrickPreviewCard": {
+            "header": "Xem Trước",
+            "badge": "THẺ_BRIX",
+            "realtime": "THỜI GIAN THỰC",
+            "hash": "MÃ HASH",
+            "noCapture": "Chưa Có Ảnh",
+            "untitled": "Brick Chưa Đặt Tên",
+            "noDescription": "Chưa có mô tả. Thêm mô tả để xác minh metadata tài sản.",
+            "lat": "Vĩ Độ",
+            "lng": "Kinh Độ",
+            "location": "Vị Trí",
+            "artist": "Nghệ Sĩ Được Xác Minh",
+            "cta": "Phân Tích Metadata Đầy Đủ",
+            "statusLabel": "TRẠNG_THÁI_XEM_TRƯỚC",
+            "rendering": "ĐANG RENDER",
+            "awaitingData": "ĐANG ĐỢI DỮ LIỆU",
+            "tagType": "LOẠI_THẺ",
+            "tagValue": "REALTIME_BRICK"
+        },
+        "RealtimeUploadForm": {
+            "metadataHeader": "Metadata Của Brick",
+            "requiredFields": "các trường bắt buộc được đánh dấu *",
+            "title": {
+                "label": "Tiêu Đề",
+                "placeholder": "Đặt tên cho khoảnh khắc này..."
+            },
+            "description": {
+                "label": "Mô Tả",
+                "placeholder": "Mô tả khoảnh khắc này (tùy chọn)..."
+            },
+            "geoHeader": "Tọa Độ Địa Lý",
+            "gpsLocked": "GPS_ĐÃ_KHÓA",
+            "lat": "Vĩ Độ",
+            "lng": "Kinh Độ",
+            "coordsLocked": "Tọa độ được khóa theo vị trí chụp và không thể thay đổi.",
+            "reset": "Đặt Lại",
+            "resetTooltip": "Đặt lại về địa chỉ GPS",
+            "visibility": {
+                "public": "Công khai",
+                "private": "Riêng tư"
+            },
+            "submit": "Xác Minh & Tải Lên",
+            "submitting": "Đang tải lên...",
+            "alerts": {
+                "addressTooFar": "Địa Chỉ Quá Xa",
+                "addressTooFarDesc": "Địa chỉ đã chọn cách vị trí chụp {distance} km. Khoảng cách tối đa cho phép là {limit} km.",
+                "locationTooFar": "Vị Trí Quá Xa",
+                "locationTooFarDesc": "Vị trí đã chọn cách điểm chụp {distance} km. Khoảng cách tối đa cho phép là {limit} km."
+            }
+        },
+        "SessionCountdown": {
+            "label": "Chụp sau {seconds}s"
+        }
+    },
+    "messages": {
+        "page": {
+            "title": "Tin nhắn"
+        },
+        "MessagesHeader": {
+            "nav": {
+                "map": "BẢN ĐỒ",
+                "trending": "XU HƯỚNG",
+                "archive": "LƯU TRỮ",
+                "messages": "TIN NHẮN",
+                "network": "MẠNG LƯỚI"
+            },
+            "searchPlaceholder": "NHẤN CMD+K ĐỂ TÌM KIẾM"
+        },
+        "ChatArea": {
+            "editedToast": "Đã chỉnh sửa tin nhắn",
+            "editFailedToast": "Không thể chỉnh sửa tin nhắn",
+            "deletedToast": "Đã xóa tin nhắn",
+            "deleteFailedToast": "Không thể xóa tin nhắn",
+            "today": "HÔM NAY",
+            "yesterday": "HÔM QUA",
+            "selectConversation": "Chọn một cuộc hội thoại",
+            "locale": "vi"
+        },
+        "ContactsSidebar": {
+            "activeSessions": "Phiên hoạt động",
+            "noActiveSessions": "Không có phiên hoạt động",
+            "offline": "Ngoại tuyến",
+            "noOfflineContacts": "Không có liên hệ ngoại tuyến",
+            "loadMore": "Tải thêm",
+            "noConversations": "Chưa có cuộc hội thoại nào"
+        },
+        "MessageInput": {
+            "recording": "Đang ghi âm {duration}",
+            "placeholder": "TRUYỀN DỮ LIỆU BẢO MẬT...",
+            "sending": "ĐANG GỬI",
+            "send": "GỬI"
+        },
+        "UserInfoSidebar": {
+            "noConversation": "Chưa chọn cuộc hội thoại",
+            "metadata": "THÔNG TIN LIÊN HỆ",
+            "online": "TRỰC TUYẾN",
+            "lastSeen": "Hoạt động {time}",
+            "offline": "NGOẠI TUYẾN",
+            "sharedMedia": "Phương tiện chia sẻ",
+            "noSharedMedia": "Không có phương tiện chia sẻ",
+            "sharedFiles": "Tệp chia sẻ",
+            "noSharedFiles": "Không có tệp chia sẻ",
+            "deleteConversation": "XÓA_CUỘC_HỘI_THOẠI",
+            "deleteConfirm": {
+                "title": "Xóa cuộc hội thoại?",
+                "message": "Cuộc hội thoại này sẽ bị ẩn khỏi hộp thư đến của bạn. Tin nhắn sẽ không bị xóa vĩnh viễn.",
+                "confirmText": "Xóa"
+            }
+        },
+        "ChatHeader": {
+            "typing": "đang nhắn",
+            "online": "Trực tuyến",
+            "lastSeen": "Hoạt động {time}",
+            "offline": "Ngoại tuyến",
+            "userInfo": "Thông tin người dùng"
+        }
+    },
+    "album": {
+        "loading": "Đang Tải Album",
+        "notFound": "Không Tìm Thấy Album",
+        "notFoundDesc": "Album này có thể đã bị xóa hoặc liên kết không hợp lệ.",
+        "share": "Chia sẻ",
+        "copied": "Đã sao chép",
+        "explore": "Kéo để khám phá",
+        "photos": "{count} ảnh",
+        "poweredBy": "CUNG CẤP BỞI",
+        "items": "{count} MỤC",
+        "successShare": "Liên kết album đã được sao chép vào bộ nhớ tạm!"
+    },
+    "introduction": {
+        "nav": {
+            "back": "Quay lại",
+            "dashboard": "Bảng Điều Khiển"
+        },
+        "header": {
+            "title": "Khám Phá",
+            "highlight": "BRIX"
+        },
+        "footer": {
+            "status": "TRẠNG THÁI GIAO THỨC",
+            "networkOnline": "MẠNG TRỰC TUYẾN",
+            "version": "PHIÊN BẢN"
+        },
+        "explore": "Kéo để khám phá • Nhấp để tìm hiểu thêm",
+        "cards": {
+            "origin": {
+                "title": "NGUỒN GỐC BRIX",
+                "desc": "Chào mừng bạn đến với kỷ nguyên nhiếp ảnh chân thực. Xây dựng sự thật kỹ thuật số của bạn, từng khối một."
+            },
+            "reality": {
+                "title": "SỰ THẬT THUẦN KHIẾT",
+                "desc": "Không bộ lọc. Không thao túng AI. Mỗi bức ảnh là một mảnh vỡ nguyên bản của thời gian được lưu giữ mãi mãi."
+            },
+            "geo": {
+                "title": "XÁC THỰC ĐỊA LÝ",
+                "desc": "Mỗi \"Brix\" được neo giữ trong không gian và thời gian bằng metadata GPS chính xác và tích hợp MapCN."
+            },
+            "trust": {
+                "title": "NIỀM TIN TRÊN CHUỖI",
+                "desc": "Bảo vệ di sản của bạn. Các bức ảnh cao cấp được mã hóa hash và đưa lên blockchain để làm chứng cứ vĩnh cửu."
+            },
+            "studio": {
+                "title": "STUDIO NGHỆ SĨ",
+                "desc": "Một trung tâm web dành riêng cho các nhà sáng tạo kỹ thuật số để xác minh quy trình và trưng bày các kiệt tác chân thực."
+            },
+            "connect": {
+                "title": "KẾT NỐI NGUYÊN BẢN",
+                "desc": "Chia sẻ cuộc sống không bộ lọc của bạn với bạn bè. Không áp lực mạng xã hội, chỉ có những kết nối thực tế."
+            },
+            "storage": {
+                "title": "LƯU TRỮ HYBRID",
+                "desc": "Tự do lựa chọn. Lưu trữ đám mây linh hoạt cho ảnh hàng ngày, hoặc lưu trữ bất biến trên chuỗi."
+            },
+            "start": {
+                "title": "BẮT ĐẦU XÂY DỰNG",
+                "desc": "Tương lai của quyền sở hữu hình ảnh là đây. Tham gia BRIX và giành lại sự thật trong ống kính của bạn."
+            }
+        }
+    },
+    "verifyEmail": {
+        "title": "Xác Minh Email",
+        "subtitle": "Chúng tôi cần xác minh địa chỉ email của bạn để tiếp tục.",
+        "initialState": {
+            "instruction": "Nhấp vào nút bên dưới để nhận mã xác minh 6 chữ số tại địa chỉ email của bạn.",
+            "submit": "Gửi Mã Xác Minh",
+            "sending": "Đang gửi..."
+        },
+        "otpState": {
+            "instruction": "Nhập mã 6 chữ số đã được gửi đến email của bạn",
+            "submit": "Xác Minh Email",
+            "verifying": "Đang xác minh...",
+            "resendPrompt": "Không nhận được mã?",
+            "resendAction": "Gửi lại",
+            "expiry": "Mã hết hạn sau"
+        },
+        "logout": "Đăng xuất và sử dụng tài khoản khác",
+        "alerts": {
+            "sending": "Đang gửi mã xác minh...",
+            "sent": "Mã xác minh đã được gửi đến email của bạn!",
+            "sendFailed": "Không gửi được email xác minh",
+            "verifying": "Đang xác minh mã...",
+            "verified": "Đã Xác Minh Email!",
+            "verifiedDesc": "Email của bạn đã được xác minh thành công.",
+            "verifyFailed": "Xác Minh Thất Bại",
+            "verifyFailedDesc": "Mã xác minh không hợp lệ hoặc đã hết hạn"
+        }
+    },
+    "albums": {
+        "title": "Phòng Album",
+        "subtitle": "{count} Album / Chia sẻ với bạn bè",
+        "newAlbum": "Album mới",
+        "delete": {
+            "loading": "Đang xóa album...",
+            "success": "Đã xóa album",
+            "successDesc": "Album của bạn đã được xóa thành công.",
+            "error": "Không thể xóa album",
+            "confirm": {
+                "title": "Xóa Album",
+                "message": "Bạn có chắc chắn muốn xóa \"{name}\"? Hành động này sẽ xóa vĩnh viễn tất cả ảnh trong album.",
+                "confirmText": "Xóa"
+            }
+        },
+        "empty": {
+            "title": "Chưa có album nào",
+            "description": "Hãy tạo album đầu tiên của bạn để chia sẻ với bạn bè.",
+            "button": "Tạo Album"
+        },
+        "card": {
+            "menu": {
+                "edit": "Chỉnh sửa Album",
+                "share": "Chia sẻ liên kết",
+                "delete": "Xóa Album"
+            },
+            "copied": "Đã sao chép liên kết album!",
+            "copiedButton": "Đã sao chép",
+            "shareButton": "Chia sẻ"
+        },
+        "createModal": {
+            "title": "Tạo Album mới",
+            "subtitle": "Tối đa 10 ảnh mỗi album",
+            "fields": {
+                "name": {
+                    "label": "Tên Album *",
+                    "placeholder": "Nhập tên album..."
+                },
+                "description": {
+                    "label": "Mô tả",
+                    "placeholder": "Thêm mô tả..."
+                }
+            },
+            "etherColors": {
+                "title": "Màu Ether",
+                "subtitle": "3 màu hòa quyện trong hiệu ứng nền LiquidEther",
+                "labels": ["Màu 1", "Màu 2", "Màu 3"]
+            },
+            "textColors": {
+                "title": "Màu văn bản",
+                "subtitle": "Màu áp dụng cho tiêu đề và mô tả trong chế độ xem album",
+                "labels": {
+                    "title": "Màu tiêu đề",
+                    "description": "Màu mô tả"
+                }
+            },
+            "images": {
+                "label": "Ảnh ({count}/10)",
+                "button": "Thêm ảnh",
+                "placeholder": {
+                    "title": "Nhấp để tải ảnh lên",
+                    "subtitle": "PNG, JPG, WEBP tối đa 10 ảnh"
+                },
+                "item": {
+                    "titlePlaceholder": "Tiêu đề cho trang {n}",
+                    "descPlaceholder": "Mô tả cho trang {n}"
+                }
+            },
+            "footer": {
+                "cancel": "Hủy",
+                "submitting": "Đang tạo...",
+                "submit": "Tạo Album"
+            }
+        }
+    },
+    "dashboard": {
+        "filters": {
+            "globalMap": "Bản đồ thế giới",
+            "myFootprints": "Dấu chân của tôi",
+            "tags": {
+                "ALL": "TẤT CẢ",
+                "REALTIME": "THỜI GIAN THỰC",
+                "ART": "NGHỆ THUẬT",
+                "PRODUCT": "SẢN PHẨM"
+            }
+        },
+        "hover": {
+            "noAsset": "KHÔNG CÓ TÀI SẢN",
+            "untitledNode": "Nút chưa đặt tên",
+            "lat": "Vĩ độ",
+            "lon": "Kinh độ",
+            "location": "Vị trí"
+        }
+    },
+    "artist": {
+        "page": {
+            "loading": "Đang tải hồ sơ..."
+        },
+        "hero": {
+            "trustLevel": "CHỈ SỐ TIN CẬY: {score}%",
+            "followers": "Người theo dõi",
+            "following": "Đang theo dõi",
+            "editProfile": "Chỉnh sửa hồ sơ",
+            "followArtist": "Theo dõi nghệ sĩ",
+            "followingButton": "Đang theo dõi",
+            "openChat": "Nhắn tin",
+            "share": "Chia sẻ",
+            "shareTooltip": "Chia sẻ hồ sơ"
+        },
+        "stats": {
+            "assetsIssued": "Tài sản đã phát hành",
+            "assetsStored": "Tài sản đã lưu trữ",
+            "blockchainValidated": "Đã xác thực Blockchain",
+            "metadataVerified": "Dữ liệu đã xác minh",
+            "communitySupport": "Sự ủng hộ cộng đồng",
+            "votes": "Lượt bình chọn",
+            "polReceived": "Đã nhận {amount} POL",
+            "ipfs": "IPFS",
+            "onChain": "ON-CHAIN",
+            "support": "ỦNG HỘ"
+        },
+        "sidebar": {
+            "nodeActivity": "Hoạt động Node",
+            "noActivity": "Chưa có hoạt động onchain",
+            "activityMint": "Tài sản đã được xác minh và triển khai.",
+            "activityDonate": "Đã nhận được khối quyên góp.",
+            "viewAllActivities": "Xem tất cả hoạt động ({count})",
+            "location": "Vị trí",
+            "followers": "Người theo dõi",
+            "noFollowers": "Chưa có người theo dõi"
+        },
+        "activities": {
+            "title": "Hoạt động Onchain",
+            "totalRecords": "Tìm thấy tổng cộng {count} bản ghi",
+            "noActivities": "Không tìm thấy hoạt động onchain nào.",
+            "mintDesc": "Tài sản đã được xác minh và triển khai on-chain thành công.",
+            "donateDesc": "Nhận được sự ủng hộ quyên góp từ cộng đồng."
+        },
+        "followers": {
+            "followersTab": "Người theo dõi ({count})",
+            "followingTab": "Đang theo dõi ({count})",
+            "noFollowers": "Chưa có người theo dõi",
+            "noFollowing": "Chưa theo dõi ai"
+        },
+        "gallery": {
+            "loadMore": "Tải thêm",
+            "loading": "Đang tải...",
+            "noBricks": "Không tìm thấy khối nào"
+        },
+        "tabs": {
+            "realtime": "Thời gian thực",
+            "art": "Nghệ thuật",
+            "product": "Sản phẩm"
+        },
+        "card": {
+            "noImage": "KHÔNG CÓ ẢNH",
+            "hash": "MÃ HASH",
+            "latitude": "Vĩ độ",
+            "longitude": "Kinh độ",
+            "location": "Vị trí"
+        },
+        "share": {
+            "title": "BRIX ID",
+            "alias": "Biệt danh",
+            "trustLevel": "Chỉ số tin cậy",
+            "scanCTA": "Quét để xem hồ sơ"
+        }
+    },
+    "archive": {
+        "title": "Kho lưu trữ",
+        "subtitle": "Tổng cộng {count} Brick đã triển khai / Đã xác thực mạng lưới",
+        "searchPlaceholder": "Tìm kiếm trong kho...",
+        "empty": {
+            "title": "Kho trống",
+            "description": "Không tìm thấy brick nào trong kho lưu trữ của bạn."
+        },
+        "loading": "Đang truy cập khối tiếp theo...",
+        "card": {
+            "sequenceCode": "Mã chuỗi",
+            "originCoord": "Tọa độ gốc",
+            "at": "LÚC: {timestamp}",
+            "verified": "Đã xác thực"
+        },
+        "filters": {
+            "title": "Bộ lọc kho lưu trữ",
+            "tagType": "Loại Tag",
+            "mediaFormat": "Định dạng Media",
+            "visibility": "Hiển thị",
+            "dateFilter": "Lọc theo ngày",
+            "all": "Tất cả",
+            "placeholders": {
+                "day": "Ngày/Tháng/Năm",
+                "month": "Tháng/Năm",
+                "year": "Năm"
+            },
+            "clearAll": "Xóa tất cả",
+            "footer": "Lưu trữ có chọn lọc"
+        }
+    },
+    "brickDetail": {
+        "page": {
+            "loading": "Đang truy cập dữ liệu khối...",
+            "notFound": "Không tìm thấy Brick",
+            "notFoundDesc": "Tài sản được yêu cầu có thể đã bị di chuyển, bị xóa hoặc đang được lập chỉ mục lại.",
+            "back": "Quay lại",
+            "edit": "Chỉnh sửa",
+            "save": "Lưu",
+            "cancel": "Hủy",
+            "location": "Vị trí",
+            "public": "CÔNG KHAI",
+            "private": "RIÊNG TƯ",
+            "verificationPassed": "XÁC MINH THÀNH CÔNG",
+            "verificationFailed": "XÁC MINH THẤT BẠI",
+            "latitude": "Vĩ độ",
+            "longitude": "Kinh độ",
+            "title": "Tiêu đề",
+            "description": "Mô tả",
+            "visibility": "Hiển thị",
+            "edited": "đã chỉnh sửa",
+            "voteBar": {
+                "viewUpvoters": "Xem người bình chọn"
+            },
+            "confirmSave": {
+                "title": "Lưu thay đổi?",
+                "message": "Bạn có chắc chắn muốn cập nhật metadata cho brick này không?",
+                "confirmText": "Lưu thay đổi"
+            },
+            "messages": {
+                "invalidInput": "Dữ liệu không hợp lệ",
+                "success": "Cập nhật brick thành công",
+                "error": "Cập nhật brick thất bại"
+            }
+        },
+        "media": {
+            "loading3d": "Đang tải công cụ Render 3D...",
+            "img": "ẢNH",
+            "dragToRotate": "Kéo để xoay",
+            "noPreview": "KHÔNG CÓ BẢN XEM TRƯỚC",
+            "view3d": "Xem tài sản 3D",
+            "thumbnails": {
+                "delete": "Xóa ảnh thu nhỏ",
+                "maxReached": "Cho phép tối đa {n} ảnh thu nhỏ",
+                "onlyRemaining": "Chỉ có thể thêm tối đa {n} ảnh thu nhỏ",
+                "lastDeleteError": "Không thể xóa ảnh thu nhỏ cuối cùng",
+                "deleteError": "Không thể xóa ảnh thu nhỏ",
+                "added": "Đã thêm ảnh thu nhỏ",
+                "addError": "Không thể thêm ảnh thu nhỏ",
+                "deleted": "Đã xóa ảnh thu nhỏ",
+                "deleteConfirmMessage": "Bạn có chắc chắn muốn xóa ảnh thu nhỏ này không? Hành động này không thể hoàn tác."
+            }
+        },
+        "upvotersModal": {
+            "title": "Người bình chọn",
+            "empty": "Chưa có lượt bình chọn"
+        }
+    },
+    "comments": {
+        "title": "Bình luận ({count})",
+        "noComments": "Chưa có bình luận nào. Hãy là người đầu tiên!",
+        "placeholder": "Viết bình luận...",
+        "input": {
+            "placeholder": "Viết bình luận...",
+            "replyPlaceholder": "Trả lời @{username}...",
+            "preview": "Đang xem trước markdown..."
+        },
+        "item": {
+            "edited": "đã chỉnh sửa",
+            "menu": {
+                "edit": "Chỉnh sửa",
+                "delete": "Xóa"
+            },
+            "actions": {
+                "reply": "Trả lời",
+                "replies": "{count} phản hồi",
+                "repliesPlural": "{count} phản hồi"
+            },
+            "deleteConfirm": {
+                "title": "Xóa bình luận",
+                "message": "Bạn có chắc chắn muốn xóa bình luận này không? Hành động này không thể hoàn tác.",
+                "confirmText": "Xóa"
+            },
+            "editForm": {
+                "save": "Lưu thay đổi",
+                "cancel": "Hủy"
+            }
+        },
+        "voteBar": {
+            "viewUpvoters": "Xem người bình chọn"
+        }
+    },
+    "onchain": {
+        "dashboardTitle": "Bảng Điều Khiển On-Chain",
+        "viewTx": "Xem TX",
+        "toast": {
+            "ipfsComplete": "Phân phối IPFS hoàn tất! Bây giờ bạn có thể mint on-chain.",
+            "mintComplete": "Đã mint brick on-chain! 🎉",
+            "processingIpfs": "Giao dịch đã xác nhận. Đang xử lý phân phối...",
+            "connectWallet": "Vui lòng kết nối ví trước",
+            "ipfsSubmitted": "Giao dịch thanh toán IPFS đã được gửi!",
+            "ipfsFailed": "Thanh toán IPFS thất bại: {error}",
+            "missingCid": "Thiếu IPFS CID hoặc ví chưa được kết nối",
+            "mintSubmitted": "Giao dịch mint đã được gửi!",
+            "mintFailed": "Mint thất bại: {error}",
+            "donateDataMissing": "Không thể quyên góp — thiếu dữ liệu hoặc ví chưa kết nối",
+            "donateSubmitted": "Giao dịch quyên góp đã được gửi!",
+            "donateFailed": "Quyên góp thất bại: {error}"
+        },
+        "share": {
+            "button": "Chia sẻ",
+            "label": "Chia sẻ",
+            "title": "Chia sẻ liên kết",
+            "copy": "Sao chép",
+            "copied": "Đã sao chép",
+            "toast": {
+                "success": "Đã sao chép liên kết vào bộ nhớ tạm!",
+                "error": "Không thể sao chép liên kết"
+            }
+        },
+        "ipfsStep": {
+            "title": "Phân phối lên IPFS",
+            "description": "Bước 1: Phân phối hình ảnh đã xác minh của bạn lên mạng lưới IPFS phi tập trung để đảm bảo lưu trữ vĩnh viễn.",
+            "button": "Phân phối lên IPFS ({fee} POL)",
+            "processing": "Đang xử lý...",
+            "waiting": "Đang khởi tạo phân phối IPFS. Vui lòng đợi..."
+        },
+        "mintStep": {
+            "title": "Mint On-Chain",
+            "live": "Trực tiếp",
+            "assetVerified": "Tài sản IPFS đã xác minh",
+            "explorer": "Explorer",
+            "cid": "CID: {cid}",
+            "description": "Bước 2: Mint brick của bạn trên Polygon Amoy để chính thức hóa và nhận sự ủng hộ.",
+            "button": "Mint trên Polygon",
+            "minting": "Đang mint...",
+            "verifying": "Đang xác minh việc mint on-chain..."
+        },
+        "donation": {
+            "title": "Ủng hộ nghệ sĩ",
+            "placeholder": "Số tiền (POL)",
+            "button": "Ủng hộ",
+            "connectWarning": "Kết nối ví để ủng hộ nghệ sĩ.",
+            "recentHeader": "Ủng hộ gần đây",
+            "explorer": "Explorer"
+        }
+    },
+    "settings": {
+        "tabs": {
+            "profile": "Hồ sơ",
+            "password": "Bảo mật"
+        },
+        "identity": {
+            "title": "Quản lý danh tính",
+            "description": "Cập nhật hình ảnh công khai và thông tin liên hệ của bạn trên giao thức BRIX.",
+            "fullName": "Họ và tên",
+            "phone": "Số điện thoại",
+            "username": "Tên người dùng (Không thể thay đổi)",
+            "email": "Địa chỉ Email (Không thể thay đổi)",
+            "gender": "Giới tính",
+            "bio": "Mô tả ngắn / Tiểu sử",
+            "location": "Vị trí / Địa chỉ",
+            "preview": "Xem trước vị trí",
+            "options": {
+                "male": "Nam",
+                "female": "Nữ",
+                "other": "Khác"
+            }
+        },
+        "security": {
+            "title": "Bảo mật & Xác thực",
+            "description": "Quản lý thông tin đăng nhập và khóa mã hóa của bạn.",
+            "changePassword": "Thay đổi mật khẩu truy cập",
+            "currentPassword": "Mật khẩu hiện tại",
+            "newPassword": "Mật khẩu mới",
+            "confirmPassword": "Xác nhận mật khẩu mới"
+        },
+        "actions": {
+            "save": "Lưu hồ sơ",
+            "saving": "Đang lưu...",
+            "updatePassword": "Cập nhật mật khẩu",
+            "updating": "Đang cập nhật...",
+            "changeBanner": "Thay đổi ảnh bìa",
+            "uploading": "Đang tải lên..."
+        },
+        "messages": {
+            "loading": "Đang tải cài đặt...",
+            "signInRequired": "Vui lòng đăng nhập để truy cập cài đặt",
+            "updateProfileSuccess": "Cập nhật hồ sơ thành công!",
+            "updateProfileError": "Cập nhật hồ sơ thất bại",
+            "updatePasswordSuccess": "Cập nhật mật khẩu thành công!",
+            "updatePasswordError": "Cập nhật mật khẩu thất bại",
+            "uploadAvatar": "Đang tải lên ảnh đại diện...",
+            "uploadAvatarSuccess": "Cập nhật ảnh đại diện thành công!",
+            "uploadAvatarError": "Tải lên ảnh đại diện thất bại",
+            "uploadBanner": "Đang tải lên ảnh bìa...",
+            "uploadBannerSuccess": "Cập nhật ảnh bìa thành công!",
+            "uploadBannerError": "Tải lên ảnh bìa thất bại",
+            "invalidImage": "Vui lòng chọn một tệp hình ảnh",
+            "imageTooLarge": "Kích thước hình ảnh phải nhỏ hơn {size}MB"
+        }
+    },
+    "search": {
+        "placeholder": "Tìm kiếm người dùng & Brix...",
+        "tabs": {
+            "all": "Tất cả",
+            "bricks": "Brix",
+            "people": "Người dùng"
+        },
+        "dateFilters": {
+            "all": "Tất cả thời gian",
+            "day": "Hôm nay",
+            "month": "Tháng này",
+            "year": "Năm nay"
+        },
+        "geo": {
+            "label": "Bộ lọc địa lý",
+            "instruction": "Nhấp vào bản đồ để chọn vị trí",
+            "radiusKm": "{radius}km",
+            "radiusM": "{radius}m",
+            "clear": "Xóa vị trí"
+        },
+        "empty": {
+            "title": "Chưa có truy vấn tìm kiếm",
+            "description": "Nhập từ khóa hoặc chọn vị trí để bắt đầu tìm kiếm."
+        },
+        "noResults": {
+            "title": "Không tìm thấy kết quả",
+            "description": "Hãy thử từ khóa khác hoặc thông số lọc khác."
+        },
+        "sections": {
+            "people": "Hồ sơ được tìm thấy",
+            "bricks": "Brix được tìm thấy"
+        },
+        "footer": {
+            "poweredBy": "Tìm kiếm được cung cấp bởi Mạng thần kinh Algolia",
+            "resultsCount": "{count} kết quả được tìm thấy"
+        },
+        "attributes": {
+            "fullname": "fullname",
+            "username": "username"
+        },
+        "card": {
+            "brick": "Brix",
+            "id": "ID",
+            "noImage": "Không có ảnh",
+            "untitled": "Chưa đặt tên",
+            "latitude": "Vĩ độ",
+            "longitude": "Kinh độ",
+            "location": "Vị trí",
+            "anonymous": "Ẩn danh"
+        }
+    },
+    "trending": {
+        "title": "NHỊP ĐẬP TOÀN CẦU",
+        "description": "Nhịp đập kiến trúc của mạng lưới. Xác minh trực quan theo thời gian thực và biểu đạt nghệ thuật mật độ cao.",
+        "tabs": {
+            "recommend": "Dành cho bạn",
+            "following": "Đang theo dõi"
+        },
+        "tags": {
+            "all": "Tất cả",
+            "realtime": "Thời gian thực",
+            "art": "Nghệ thuật",
+            "product": "Sản phẩm"
+        },
+        "empty": {
+            "title": "Không tìm thấy brick nào trong luồng này.",
+            "description": "Hãy thử điều chỉnh bộ lọc của bạn."
+        },
+        "widget": {
+            "title": "Hoạt động toàn cầu",
+            "live": "Trực tiếp",
+            "syncStatus": "Trạng thái đồng bộ",
+            "stable": "ỔN ĐỊNH",
+            "activeNodes": "Node đang hoạt động"
+        },
+        "risingArtists": {
+            "title": "NGHỆ SĨ ĐANG LÊN",
+            "authors": "Tác giả hàng đầu",
+            "users": "Người dùng hàng đầu",
+            "empty": "Không tìm thấy nghệ sĩ nào.",
+            "flws": "người theo dõi"
+        },
+        "actions": {
+            "loadMore": "Tải thêm",
+            "loading": "Đang tải..."
+        }
+    },
+    "uploads": {
+        "title": "BRIX_IMAGE_UPLOAD_CENTER",
+        "subtitle": "Giao thức xử lý nghệ thuật thần kinh v2.4.0",
+        "authentic": "AUTHENTIC_BRIX",
+        "tabs": {
+            "art": "Tải tác phẩm",
+            "model": "Tải mô hình 3D"
+        },
+        "form": {
+            "metadata": "Siêu dữ liệu gạch",
+            "modelMetadata": "Siêu dữ liệu mô hình",
+            "required": "các trường bắt buộc đánh dấu *",
+            "title": "Tiêu đề",
+            "titlePlaceholder": "Đặt tên cho Brix của bạn...",
+            "modelTitlePlaceholder": "Đặt tên cho mô hình 3D...",
+            "description": "Mô tả",
+            "descPlaceholder": "Mô tả khoảnh khắc này (tùy chọn)...",
+            "modelDescPlaceholder": "Mô tả mô hình 3D của bạn (tùy chọn)...",
+            "noFile": "Chưa chọn tệp",
+            "noFiles": "Chưa chọn tệp nào",
+            "uploading": "Đang tải lên...",
+            "remove": "Gỡ bỏ",
+            "thumbnails": "Hình thu nhỏ",
+            "addThumbnails": "Thêm hình thu nhỏ (1-5)",
+            "addMore": "Thêm nữa ({count} còn lại)",
+            "limitReached": "Cho phép tối đa 5 hình thu nhỏ",
+            "glbFile": "Tệp mô hình 3D",
+            "glbFormat": "ĐỊNH DẠNG .GLB",
+            "dropGlb": "Thả tệp GLB vào đây",
+            "clickBrowse": "Hoặc nhấp để duyệt",
+            "selectGlb": "Chọn tệp GLB",
+            "initAsset": "Khởi tạo liên kết tài sản",
+            "dropArtDesc": "Thả tác phẩm nghệ thuật kỹ thuật số hoặc chọn từ bộ nhớ cục bộ. Lưới Neon Cyan đang giám sát tính toàn vẹn.",
+            "selectFile": "Chọn tệp",
+            "addressLabel": "Địa chỉ",
+            "addressPlaceholder": "Tìm kiếm địa chỉ hoặc tự động phát hiện từ GPS...",
+            "geoTitle": "Tọa độ địa lý",
+            "gpsLocked": "ĐÃ_KHÓA_GPS",
+            "latLabel": "Vĩ độ",
+            "lngLabel": "Kinh độ",
+            "latPlaceholder": "-90 đến 90",
+            "lngPlaceholder": "-180 đến 180",
+            "noThumbnails": "Chưa thêm hình thu nhỏ",
+            "readyForBlockchain": "Sẵn sàng cho Blockchain",
+            "verifyUpload": "Xác minh & Tải lên",
+            "modelModule": "MÔ_ĐUN_TẢI_LÊN_MÔ_HÌNH",
+            "modelUnderDev": "Đường ống xử lý mô hình 3D — Đang phát triển",
+            "phase3Coming": "Sắp ra mắt — Giai đoạn 3"
+        },
+        "messages": {
+            "selectImage": "Vui lòng chọn một tệp hình ảnh để tải lên",
+            "selectGlb": "Vui lòng chọn một tệp mô hình GLB",
+            "addThumbnail": "Vui lòng thêm ít nhất 1 hình ảnh thu nhỏ",
+            "uploadingArt": "Đang tải gạch nghệ thuật lên...",
+            "uploadingModel": "Đang tải mô hình 3D lên...",
+            "successArt": "Tải gạch nghệ thuật lên thành công!",
+            "successModel": "Tải mô hình 3D lên thành công!",
+            "errorArt": "Tải gạch nghệ thuật thất bại",
+            "errorModel": "Tải mô hình 3D thất bại"
+        },
+        "analysis": {
+            "title": "Phân tích siêu dữ liệu",
+            "imageStream": "Dữ liệu luồng hình ảnh",
+            "rawExif": "Luồng EXIF thô",
+            "systemLogs": "Nhật ký hệ thống",
+            "processing": "Đang xử lý tệp...",
+            "waiting": "Đang chờ khởi tạo tệp...",
+            "listening": "Đang nghe trên cổng 8080...",
+            "integrity": "KIỂM_TRA_TOÀN_VẸN",
+            "pending": "CHỜ_XỬ_LÝ",
+            "latency": "ĐỘ_TRỄ_MẠNG",
+            "resolution": "ĐỘ_PHÂN_GIẢI",
+            "bitDepth": "ĐỘ_SÂU_BIT",
+            "colorSpace": "KHÔNG_GIAN_MÀU",
+            "genHash": "MÃ_BĂM_GEN",
+            "timestamp": "DẤU_THỜI_GIAN",
+            "geoTag": "THẺ_ĐỊA_LÝ",
+            "aiProbability": "XÁC_SUẤT_AI",
+            "artifactScan": "QUÉT_VẬT_THỂ",
+            "noAnomalies": "KHÔNG_CÓ_BẤT_THƯỜNG"
+        },
+        "preview": {
+            "loadingEngine": "Đang tải công cụ 3D...",
+            "reloadingEngine": "Đang tải lại công cụ 3D...",
+            "livePreview": "Xem trước trực tiếp",
+            "brixCard": "BRIX_CARD v1.0",
+            "artTag": "NGHỆ THUẬT",
+            "refresh3d": "Làm mới mô hình 3D",
+            "rendering": "ĐANG XỬ LÝ",
+            "awaitingData": "CHỜ DỮ LIỆU",
+            "previewStatus": "TRẠNG THÁI XEM TRƯỚC",
+            "tagType": "LOẠI THẺ",
+            "artBrick": "ART_BRICK",
+            "geoLock": "KHÓA_ĐỊA_LÝ",
+            "fullMetadata": "Phân tích siêu dữ liệu",
+            "dragRotate": "Kéo để xoay",
+            "noModel": "Chưa tải mô hình",
+            "noImage": "Chưa chọn hình ảnh",
+            "untitledModel": "Mô hình chưa đặt tên",
+            "untitledBrick": "Gạch chưa đặt tên",
+            "noDescription": "Chưa có mô tả.",
+            "noDescriptionVerify": "Chưa có mô tả. Thêm mô tả để xác minh siêu dữ liệu tài sản.",
+            "creators": {
+                "model": "Người sáng tạo 3D",
+                "art": "Nghệ sĩ đã xác minh"
+            },
+            "status": {
+                "loaded": "ĐÃ_TẢI_MÔ_HÌNH",
+                "loading": "ĐANG_TẢI_MÔ_HÌNH",
+                "awaiting": "ĐANG_CHỜ_DỮ_LIỆU",
+                "rendering": "ĐANG_DỰNG_HÌNH"
+            }
+        }
+    },
+    "vault": {
+        "audit": {
+            "title": "Kiểm tra an ninh trực tiếp",
+            "live": "TRỰC TIẾP",
+            "search": "Tìm kiếm nhật ký...",
+            "nodeStatus": "Trạng thái nút",
+            "encryptedConnection": "Kết nối mã hóa",
+            "uptime": "Thời gian hoạt động",
+            "traffic": "Lưu lượng"
+        },
+        "trust": {
+            "title": "Chỉ số tin cậy hệ thống",
+            "description": "Mức độ an ninh của bạn hiện tại là Cấp {level}. Các yêu cầu cho Kho lưu trữ mã hóa đã được đáp ứng.",
+            "current": "Điểm hiện tại",
+            "requirement": "Yêu cầu"
+        },
+        "sections": {
+            "folders": "Thư mục Kho lưu trữ",
+            "recent": "Nội dung riêng tư gần đây"
+        },
+        "actions": {
+            "filter": "Bộ lọc",
+            "createNew": "Tạo mới"
+        },
+        "folder": {
+            "foldersTag": "THƯ MỤC",
+            "decrypt": "GIẢI MÃ",
+            "protocolV1": "GIAO_THỨC_V1",
+            "protocolV2": "GIAO_THỨC_V2",
+            "encrypted": "ĐÃ MÃ HÓA",
+            "protected": "ĐƯỢC BẢO VỆ"
+        },
+        "content": {
+            "encryptedData": "DỮ_LIỆU_MÃ_HÓA",
+            "decrypt": "GIẢI MÃ",
+            "contentType": "LOẠI NỘI DUNG",
+            "fileSize": "KÍCH THƯỚC TỆP"
+        },
+        "onChainLocked": "Đã khóa On-Chain",
+        "encrypted": "Đã mã hóa",
+        "filesCount": "{count} Tệp • {size}",
+        "types": {
+            "sensitive": "NỘI_DUNG_NHẠY_CẢM",
+            "onChain": "SỔ_CÁI_ON_CHAIN",
+            "biometric": "KHÓA_SINH_TRẮC_HỌC"
+        },
+        "authOnChain": "Xác thực On-Chain",
+        "decryptToView": "Giải mã để xem"
+    },
+    "shared": {
+        "loading": "Đang xử lý...",
+        "systemProcessing": "HỆ_THỐNG_XỬ_LÝ",
+        "confirm": {
+            "defaultTitle": "Bạn có chắc chắn không?",
+            "confirm": "Xác nhận",
+            "cancel": "Hủy"
+        },
+        "detail": {
+            "authentic": "CHÍNH CHỦ",
+            "hash": "MÃ BĂM",
+            "verifiedAsset": "Tài sản đã xác minh",
+            "description": "Được ghi lại qua cảm biến quang học đã xác minh. Không phát hiện xử lý hậu kỳ. Hình học khớp với siêu dữ liệu vị trí.",
+            "latitude": "Vĩ độ",
+            "longitude": "Kinh độ",
+            "fullAnalysis": "Phân tích đầy đủ",
+            "north": "B",
+            "south": "N",
+            "east": "Đ",
+            "west": "T"
+        }
+    },
+    "wallet": {
+        "connect": "Kết nối",
+        "disconnect": "Ngắt kết nối",
+        "linked": "Đã liên kết",
+        "unlinked": "Chưa liên kết",
+        "current": "Ví hiện tại",
+        "yourWallets": "Ví đã liên kết",
+        "copy": "Sao chép địa chỉ",
+        "explorer": "Xem trên Explorer",
+        "verifiedOwner": "Chủ sở hữu tài khoản đã xác minh",
+        "notLinkedMsg": "Ví đã kết nối nhưng chưa liên kết.",
+        "linkWallet": "Liên kết ví này",
+        "linkSuccess": "Liên kết ví thành công!",
+        "linkError": "Liên kết ví thất bại. Ví có thể đã được liên kết với tài khoản khác."
+    },
+    "navigation": {
+        "header": {
+            "explore": "Khám phá",
+            "searchPlaceholder": "Tìm người dùng & bricks...",
+            "camera": "Máy ảnh",
+            "userAvatar": "Ảnh đại diện"
+        },
+        "sidebar": {
+            "groups": {
+                "overview": "Tổng quan",
+                "library": "Thư viện",
+                "connect": "Kết nối",
+                "insights": "Thông tin"
+            },
+            "items": {
+                "map": "Bản đồ",
+                "trending": "Xu hướng",
+                "archive": "Lưu trữ",
+                "albums": "Album",
+                "messages": "Tin nhắn",
+                "network": "Mạng lưới",
+                "reports": "Báo cáo",
+                "verificationStats": "Số liệu xác thực",
+                "uploadTrends": "Xu hướng tải lên",
+                "revenue": "Doanh thu",
+                "uploads": "Tải lên",
+                "realtime": "Thời gian thực",
+                "camera": "Máy ảnh",
+                "settings": "Cài đặt",
+                "logout": "Đăng xuất",
+                "signingOut": "Đang đăng xuất..."
+            },
+            "status": {
+                "title": "Trạng thái mạng",
+                "nodesActive": "NÚT_HOẠT_ĐỘNG",
+                "blocksVer": "KHỐI_XÁC_THỰC"
+            },
+            "messages": {
+                "signOutSuccess": "Đăng xuất thành công",
+                "signOutError": "Đăng xuất thất bại"
+            }
+        }
+    }
+}

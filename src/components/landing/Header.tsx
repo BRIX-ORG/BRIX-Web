@@ -3,17 +3,19 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { BrixBrandLogo } from '@/components/shared';
+import { BrixBrandLogo, LanguageSwitcher } from '@/components/shared';
 import { SupportedWalletsModal } from '@/components/landing';
+import { useTranslations } from 'next-intl';
 
 const navLinks = [
-    { href: '#concept', label: 'The Concept' },
-    { href: '#artist-hub', label: 'Artist Hub' },
-    { href: '#map', label: 'Real-Time Map' },
-    { href: '#roadmap', label: 'Roadmap' },
+    { href: '#concept', i18nKey: 'concept' },
+    { href: '#artist-hub', i18nKey: 'artistHub' },
+    { href: '#map', i18nKey: 'map' },
+    { href: '#roadmap', i18nKey: 'roadmap' },
 ];
 
 export function Header() {
+    const t = useTranslations('landing');
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isWalletsModalOpen, setIsWalletsModalOpen] = useState(false);
 
@@ -31,21 +33,24 @@ export function Header() {
                             href={link.href}
                             className="font-display text-sm font-medium tracking-widest uppercase hover:text-primary transition-colors"
                         >
-                            {link.label}
+                            {t(`Header.navLinks.${link.i18nKey}`)}
                         </Link>
                     ))}
                 </nav>
 
                 {/* CTA Buttons */}
                 <div className="flex items-center gap-4">
+                    <div className="hidden sm:block">
+                        <LanguageSwitcher />
+                    </div>
                     <button className="px-6 py-2 bg-primary text-primary-foreground font-display font-bold text-xs uppercase tracking-widest hover:bg-white transition-all glow-cyan">
-                        Launch App
+                        {t('Header.launchApp')}
                     </button>
                     <button
                         onClick={() => setIsWalletsModalOpen(true)}
                         className="hidden sm:block px-6 py-2 border border-secondary text-secondary font-display font-bold text-xs uppercase tracking-widest hover:bg-secondary/10 transition-all"
                     >
-                        Supported Wallets
+                        {t('Header.supportedWallets')}
                     </button>
 
                     {/* Mobile Menu Toggle */}
@@ -62,6 +67,13 @@ export function Header() {
             {mobileMenuOpen && (
                 <div className="md:hidden bg-background border-t border-border">
                     <nav className="flex flex-col p-6 gap-4">
+                        <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs uppercase tracking-widest font-bold text-primary">
+                                {t('Header.language')}
+                            </span>
+                            <LanguageSwitcher />
+                        </div>
+                        <div className="h-px bg-border my-2" />
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
@@ -69,7 +81,7 @@ export function Header() {
                                 className="font-display text-sm font-medium tracking-widest uppercase hover:text-primary transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
-                                {link.label}
+                                {t(`Header.navLinks.${link.i18nKey}`)}
                             </Link>
                         ))}
                     </nav>

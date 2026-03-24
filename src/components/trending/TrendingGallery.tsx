@@ -16,6 +16,7 @@ import type { BrickTagType, UserBrick } from '@/types/brick.types';
 import { NewsfeedBrickCard, type NewsfeedBrick, TimeFilter } from '@/components/trending';
 import { ArtistBricksGrid } from '@/components/artist';
 import { BrickDetailModal } from '@/components/brick-detail';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/utils/classnames';
 
 type FeedType = 'RECOMMEND' | 'FOLLOWING';
@@ -59,15 +60,16 @@ function MasonrySkeleton() {
 }
 
 function EmptyState() {
+    const t = useTranslations('trending');
     return (
         <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="size-20 border-2 border-dashed border-muted-foreground/20 rounded-lg flex items-center justify-center">
                 <span className="text-2xl text-muted-foreground/30">∅</span>
             </div>
             <p className="text-sm text-muted-foreground/60 font-mono uppercase tracking-widest text-center">
-                No bricks found in this feed.
+                {t('empty.title')}
                 <br />
-                Try adjusting your filters.
+                {t('empty.description')}
             </p>
         </div>
     );
@@ -94,6 +96,7 @@ function useBreakpointColumns() {
 }
 
 export function TrendingGallery() {
+    const t = useTranslations('trending');
     const [feedType, setFeedType] = useState<FeedType>('RECOMMEND');
     const [tagFilter, setTagFilter] = useState<FilterTagType>('ALL');
     const [timeRange, setTimeRange] = useState<string>('DAY');
@@ -180,10 +183,10 @@ export function TrendingGallery() {
                             {isFetchingNextPage ? (
                                 <span className="flex items-center gap-2">
                                     <Loader2 className="size-3.5 animate-spin" />
-                                    Loading...
+                                    {t('actions.loading')}
                                 </span>
                             ) : (
-                                'Load More'
+                                t('actions.loadMore')
                             )}
                         </button>
                     </div>
@@ -217,7 +220,7 @@ export function TrendingGallery() {
                                     isActive && 'text-primary animate-pulse shadow-primary',
                                 )}
                             />
-                            {tab.label}
+                            {t(`tabs.${tab.id.toLowerCase()}`)}
                         </button>
                     );
                 })}
@@ -241,7 +244,7 @@ export function TrendingGallery() {
                                 )}
                             >
                                 <Icon className="size-3.5" />
-                                {tab.label}
+                                {t(`tags.${tab.id.toLowerCase()}`)}
                             </button>
                         );
                     })}

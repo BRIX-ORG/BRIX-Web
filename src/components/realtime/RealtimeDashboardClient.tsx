@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useState, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useGetRealtimeBricks, useGetUserStats } from '@/hooks/apis/brick.api';
@@ -20,19 +21,24 @@ import GooeyNav from '@/components/react-bits/GooeyNav';
 
 type FilterType = 'all' | 'pending' | 'ipfs_uploaded' | 'onchain' | 'failed';
 
-const FILTER_OPTIONS: { label: string; value: FilterType; icon: LucideIcon }[] = [
-    { label: 'All Assets', value: 'all', icon: BoxSelect },
-    { label: 'Verified', value: 'onchain', icon: CheckCircle2 },
-    { label: 'IPFS Stored', value: 'ipfs_uploaded', icon: CloudUpload },
-    { label: 'Processing', value: 'pending', icon: Clock },
-    { label: 'Failed', value: 'failed', icon: AlertCircle },
-];
-
 export function RealtimeDashboardClient() {
+    const t = useTranslations('realtime');
+    const tc = useTranslations('common');
     const { data: session } = useSession();
     const userId = session?.user?.id;
 
     const [filter, setFilter] = useState<FilterType>('all');
+
+    const FILTER_OPTIONS: { label: string; value: FilterType; icon: LucideIcon }[] = useMemo(
+        () => [
+            { label: t('filters.all'), value: 'all', icon: BoxSelect },
+            { label: t('filters.onchain'), value: 'onchain', icon: CheckCircle2 },
+            { label: t('filters.ipfs_uploaded'), value: 'ipfs_uploaded', icon: CloudUpload },
+            { label: t('filters.pending'), value: 'pending', icon: Clock },
+            { label: t('filters.failed'), value: 'failed', icon: AlertCircle },
+        ],
+        [t],
+    );
 
     const { data: stats } = useGetUserStats(userId);
 
@@ -72,11 +78,10 @@ export function RealtimeDashboardClient() {
             {/* Header */}
             <header className="flex flex-col gap-2">
                 <h1 className="text-3xl md:text-5xl font-bold tracking-tighter text-foreground">
-                    Realtime Assets
+                    {t('title')}
                 </h1>
                 <p className="text-muted-foreground max-w-[65ch] leading-relaxed">
-                    Monitor your continuously-distributed content, track metadata verification
-                    across the blockchain, and trace incoming POL donations in real-time.
+                    {t('description')}
                 </p>
             </header>
 
@@ -124,11 +129,10 @@ export function RealtimeDashboardClient() {
                         >
                             <BoxSelect className="size-10 text-muted-foreground/30 mb-4" />
                             <h3 className="text-sm font-semibold text-foreground mb-1">
-                                No Realtime Assets Found
+                                {t('empty.title')}
                             </h3>
                             <p className="text-xs text-muted-foreground max-w-[40ch] text-center">
-                                You don't have any realtime assets matching the current filter.
-                                Assets uploaded via Camera will appear here.
+                                {t('empty.description')}
                             </p>
                         </motion.div>
                     )}
@@ -141,7 +145,7 @@ export function RealtimeDashboardClient() {
                                 disabled={isFetchingNextBricks}
                                 className="px-6 py-2.5 rounded-full bg-muted/50 hover:bg-muted text-xs font-semibold transition-colors disabled:opacity-50"
                             >
-                                {isFetchingNextBricks ? 'Loading...' : 'Load Older Assets'}
+                                {isFetchingNextBricks ? tc('loading') : t('actions.loadMore')}
                             </button>
                         </div>
                     )}

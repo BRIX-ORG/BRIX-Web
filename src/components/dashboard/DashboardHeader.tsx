@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Search, Camera, Menu } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { BrixBrandLogo, LanguageSwitcher } from '@/components/shared';
@@ -20,6 +21,7 @@ interface DashboardHeaderProps {
 }
 
 export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
+    const t = useTranslations('navigation.header');
     const { data: session } = useSession();
     const user = session?.user;
     const avatarUrl = user ? getAvatarUrl(user.avatar, user.gender) : null;
@@ -45,7 +47,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                     {/* Page Title - visible on desktop */}
                     <div className="hidden lg:flex items-center gap-3">
                         <h2 className="text-xl font-bold tracking-tight uppercase">
-                            BRIX <span className="text-primary/50 font-light">Explore</span>
+                            BRIX <span className="text-primary/50 font-light">{t('explore')}</span>
                         </h2>
                     </div>
 
@@ -53,14 +55,14 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                     <button
                         onClick={() => setIsSearchOpen(true)}
                         className="hidden md:flex flex-col min-w-48 lg:min-w-64 h-9 cursor-text"
-                        aria-label="Open search"
+                        aria-label={t('searchPlaceholder')}
                     >
                         <div className="flex w-full flex-1 items-stretch rounded border border-border bg-muted h-full group hover:border-primary/40 transition-colors">
                             <div className="text-muted-foreground flex items-center justify-center pl-3">
                                 <Search className="size-4" />
                             </div>
                             <span className="flex w-full min-w-0 flex-1 items-center px-3 text-sm text-muted-foreground/50 select-none">
-                                Search users & bricks...
+                                {t('searchPlaceholder')}
                             </span>
                             <div className="flex items-center pr-3 gap-1">
                                 <kbd className="text-[10px] font-mono border border-border/60 px-1 py-0.5 rounded text-muted-foreground/40 hidden lg:block">
@@ -93,7 +95,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                             className="flex items-center gap-2 bg-primary text-primary-foreground px-3 md:px-4 py-1.5 rounded text-xs font-bold uppercase tracking-tighter hover:brightness-110 transition-all h-9"
                         >
                             <Camera className="size-4" />
-                            <span className="hidden sm:inline">Camera</span>
+                            <span className="hidden sm:inline">{t('camera')}</span>
                         </Link>
 
                         {/* Wallet Button */}
@@ -112,7 +114,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                             {avatarUrl && (
                                 <Image
                                     src={avatarUrl}
-                                    alt={user?.username ?? 'User avatar'}
+                                    alt={user?.username ?? t('userAvatar')}
                                     width={36}
                                     height={36}
                                     className="w-full h-full object-cover"

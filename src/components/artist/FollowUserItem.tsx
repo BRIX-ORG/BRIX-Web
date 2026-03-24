@@ -8,6 +8,7 @@ import { useFollowUser, useUnfollowUser } from '@/hooks/apis/user.api';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import Link from 'next/link';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 interface FollowUserItemProps {
     user: FollowUser;
@@ -15,6 +16,7 @@ interface FollowUserItemProps {
 }
 
 export function FollowUserItem({ user, currentUserId }: FollowUserItemProps) {
+    const t = useTranslations('artist.hero');
     const isOwnRow = currentUserId === user.id;
     const [optimisticFollowing, setOptimisticFollowing] = useState(user.isFollowing);
 
@@ -80,7 +82,7 @@ export function FollowUserItem({ user, currentUserId }: FollowUserItemProps) {
                     ) : (
                         <UserPlus className="size-4" />
                     )}
-                    {optimisticFollowing ? 'Following' : 'Follow'}
+                    {optimisticFollowing ? t('followingButton') : t('followArtist')}
                 </button>
             )}
         </div>

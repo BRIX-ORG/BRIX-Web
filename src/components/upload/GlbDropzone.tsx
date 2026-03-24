@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import { Box, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface GlbDropzoneProps {
     file: File | null;
@@ -11,6 +12,7 @@ interface GlbDropzoneProps {
 }
 
 export function GlbDropzone({ file, onFileSelect, onRemove, disabled }: GlbDropzoneProps) {
+    const t = useTranslations('uploads.form');
     const handleDrop = useCallback(
         (e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
@@ -37,10 +39,10 @@ export function GlbDropzone({ file, onFileSelect, onRemove, disabled }: GlbDropz
             {/* Section Header */}
             <div className="p-4 border-b border-border flex items-center gap-3">
                 <Box className="size-4 text-secondary" />
-                <h3 className="text-sm font-bold tracking-[0.2em] uppercase">3D Model File</h3>
+                <h3 className="text-sm font-bold tracking-[0.2em] uppercase">{t('glbFile')}</h3>
                 <div className="flex-1" />
                 <span className="text-[9px] font-mono text-secondary/50 uppercase tracking-widest">
-                    .GLB FORMAT
+                    {t('glbFormat')}
                 </span>
             </div>
 
@@ -79,14 +81,14 @@ export function GlbDropzone({ file, onFileSelect, onRemove, disabled }: GlbDropz
                     </div>
                     <div className="text-center">
                         <p className="text-sm font-bold tracking-[0.15em] uppercase text-foreground/60 mb-1">
-                            Drop GLB File Here
+                            {t('dropGlb')}
                         </p>
                         <p className="text-[10px] text-muted-foreground/50 font-mono uppercase tracking-widest">
-                            Or click to browse
+                            {t('clickBrowse')}
                         </p>
                     </div>
                     <label className="bg-secondary/10 border border-secondary/30 text-secondary px-6 py-2 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-secondary hover:text-secondary-foreground transition-all cursor-pointer">
-                        Select GLB File
+                        {t('selectGlb')}
                         <input
                             type="file"
                             className="hidden"

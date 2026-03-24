@@ -7,6 +7,7 @@ import type { SearchParamsObject, SearchMethodParams } from 'algoliasearch';
 import { Search, X, Calendar, MapPin, SlidersHorizontal, Loader2 } from 'lucide-react';
 import { algoliaClient, ALGOLIA_INDICES } from '@/lib/algolia';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useTranslations } from 'next-intl';
 import {
     AlgoliaBrickCard,
     AlgoliaUserCard,
@@ -40,6 +41,7 @@ interface SearchModalProps {
 }
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+    const t = useTranslations('search');
     const router = useRouter();
     const [query, setQuery] = useState('');
     const [activeTab, setActiveTab] = useState<TabType>('all');
@@ -87,7 +89,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         if (!hasDate) {
             const userParams: SearchParamsObject = {
                 hitsPerPage: 5,
-                attributesToHighlight: ['fullname', 'username'],
+                attributesToHighlight: [t('attributes.fullname'), t('attributes.username')],
             };
 
             if (hasGeo && geoFilter) {
@@ -143,7 +145,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         }
 
         return { users: usersHits, bricks: bricksHits };
-    }, [debouncedQuery, dateFilterType, dateFilterValue, geoEnabled, geoFilter, radius]);
+        return { users: usersHits, bricks: bricksHits };
+    }, [debouncedQuery, dateFilterType, dateFilterValue, geoEnabled, geoFilter, radius, t]);
 
     // setState is called exclusively inside .then()/.catch() callbacks (async callbacks),
     // never synchronously in the effect body — satisfies the react-compiler rule.
@@ -206,7 +209,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search users, bricks, locations..."
+                        placeholder={t('placeholder')}
                         className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
                     />
                     {results.isLoading && (
@@ -242,7 +245,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                         : 'text-muted-foreground hover:text-foreground',
                                 )}
                             >
-                                {tab === 'all' ? 'All' : tab === 'bricks' ? 'Bricks' : 'People'}
+                                {t(`tabs.${tab}`)}
                             </button>
                         ))}
                     </div>
@@ -268,7 +271,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                                         : 'text-muted-foreground hover:text-foreground',
                                                 )}
                                             >
-                                                {d === 'none' ? 'All' : d}
+                                                {d === 'none'
+                                                    ? t('dateFilters.all')
+                                                    : t(`dateFilters.${d}`)}
                                             </button>
                                         ),
                                     )}
@@ -305,7 +310,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 )}
                             >
                                 <MapPin className="size-3" />
-                                Geo
+                                {t('geo.label')}
                             </button>
                         )}
                     </div>
@@ -317,10 +322,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <div className="flex items-center justify-between">
                             <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                                 <SlidersHorizontal className="size-3" />
-                                Click map to set center point
+                                {t('geo.instruction')}
                             </p>
                             <span className="text-xs font-mono text-primary">
-                                {radius >= 1000 ? `${radius / 1000}km radius` : `${radius}m radius`}
+                                {radius >= 1000
+                                    ? t('geo.radiusKm', { radius: radius / 1000 })
+                                    : t('geo.radiusM', { radius })}
                             </span>
                         </div>
 
@@ -366,7 +373,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                     onClick={() => setGeoFilter(null)}
                                     className="text-primary/60 hover:text-primary transition-colors"
                                 >
-                                    Clear point
+                                    {t('geo.clear')}
                                 </button>
                             </div>
                         )}
@@ -379,11 +386,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     {!hasQuery && (
                         <div className="text-center py-12 space-y-2">
                             <Search className="size-8 text-muted-foreground/20 mx-auto" />
-                            <p className="text-sm text-muted-foreground/50">
-                                Type to search users and bricks
-                            </p>
+                            <p className="text-sm text-muted-foreground/50">{t('empty.title')}</p>
                             <p className="text-xs text-muted-foreground/30">
-                                Or enable Geo to find nearby bricks
+                                {t('empty.description')}
                             </p>
                         </div>
                     )}
@@ -392,9 +397,11 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     {hasQuery && !results.isLoading && totalResults === 0 && (
                         <div className="text-center py-12 space-y-2">
                             <Search className="size-8 text-muted-foreground/20 mx-auto" />
-                            <p className="text-sm text-muted-foreground/50">No results found</p>
+                            <p className="text-sm text-muted-foreground/50">
+                                {t('noResults.title')}
+                            </p>
                             <p className="text-xs text-muted-foreground/30">
-                                Try different keywords or adjust filters
+                                {t('noResults.description')}
                             </p>
                         </div>
                     )}
@@ -404,13 +411,15 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <>
                             {results.isLoading && (
                                 <div>
-                                    <SectionLabel>People</SectionLabel>
+                                    <SectionLabel>{t('sections.people')}</SectionLabel>
                                     <UserSkeleton />
                                 </div>
                             )}
                             {!results.isLoading && results.users.length > 0 && (
                                 <div>
-                                    <SectionLabel count={results.users.length}>People</SectionLabel>
+                                    <SectionLabel count={results.users.length}>
+                                        {t('sections.people')}
+                                    </SectionLabel>
                                     <div className="space-y-2">
                                         {results.users.map((hit) => (
                                             <AlgoliaUserCard
@@ -430,14 +439,14 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <>
                             {results.isLoading && (
                                 <div>
-                                    <SectionLabel>Bricks</SectionLabel>
+                                    <SectionLabel>{t('sections.bricks')}</SectionLabel>
                                     <ResultSkeleton />
                                 </div>
                             )}
                             {!results.isLoading && results.bricks.length > 0 && (
                                 <div>
                                     <SectionLabel count={results.bricks.length}>
-                                        Bricks
+                                        {t('sections.bricks')}
                                     </SectionLabel>
                                     <div className="columns-2 sm:columns-3 lg:columns-4 gap-4 w-full">
                                         {results.bricks.map((hit) => (
@@ -461,11 +470,11 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {/* Footer */}
                 <div className="px-4 py-2 border-t border-border flex items-center justify-between shrink-0">
                     <p className="text-[10px] text-muted-foreground/30 font-mono">
-                        Powered by Algolia
+                        {t('footer.poweredBy')}
                     </p>
                     {hasQuery && !results.isLoading && (
                         <p className="text-[10px] text-muted-foreground/40 font-mono">
-                            {totalResults} result{totalResults !== 1 ? 's' : ''}
+                            {t('footer.resultsCount', { count: totalResults })}
                         </p>
                     )}
                 </div>

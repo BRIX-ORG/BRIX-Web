@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import {
     useConnection,
     useWriteContract,
@@ -66,6 +67,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
     const isConnected = !!connection?.address;
 
     const toast = useToast();
+    const t = useTranslations('onchain');
     const qc = useQueryClient();
     const { onIpfsUploaded, onBrickMinted } = useOnchainSocket();
     const { data: donations = [], isLoading: isLoadingDonations } = useGetDonations(brick.id);
@@ -81,7 +83,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
     useEffect(() => {
         const unsubIpfs = onIpfsUploaded((data) => {
             if (data.brickId !== brick.id) return;
-            toast.success('IPFS distribution complete! You can now mint on-chain.');
+            toast.success(t('toast.ipfsComplete'));
             setLocalMeta((prev) =>
                 prev
                     ? {
@@ -98,7 +100,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
 
         const unsubMint = onBrickMinted((data) => {
             if (data.brickId !== brick.id) return;
-            toast.success('Brick minted on-chain! 🎉');
+            toast.success(t('toast.mintComplete'));
             setLocalMeta((prev) =>
                 prev
                     ? {
@@ -115,7 +117,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
             unsubIpfs();
             unsubMint();
         };
-    }, [brick.id, onIpfsUploaded, onBrickMinted, toast, qc]);
+    }, [brick.id, onIpfsUploaded, onBrickMinted, toast, qc, t]);
 
     const ipfsMutation = useWriteContract();
     const hashIPFS = ipfsMutation.data;
@@ -200,12 +202,12 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
             localMeta?.onChainStatus !== 'onchain'
         ) {
             hasToastedIPFSRef.current = true;
-            toast.info('Transaction confirmed. Processing IPFS distribution...');
+            toast.info(t('toast.processingIpfs'));
             queueMicrotask(() => {
                 setLocalMeta((prev) => (prev ? { ...prev, onChainStatus: 'pending' } : prev));
             });
         }
-    }, [isIPFSTxConfirmed, localMeta?.onChainStatus, toast]);
+    }, [isIPFSTxConfirmed, localMeta?.onChainStatus, toast, t]);
 
     // Invalidate donations on success
     useEffect(() => {
@@ -220,7 +222,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
 
     const handlePayForIPFS = useCallback(async () => {
         if (!verifiedAt || !isConnected) {
-            toast.error('Please connect wallet first');
+            toast.error(t('toast.connectWallet'));
             return;
         }
 
@@ -246,9 +248,11 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
                 ...gasParams,
             },
             {
-                onSuccess: () => toast.success('IPFS payment transaction submitted!'),
+                onSuccess: () => toast.success(t('toast.ipfsSubmitted')),
                 onError: (error) =>
-                    toast.error(`IPFS payment failed: ${error?.message ?? 'Unknown error'}`),
+                    toast.error(
+                        t('toast.ipfsFailed', { error: error?.message ?? 'Unknown error' }),
+                    ),
             },
         );
     }, [
@@ -261,13 +265,14 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
         brick.id,
         toast,
         TARGET_CHAIN_ID,
+        t,
     ]);
 
     const ipfsCid = localMeta?.ipfsCid;
 
     const handleMint = useCallback(async () => {
         if (!ipfsCid || !isConnected) {
-            toast.error('Missing IPFS CID or wallet not connected');
+            toast.error(t('toast.missingCid'));
             return;
         }
 
@@ -292,9 +297,11 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
                 ...gasParams,
             },
             {
-                onSuccess: () => toast.success('Mint transaction submitted!'),
+                onSuccess: () => toast.success(t('toast.mintSubmitted')),
                 onError: (error) =>
-                    toast.error(`Minting failed: ${error?.message ?? 'Unknown error'}`),
+                    toast.error(
+                        t('toast.mintFailed', { error: error?.message ?? 'Unknown error' }),
+                    ),
             },
         );
     }, [
@@ -307,13 +314,14 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
         brick.id,
         toast,
         TARGET_CHAIN_ID,
+        t,
     ]);
 
     const onChainId = localMeta?.onChainId;
 
     const handleDonate = useCallback(async () => {
         if (!onChainId || !donateAmount || !isConnected) {
-            toast.error('Cannot donate — missing data or wallet not connected');
+            toast.error(t('toast.donateDataMissing'));
             return;
         }
 
@@ -340,11 +348,13 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
             },
             {
                 onSuccess: () => {
-                    toast.success('Donation transaction submitted!');
+                    toast.success(t('toast.donateSubmitted'));
                     setDonateAmount('1');
                 },
                 onError: (error) =>
-                    toast.error(`Donation failed: ${error?.message ?? 'Unknown error'}`),
+                    toast.error(
+                        t('toast.donateFailed', { error: error?.message ?? 'Unknown error' }),
+                    ),
             },
         );
     }, [
@@ -357,6 +367,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
         donateMutation,
         toast,
         TARGET_CHAIN_ID,
+        t,
     ]);
 
     // ─── UI ──────────────────────────────────────────────────────
@@ -370,7 +381,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                    On-Chain Dashboard
+                    {t('dashboardTitle')}
                     {isOnChain && <CheckCircle2 className="size-4 text-green-500" />}
                 </h3>
                 {localMeta.onChainTx && (
@@ -380,7 +391,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
                         rel="noreferrer"
                         className="text-[10px] font-mono text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
                     >
-                        View TX <ExternalLink className="size-3" />
+                        {t('viewTx')} <ExternalLink className="size-3" />
                     </a>
                 )}
             </div>

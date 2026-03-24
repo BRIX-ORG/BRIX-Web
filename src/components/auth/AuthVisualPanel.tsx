@@ -1,6 +1,8 @@
 import { BrixBrandLogo } from '@/components/shared';
+import { useTranslations } from 'next-intl';
 
 export function AuthVisualPanel() {
+    const t = useTranslations('auth');
     return (
         <div className="hidden lg:flex lg:w-3/5 relative overflow-hidden bg-background border-r border-border">
             {/* Background Image with gradient overlay */}
@@ -16,7 +18,7 @@ export function AuthVisualPanel() {
                 {/* Status indicator */}
                 <div className="absolute top-20 left-20 border border-primary/20 p-4 backdrop-blur-sm">
                     <p className="text-[10px] font-mono text-primary uppercase tracking-[0.3em]">
-                        System_Status: Online
+                        {t('visualPanel.status')}
                     </p>
                     <div className="w-32 h-1 bg-primary/20 mt-2">
                         <div className="w-2/3 h-full bg-primary" />
@@ -27,7 +29,7 @@ export function AuthVisualPanel() {
                 <div className="absolute bottom-40 right-10 flex flex-col items-end gap-2 opacity-40">
                     <div className="h-px w-40 bg-linear-to-l from-primary to-transparent" />
                     <p className="text-[8px] font-mono tracking-widest uppercase">
-                        BRIX_INFRASTRUCTURE_V4.2
+                        {t('visualPanel.infra')}
                     </p>
                 </div>
             </div>

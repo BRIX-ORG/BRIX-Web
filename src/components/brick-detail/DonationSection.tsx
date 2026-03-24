@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Loader2, AlertCircle } from 'lucide-react';
 import type { BrickDonation } from '@/types/brick.types';
 import { DonationList } from '@/components/brick-detail';
@@ -23,12 +24,13 @@ export function DonationSection({
     donations,
     isLoadingDonations,
 }: DonationSectionProps) {
+    const t = useTranslations('onchain.donation');
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
             {/* Input Section (Only for connected users) */}
             <div className="space-y-3">
                 <label className="text-[10px] font-bold text-foreground uppercase tracking-widest block px-1">
-                    Support Artist
+                    {t('title')}
                 </label>
                 {isConnected ? (
                     <div className="flex gap-2">
@@ -51,14 +53,18 @@ export function DonationSection({
                             disabled={isDonating || !donateAmount}
                             className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 text-xs font-bold text-primary-foreground shadow-lg shadow-primary/10 transition-all hover:brightness-110 disabled:opacity-50"
                         >
-                            {isDonating ? <Loader2 className="size-3.5 animate-spin" /> : 'Support'}
+                            {isDonating ? (
+                                <Loader2 className="size-3.5 animate-spin" />
+                            ) : (
+                                t('button')
+                            )}
                         </button>
                     </div>
                 ) : (
                     <div className="flex items-center gap-3 p-3 bg-muted/30 border border-border rounded-lg group hover:border-primary/20 transition-colors">
                         <AlertCircle className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         <p className="text-[11px] text-muted-foreground font-medium">
-                            Connect your wallet to support the artist.
+                            {t('connectWarning')}
                         </p>
                     </div>
                 )}

@@ -3,6 +3,7 @@
 import { Map as MapIcon, User } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 import { BrickTagType } from '@/types/brick.types';
+import { useTranslations } from 'next-intl';
 
 type MapTab = 'GLOBAL' | 'ME';
 type TagFilter = BrickTagType | 'ALL';
@@ -22,6 +23,7 @@ export function DashboardFilters({
     onMapTabChange,
     onTagChange,
 }: DashboardFiltersProps) {
+    const t = useTranslations('dashboard.filters');
     return (
         <>
             {/* Map Tab Filter - top */}
@@ -37,7 +39,7 @@ export function DashboardFilters({
                         )}
                     >
                         <MapIcon className="size-4" />
-                        Global Map
+                        {t('globalMap')}
                     </button>
                     <button
                         onClick={() => onMapTabChange('ME')}
@@ -49,7 +51,7 @@ export function DashboardFilters({
                         )}
                     >
                         <User className="size-4" />
-                        My Footprints
+                        {t('myFootprints')}
                     </button>
                 </div>
             </div>
@@ -68,7 +70,7 @@ export function DashboardFilters({
                                     : 'text-muted-foreground hover:text-foreground',
                             )}
                         >
-                            {tag}
+                            {t(`tags.${tag}`)}
                         </button>
                     ))}
                 </div>

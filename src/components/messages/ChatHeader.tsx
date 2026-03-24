@@ -7,6 +7,7 @@ import { getAvatarUrl } from '@/utils/cloudinary';
 import { timeAgo } from '@/utils/time';
 import type { ConversationPartner } from '@/types/message.types';
 import { useTypingUsers } from '@/stores/chat-store';
+import { useTranslations } from 'next-intl';
 
 interface ChatHeaderProps {
     partner: ConversationPartner;
@@ -16,6 +17,7 @@ interface ChatHeaderProps {
 }
 
 export function ChatHeader({ partner, conversationId, onToggleInfo, onBack }: ChatHeaderProps) {
+    const t = useTranslations('messages.ChatHeader');
     const typingUsers = useTypingUsers(conversationId);
     const isTyping = typingUsers.includes(partner.id);
 
@@ -66,16 +68,16 @@ export function ChatHeader({ partner, conversationId, onToggleInfo, onBack }: Ch
                                     <span className="size-1 rounded-full bg-primary animate-bounce [animation-delay:300ms]" />
                                 </span>
                                 <span className="text-[10px] font-mono text-primary tracking-widest uppercase">
-                                    typing
+                                    {t('typing')}
                                 </span>
                             </span>
                         ) : (
                             <p className="text-[10px] font-mono text-primary/60 tracking-widest uppercase">
                                 {partner.isOnline
-                                    ? 'Online'
+                                    ? t('online')
                                     : partner.lastSeenAt
-                                      ? `Last seen ${timeAgo(partner.lastSeenAt)}`
-                                      : 'Offline'}
+                                      ? t('lastSeen', { time: timeAgo(partner.lastSeenAt) })
+                                      : t('offline')}
                             </p>
                         )}
                     </div>
@@ -87,7 +89,7 @@ export function ChatHeader({ partner, conversationId, onToggleInfo, onBack }: Ch
                 <button
                     onClick={onToggleInfo}
                     className="size-9 flex items-center justify-center rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
-                    title="User info"
+                    title={t('userInfo')}
                 >
                     <Info className="size-4" />
                 </button>

@@ -1,4 +1,5 @@
 import { DataStream } from '@/components/camera';
+import { useTranslations } from 'next-intl';
 
 interface HashPanelProps {
     hash?: string;
@@ -19,6 +20,7 @@ const HASH_DATA_STREAM = [
 ];
 
 export function HashPanel({ hash }: HashPanelProps) {
+    const t = useTranslations('camera.HashPanel');
     const displayHash = hash ? `${hash.slice(0, 8)}...${hash.slice(-4)}` : '8f3c2...e9a1';
 
     return (
@@ -26,7 +28,7 @@ export function HashPanel({ hash }: HashPanelProps) {
             {/* Hash Data Box */}
             <div className="border-r-2 border-primary pr-4 py-2 bg-background/60 backdrop-blur-md">
                 <div className="text-[10px] uppercase opacity-50 mb-1 tracking-widest font-bold">
-                    Authenticity_Hash
+                    {t('label')}
                 </div>
                 <div className="text-[10px] break-all text-primary font-mono">
                     SHA-256: {displayHash}

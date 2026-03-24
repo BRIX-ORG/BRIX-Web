@@ -1,8 +1,10 @@
 'use client';
 
 import { Box } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function ModelUploadPlaceholder() {
+    const t = useTranslations('uploads.form');
     return (
         <div className="w-full flex flex-col items-center justify-center py-24 px-8">
             <div className="relative mb-8">
@@ -14,17 +16,17 @@ export function ModelUploadPlaceholder() {
             </div>
 
             <h2 className="text-3xl font-bold tracking-tighter italic text-foreground/60 mb-3">
-                MODEL_UPLOAD_MODULE
+                {t('modelModule')}
             </h2>
 
             <p className="text-muted-foreground text-xs tracking-[0.3em] font-medium uppercase mb-8">
-                3D Model Processing Pipeline — Under Development
+                {t('modelUnderDev')}
             </p>
 
             <div className="flex items-center gap-3 px-6 py-3 border border-secondary/30 bg-secondary/5">
                 <span className="size-2 bg-secondary/60 animate-pulse" />
                 <span className="text-[10px] font-bold tracking-widest text-secondary/60 uppercase">
-                    Coming Soon — Phase 3
+                    {t('phase3Coming')}
                 </span>
             </div>
 

@@ -6,6 +6,7 @@ import { Camera, Image as ImageIcon } from 'lucide-react';
 import { useUpdateAvatar, useUpdateBackground } from '@/hooks/apis/user.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import { getAvatarUrl, getCloudinaryAvatar, getCloudinaryBanner } from '@/utils/cloudinary';
 import type { User } from '@/types/user.types';
 
@@ -14,6 +15,7 @@ interface SettingsBannerProps {
 }
 
 export function SettingsBanner({ user }: SettingsBannerProps) {
+    const t = useTranslations('settings');
     const toast = useToast();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
@@ -39,22 +41,22 @@ export function SettingsBanner({ user }: SettingsBannerProps) {
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-            toast.error('Please select an image file');
+            toast.error(t('messages.invalidImage'));
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-            toast.error('Image size must be less than 5MB');
+            toast.error(t('messages.imageTooLarge', { size: 5 }));
             return;
         }
 
         try {
-            showLoading('Uploading avatar...');
+            showLoading(t('messages.uploadAvatar'));
             await updateAvatar.mutateAsync(file);
-            toast.success('Avatar updated successfully!');
+            toast.success(t('messages.uploadAvatarSuccess'));
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            toast.error(error?.response?.data?.message || 'Failed to upload avatar');
+            toast.error(error?.response?.data?.message || t('messages.uploadAvatarError'));
         } finally {
             hideLoading();
         }
@@ -65,25 +67,25 @@ export function SettingsBanner({ user }: SettingsBannerProps) {
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-            toast.error('Please select an image file');
+            toast.error(t('messages.invalidImage'));
             return;
         }
 
         if (file.size > 10 * 1024 * 1024) {
-            toast.error('Image size must be less than 10MB');
+            toast.error(t('messages.imageTooLarge', { size: 10 }));
             return;
         }
 
         try {
-            showLoading('Uploading banner...');
+            showLoading(t('messages.uploadBanner'));
             console.log('Uploading banner...');
             await updateBackground.mutateAsync(file);
             console.log('Banner uploaded');
-            toast.success('Banner updated successfully!');
+            toast.success(t('messages.uploadBannerSuccess'));
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error('Error uploading banner:', error);
-            toast.error(error?.response?.data?.message || 'Failed to upload banner');
+            toast.error(error?.response?.data?.message || t('messages.uploadBannerError'));
         } finally {
             hideLoading();
         }
@@ -128,7 +130,9 @@ export function SettingsBanner({ user }: SettingsBannerProps) {
                         className="absolute top-4 right-4 bg-background/80 backdrop-blur-md border border-primary/20 px-4 py-2 text-[10px] font-mono uppercase tracking-[0.2em] hover:border-primary transition-colors flex items-center gap-2 disabled:opacity-50"
                     >
                         <ImageIcon className="size-4" />
-                        {updateBackground.isPending ? 'Uploading...' : 'Change Banner'}
+                        {updateBackground.isPending
+                            ? t('actions.uploading')
+                            : t('actions.changeBanner')}
                     </button>
                 </div>
 

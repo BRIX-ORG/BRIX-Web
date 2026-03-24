@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
@@ -20,6 +20,7 @@ import { useLocationReverse } from '@/hooks/apis/location.api';
 import { useUploadGlbBrick } from '@/hooks/apis/brick.api';
 import { useSwal } from '@/hooks/useSwal';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import { getAvatarUrl } from '@/utils/cloudinary';
 import { uploadGlbBrickSchema, type UploadGlbBrickFormInput } from '@/validations/brick';
 import { cn } from '@/utils/classnames';
@@ -29,6 +30,7 @@ const MAX_THUMBNAILS = 5;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export function GlbUploadForm() {
+    const t = useTranslations('uploads');
     const router = useRouter();
     const swal = useSwal();
     const showLoading = useUIStore((state) => state.showLoading);
@@ -164,7 +166,7 @@ export function GlbUploadForm() {
             const remaining = MAX_THUMBNAILS - thumbnails.length;
 
             if (remaining <= 0) {
-                swal.warning('Limit Reached', `Maximum ${MAX_THUMBNAILS} thumbnails allowed`);
+                swal.warning('Limit Reached', t('form.limitReached'));
                 e.target.value = '';
                 return;
             }
@@ -178,7 +180,7 @@ export function GlbUploadForm() {
             setThumbnails((prev) => [...prev, ...newThumbnails]);
             e.target.value = '';
         },
-        [thumbnails.length, swal],
+        [thumbnails.length, swal, t],
     );
 
     const handleThumbnailRemove = useCallback((index: number) => {
@@ -221,22 +223,22 @@ export function GlbUploadForm() {
 
     const onSubmit = async (data: UploadGlbBrickFormInput) => {
         if (!glbFile) {
-            swal.error('Error', 'Please select a GLB model file');
+            swal.error('Error', t('messages.selectGlb'));
             return;
         }
         if (thumbnails.length === 0) {
-            swal.error('Error', 'Please add at least 1 thumbnail image');
+            swal.error('Error', t('messages.addThumbnail'));
             return;
         }
 
         try {
-            showLoading('Uploading 3D model...');
+            showLoading(t('messages.uploadingModel'));
             const result = await uploadGlbBrick.mutateAsync({
                 glb: glbFile,
                 thumbnails: thumbnails.map((t) => t.file),
                 ...data,
             });
-            swal.success('Success', '3D model brick uploaded successfully!');
+            swal.success('Success', t('messages.successModel'));
             reset();
             setGlbFile(null);
             setThumbnails([]);
@@ -244,10 +246,7 @@ export function GlbUploadForm() {
             router.push(`/dashboard/brick/${result.id}`);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            swal.error(
-                'Upload Failed',
-                error?.response?.data?.message || 'Failed to upload 3D model',
-            );
+            swal.error('Upload Failed', error?.response?.data?.message || t('messages.errorModel'));
         } finally {
             hideLoading();
         }
@@ -284,31 +283,31 @@ export function GlbUploadForm() {
                         <div className="flex items-center gap-3 pb-4 border-b border-border">
                             <FileText className="size-4 text-primary" />
                             <h3 className="text-sm font-bold tracking-[0.2em] uppercase">
-                                Model Metadata
+                                {t('form.modelMetadata')}
                             </h3>
                             <div className="flex-1" />
                             <span className="text-[9px] font-mono text-muted-foreground/50 uppercase tracking-widest">
-                                required fields marked *
+                                {t('form.required')}
                             </span>
                         </div>
 
                         <div className="grid grid-cols-1 gap-5">
                             <Input
-                                label="Title"
+                                label={t('form.title')}
                                 {...register('title')}
                                 leftIcon={<Type className="size-4" />}
                                 variant="compact"
-                                placeholder="Name your 3D model..."
+                                placeholder={t('form.modelTitlePlaceholder')}
                                 error={errors.title?.message}
                                 required
                                 disabled={uploadGlbBrick.isPending}
                             />
                             <Textarea
-                                label="Description"
+                                label={t('form.description')}
                                 {...register('description')}
                                 rows={3}
                                 variant="compact"
-                                placeholder="Describe your 3D model (optional)..."
+                                placeholder={t('form.modelDescPlaceholder')}
                                 error={errors.description?.message}
                                 disabled={uploadGlbBrick.isPending}
                             />
@@ -361,7 +360,7 @@ export function GlbUploadForm() {
                                 <>
                                     <Upload className="size-4 text-muted-foreground/50" />
                                     <span className="text-[10px] font-bold tracking-widest text-muted-foreground/50 uppercase">
-                                        No files selected
+                                        {t('form.noFiles')}
                                     </span>
                                 </>
                             )}
@@ -375,7 +374,9 @@ export function GlbUploadForm() {
                             className="glow-button bg-linear-to-r from-secondary to-primary px-12 py-4 text-primary-foreground text-sm font-black tracking-[0.25em] uppercase flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <span>
-                                {uploadGlbBrick.isPending ? 'Uploading...' : 'Verify & Upload'}
+                                {uploadGlbBrick.isPending
+                                    ? t('form.uploading')
+                                    : t('form.verifyUpload')}
                             </span>
                             <Zap className="size-4" />
                         </button>
@@ -415,11 +416,14 @@ interface ThumbnailsSectionProps {
 }
 
 function ThumbnailsSection({ thumbnails, onAdd, onRemove, disabled }: ThumbnailsSectionProps) {
+    const t = useTranslations('uploads');
     return (
         <div className="bg-muted/40 border border-border overflow-hidden">
             <div className="p-4 border-b border-border flex items-center gap-3">
                 <ImagePlus className="size-4 text-primary" />
-                <h3 className="text-sm font-bold tracking-[0.2em] uppercase">Thumbnails</h3>
+                <h3 className="text-sm font-bold tracking-[0.2em] uppercase">
+                    {t('form.thumbnails')}
+                </h3>
                 <div className="flex-1" />
                 <span className="text-[9px] font-mono text-primary/50 uppercase tracking-widest">
                     {thumbnails.length} / {MAX_THUMB}
@@ -444,8 +448,8 @@ function ThumbnailsSection({ thumbnails, onAdd, onRemove, disabled }: Thumbnails
                         <ImagePlus className="size-5 text-primary/50" />
                         <span className="text-xs font-bold tracking-widest uppercase text-primary/60">
                             {thumbnails.length === 0
-                                ? 'Add Thumbnail Images (1-5)'
-                                : `Add More (${MAX_THUMB - thumbnails.length} remaining)`}
+                                ? t('form.addThumbnails')
+                                : t('form.addMore', { count: MAX_THUMB - thumbnails.length })}
                         </span>
                         <input
                             type="file"

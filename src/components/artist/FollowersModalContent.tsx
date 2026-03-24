@@ -6,6 +6,7 @@ import Link from 'next/link';
 import type { FollowUser } from '@/types/user.types';
 import { useGetFollowers, useGetFollowing } from '@/hooks/apis/user.api';
 import { FollowUserItem } from '@/components/artist';
+import { useTranslations } from 'next-intl';
 
 type ModalTab = 'followers' | 'following';
 
@@ -49,6 +50,7 @@ export function FollowersModalContent({
     followersCount,
     followingCount,
 }: FollowersModalContentProps) {
+    const t = useTranslations('artist.followers');
     const [activeTab, setActiveTab] = useState<ModalTab>(initialTab);
     const [followersPage, setFollowersPage] = useState(0);
     const [followingPage, setFollowingPage] = useState(0);
@@ -158,7 +160,7 @@ export function FollowersModalContent({
                                 : 'text-muted-foreground hover:text-foreground'
                         }`}
                     >
-                        Followers ({followersCount.toLocaleString()})
+                        {t('followersTab', { count: followersCount.toLocaleString() })}
                     </button>
                     <button
                         onClick={() => setActiveTab('following')}
@@ -168,7 +170,7 @@ export function FollowersModalContent({
                                 : 'text-muted-foreground hover:text-foreground'
                         }`}
                     >
-                        Following ({followingCount.toLocaleString()})
+                        {t('followingTab', { count: followingCount.toLocaleString() })}
                     </button>
                 </div>
 
@@ -185,9 +187,7 @@ export function FollowersModalContent({
                     ) : currentList.length === 0 ? (
                         <div className="flex items-center justify-center py-12">
                             <p className="text-sm text-muted-foreground font-mono">
-                                {activeTab === 'followers'
-                                    ? 'No followers yet'
-                                    : 'Not following anyone'}
+                                {activeTab === 'followers' ? t('noFollowers') : t('noFollowing')}
                             </p>
                         </div>
                     ) : (

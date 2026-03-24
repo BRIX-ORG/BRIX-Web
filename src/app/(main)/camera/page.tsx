@@ -10,6 +10,7 @@ import { useCreateRealtimeSession, useUploadRealtimeBrick } from '@/hooks/apis/b
 import { useRealtimeSessionStore } from '@/stores/realtime-session-store';
 import { useUIStore } from '@/stores/ui-store';
 import { useSwal } from '@/hooks/useSwal';
+import { useTranslations } from 'next-intl';
 import { ConfirmPopup } from '@/components/shared';
 import {
     CornerBrackets,
@@ -24,6 +25,7 @@ import {
 import type { UploadRealtimeBrickFormInput } from '@/validations/brick';
 
 export default function CameraPage() {
+    const t = useTranslations('camera.page');
     const router = useRouter();
     const swal = useSwal();
     const showLoading = useUIStore((state) => state.showLoading);
@@ -94,10 +96,7 @@ export default function CameraPage() {
     // ─── Step 1: Request a realtime session ───────────────────────
     const handleStartSession = useCallback(async () => {
         if (!hasLocation) {
-            swal.error(
-                'Location Required',
-                'Please enable Location in your browser settings to use Realtime Capture.',
-            );
+            swal.error(t('alerts.locationRequired'), t('alerts.locationRequiredDesc'));
             return;
         }
 
@@ -106,10 +105,10 @@ export default function CameraPage() {
             const data = await createSession.mutateAsync();
             startSession(data.sessionId, data.qrToken, data.expiresIn);
         } catch {
-            setError('Failed to create capture session.');
-            swal.error('Session Error', 'Failed to create capture session. Please try again.');
+            setError(t('alerts.sessionError'));
+            swal.error(t('alerts.sessionError'), t('alerts.sessionErrorDesc'));
         }
-    }, [hasLocation, createSession, startSession, setRequesting, setError, swal]);
+    }, [hasLocation, createSession, startSession, setRequesting, setError, swal, t]);
 
     // ─── Step 2: Capture photo with QR embedded ──────────────────
     const handleCapture = useCallback(async () => {
@@ -126,9 +125,9 @@ export default function CameraPage() {
             const previewUrl = URL.createObjectURL(blob);
             setCapturedImage(blob, previewUrl);
         } else {
-            setError('Failed to capture image. Please try again.');
+            setError(t('alerts.captureFailed'));
         }
-    }, [qrToken, status, location, captureWithQR, setCapturing, setCapturedImage, setError]);
+    }, [qrToken, status, location, captureWithQR, setCapturing, setCapturedImage, setError, t]);
 
     // ─── Step 3: Upload captured image ────────────────────────────
     const handleUpload = useCallback(
@@ -137,7 +136,7 @@ export default function CameraPage() {
 
             try {
                 setUploading();
-                showLoading('Uploading realtime brick...');
+                showLoading(t('alerts.uploading'));
                 await uploadRealtime.mutateAsync({
                     file: capturedBlob,
                     sessionId,
@@ -149,18 +148,15 @@ export default function CameraPage() {
                     isPublic: formData.isPublic,
                 });
                 setSuccess();
-                swal.success(
-                    'Photo Queued!',
-                    'Your photo is being processed. It will appear in your gallery shortly.',
-                );
+                swal.success(t('alerts.success'), t('alerts.successDesc'));
                 resetSession();
                 router.push('/dashboard');
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
-                setError('Upload failed.');
+                setError(t('alerts.uploadFailed'));
                 swal.error(
-                    'Upload Failed',
-                    error?.response?.data?.message || 'Session may have expired. Please try again.',
+                    t('alerts.uploadFailed'),
+                    error?.response?.data?.message || t('alerts.uploadFailedDesc'),
                 );
             } finally {
                 hideLoading();
@@ -179,6 +175,7 @@ export default function CameraPage() {
             swal,
             showLoading,
             hideLoading,
+            t,
         ],
     );
 
@@ -203,30 +200,30 @@ export default function CameraPage() {
         switch (status) {
             case 'idle':
                 return isActive
-                    ? 'SYSTEM READY: AWAITING_SESSION'
+                    ? t('systemStatus.idleReady')
                     : cameraLoading
-                      ? 'SYSTEM: LOADING_CAMERA_RESOURCE...'
+                      ? t('systemStatus.idleLoading')
                       : cameraError
-                        ? 'SYSTEM ERROR: CAMERA_UNAVAILABLE'
-                        : 'SYSTEM: INITIALIZING...';
+                        ? t('systemStatus.idleError')
+                        : t('systemStatus.idleInit');
             case 'requesting':
-                return 'SYSTEM: REQUESTING_SESSION...';
+                return t('systemStatus.requesting');
             case 'active':
-                return `SESSION_ACTIVE: QR_READY | TTL_${countdown}s`;
+                return t('systemStatus.active', { seconds: countdown });
             case 'capturing':
                 return capturedPreview
-                    ? `CAPTURE_COMPLETE: FORM_TTL_${countdown}s`
-                    : 'SYSTEM: PROCESSING_CAPTURE...';
+                    ? t('systemStatus.capturingForm', { seconds: countdown })
+                    : t('systemStatus.capturingProcessing');
             case 'uploading':
-                return 'SYSTEM: UPLOADING_TO_QUEUE...';
+                return t('systemStatus.uploading');
             case 'success':
-                return 'UPLOAD_QUEUED: PROCESSING_ASYNC...';
+                return t('systemStatus.success');
             case 'expired':
-                return 'SESSION_EXPIRED: REQUEST_NEW_SESSION';
+                return t('systemStatus.expired');
             case 'error':
-                return `SYSTEM ERROR: ${sessionError ?? 'UNKNOWN'}`;
+                return t('systemStatus.error', { error: sessionError ?? 'UNKNOWN' });
             default:
-                return 'SYSTEM: UNKNOWN_STATE';
+                return t('systemStatus.unknown');
         }
     })();
 
@@ -243,7 +240,7 @@ export default function CameraPage() {
                 className="absolute top-6 left-6 z-30 flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest"
             >
                 <ArrowLeft className="size-4" />
-                <span className="hidden sm:inline">Dashboard</span>
+                <span className="hidden sm:inline">{t('dashboard')}</span>
             </Link>
 
             {/* Location Denied Banner */}
@@ -254,11 +251,11 @@ export default function CameraPage() {
                         <div className="flex-1">
                             <p className="text-xs font-bold text-destructive uppercase tracking-wider">
                                 {locationDenied
-                                    ? 'Location permission denied'
-                                    : locationError || 'Location unavailable'}
+                                    ? t('locationDenied')
+                                    : locationError || t('locationUnavailable')}
                             </p>
                             <p className="text-[10px] text-muted-foreground mt-0.5">
-                                Please enable Location in your browser settings to use this feature.
+                                {t('locationInstruction')}
                             </p>
                         </div>
                     </div>
@@ -277,7 +274,7 @@ export default function CameraPage() {
                 {!isActive && (
                     <div className="absolute inset-0 bg-background flex items-center justify-center">
                         <p className="text-muted-foreground text-sm uppercase tracking-widest">
-                            {cameraError || 'Requesting camera access...'}
+                            {cameraError || t('cameraLoading')}
                         </p>
                     </div>
                 )}
@@ -354,10 +351,10 @@ export default function CameraPage() {
                             className="glow-button px-6 py-3 bg-linear-to-r from-primary to-secondary text-primary-foreground font-bold uppercase tracking-widest text-xs disabled:opacity-40 disabled:cursor-not-allowed disabled:from-muted disabled:to-muted disabled:text-muted-foreground"
                         >
                             {!hasLocation && locationLoading
-                                ? 'Acquiring Location...'
+                                ? t('buttons.acquiringLocation')
                                 : !hasLocation
-                                  ? 'Location Required'
-                                  : 'Start Capture Session'}
+                                  ? t('buttons.locationRequired')
+                                  : t('buttons.startSession')}
                         </button>
                     )}
 
@@ -372,14 +369,14 @@ export default function CameraPage() {
                             onClick={handleRetry}
                             className="px-6 py-3 border border-border text-muted-foreground font-bold uppercase tracking-widest text-xs hover:text-primary hover:border-primary/40 transition-all"
                         >
-                            {status === 'expired' ? 'New Session' : 'Retry'}
+                            {status === 'expired' ? t('buttons.newSession') : t('buttons.retry')}
                         </button>
                     )}
 
                     {/* REQUESTING: Loading indicator */}
                     {status === 'requesting' && (
                         <div className="px-6 py-3 border border-border text-secondary font-bold uppercase tracking-widest text-xs animate-pulse">
-                            Creating session...
+                            {t('buttons.creatingSession')}
                         </div>
                     )}
                 </div>
@@ -388,12 +385,12 @@ export default function CameraPage() {
             {/* Bottom Footer Info */}
             <div className="absolute bottom-6 w-full px-12 flex justify-between items-center z-20 opacity-40 text-[9px] uppercase tracking-widest">
                 <div className="flex gap-8">
-                    <span>REC_MODE: REALTIME_CAPTURE</span>
-                    <span>ENC: BRIX_SECURE_V1</span>
+                    <span>{t('footer.mode')}</span>
+                    <span>{t('footer.enc')}</span>
                 </div>
                 <div className="flex gap-8">
-                    <span>VER: 4.0.22_STABLE</span>
-                    <span>© BRIX_SYSTEMS</span>
+                    <span>{t('footer.ver')}</span>
+                    <span>{t('footer.copyright')}</span>
                 </div>
             </div>
 
@@ -422,7 +419,7 @@ export default function CameraPage() {
                                 className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest"
                             >
                                 <ArrowLeft className="size-4" />
-                                Back to Dashboard
+                                {t('dashboard')}
                             </Link>
                             <button
                                 type="button"
@@ -430,7 +427,7 @@ export default function CameraPage() {
                                 disabled={status === 'uploading'}
                                 className="px-4 py-2 border border-destructive/40 text-destructive text-xs font-bold uppercase tracking-widest hover:bg-destructive/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                             >
-                                Cancel Upload
+                                {t('cancelConfirm.cancelButton')}
                             </button>
                         </div>
 
@@ -441,18 +438,17 @@ export default function CameraPage() {
                         {status === 'expired' && (
                             <div className="bg-destructive/10 border border-destructive/40 rounded-sm p-6 text-center space-y-3">
                                 <p className="text-destructive text-sm font-bold uppercase tracking-widest">
-                                    Session Expired
+                                    {t('preview.sessionExpired')}
                                 </p>
                                 <p className="text-muted-foreground text-xs">
-                                    Your upload time has run out. Please start a new capture
-                                    session.
+                                    {t('preview.sessionExpiredDesc')}
                                 </p>
                                 <button
                                     type="button"
                                     onClick={handleRetry}
                                     className="px-6 py-2 border border-primary/40 text-primary text-xs font-bold uppercase tracking-widest hover:bg-primary/10 transition-colors"
                                 >
-                                    New Session
+                                    {t('buttons.newSession')}
                                 </button>
                             </div>
                         )}
@@ -469,11 +465,13 @@ export default function CameraPage() {
                                     />
                                     <div className="mt-3 flex justify-between items-center text-[10px] font-mono text-muted-foreground">
                                         <span>
-                                            LAT: {location.latitude?.toFixed(4) ?? '--'} | LNG:{' '}
+                                            {t('preview.lat')}:{' '}
+                                            {location.latitude?.toFixed(4) ?? '--'} {' | '}{' '}
+                                            {t('preview.lng')}:{' '}
                                             {location.longitude?.toFixed(4) ?? '--'}
                                         </span>
                                         <span className="text-primary neon-glow-text">
-                                            SESSION: {sessionId?.slice(0, 8)}...
+                                            {t('preview.session')}: {sessionId?.slice(0, 8)}...
                                         </span>
                                     </div>
 
@@ -484,7 +482,7 @@ export default function CameraPage() {
                                         disabled={status === 'uploading'}
                                         className="mt-3 w-full py-2 border border-border text-muted-foreground text-xs font-bold uppercase tracking-widest hover:text-primary hover:border-primary/40 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                                     >
-                                        Retake Photo
+                                        {t('preview.retake')}
                                     </button>
                                 </div>
 
@@ -509,10 +507,10 @@ export default function CameraPage() {
                 onClose={() => setShowCancelConfirm(false)}
                 onConfirm={handleConfirmCancel}
                 type="warning"
-                title="Cancel Upload?"
-                message="Are you sure you want to discard this photo and go back to capture? Your current photo and form data will be lost."
-                confirmText="Discard & Retake"
-                cancelText="Keep Editing"
+                title={t('cancelConfirm.title')}
+                message={t('cancelConfirm.message')}
+                confirmText={t('cancelConfirm.confirmText')}
+                cancelText={t('cancelConfirm.cancelText')}
             />
 
             {/* ═══ Success Overlay ═══ */}
@@ -521,10 +519,10 @@ export default function CameraPage() {
                     <div className="text-center space-y-4">
                         <div className="text-6xl text-primary neon-glow-text">✓</div>
                         <p className="text-primary font-bold uppercase tracking-widest text-lg neon-glow-text">
-                            Photo Queued Successfully
+                            {t('successOverlay.title')}
                         </p>
                         <p className="text-muted-foreground text-xs uppercase tracking-wider">
-                            Your brick is being processed asynchronously...
+                            {t('successOverlay.desc')}
                         </p>
                     </div>
                 </div>

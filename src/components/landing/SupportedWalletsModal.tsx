@@ -5,6 +5,7 @@ import { X, Wallet, ShieldCheck, Zap, Coins, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/utils/classnames';
 import Image from 'next/image';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { useTranslations } from 'next-intl';
 
 interface SupportedWalletsModalProps {
     isOpen: boolean;
@@ -14,22 +15,22 @@ interface SupportedWalletsModalProps {
 const SUPPORTED_WALLETS = [
     {
         name: 'MetaMask',
-        description: 'Browser extension & Mobile App',
+        i18nKey: 'metamask',
         image: '/images/MetaMask.png',
     },
     {
         name: 'Trust Wallet',
-        description: 'Secure multi-chain mobile wallet',
+        i18nKey: 'trust',
         image: '/images/TrustWallet.png',
     },
     {
         name: 'Brave Wallet',
-        description: 'Native secure browser wallet',
+        i18nKey: 'brave',
         image: '/images/BraveWallet.png',
     },
     {
         name: 'Coinbase Wallet',
-        description: 'Connect directly to your account',
+        i18nKey: 'coinbase',
         image: '/images/CoinBaseWallet.png',
     },
 ];
@@ -37,14 +38,15 @@ const SUPPORTED_WALLETS = [
 const SUPPORTED_ASSETS = [
     {
         symbol: 'POL / MATIC',
-        name: 'Polygon Ecosystem',
+        i18nKey: 'polygon',
         color: 'from-purple-500/20 to-purple-900/10',
     },
-    { symbol: 'USDT / USDC', name: 'USD Stablecoins', color: 'from-green-500/20 to-green-900/10' },
-    { symbol: 'ETH', name: 'Ethereum Asset', color: 'from-blue-500/20 to-blue-900/10' },
+    { symbol: 'USDT / USDC', i18nKey: 'stablecoins', color: 'from-green-500/20 to-green-900/10' },
+    { symbol: 'ETH', i18nKey: 'ethereum', color: 'from-blue-500/20 to-blue-900/10' },
 ];
 
 export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModalProps) {
+    const t = useTranslations('landing');
     usePreventScroll(isOpen);
 
     if (!isOpen) return null;
@@ -73,16 +75,17 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                             <Wallet className="size-6 text-primary" />
                         </div>
                         <span className="text-xs font-bold uppercase tracking-[0.3em] text-primary">
-                            Web3 Integration
+                            {t('SupportedWalletsModal.badge')}
                         </span>
                     </div>
 
                     <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4">
-                        Supported <span className="text-primary">Wallets</span> & Assets
+                        {t('SupportedWalletsModal.title')}{' '}
+                        <span className="text-primary">{t('SupportedWalletsModal.highlight')}</span>{' '}
+                        {t('SupportedWalletsModal.titleSuffix')}
                     </h2>
                     <p className="text-muted-foreground text-sm md:text-base max-w-lg leading-relaxed">
-                        BRIX is built on the Polygon Network for high-speed, low-cost verification.
-                        Connect your favorite wallet to start sealing your truth on the block.
+                        {t('SupportedWalletsModal.desc')}
                     </p>
                 </div>
 
@@ -92,7 +95,7 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                         <div className="flex items-center gap-2 mb-4">
                             <ShieldCheck className="size-4 text-primary" />
                             <h3 className="text-xs font-bold uppercase tracking-widest text-foreground">
-                                Verified Wallets
+                                {t('SupportedWalletsModal.sections.verifiedWallets')}
                             </h3>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -113,7 +116,7 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                                     <div>
                                         <h4 className="text-sm font-bold">{wallet.name}</h4>
                                         <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                                            {wallet.description}
+                                            {t(`SupportedWalletsModal.wallets.${wallet.i18nKey}`)}
                                         </p>
                                     </div>
                                 </div>
@@ -126,7 +129,7 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                         <div className="flex items-center gap-2 mb-4">
                             <Coins className="size-4 text-primary" />
                             <h3 className="text-xs font-bold uppercase tracking-widest text-foreground">
-                                Payment Support
+                                {t('SupportedWalletsModal.sections.paymentSupport')}
                             </h3>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -142,7 +145,7 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                                         {asset.symbol}
                                     </div>
                                     <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter italic">
-                                        {asset.name}
+                                        {t(`SupportedWalletsModal.assets.${asset.i18nKey}`)}
                                     </p>
                                 </div>
                             ))}
@@ -154,11 +157,9 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                         <Zap className="size-5 text-primary shrink-0 mt-0.5" />
                         <div className="text-xs leading-relaxed text-muted-foreground">
                             <strong className="text-foreground block mb-1 uppercase tracking-wider">
-                                Fast & Immutable
+                                {t('SupportedWalletsModal.infra.title')}
                             </strong>
-                            All transactions are executed on the Polygon Network (Amoy Testnet for
-                            trial) ensuring near-instant hashing and temporal anchoring with minimal
-                            gas fees.
+                            {t('SupportedWalletsModal.infra.desc')}
                         </div>
                     </div>
                 </div>
@@ -167,13 +168,13 @@ export function SupportedWalletsModal({ isOpen, onClose }: SupportedWalletsModal
                 <div className="px-8 py-6 bg-muted/30 border-t border-border flex items-center justify-between">
                     <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                         <CheckCircle2 className="size-3 text-primary" />
-                        Audited Infrastructure
+                        {t('SupportedWalletsModal.footer.audited')}
                     </div>
                     <button
                         onClick={onClose}
                         className="px-6 py-2 bg-primary text-background text-xs font-bold uppercase tracking-widest rounded-lg hover:brightness-110 transition-all shadow-[0_4_20_rgba(0,238,255,0.2)]"
                     >
-                        Got It
+                        {t('SupportedWalletsModal.footer.gotIt')}
                     </button>
                 </div>
             </div>

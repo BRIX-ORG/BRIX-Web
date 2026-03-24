@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useDisconnect } from 'wagmi';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/utils/classnames';
 import { SidebarItem } from '@/components/dashboard';
 import { BrixBrandLogo, ThemeToggle, LanguageSwitcher } from '@/components/shared';
@@ -46,100 +47,6 @@ export type SidebarGroup = {
     items: SidebarItemType[];
 };
 
-const sidebarGroups: SidebarGroup[] = [
-    {
-        title: 'Overview',
-        items: [
-            {
-                title: 'Map',
-                href: '/dashboard',
-                icon: MapPin,
-            },
-            {
-                title: 'Trending',
-                href: '/dashboard/trending',
-                icon: Compass,
-            },
-        ],
-    },
-    {
-        title: 'Library',
-        items: [
-            {
-                title: 'Archive',
-                href: '/dashboard/archive',
-                icon: Database,
-            },
-            {
-                title: 'Albums',
-                href: '/dashboard/albums',
-                icon: BookImage,
-            },
-        ],
-    },
-    {
-        title: 'Connect',
-        items: [
-            {
-                title: 'Messages',
-                href: '/messages',
-                icon: MessageCircle,
-            },
-            {
-                title: 'Network',
-                href: '/dashboard/network',
-                icon: Network,
-            },
-        ],
-    },
-    {
-        title: 'Insights',
-        items: [
-            {
-                title: 'Reports',
-                href: '/dashboard/reports',
-                icon: BarChart3,
-                subItems: [
-                    {
-                        title: 'Verification Stats',
-                        href: '/dashboard/reports/verification',
-                        icon: Shield,
-                    },
-                    {
-                        title: 'Upload Trends',
-                        href: '/dashboard/reports/uploads',
-                        icon: TrendingUp,
-                    },
-                    { title: 'Revenue', href: '/dashboard/reports/revenue', icon: DollarSign },
-                ],
-            },
-            {
-                title: 'Uploads',
-                href: '/dashboard/uploads',
-                icon: Upload,
-            },
-            {
-                title: 'Realtime',
-                href: '/dashboard/realtime',
-                icon: Activity,
-            },
-            {
-                title: 'Camera',
-                href: '/camera',
-                icon: Camera,
-            },
-        ],
-    },
-];
-
-const bottomItems = [
-    {
-        title: 'Settings',
-        href: '/dashboard/settings',
-        icon: Settings,
-    },
-];
-
 interface DashboardSidebarProps {
     isOpen: boolean;
     onClose: () => void;
@@ -153,6 +60,7 @@ export function DashboardSidebar({
     isCollapsed = false,
     toggleCollapse,
 }: DashboardSidebarProps) {
+    const t = useTranslations('navigation.sidebar');
     const pathname = usePathname();
     const router = useRouter();
     const { success, error: toastError } = useToast();
@@ -162,6 +70,104 @@ export function DashboardSidebar({
     const setTotalUnread = useChatStore((s) => s.setTotalUnread);
     const logoutMutation = useLogout();
     const disconnect = useDisconnect();
+
+    const sidebarGroups: SidebarGroup[] = [
+        {
+            title: t('groups.overview'),
+            items: [
+                {
+                    title: t('items.map'),
+                    href: '/dashboard',
+                    icon: MapPin,
+                },
+                {
+                    title: t('items.trending'),
+                    href: '/dashboard/trending',
+                    icon: Compass,
+                },
+            ],
+        },
+        {
+            title: t('groups.library'),
+            items: [
+                {
+                    title: t('items.archive'),
+                    href: '/dashboard/archive',
+                    icon: Database,
+                },
+                {
+                    title: t('items.albums'),
+                    href: '/dashboard/albums',
+                    icon: BookImage,
+                },
+            ],
+        },
+        {
+            title: t('groups.connect'),
+            items: [
+                {
+                    title: t('items.messages'),
+                    href: '/messages',
+                    icon: MessageCircle,
+                },
+                {
+                    title: t('items.network'),
+                    href: '/dashboard/network',
+                    icon: Network,
+                },
+            ],
+        },
+        {
+            title: t('groups.insights'),
+            items: [
+                {
+                    title: t('items.reports'),
+                    href: '/dashboard/reports',
+                    icon: BarChart3,
+                    subItems: [
+                        {
+                            title: t('items.verificationStats'),
+                            href: '/dashboard/reports/verification',
+                            icon: Shield,
+                        },
+                        {
+                            title: t('items.uploadTrends'),
+                            href: '/dashboard/reports/uploads',
+                            icon: TrendingUp,
+                        },
+                        {
+                            title: t('items.revenue'),
+                            href: '/dashboard/reports/revenue',
+                            icon: DollarSign,
+                        },
+                    ],
+                },
+                {
+                    title: t('items.uploads'),
+                    href: '/dashboard/uploads',
+                    icon: Upload,
+                },
+                {
+                    title: t('items.realtime'),
+                    href: '/dashboard/realtime',
+                    icon: Activity,
+                },
+                {
+                    title: t('items.camera'),
+                    href: '/camera',
+                    icon: Camera,
+                },
+            ],
+        },
+    ];
+
+    const bottomItems = [
+        {
+            title: t('items.settings'),
+            href: '/dashboard/settings',
+            icon: Settings,
+        },
+    ];
 
     const { data: unreadData } = useGetTotalUnread();
 
@@ -173,15 +179,15 @@ export function DashboardSidebar({
 
     const handleLogout = async () => {
         try {
-            showLoading('Signing out...');
+            showLoading(t('items.signingOut'));
             await logoutMutation.mutateAsync();
             await disconnect.mutateAsync();
             hideLoading();
-            success('Signed out successfully');
+            success(t('messages.signOutSuccess'));
             router.push('/login');
         } catch (err) {
             hideLoading();
-            const errorMessage = err instanceof Error ? err.message : 'Failed to sign out';
+            const errorMessage = err instanceof Error ? err.message : t('messages.signOutError');
             toastError(errorMessage);
         }
     };
@@ -290,17 +296,17 @@ export function DashboardSidebar({
                         {!isCollapsed && (
                             <div className="mb-4 p-3 border border-border bg-muted/50 rounded-lg">
                                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2 font-bold">
-                                    Network Status
+                                    {t('status.title')}
                                 </p>
                                 <div className="flex items-center justify-between mb-1">
                                     <span className="text-xs font-mono text-primary">
-                                        NODES_ACTIVE
+                                        {t('status.nodesActive')}
                                     </span>
                                     <span className="text-xs font-mono">1,402</span>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="text-xs font-mono text-primary">
-                                        BLOCKS_VER
+                                        {t('status.blocksVer')}
                                     </span>
                                     <span className="text-xs font-mono">2.4M</span>
                                 </div>
@@ -331,7 +337,7 @@ export function DashboardSidebar({
                                 'flex w-full items-center rounded-lg p-3 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
                                 isCollapsed ? 'justify-center' : '',
                             )}
-                            title={isCollapsed ? 'Logout' : undefined}
+                            title={isCollapsed ? t('items.logout') : undefined}
                         >
                             {isLoggingOut ? (
                                 <Loader2 className="size-5 shrink-0 animate-spin" />
@@ -340,7 +346,7 @@ export function DashboardSidebar({
                             )}
                             {!isCollapsed && (
                                 <span className="ml-3 text-sm font-medium">
-                                    {isLoggingOut ? 'Signing out...' : 'Logout'}
+                                    {isLoggingOut ? t('items.signingOut') : t('items.logout')}
                                 </span>
                             )}
                         </button>

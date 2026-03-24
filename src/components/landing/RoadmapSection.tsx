@@ -1,43 +1,43 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 const milestones = [
     {
         quarter: 'Q1 2026',
-        status: 'COMPLETED',
-        title: 'Protocol Genesis',
-        description: 'Deployment of the immutable storage layer and metadata hashing core.',
+        i18nKey: 'm1',
         color: 'secondary',
         completed: true,
     },
     {
         quarter: 'Q3 2026',
-        status: 'IN PROGRESS',
-        title: 'Global Mesh Mapping',
-        description: 'Launching the real-time map interface and artist verification hub.',
+        i18nKey: 'm2',
         color: 'primary',
         completed: false,
     },
     {
         quarter: 'Q1 2027',
-        status: 'PLANNED',
-        title: 'Decentralized Rendering',
-        description: 'Implementation of P2P image processing and distribution nodes.',
+        i18nKey: 'm3',
         color: 'muted',
         completed: false,
     },
 ];
 
 export function RoadmapSection() {
+    const t = useTranslations('landing');
     return (
         <section id="roadmap" className="py-24 bg-background border-t border-border">
             <div className="max-w-4xl mx-auto px-6">
                 {/* Section Header */}
                 <h2 className="font-display text-4xl font-bold uppercase mb-16 text-center">
-                    Development <span className="text-primary">Timeline</span>
+                    {t('RoadmapSection.title')}{' '}
+                    <span className="text-primary">{t('RoadmapSection.highlight')}</span>
                 </h2>
 
                 {/* Timeline */}
                 <div className="relative border-l border-border ml-4 space-y-16">
                     {milestones.map((milestone) => (
-                        <div key={milestone.title} className="relative pl-8">
+                        <div key={milestone.quarter} className="relative pl-8">
                             {/* Dot */}
                             <div
                                 className={`absolute -left-1.5 top-0 size-3 rounded-full ${
@@ -59,13 +59,14 @@ export function RoadmapSection() {
                                           : 'text-muted-foreground'
                                 }`}
                             >
-                                {milestone.quarter} - {milestone.status}
+                                {milestone.quarter} -{' '}
+                                {t(`RoadmapSection.milestones.${milestone.i18nKey}.status`)}
                             </span>
                             <h3 className="font-display text-xl font-bold uppercase mb-2">
-                                {milestone.title}
+                                {t(`RoadmapSection.milestones.${milestone.i18nKey}.title`)}
                             </h3>
                             <p className="font-body text-muted-foreground text-sm">
-                                {milestone.description}
+                                {t(`RoadmapSection.milestones.${milestone.i18nKey}.desc`)}
                             </p>
                         </div>
                     ))}

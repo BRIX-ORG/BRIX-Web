@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import type { UserBrickStats } from '@/types/brick.types';
 import { motion } from 'motion/react';
 import { Activity, Coins, ShieldCheck, Box } from 'lucide-react';
@@ -14,37 +15,39 @@ interface StatConfig {
 }
 
 export function RealtimeStatsRow({ stats }: { stats?: UserBrickStats }) {
+    const t = useTranslations('realtime');
+
     const data: StatConfig[] = [
         {
             id: 'realtime-assets',
-            label: 'Total Realtime',
+            label: t('stats.totalRealtime.label'),
             value: (stats?.bricksByTagType?.REALTIME || 0).toLocaleString(),
-            subtext: 'Assets captured in realtime',
+            subtext: t('stats.totalRealtime.subtext'),
             icon: Activity,
             accentClassName: 'text-blue-500 bg-blue-500/10 border-blue-500/30',
         },
         {
             id: 'revenue',
-            label: 'Revenue Generated',
+            label: t('stats.revenue.label'),
             value: `${stats?.totalDonationsReceived || '0.0'} POL`,
-            subtext: 'Across all assets',
+            subtext: t('stats.revenue.subtext'),
             icon: Coins,
             accentClassName:
                 'text-amber-500 bg-amber-500/10 border-amber-500/30 glow-cyan' /* Custom glow */,
         },
         {
             id: 'onchain',
-            label: 'Blockchain Verified',
+            label: t('stats.onchain.label'),
             value: (stats?.onchainBricks || 0).toLocaleString(),
-            subtext: 'Minted on Polygon',
+            subtext: t('stats.onchain.subtext'),
             icon: ShieldCheck,
             accentClassName: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30',
         },
         {
             id: 'ipfs',
-            label: 'IPFS Stored',
+            label: t('stats.ipfs.label'),
             value: (stats?.ipfsBricksUploaded || 0).toLocaleString(),
-            subtext: 'Decentralized storage',
+            subtext: t('stats.ipfs.subtext'),
             icon: Box,
             accentClassName: 'text-indigo-500 bg-indigo-500/10 border-indigo-500/30',
         },

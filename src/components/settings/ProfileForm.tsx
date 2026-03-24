@@ -9,6 +9,7 @@ import { User, Phone, MapPin, Mail, ShieldCheck } from 'lucide-react';
 import { useUpdateProfile } from '@/hooks/apis/user.api';
 import { useToast } from '@/hooks/useToast';
 import { useUIStore } from '@/stores/ui-store';
+import { useTranslations } from 'next-intl';
 import { updateProfileSchema, type UpdateProfileInput } from '@/validations/user';
 import { LocationSearch } from '@/components/settings';
 import type { User as UserType } from '@/types/user.types';
@@ -19,6 +20,7 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ user }: ProfileFormProps) {
+    const t = useTranslations('settings');
     const toast = useToast();
     const showLoading = useUIStore((state) => state.showLoading);
     const hideLoading = useUIStore((state) => state.hideLoading);
@@ -110,9 +112,9 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
     const onSubmit = async (data: UpdateProfileInput) => {
         try {
-            showLoading('Updating profile...');
+            showLoading(t('actions.saving'));
             await updateProfile.mutateAsync(data);
-            toast.success('Profile updated successfully!');
+            toast.success(t('messages.updateProfileSuccess'));
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error?.response?.data?.message || 'Failed to update profile');
@@ -125,15 +127,15 @@ export function ProfileForm({ user }: ProfileFormProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="pt-8 space-y-10">
             <section className="space-y-8">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight mb-1">Identity Management</h2>
-                    <p className="text-muted-foreground text-sm">
-                        Update your public persona and contact information on the BRIX protocol.
-                    </p>
+                    <h2 className="text-2xl font-bold tracking-tight mb-1">
+                        {t('identity.title')}
+                    </h2>
+                    <p className="text-muted-foreground text-sm">{t('identity.description')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Input
-                        label="Full Name"
+                        label={t('identity.fullName')}
                         {...register('fullName')}
                         leftIcon={<User className="size-4" />}
                         variant="compact"
@@ -142,7 +144,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                     />
 
                     <Input
-                        label="Phone Identity"
+                        label={t('identity.phone')}
                         type="tel"
                         {...register('phone')}
                         leftIcon={<Phone className="size-4" />}
@@ -154,7 +156,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
                     <div className="space-y-2">
                         <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                            Username (Immutable)
+                            {t('identity.username')}
                         </label>
                         <div className="w-full bg-muted/50 border border-border p-3 rounded-sm text-muted-foreground font-mono text-sm flex items-center gap-3">
                             <User className="size-4 text-muted-foreground/50" />
@@ -164,7 +166,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
                     <div className="space-y-2">
                         <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                            Email Address (Immutable)
+                            {t('identity.email')}
                         </label>
                         <div
                             className="w-full bg-muted/50 border border-border p-3 rounded-sm text-muted-foreground font-mono text-sm flex items-center justify-between group cursor-help"
@@ -180,7 +182,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
                     <div className="space-y-2">
                         <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                            Gender
+                            {t('identity.gender')}
                         </label>
                         <Controller
                             name="gender"
@@ -188,9 +190,21 @@ export function ProfileForm({ user }: ProfileFormProps) {
                             render={({ field }) => (
                                 <div className="grid grid-cols-3 gap-3">
                                     {[
-                                        { value: 'MALE', label: 'Male', icon: '♂' },
-                                        { value: 'FEMALE', label: 'Female', icon: '♀' },
-                                        { value: 'OTHER', label: 'Other', icon: '⚧' },
+                                        {
+                                            value: 'MALE',
+                                            label: t('identity.options.male'),
+                                            icon: '♂',
+                                        },
+                                        {
+                                            value: 'FEMALE',
+                                            label: t('identity.options.female'),
+                                            icon: '♀',
+                                        },
+                                        {
+                                            value: 'OTHER',
+                                            label: t('identity.options.other'),
+                                            icon: '⚧',
+                                        },
                                     ].map((option) => (
                                         <button
                                             key={option.value}
@@ -227,7 +241,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                     </div>
 
                     <Textarea
-                        label="Short Description / Bio"
+                        label={t('identity.bio')}
                         {...register('shortDescription')}
                         rows={3}
                         variant="compact"
@@ -237,7 +251,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
                     <div className="col-span-1 md:col-span-2">
                         <LocationSearch
-                            label="Location / Address"
+                            label={t('identity.location')}
                             placeholder="Search for your address..."
                             defaultValue={user.address?.displayName || ''}
                             onSelect={handleLocationSelect}
@@ -250,7 +264,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
                         <div className="col-span-1 md:col-span-2">
                             <div className="space-y-2">
                                 <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                                    Location Preview
+                                    {t('identity.preview')}
                                 </label>
                                 <div className="relative w-full h-75 rounded-sm overflow-hidden border border-border shadow-[0_0_15px_rgba(0,238,255,0.2)]">
                                     <Map
@@ -291,7 +305,9 @@ export function ProfileForm({ user }: ProfileFormProps) {
                     disabled={isSubmitting || updateProfile.isPending}
                     className="bg-linear-to-r from-secondary to-secondary/80 shadow-[0_0_20px_rgba(188,0,255,0.4)] px-12 py-4 text-white text-sm font-bold uppercase tracking-[0.2em] rounded-sm hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isSubmitting || updateProfile.isPending ? 'Saving...' : 'Save Profile'}
+                    {isSubmitting || updateProfile.isPending
+                        ? t('actions.saving')
+                        : t('actions.save')}
                 </button>
             </div>
         </form>

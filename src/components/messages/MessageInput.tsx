@@ -21,6 +21,7 @@ import { EmojiStyle, Theme } from 'emoji-picker-react';
 import type { EmojiClickData } from 'emoji-picker-react';
 import { cn } from '@/utils/classnames';
 import { useVoiceRecorder } from '@/hooks/useVoiceRecorder';
+import { useTranslations } from 'next-intl';
 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
@@ -45,6 +46,7 @@ export function MessageInput({
     disabled,
     isSending,
 }: MessageInputProps) {
+    const t = useTranslations('messages.MessageInput');
     const [content, setContent] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [images, setImages] = useState<File[]>([]);
@@ -247,7 +249,7 @@ export function MessageInput({
                 <div className="flex items-center gap-3 mb-3 px-3 py-2 bg-destructive/10 border border-destructive/30 rounded-sm animate-pulse">
                     <div className="size-2 rounded-full bg-destructive animate-pulse" />
                     <span className="text-xs font-bold text-destructive uppercase tracking-widest">
-                        Recording {formatDuration(voice.duration)}
+                        {t('recording', { duration: formatDuration(voice.duration) })}
                     </span>
                     <div className="flex-1" />
                     <button
@@ -431,7 +433,7 @@ export function MessageInput({
                     disabled={disabled}
                     rows={1}
                     className="flex-1 bg-transparent border-none text-sm focus:ring-0 placeholder:text-muted-foreground font-bold tracking-tight outline-none resize-none max-h-30"
-                    placeholder="TRANSMIT SECURE DATA..."
+                    placeholder={t('placeholder')}
                 />
 
                 {/* Emoji */}
@@ -463,11 +465,11 @@ export function MessageInput({
                     {isSending ? (
                         <>
                             <Loader2 className="size-3 animate-spin" />
-                            SENDING
+                            {t('sending')}
                         </>
                     ) : (
                         <>
-                            SEND
+                            {t('send')}
                             <Send className="size-3" />
                         </>
                     )}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { X, Loader2, MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
 import { useGetBrickDetail, useGetBrickVotes } from '@/hooks/apis/brick.api';
@@ -21,6 +22,8 @@ interface BrickDetailModalProps {
 }
 
 export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
+    const t = useTranslations('brickDetail.page');
+    const tc = useTranslations('common');
     const isOpen = !!brickId;
     usePreventScroll(isOpen);
 
@@ -82,8 +85,11 @@ export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
                 </button>
 
                 {isLoading || !brick ? (
-                    <div className="flex items-center justify-center py-20">
+                    <div className="flex flex-col items-center justify-center py-20 gap-3">
                         <Loader2 className="size-8 animate-spin text-primary" />
+                        <p className="text-[10px] text-primary animate-pulse tracking-widest uppercase font-mono">
+                            {t('loading')}
+                        </p>
                     </div>
                 ) : (
                     <>
@@ -104,8 +110,8 @@ export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
                                         />
                                         <ShareButton brickId={brick.id} />
                                         <span className="text-[10px] text-muted-foreground/50 font-mono ml-auto">
-                                            {brick._count.votes} votes &middot;{' '}
-                                            {brick._count.comments} comments
+                                            {brick._count.votes} {tc('votes')} &middot;{' '}
+                                            {brick._count.comments} {tc('comments')}
                                         </span>
                                     </div>
 
@@ -115,7 +121,7 @@ export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
                                             <div className="flex items-center gap-2 px-3 py-2 border-b border-primary/10">
                                                 <MapPin className="size-3.5 text-primary" />
                                                 <h3 className="text-[10px] font-bold uppercase tracking-widest">
-                                                    Location
+                                                    {t('location')}
                                                 </h3>
                                             </div>
                                             <div className="relative w-full h-44">
@@ -173,8 +179,8 @@ export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
                                     />
                                     <ShareButton brickId={brick.id} />
                                     <span className="text-[10px] text-muted-foreground/50 font-mono ml-auto">
-                                        {brick._count.votes} votes {'·'} {brick._count.comments}{' '}
-                                        comments
+                                        {brick._count.votes} {tc('votes')} {'·'}{' '}
+                                        {brick._count.comments} {tc('comments')}
                                     </span>
                                 </div>
 
@@ -184,7 +190,7 @@ export function BrickDetailModal({ brickId, onClose }: BrickDetailModalProps) {
                                         <div className="flex items-center gap-2 px-3 py-2 border-b border-primary/10">
                                             <MapPin className="size-3.5 text-primary" />
                                             <h3 className="text-[10px] font-bold uppercase tracking-widest">
-                                                Location
+                                                {t('location')}
                                             </h3>
                                         </div>
                                         <div className="relative w-full h-44">

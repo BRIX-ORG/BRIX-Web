@@ -6,6 +6,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useLocationAutocomplete } from '@/hooks/apis/location.api';
 import { cn } from '@/utils/classnames';
 import type { LocationSuggestion } from '@/types/location.types';
+import { useTranslations } from 'next-intl';
 
 interface AddressSearchFieldProps {
     value: string;
@@ -28,6 +29,7 @@ export function AddressSearchField({
     isTyping,
     setIsTyping,
 }: AddressSearchFieldProps) {
+    const t = useTranslations('uploads.form');
     const dropdownRef = useRef<HTMLDivElement>(null);
     const debouncedQuery = useDebounce(value, 500);
 
@@ -61,7 +63,7 @@ export function AddressSearchField({
     return (
         <div className="relative w-full" ref={dropdownRef}>
             <label className="block text-xs font-mono font-medium uppercase tracking-[0.2em] text-muted-foreground mb-2">
-                Address
+                {t('addressLabel')}
             </label>
             <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50">
@@ -79,7 +81,7 @@ export function AddressSearchField({
                             setIsTyping(true);
                         }
                     }}
-                    placeholder="Search for an address or auto-detected from GPS..."
+                    placeholder={t('addressPlaceholder')}
                     disabled={disabled}
                     className={cn(
                         'w-full bg-muted border border-border rounded-sm font-cabin text-foreground',

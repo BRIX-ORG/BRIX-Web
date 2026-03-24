@@ -2,12 +2,14 @@
 
 import { Timer } from 'lucide-react';
 import { useRealtimeSessionStore } from '@/stores/realtime-session-store';
+import { useTranslations } from 'next-intl';
 
 /**
  * Inline countdown bar shown in the upload form modal during the form-fill phase.
  * Shows how many seconds remain before the session expires.
  */
 export function FormCountdown() {
+    const t = useTranslations('camera.FormCountdown');
     const { countdown, status, expiresIn } = useRealtimeSessionStore();
 
     // Only show during capturing (form phase) — not uploading/success/etc.
@@ -39,7 +41,7 @@ export function FormCountdown() {
                         }`}
                     />
                     <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                        Upload Deadline
+                        {t('label')}
                     </span>
                 </div>
                 <span

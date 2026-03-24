@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Lock, ShieldCheck } from 'lucide-react';
 import { cn } from '@/utils/classnames';
+import { useTranslations } from 'next-intl';
 
 export interface EncryptedFile {
     id: string;
@@ -16,12 +17,13 @@ interface EncryptedContentCardProps {
 }
 
 export function EncryptedContentCard({ file, onDecrypt }: EncryptedContentCardProps) {
+    const t = useTranslations('vault');
     const isOnChain = file.type === 'on-chain';
 
     const typeLabels = {
-        sensitive: 'SENSITIVE_CONTENT',
-        'on-chain': 'ON_CHAIN_LEDGER',
-        biometric: 'BIOMETRIC_LOCKED',
+        sensitive: t('types.sensitive'),
+        'on-chain': t('types.onChain'),
+        biometric: t('types.biometric'),
     };
 
     return (
@@ -49,7 +51,7 @@ export function EncryptedContentCard({ file, onDecrypt }: EncryptedContentCardPr
                             : 'bg-primary text-primary-foreground',
                     )}
                 >
-                    {isOnChain ? 'Auth On-Chain' : 'Decrypt to View'}
+                    {isOnChain ? t('authOnChain') : t('decryptToView')}
                 </button>
             </div>
 

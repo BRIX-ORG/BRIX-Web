@@ -2,6 +2,7 @@
 
 import { Navigation } from 'lucide-react';
 import { Input } from '@/components/ui';
+import { useTranslations } from 'next-intl';
 
 interface GeoLocationFieldsProps {
     latitude: number | null | undefined;
@@ -24,29 +25,30 @@ export function GeoLocationFields({
     gpsLocked,
     disabled,
 }: GeoLocationFieldsProps) {
+    const t = useTranslations('uploads.form');
     return (
         <div className="space-y-5">
             {/* Section Header */}
             <div className="flex items-center gap-3 pb-4 border-b border-border">
                 <Navigation className="size-4 text-secondary" />
-                <h3 className="text-sm font-bold tracking-[0.2em] uppercase">Geo Coordinates</h3>
+                <h3 className="text-sm font-bold tracking-[0.2em] uppercase">{t('geoTitle')}</h3>
                 <div className="flex-1" />
                 {gpsLocked && (
                     <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest flex items-center gap-1.5">
                         <span className="size-1.5 bg-primary rounded-full animate-pulse" />
-                        GPS_LOCKED
+                        {t('gpsLocked')}
                     </span>
                 )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <Input
-                    label="Latitude"
+                    label={t('latLabel')}
                     type="number"
                     step="any"
                     leftIcon={<Navigation className="size-4" />}
                     variant="compact"
-                    placeholder="-90 to 90"
+                    placeholder={t('latPlaceholder')}
                     error={latitudeError}
                     disabled={disabled}
                     value={latitude ?? ''}
@@ -57,12 +59,12 @@ export function GeoLocationFields({
                 />
 
                 <Input
-                    label="Longitude"
+                    label={t('lngLabel')}
                     type="number"
                     step="any"
                     leftIcon={<Navigation className="size-4" />}
                     variant="compact"
-                    placeholder="-180 to 180"
+                    placeholder={t('lngPlaceholder')}
                     error={longitudeError}
                     disabled={disabled}
                     value={longitude ?? ''}

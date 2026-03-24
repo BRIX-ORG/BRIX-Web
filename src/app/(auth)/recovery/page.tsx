@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { BrixBrandLogo } from '@/components/shared';
 import { RecoveryForm } from '@/components/auth';
+import { useTranslations } from 'next-intl';
 
 export default function RecoveryPage() {
+    const t = useTranslations('auth');
     return (
         <div className="w-full lg:w-2/5 flex flex-col justify-center items-center p-8 md:p-16 lg:p-24 relative bg-background">
             {/* Mobile Header Logo */}
@@ -21,10 +23,10 @@ export default function RecoveryPage() {
                 {/* Headline */}
                 <div className="mb-8">
                     <h2 className="text-3xl font-bold tracking-tight text-foreground uppercase mb-2">
-                        Recover_Access
+                        {t('recovery.title')}
                     </h2>
                     <p className="text-muted-foreground text-sm font-mono tracking-wide uppercase">
-                        Reset your credentials
+                        {t('recovery.subtitle')}
                     </p>
                 </div>
 
@@ -35,12 +37,12 @@ export default function RecoveryPage() {
             {/* Footer Links */}
             <div className="mt-12 flex gap-8 text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                 <Link className="hover:text-primary transition-colors" href="#">
-                    Global_Privacy
+                    {t('common.privacy')}
                 </Link>
                 <Link className="hover:text-primary transition-colors" href="#">
-                    Term_Protocols
+                    {t('common.terms')}
                 </Link>
-                <span className="opacity-40">©2024_BRIX_GRID</span>
+                <span className="opacity-40">{t('common.copyright')}</span>
             </div>
         </div>
     );
