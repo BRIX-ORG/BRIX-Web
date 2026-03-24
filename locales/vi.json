@@ -139,6 +139,20 @@
                 "audited": "Kiểm Định Cẩn Thận",
                 "gotIt": "Vào Thôi"
             }
+        },
+        "share": {
+            "title": "Chia Sẻ Brix",
+            "copyLink": "Sao chép liên kết",
+            "sendTo": "Gửi dưới dạng tin nhắn...",
+            "send": "Gửi",
+            "sent": "Đã gửi",
+            "optionalMessage": "Thêm tin nhắn (tùy chọn)...",
+            "noConversations": "Không có cuộc trò chuyện nào",
+            "search": "Tìm kiếm người dùng...",
+            "toast": {
+                "success": "Đã gửi Brix!",
+                "error": "Lỗi khi gửi Brix"
+            }
         }
     },
     "common": {

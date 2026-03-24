@@ -139,6 +139,20 @@
                 "audited": "Audited Infrastructure",
                 "gotIt": "Got It"
             }
+        },
+        "share": {
+            "title": "Share Brix",
+            "copyLink": "Copy link",
+            "sendTo": "Send as message...",
+            "send": "Send",
+            "sent": "Sent",
+            "optionalMessage": "Add a message (optional)...",
+            "noConversations": "No conversations",
+            "search": "Search users...",
+            "toast": {
+                "success": "Brix sent!",
+                "error": "Failed to send Brix"
+            }
         }
     },
     "common": {

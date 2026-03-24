@@ -13,3 +13,4 @@ export { IpfsStep } from './IpfsStep';
 export { MintStep } from './MintStep';
 export { DonationSection } from './DonationSection';
 export { DonationList } from './DonationList';
+export { ShareBrickModal } from './ShareBrickModal';
