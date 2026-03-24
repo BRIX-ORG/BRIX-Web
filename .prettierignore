@@ -25,3 +25,6 @@ dist
 
 # Git
 .git
+
+# Package Managers
+pnpm-lock.yaml
