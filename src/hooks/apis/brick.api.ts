@@ -15,6 +15,7 @@ import type {
     RealtimeSession,
     RealtimeUploadResult,
     PaginatedTopAuthorsResponse,
+    UserBrickStats,
 } from '@/types/brick.types';
 import type {
     UploadArtBrickFormInput,
@@ -678,5 +679,21 @@ export function useGetTopAuthors(limit: number = 10) {
             return nextOffset < lastPage.total ? nextOffset : undefined;
         },
         initialPageParam: 0,
+    });
+}
+
+/**
+ * Get user stats
+ */
+export function useGetUserStats(idOrUsername: string | undefined) {
+    return useQuery({
+        queryKey: ['userStats', idOrUsername],
+        queryFn: async () => {
+            const response = await apiClient.get<ApiResponse<UserBrickStats>>(
+                `/api/bricks/user/${idOrUsername}/stats`,
+            );
+            return response.data.data;
+        },
+        enabled: !!idOrUsername,
     });
 }

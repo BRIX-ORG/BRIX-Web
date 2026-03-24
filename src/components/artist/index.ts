@@ -1,6 +1,6 @@
 export { ArtistHeroSection, type ArtistData } from './ArtistHeroSection';
-export { ArtistStatsGrid, type ArtistStats } from './ArtistStatsGrid';
-export { ArtistSidebar, type ActivityItem, type Collaborator } from './ArtistSidebar';
+export { ArtistStatsGrid } from './ArtistStatsGrid';
+export { ArtistSidebar, type Collaborator } from './ArtistSidebar';
 export { ArtistGallery } from './ArtistGallery';
 export { ArtistGalleryTabs } from './ArtistGalleryTabs';
 export { ArtistBricksGrid } from './ArtistBricksGrid';
@@ -8,4 +8,5 @@ export { ArtBrickCard } from './ArtBrickCard';
 export { ModelBrickCard } from './ModelBrickCard';
 export { FollowersModal } from './FollowersModal';
 export { FollowUserItem } from './FollowUserItem';
+export { ActivitiesModal } from './ActivitiesModal';
 export { BrickDetailModal } from '../brick-detail';

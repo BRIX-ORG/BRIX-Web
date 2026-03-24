@@ -1,57 +1,95 @@
-export interface ArtistStats {
-    digitalAssets: number;
-    assetsGrowth: string;
-    validated: number;
-    rank: number;
-    rankPercentile: string;
-}
+import type { UserBrickStats } from '@/types/brick.types';
+import { Layers, ShieldCheck, HeartPulse } from 'lucide-react';
 
 interface ArtistStatsGridProps {
-    stats: ArtistStats;
+    stats?: UserBrickStats | null;
 }
 
 export function ArtistStatsGrid({ stats }: ArtistStatsGridProps) {
     return (
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-muted border border-primary/10 p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group">
-                <p className="text-[10px] font-mono text-primary/60 uppercase tracking-widest">
-                    Digital Assets Issued
-                </p>
-                <div className="flex items-baseline gap-2">
-                    <p className="text-3xl font-bold tracking-tighter">
-                        {stats.digitalAssets.toLocaleString()}
+            {/* Box 1: Digital Assets Issued */}
+            <div className="relative p-6 rounded-2xl bg-muted/30 border border-primary/10 hover:border-primary/30 transition-all duration-500 group overflow-hidden hover:shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)] hover:-translate-y-1">
+                {/* Glow Background */}
+                <div className="absolute top-0 right-0 p-16 -mr-8 -mt-8 rounded-full bg-primary/5 group-hover:bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-700 blur-3xl" />
+
+                <div className="flex justify-between items-start mb-6 relative z-10">
+                    <p className="text-[10px] sm:text-xs font-mono text-primary/80 uppercase tracking-widest font-semibold flex items-center gap-2">
+                        <Layers className="size-4 text-primary" />
+                        Assets Issued
                     </p>
-                    <p className="text-xs font-mono text-primary">{stats.assetsGrowth}</p>
                 </div>
-                <p className="text-[10px] font-mono text-muted-foreground uppercase">
-                    Total Bricks Platform-Wide
-                </p>
-            </div>
-            <div className="bg-muted border border-primary/10 p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group">
-                <p className="text-[10px] font-mono text-primary/60 uppercase tracking-widest">
-                    Blockchain Validated
-                </p>
-                <div className="flex items-baseline gap-2">
-                    <p className="text-3xl font-bold tracking-tighter">
-                        {stats.validated.toLocaleString()}
+
+                <div className="flex flex-col gap-2 relative z-10">
+                    <p className="text-4xl sm:text-5xl font-bold tracking-tighter bg-gradient-to-br from-foreground to-foreground/40 bg-clip-text text-transparent drop-shadow-sm">
+                        {(stats?.totalBricksUploaded || 0).toLocaleString()}
                     </p>
-                    <p className="text-xs font-mono text-primary">On-Chain</p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-medium tracking-wider">
+                            IPFS
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-mono text-muted-foreground font-semibold">
+                            {stats?.ipfsBricksUploaded || 0} Assets Stored
+                        </span>
+                    </div>
                 </div>
-                <p className="text-[10px] font-mono text-muted-foreground uppercase">
-                    Metadata Verified Records
-                </p>
             </div>
-            <div className="bg-muted border border-primary/10 p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group">
-                <p className="text-[10px] font-mono text-primary/60 uppercase tracking-widest">
-                    Network Hierarchy
-                </p>
-                <div className="flex items-baseline gap-2">
-                    <p className="text-3xl font-bold tracking-tighter">#{stats.rank}</p>
-                    <p className="text-xs font-mono text-primary">{stats.rankPercentile}</p>
+
+            {/* Box 2: Blockchain Validated */}
+            <div className="relative p-6 rounded-2xl bg-muted/30 border border-secondary/10 hover:border-secondary/30 transition-all duration-500 group overflow-hidden hover:shadow-[0_0_30px_-5px_hsl(var(--secondary)/0.15)] hover:-translate-y-1 md:translate-y-2 md:hover:translate-y-1">
+                <div className="absolute top-0 right-0 p-16 -mr-8 -mt-8 rounded-full bg-secondary/5 group-hover:bg-secondary/10 opacity-0 group-hover:opacity-100 transition-all duration-700 blur-3xl" />
+
+                <div className="flex justify-between items-start mb-6 relative z-10">
+                    <p className="text-[10px] sm:text-xs font-mono text-secondary/80 uppercase tracking-widest font-semibold flex items-center gap-2">
+                        <ShieldCheck className="size-4 text-secondary" />
+                        Blockchain Validated
+                    </p>
                 </div>
-                <p className="text-[10px] font-mono text-muted-foreground uppercase">
-                    Global Reputation Rank
-                </p>
+
+                <div className="flex flex-col gap-2 relative z-10">
+                    <p className="text-4xl sm:text-5xl font-bold tracking-tighter bg-gradient-to-br from-foreground to-foreground/40 bg-clip-text text-transparent drop-shadow-sm">
+                        {(stats?.onchainBricks || 0).toLocaleString()}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <span className="px-2 py-0.5 rounded-full bg-secondary/10 border border-secondary/20 text-[10px] font-mono text-secondary font-medium tracking-wider">
+                            ON-CHAIN
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-mono text-muted-foreground font-semibold">
+                            Metadata Verified
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Box 3: Community Support */}
+            <div className="relative p-6 rounded-2xl bg-muted/30 border border-primary/10 hover:border-primary/30 transition-all duration-500 group overflow-hidden hover:shadow-[0_0_30px_-5px_hsl(var(--primary)/0.15)] hover:-translate-y-1">
+                <div className="absolute top-0 right-0 p-16 -mr-8 -mt-8 rounded-full bg-primary/5 group-hover:bg-primary/10 opacity-0 group-hover:opacity-100 transition-all duration-700 blur-3xl" />
+
+                <div className="flex justify-between items-start mb-6 relative z-10">
+                    <p className="text-[10px] sm:text-xs font-mono text-primary/80 uppercase tracking-widest font-semibold flex items-center gap-2">
+                        <HeartPulse className="size-4 text-primary" />
+                        Community Support
+                    </p>
+                </div>
+
+                <div className="flex flex-col gap-2 relative z-10">
+                    <div className="flex items-baseline gap-2">
+                        <p className="text-4xl sm:text-5xl font-bold tracking-tighter bg-gradient-to-br from-foreground to-foreground/40 bg-clip-text text-transparent drop-shadow-sm">
+                            {(stats?.totalUpvotes || 0).toLocaleString()}
+                        </p>
+                        <span className="text-sm font-semibold text-muted-foreground/60 tracking-wider uppercase font-mono">
+                            Votes
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                        <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-medium tracking-wider">
+                            SUPPORT
+                        </span>
+                        <span className="text-[11px] sm:text-xs font-mono text-muted-foreground font-semibold">
+                            {(stats?.totalDonationsReceived || 0).toLocaleString()} POL Received
+                        </span>
+                    </div>
+                </div>
             </div>
         </section>
     );
