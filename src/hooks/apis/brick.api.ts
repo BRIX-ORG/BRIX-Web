@@ -16,6 +16,7 @@ import type {
     RealtimeUploadResult,
     PaginatedTopAuthorsResponse,
     UserBrickStats,
+    PaginatedRealtimeBricksResponse,
 } from '@/types/brick.types';
 import type {
     UploadArtBrickFormInput,
@@ -694,6 +695,40 @@ export function useGetUserStats(idOrUsername: string | undefined) {
             );
             return response.data.data;
         },
+        enabled: !!idOrUsername,
+    });
+}
+
+/**
+ * Get realtime bricks of a user (paginated, with revenue)
+ */
+export function useGetRealtimeBricks({
+    idOrUsername,
+    onChainStatus,
+    limit = 20,
+}: {
+    idOrUsername: string | undefined;
+    onChainStatus?: string;
+    limit?: number;
+}) {
+    return useInfiniteQuery({
+        queryKey: ['realtimeBricks', idOrUsername, onChainStatus],
+        queryFn: async ({ pageParam = 0 }) => {
+            const params = new URLSearchParams();
+            params.set('limit', limit.toString());
+            params.set('offset', pageParam.toString());
+            if (onChainStatus) params.set('onChainStatus', onChainStatus);
+
+            const response = await apiClient.get<ApiResponse<PaginatedRealtimeBricksResponse>>(
+                `/api/bricks/user/${idOrUsername}/realtime?${params.toString()}`,
+            );
+            return response.data.data;
+        },
+        getNextPageParam: (lastPage) => {
+            const nextOffset = lastPage.offset + lastPage.limit;
+            return nextOffset < lastPage.total ? nextOffset : undefined;
+        },
+        initialPageParam: 0,
         enabled: !!idOrUsername,
     });
 }

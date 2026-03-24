@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BrickDetailModal } from '@/components/artist';
+import { BrickDetailModal } from '@/components/brick-detail';
 import { DashboardFilters, DashboardMap } from '@/components/dashboard';
 import { BrickTagType } from '@/types/brick.types';
 

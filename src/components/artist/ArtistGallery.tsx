@@ -7,7 +7,8 @@ import type { BrickTagType, UserBrick } from '@/types/brick.types';
 import { useGetUserBricks } from '@/hooks/apis/brick.api';
 import { cn } from '@/utils/classnames';
 import { formatCoord, formatTimestamp } from '@/utils/brick';
-import { ArtistGalleryTabs, ArtistBricksGrid, BrickDetailModal } from '@/components/artist';
+import { ArtistGalleryTabs, ArtistBricksGrid } from '@/components/artist';
+import { BrickDetailModal } from '@/components/brick-detail';
 
 interface ArtistGalleryProps {
     idOrUsername: string;

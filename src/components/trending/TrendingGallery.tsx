@@ -14,7 +14,8 @@ import {
 import { useGetNewsfeedBricks, useGetFollowingBricks } from '@/hooks/apis/brick.api';
 import type { BrickTagType, UserBrick } from '@/types/brick.types';
 import { NewsfeedBrickCard, type NewsfeedBrick, TimeFilter } from '@/components/trending';
-import { BrickDetailModal, ArtistBricksGrid } from '@/components/artist';
+import { ArtistBricksGrid } from '@/components/artist';
+import { BrickDetailModal } from '@/components/brick-detail';
 import { cn } from '@/utils/classnames';
 
 type FeedType = 'RECOMMEND' | 'FOLLOWING';

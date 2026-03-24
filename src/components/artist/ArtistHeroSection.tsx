@@ -10,6 +10,7 @@ import {
     Pencil,
     Loader2,
     Users,
+    Share2,
 } from 'lucide-react';
 import type { Gender } from '@/types/user.types';
 import { getAvatarUrl, type CloudinaryImage } from '@/utils/cloudinary';
@@ -39,6 +40,7 @@ interface ArtistHeroSectionProps {
     onEditProfile?: () => void;
     onFollowersClick?: () => void;
     onFollowingClick?: () => void;
+    onShareClick?: () => void;
 }
 
 export function ArtistHeroSection({
@@ -52,11 +54,12 @@ export function ArtistHeroSection({
     onEditProfile,
     onFollowersClick,
     onFollowingClick,
+    onShareClick,
 }: ArtistHeroSectionProps) {
     return (
         <section className="relative group">
             {/* Main Container with subtle outer glow */}
-            <div className="relative h-96 w-full rounded-2xl overflow-hidden border border-white/10 bg-background/40 backdrop-blur-sm shadow-2xl transition-all duration-700 group-hover:border-primary/20">
+            <div className="relative min-h-[24rem] w-full rounded-2xl overflow-hidden border border-white/10 bg-background/40 backdrop-blur-sm shadow-2xl transition-all duration-700 group-hover:border-primary/20 flex flex-col p-4 md:p-6 justify-end pt-32">
                 {/* 1. Background Layer */}
                 <div className="absolute inset-0 z-0">
                     {artist.background ? (
@@ -78,12 +81,12 @@ export function ArtistHeroSection({
                         />
                     )}
                     {/* Balanced gradient overlay — more transparent to show image */}
-                    <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/40 to-transparent" />
                 </div>
 
                 {/* 2. Glassmorphism Card (Floating effect) */}
-                <div className="absolute inset-x-6 bottom-6 z-10 flex flex-col md:flex-row items-center md:items-end justify-between gap-6 p-8 rounded-xl border border-white/10 bg-background/10 backdrop-blur-[10px] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] transition-all duration-500">
-                    <div className="flex flex-col md:flex-row items-center md:items-end gap-8 text-center md:text-left">
+                <div className="relative z-10 flex flex-col lg:flex-row items-center lg:items-end justify-between gap-6 p-6 md:p-8 rounded-xl border border-white/10 bg-background/20 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] transition-all duration-500 mt-auto">
+                    <div className="flex flex-col md:flex-row items-center md:items-end gap-6 md:gap-8 text-center md:text-left">
                         {/* Avatar with Halo Glow */}
                         <div className="relative shrink-0">
                             <div className="absolute -inset-1 bg-linear-to-r from-primary via-secondary to-primary rounded-full blur-md opacity-40 group-hover:opacity-100 animate-pulse transition-opacity duration-700" />
@@ -158,7 +161,7 @@ export function ArtistHeroSection({
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-col gap-3 min-w-[180px] w-full md:w-auto">
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-3 min-w-full sm:min-w-0 w-full lg:w-auto mt-4 lg:mt-0">
                         {isOwnProfile ? (
                             <button
                                 onClick={onEditProfile}
@@ -204,6 +207,13 @@ export function ArtistHeroSection({
                                 </button>
                             </>
                         )}
+                        <button
+                            onClick={onShareClick}
+                            title="Share Profile"
+                            className="flex items-center justify-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-sm font-black uppercase text-xs tracking-widest transition-all cursor-pointer shadow-lg"
+                        >
+                            <Share2 className="size-4" /> Share
+                        </button>
                     </div>
                 </div>
             </div>

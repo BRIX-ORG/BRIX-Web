@@ -248,6 +248,24 @@ export interface PaginatedTopAuthorsResponse {
     offset: number;
 }
 
+export interface RealtimeBrick extends UserBrick {
+    totalRevenue: string;
+}
+
+export interface PaginatedRealtimeBricksResponse {
+    data: RealtimeBrick[];
+    total: number;
+    limit: number;
+    offset: number;
+}
+
+export interface PaginatedDonationsResponse {
+    data: BrickDonation[];
+    total: number;
+    limit: number;
+    offset: number;
+}
+
 export interface UserBrickStats {
     totalBricksUploaded: number;
     ipfsBricksUploaded: number;

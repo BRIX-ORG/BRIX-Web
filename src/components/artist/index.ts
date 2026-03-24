@@ -9,4 +9,4 @@ export { ModelBrickCard } from './ModelBrickCard';
 export { FollowersModal } from './FollowersModal';
 export { FollowUserItem } from './FollowUserItem';
 export { ActivitiesModal } from './ActivitiesModal';
-export { BrickDetailModal } from '../brick-detail';
+export { ArtistShareModal } from './ArtistShareModal';

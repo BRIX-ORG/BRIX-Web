@@ -20,6 +20,7 @@ import {
     Loader2,
     MapPin,
     Camera,
+    Activity,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { useDisconnect } from 'wagmi';
@@ -116,6 +117,11 @@ const sidebarGroups: SidebarGroup[] = [
                 title: 'Uploads',
                 href: '/dashboard/uploads',
                 icon: Upload,
+            },
+            {
+                title: 'Realtime',
+                href: '/dashboard/realtime',
+                icon: Activity,
             },
             {
                 title: 'Camera',

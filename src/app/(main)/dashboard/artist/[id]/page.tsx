@@ -15,6 +15,7 @@ import {
     ArtistData,
     FollowersModal,
     ActivitiesModal,
+    ArtistShareModal,
 } from '@/components/artist';
 import {
     useGetUser,
@@ -67,6 +68,7 @@ export default function ArtistProfilePage() {
     const totalActivities = activitiesData?.pages[0]?.total || 0;
 
     const [showActivitiesModal, setShowActivitiesModal] = useState(false);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     // ─── Follow / Unfollow (optimistic cache update) ───────
     const followMutation = useFollowUser();
@@ -194,6 +196,7 @@ export default function ArtistProfilePage() {
                 onEditProfile={() => router.push('/dashboard/settings')}
                 onFollowersClick={openFollowersModal}
                 onFollowingClick={openFollowingModal}
+                onShareClick={() => setIsShareModalOpen(true)}
             />
 
             <ArtistStatsGrid stats={statsData} />
@@ -232,6 +235,13 @@ export default function ArtistProfilePage() {
                 isOpen={showActivitiesModal}
                 onClose={() => setShowActivitiesModal(false)}
                 idOrUsername={id}
+            />
+
+            {/* Share Modal */}
+            <ArtistShareModal
+                isOpen={isShareModalOpen}
+                onClose={() => setIsShareModalOpen(false)}
+                artist={artistData}
             />
         </div>
     );
