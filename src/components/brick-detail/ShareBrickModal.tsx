@@ -86,7 +86,7 @@ export function ShareBrickModal({ brickId, isOpen, onClose }: ShareBrickModalPro
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
             <div className="bg-background border border-primary/20 rounded-xl shadow-[0_0_40px_rgba(0,238,255,0.1)] w-full max-w-md flex flex-col max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-200">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-primary/10">

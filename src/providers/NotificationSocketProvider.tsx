@@ -1,8 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
-import { io, type Socket } from 'socket.io-client';
-import { useSession } from 'next-auth/react';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
+import { useSocket } from '@/hooks/useSocket';
 import { useNotificationStore } from '@/stores/notification-store';
 import type {
     SocketNotificationEvent,
@@ -31,53 +30,35 @@ interface NotificationSocketProviderProps {
 }
 
 export function NotificationSocketProvider({ children }: NotificationSocketProviderProps) {
-    const { data: session } = useSession();
-    const socketRef = useRef<Socket | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
+    const { socket, isConnected } = useSocket({ namespace: '/notifications' });
 
     useEffect(() => {
-        const token = session?.accessToken;
-        if (!token) {
-            socketRef.current?.disconnect();
-            socketRef.current = null;
-            return () => setIsConnected(false);
-        }
-
-        const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}/notifications`, {
-            auth: { token },
-            transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax: 5000,
-            reconnectionAttempts: Infinity,
-        });
-
-        socketRef.current = socket;
-
-        socket.on('connect', () => setIsConnected(true));
-        socket.on('disconnect', () => setIsConnected(false));
+        if (!socket) return;
 
         // ─── Server-to-Client Events ─────────────────────────────
 
-        socket.on('notification', (notification: SocketNotificationEvent) => {
+        const handleNotification = (notification: SocketNotificationEvent) => {
             useNotificationStore.getState().addNotification(notification);
-        });
+        };
 
-        socket.on('notificationUpdated', (update: SocketNotificationUpdatedEvent) => {
+        const handleNotificationUpdated = (update: SocketNotificationUpdatedEvent) => {
             useNotificationStore.getState().updateNotification(update);
-        });
+        };
 
-        socket.on('unreadCount', (data: SocketUnreadCountEvent) => {
+        const handleUnreadCount = (data: SocketUnreadCountEvent) => {
             useNotificationStore.getState().setUnreadCount(data.count);
-        });
+        };
+
+        socket.on('notification', handleNotification);
+        socket.on('notificationUpdated', handleNotificationUpdated);
+        socket.on('unreadCount', handleUnreadCount);
 
         return () => {
-            socket.removeAllListeners();
-            socket.disconnect();
-            socketRef.current = null;
-            setIsConnected(false);
+            socket.off('notification', handleNotification);
+            socket.off('notificationUpdated', handleNotificationUpdated);
+            socket.off('unreadCount', handleUnreadCount);
         };
-    }, [session?.accessToken]);
+    }, [socket]);
 
     return (
         <NotificationSocketContext.Provider value={{ isConnected }}>

@@ -170,6 +170,7 @@
         "private": "Private",
         "latitude": "Latitude",
         "longitude": "Longitude",
+        "location": "Location",
         "revenue": "Revenue",
         "cover": "Cover"
     },

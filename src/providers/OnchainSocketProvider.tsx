@@ -1,16 +1,7 @@
 'use client';
 
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-    useCallback,
-    type ReactNode,
-} from 'react';
-import { io, type Socket } from 'socket.io-client';
-import { useSession } from 'next-auth/react';
+import { createContext, useContext, useEffect, useRef, useCallback, type ReactNode } from 'react';
+import { useSocket } from '@/hooks/useSocket';
 
 // ─── Event Types ────────────────────────────────────────────────
 
@@ -56,55 +47,35 @@ interface OnchainSocketProviderProps {
 }
 
 export function OnchainSocketProvider({ children }: OnchainSocketProviderProps) {
-    const { data: session } = useSession();
-    const socketRef = useRef<Socket | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
+    const { socket, isConnected } = useSocket({ namespace: '/onchain' });
 
     // Sets of handlers per event - use ref so registrations survive re-renders
     const ipfsHandlersRef = useRef<Set<IpfsUploadedHandler>>(new Set());
     const mintHandlersRef = useRef<Set<BrickMintedHandler>>(new Set());
 
     useEffect(() => {
-        const token = session?.accessToken;
-        if (!token) {
-            socketRef.current?.disconnect();
-            socketRef.current = null;
-            return () => setIsConnected(false);
-        }
+        if (!socket) return;
 
-        const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}/onchain`, {
-            auth: { token },
-            transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax: 5000,
-            reconnectionAttempts: Infinity,
-        });
-
-        socketRef.current = socket;
-
-        socket.on('connect', () => setIsConnected(true));
-        socket.on('disconnect', () => setIsConnected(false));
-
-        socket.on('ipfs_uploaded', (data: IpfsUploadedEvent) => {
+        const handleIpfsUploaded = (data: IpfsUploadedEvent) => {
             for (const handler of ipfsHandlersRef.current) {
                 handler(data);
             }
-        });
+        };
 
-        socket.on('brick_minted', (data: BrickMintedEvent) => {
+        const handleBrickMinted = (data: BrickMintedEvent) => {
             for (const handler of mintHandlersRef.current) {
                 handler(data);
             }
-        });
+        };
+
+        socket.on('ipfs_uploaded', handleIpfsUploaded);
+        socket.on('brick_minted', handleBrickMinted);
 
         return () => {
-            socket.removeAllListeners();
-            socket.disconnect();
-            socketRef.current = null;
-            setIsConnected(false);
+            socket.off('ipfs_uploaded', handleIpfsUploaded);
+            socket.off('brick_minted', handleBrickMinted);
         };
-    }, [session?.accessToken]);
+    }, [socket]);
 
     const onIpfsUploaded = useCallback((handler: IpfsUploadedHandler) => {
         ipfsHandlersRef.current.add(handler);

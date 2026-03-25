@@ -1,16 +1,7 @@
 'use client';
 
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-    useCallback,
-    type ReactNode,
-} from 'react';
-import { io, type Socket } from 'socket.io-client';
-import { useSession } from 'next-auth/react';
+import { createContext, useContext, useEffect, useRef, useCallback, type ReactNode } from 'react';
+import { useSocket } from '@/hooks/useSocket';
 import { useChatStore } from '@/stores/chat-store';
 import type {
     SocketNewMessageEvent,
@@ -58,128 +49,139 @@ interface ChatSocketProviderProps {
 }
 
 export function ChatSocketProvider({ children }: ChatSocketProviderProps) {
-    const { data: session } = useSession();
-    const socketRef = useRef<Socket | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
+    const { socket, isConnected } = useSocket({ namespace: '/chat' });
     const joinedRoomsRef = useRef<Set<string>>(new Set());
 
-    // Connect / disconnect based on session
     useEffect(() => {
-        const token = session?.accessToken;
-        if (!token) {
-            socketRef.current?.disconnect();
-            socketRef.current = null;
-            return () => setIsConnected(false);
-        }
-
-        const socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat`, {
-            auth: { token },
-            transports: ['websocket', 'polling'],
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax: 5000,
-            reconnectionAttempts: Infinity,
-        });
-
-        socketRef.current = socket;
-
-        socket.on('connect', () => {
-            setIsConnected(true);
-            // Re-join all rooms on reconnect
-            for (const roomId of joinedRoomsRef.current) {
-                socket.emit('joinConversation', { conversationId: roomId });
-            }
-        });
-
-        socket.on('disconnect', () => {
-            setIsConnected(false);
-        });
+        if (!socket) return;
 
         // ─── Socket Event Handlers → Store Actions ──────────
 
-        socket.on('newMessage', (message: SocketNewMessageEvent) => {
+        const handleNewMessage = (message: SocketNewMessageEvent) => {
             const storeState = useChatStore.getState();
             const conv = storeState.conversations[message.conversationId];
             const isCurrentConv = storeState.currentConversationId === message.conversationId;
 
             storeState.addMessage(message.conversationId, message);
 
-            // addMessage only increments totalUnread when the conversation already exists in the store.
-            // If conversations haven't been loaded yet (e.g. user is on dashboard, not /messages),
-            // we need to increment totalUnread manually here.
             if (!conv && !isCurrentConv) {
                 const newState = useChatStore.getState();
                 newState.setTotalUnread(newState.totalUnread + 1);
             }
-        });
+        };
 
-        socket.on('messageUpdated', (message: SocketMessageUpdatedEvent) => {
+        const handleMessageUpdated = (message: SocketMessageUpdatedEvent) => {
             useChatStore.getState().updateMessage({ ...message, _isEdited: true });
-        });
+        };
 
-        socket.on('messageDeleted', (event: SocketMessageDeletedEvent) => {
+        const handleMessageDeleted = (event: SocketMessageDeletedEvent) => {
             useChatStore.getState().deleteMessage(event.messageId, event.conversationId);
-        });
+        };
 
-        socket.on('messageReaction', (event: SocketMessageReactionEvent) => {
+        const handleMessageReaction = (event: SocketMessageReactionEvent) => {
             useChatStore.getState().updateMessageReactions(event.messageId, event.reactions);
-        });
+        };
 
-        socket.on('messagesRead', (event: SocketMessagesReadEvent) => {
+        const handleMessagesRead = (event: SocketMessagesReadEvent) => {
             useChatStore.getState().markMessagesAsRead(event.conversationId, event.readerId);
-        });
+        };
 
-        socket.on('typing', (event: SocketTypingEvent) => {
+        const handleTyping = (event: SocketTypingEvent) => {
             useChatStore.getState().addTyping(event.conversationId, event.userId);
-            // Auto-expire typing after 5s
             setTimeout(() => {
                 useChatStore.getState().removeTyping(event.conversationId, event.userId);
             }, 5000);
-        });
+        };
 
-        socket.on('stopTyping', (event: SocketTypingEvent) => {
+        const handleStopTyping = (event: SocketTypingEvent) => {
             useChatStore.getState().removeTyping(event.conversationId, event.userId);
-        });
+        };
 
-        socket.on('typingList', (event: SocketTypingListEvent) => {
+        const handleTypingList = (event: SocketTypingListEvent) => {
             useChatStore.getState().setTypingList(event.conversationId, event.users);
-        });
+        };
 
-        socket.on('userOnline', (event: SocketUserOnlineEvent) => {
+        const handleUserOnline = (event: SocketUserOnlineEvent) => {
             useChatStore.getState().setPartnerOnline(event.userId);
-        });
+        };
 
-        socket.on('userOffline', (event: SocketUserOfflineEvent) => {
+        const handleUserOffline = (event: SocketUserOfflineEvent) => {
             useChatStore.getState().setPartnerOffline(event.userId, event.lastSeenAt);
-        });
+        };
+
+        socket.on('newMessage', handleNewMessage);
+        socket.on('messageUpdated', handleMessageUpdated);
+        socket.on('messageDeleted', handleMessageDeleted);
+        socket.on('messageReaction', handleMessageReaction);
+        socket.on('messagesRead', handleMessagesRead);
+        socket.on('typing', handleTyping);
+        socket.on('stopTyping', handleStopTyping);
+        socket.on('typingList', handleTypingList);
+        socket.on('userOnline', handleUserOnline);
+        socket.on('userOffline', handleUserOffline);
 
         return () => {
-            socket.removeAllListeners();
-            socket.disconnect();
-            socketRef.current = null;
-            setIsConnected(false);
+            socket.off('newMessage', handleNewMessage);
+            socket.off('messageUpdated', handleMessageUpdated);
+            socket.off('messageDeleted', handleMessageDeleted);
+            socket.off('messageReaction', handleMessageReaction);
+            socket.off('messagesRead', handleMessagesRead);
+            socket.off('typing', handleTyping);
+            socket.off('stopTyping', handleStopTyping);
+            socket.off('typingList', handleTypingList);
+            socket.off('userOnline', handleUserOnline);
+            socket.off('userOffline', handleUserOffline);
         };
-    }, [session?.accessToken]);
+    }, [socket]);
+
+    useEffect(() => {
+        if (!socket || !isConnected) return;
+
+        // Re-join all rooms on reconnect
+        for (const roomId of joinedRoomsRef.current) {
+            socket.emit('joinConversation', { conversationId: roomId });
+        }
+    }, [socket, isConnected]);
 
     // ─── Public API ─────────────────────────────────────────
 
-    const joinConversation = useCallback((conversationId: string) => {
-        joinedRoomsRef.current.add(conversationId);
-        socketRef.current?.emit('joinConversation', { conversationId });
-    }, []);
+    const joinConversation = useCallback(
+        (conversationId: string) => {
+            joinedRoomsRef.current.add(conversationId);
+            if (isConnected && socket) {
+                socket.emit('joinConversation', { conversationId });
+            }
+        },
+        [socket, isConnected],
+    );
 
-    const leaveConversation = useCallback((conversationId: string) => {
-        joinedRoomsRef.current.delete(conversationId);
-        socketRef.current?.emit('leaveConversation', { conversationId });
-    }, []);
+    const leaveConversation = useCallback(
+        (conversationId: string) => {
+            joinedRoomsRef.current.delete(conversationId);
+            if (isConnected && socket) {
+                socket.emit('leaveConversation', { conversationId });
+            }
+        },
+        [socket, isConnected],
+    );
 
-    const emitTyping = useCallback((conversationId: string) => {
-        socketRef.current?.emit('typing', { conversationId });
-    }, []);
+    const emitTyping = useCallback(
+        (conversationId: string) => {
+            if (isConnected && socket) {
+                socket.emit('typing', { conversationId });
+            }
+        },
+        [socket, isConnected],
+    );
 
-    const emitStopTyping = useCallback((conversationId: string) => {
-        socketRef.current?.emit('stopTyping', { conversationId });
-    }, []);
+    const emitStopTyping = useCallback(
+        (conversationId: string) => {
+            if (isConnected && socket) {
+                socket.emit('stopTyping', { conversationId });
+            }
+        },
+        [socket, isConnected],
+    );
 
     const value: ChatSocketContextValue = {
         joinConversation,
