@@ -10,7 +10,8 @@
         "lint": "eslint",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "prepare": "husky"
+        "prepare": "husky",
+        "analyze": "next experimental-analyze"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -61,7 +62,7 @@
         "tailwind-merge": "^3.5.0",
         "three": "^0.167.1",
         "viem": "^2.47.6",
-        "wagmi": "^3.5.0",
+        "wagmi": "^3.6.0",
         "zod": "^4.3.6",
         "zustand": "^5.0.9"
     },
