@@ -37,4 +37,3 @@ coverage
 .prettierrc
 .prettierignore
 .eslintrc*
-tsconfig.json
