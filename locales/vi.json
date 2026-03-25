@@ -1097,6 +1097,8 @@
             "assetVerified": "Tài sản IPFS đã xác minh",
             "explorer": "Explorer",
             "cid": "CID: {cid}",
+            "imageCid": "Ảnh: {cid}",
+            "metaCid": "Dữ liệu: {cid}",
             "description": "Bước 2: Mint brick của bạn trên Polygon Amoy để chính thức hóa và nhận sự ủng hộ.",
             "button": "Mint trên Polygon",
             "minting": "Đang mint...",

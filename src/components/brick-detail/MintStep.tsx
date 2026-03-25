@@ -10,6 +10,7 @@ interface MintStepProps {
     isMinting: boolean;
     onMint: () => void;
     ipfsCid: string | null;
+    imageCid: string | null;
     onChainTx: string | null;
     isMintTxConfirmed: boolean;
 }
@@ -20,6 +21,7 @@ export function MintStep({
     isMinting,
     onMint,
     ipfsCid,
+    imageCid,
     onChainTx,
     isMintTxConfirmed,
 }: MintStepProps) {
@@ -68,11 +70,43 @@ export function MintStep({
                             </a>
                         )}
                     </div>
-                    <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="text-[10px] font-mono text-muted-foreground truncate group-hover:text-primary/70">
-                            {t('cid', { cid: ipfsCid || '' })}
-                        </span>
-                        <CheckCircle2 className="size-3 text-green-500/60 shrink-0" />
+                    <div className="flex flex-col gap-1.5 min-w-0 mt-2">
+                        {imageCid && (
+                            <div className="flex items-center justify-between">
+                                <span className="text-[10px] font-mono text-muted-foreground truncate group-hover:text-primary/70">
+                                    {t('imageCid', { cid: imageCid })}
+                                </span>
+                                <div className="flex gap-2 items-center">
+                                    <CheckCircle2 className="size-3 text-green-500/60 shrink-0" />
+                                    <a
+                                        href={`${process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || 'https://plum-urban-pike-360.mypinata.cloud'}/ipfs/${imageCid}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-[10px] text-primary/60 hover:text-primary transition-colors"
+                                    >
+                                        <ExternalLink className="size-3" />
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                        {ipfsCid && (
+                            <div className="flex items-center justify-between mt-1">
+                                <span className="text-[10px] font-mono text-muted-foreground truncate group-hover:text-primary/70">
+                                    {t('metaCid', { cid: ipfsCid })}
+                                </span>
+                                <div className="flex gap-2 items-center">
+                                    <CheckCircle2 className="size-3 text-green-500/60 shrink-0" />
+                                    <a
+                                        href={`${process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || 'https://plum-urban-pike-360.mypinata.cloud'}/ipfs/${ipfsCid}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-[10px] text-primary/60 hover:text-primary transition-colors"
+                                    >
+                                        <ExternalLink className="size-3" />
+                                    </a>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

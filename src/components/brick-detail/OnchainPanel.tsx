@@ -412,6 +412,7 @@ export function OnchainPanel({ brick, isOwner = false }: OnchainPanelProps) {
                     isMinting={isConfirmingMint || isWaitingMint}
                     onMint={handleMint}
                     ipfsCid={localMeta?.ipfsCid || null}
+                    imageCid={localMeta?.imageCid || null}
                     onChainTx={localMeta?.onChainTx || null}
                     isMintTxConfirmed={isMintTxConfirmed}
                 />

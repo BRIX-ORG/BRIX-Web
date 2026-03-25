@@ -1097,6 +1097,8 @@
             "assetVerified": "IPFS Asset Verified",
             "explorer": "Explorer",
             "cid": "CID: {cid}",
+            "imageCid": "Image: {cid}",
+            "metaCid": "Metadata: {cid}",
             "description": "Step 2: Mint your brick on Polygon Amoy to make it official and enable support.",
             "button": "Mint on Polygon",
             "minting": "Minting...",
