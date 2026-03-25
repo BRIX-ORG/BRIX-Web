@@ -1,0 +1,6 @@
+---
+# Orchestration playbook to setup everything
+- import_playbook: check_docker.yml
+- import_playbook: install_docker.yml
+- import_playbook: deploy_portainer.yml
+- import_playbook: deploy_web_client.yml

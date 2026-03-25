@@ -1,0 +1,32 @@
+---
+- name: Check Docker Status
+  hosts: all
+  become: yes
+
+  tasks:
+      - name: Check if Docker is installed
+        command: docker --version
+        register: docker_version
+        ignore_errors: yes
+
+      - name: Show Docker version
+        debug:
+            var: docker_version.stdout
+        when: docker_version.rc == 0
+
+      - name: Check Docker service status
+        systemd:
+            name: docker
+        register: docker_service
+        ignore_errors: yes
+
+      - name: Show Docker service status
+        debug:
+            var: docker_service.status.ActiveState | default('not found')
+
+      - name: Start Docker service if not running
+        systemd:
+            name: docker
+            state: started
+            enabled: yes
+        when: docker_version.rc == 0

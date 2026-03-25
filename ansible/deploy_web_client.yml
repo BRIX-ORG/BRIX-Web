@@ -1,0 +1,51 @@
+---
+- name: Deploy Web Client
+  hosts: all
+  become: yes
+
+  vars:
+      dockerhub_image: 'jonasaugust12/brix-web'
+      image_tag: 'latest'
+      container_name: 'brix-web'
+      container_port: 3000
+      host_port: 3000
+
+  tasks:
+      - name: Stop existing web client container
+        docker_container:
+            name: '{{ container_name }}'
+            state: absent
+        ignore_errors: yes
+
+      - name: Pull web client image from Docker Hub
+        docker_image:
+            name: '{{ dockerhub_image }}:{{ image_tag }}'
+            source: pull
+            force_source: yes
+
+      - name: Deploy web client container
+        docker_container:
+            name: '{{ container_name }}'
+            image: '{{ dockerhub_image }}:{{ image_tag }}'
+            state: started
+            restart_policy: always
+            published_ports:
+                - '{{ host_port }}:{{ container_port }}'
+            env:
+                # These can be passed via --extra-vars or a variable file
+                NEXTAUTH_SECRET: "{{ nextauth_secret | default('') }}"
+                NEXTAUTH_URL: "{{ nextauth_url | default('') }}"
+                NEXT_PUBLIC_BACKEND_URL: "{{ next_public_backend_url | default('') }}"
+            labels:
+                com.centurylinklabs.watchtower.enable: 'true'
+
+      - name: Wait for web client to be healthy
+        wait_for:
+            port: '{{ host_port }}'
+            host: 0.0.0.0
+            delay: 10
+            timeout: 120
+
+      - name: Show deployment status
+        debug:
+            msg: 'Web Client is running at http://{{ ansible_host }}:{{ host_port }}'

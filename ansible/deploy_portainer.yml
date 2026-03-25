@@ -1,0 +1,36 @@
+---
+- name: Deploy Portainer
+  hosts: all
+  become: yes
+
+  vars:
+      portainer_image: 'portainer/portainer-ce:latest'
+      portainer_container: 'portainer'
+
+  tasks:
+      - name: Create Portainer volume
+        docker_volume:
+            name: portainer_data
+
+      - name: Stop existing Portainer container
+        docker_container:
+            name: '{{ portainer_container }}'
+            state: absent
+        ignore_errors: yes
+
+      - name: Deploy Portainer container
+        docker_container:
+            name: '{{ portainer_container }}'
+            image: '{{ portainer_image }}'
+            state: started
+            restart_policy: always
+            published_ports:
+                - '9443:9443'
+                - '9000:9000'
+            volumes:
+                - /var/run/docker.sock:/var/run/docker.sock
+                - portainer_data:/data
+
+      - name: Show Portainer dashboard URL
+        debug:
+            msg: 'Portainer is running at https://{{ ansible_host }}:9443'
