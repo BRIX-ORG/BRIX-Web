@@ -26,6 +26,15 @@
             - /opt/brix
             - /opt/nginx
 
+      - name: CLEANUP | Remove old standalone containers (only if not part of this Compose project)
+        shell: |
+            # Only remove containers with these names if they lack the 'brix' compose project label
+            docker ps -a --filter "name=brix-web" --filter "label!=com.docker.compose.project=brix" -q | xargs -r docker rm -f
+            docker ps -a --filter "name=portainer" --filter "label!=com.docker.compose.project=brix" -q | xargs -r docker rm -f
+            docker ps -a --filter "name=brix-nginx" --filter "label!=com.docker.compose.project=brix" -q | xargs -r docker rm -f
+        failed_when: false
+        changed_when: false
+
       - name: Generate Nginx configuration
         template:
             src: templates/nginx.conf.j2
