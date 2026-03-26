@@ -28,16 +28,19 @@
 
       - name: CLEANUP | Remove old standalone containers (only if not part of this Compose project)
         shell: |
+            {% raw %}
             for name in brix-web portainer brix-nginx; do
-              if docker ps -a --format '{\{.Names}}' | grep -Eq "^${name}$"; then
-                PROJECT=$(docker inspect -f '{\{index .Config.Labels "com.docker.compose.project"}}' $name 2>/dev/null || echo "")
+              if docker ps -a --format '{{.Names}}' | grep -Eq "^/?${name}$"; then
+                PROJECT=$(docker inspect -f '{{index .Config.Labels "com.docker.compose.project"}}' $name 2>/dev/null || echo "")
                 if [ "$PROJECT" != "brix" ]; then
-                  docker rm -f $name
+                   echo "Removing old container $name (Project: $PROJECT)"
+                   docker rm -f $name
                 fi
               fi
             done
-        failed_when: false
-        changed_when: false
+            {% endraw %}
+        register: cleanup_output
+        changed_when: cleanup_output.stdout != ""
 
       - name: Generate Nginx configuration
         template:
