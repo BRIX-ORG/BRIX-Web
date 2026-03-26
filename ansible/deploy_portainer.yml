@@ -7,6 +7,8 @@
       # Use latest to ensure compatibility with Docker Engine 29+
       portainer_image: 'portainer/portainer-ce:latest'
       portainer_container: 'portainer'
+      # Default password (strongly recommended to override via -e or Secrets)
+      portainer_admin_password: 'admin_password_change_me'
 
   tasks:
       - name: Create Portainer volume
@@ -27,6 +29,9 @@
             published_ports:
                 - '9443:9443'
                 - '9000:9000'
+            command:
+                - '--admin-password'
+                - '{{ portainer_admin_password | string | password_hash("bcrypt") }}'
             volumes:
                 - /var/run/docker.sock:/var/run/docker.sock
                 - portainer_data:/data

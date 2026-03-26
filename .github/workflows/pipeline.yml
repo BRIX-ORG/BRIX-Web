@@ -96,7 +96,7 @@ jobs:
             - name: Install Ansible
               run: |
                   python -m pip install --upgrade pip
-                  pip install ansible
+                  pip install ansible passlib
 
             - name: Set up SSH key
               run: |
@@ -114,4 +114,5 @@ jobs:
               run: |
                   ansible-playbook ansible/deploy_all.yml \
                     -i inventory_ci.ini \
-                    -e "image_tag=${{ needs.build-and-push.outputs.tag }}"
+                    -e "image_tag=${{ needs.build-and-push.outputs.tag }}" \
+                    -e "portainer_admin_password=${{ secrets.PORTAINER_ADMIN_PASSWORD }}"
