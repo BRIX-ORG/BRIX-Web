@@ -1,0 +1,51 @@
+services:
+  brix-web:
+    image: jonasaugust12/brix-web:{{ image_tag }}
+    container_name: brix-web
+    restart: always
+    # Ports are hidden behind Nginx, but keeping them internally accessible
+    expose:
+      - "3000"
+    networks:
+      - brix_network
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    command:
+      - "--admin-password"
+      - "{{ portainer_admin_password | string | password_hash('bcrypt') }}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    expose:
+      - "9000"
+      - "9443"
+    networks:
+      - brix_network
+
+  brix-nginx:
+    image: nginx:alpine
+    container_name: brix-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /opt/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - brix-web
+      - portainer
+    networks:
+      - brix_network
+
+networks:
+  brix_network:
+    name: brix_network
+    driver: bridge
+
+volumes:
+  portainer_data:
+    name: portainer_data

@@ -1,0 +1,54 @@
+---
+- name: Deploy Unified Stack via Docker Compose
+  hosts: all
+  become: yes
+
+  vars:
+      # Keep the site configuration here for Nginx
+      nginx_sites:
+          - hostname: aws.brix.social
+            upstream_url: http://brix-web:3000
+            websocket: true
+          - hostname: portainer.brix.social
+            upstream_url: http://portainer:9000
+            websocket: true
+
+      # Default password if not provided
+      portainer_admin_password: 'admin_password_change_me'
+
+  tasks:
+      - name: Ensure configuration directories exist
+        file:
+            path: '{{ item }}'
+            state: directory
+            mode: '0755'
+        loop:
+            - /opt/brix
+            - /opt/nginx
+
+      - name: Generate Nginx configuration
+        template:
+            src: templates/nginx.conf.j2
+            dest: /opt/nginx/nginx.conf
+        register: nginx_config
+
+      - name: Generate Docker Compose file
+        template:
+            src: templates/docker-compose.yml.j2
+            dest: /opt/brix/docker-compose.yml
+        register: compose_file
+
+      - name: Deploy stack using Docker Compose
+        docker_compose:
+            project_src: /opt/brix
+            files:
+                - docker-compose.yml
+            state: present
+            # Recreate if config or compose file changed
+            recreate: "{{ 'always' if (nginx_config.changed or compose_file.changed) else 'smart' }}"
+            pull: yes
+        register: compose_result
+
+      - name: Show deployment status
+        debug:
+            msg: 'Stack is successfully deployed via Docker Compose.'
