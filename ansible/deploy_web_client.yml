@@ -23,6 +23,8 @@
             image: '{{ dockerhub_image }}:{{ image_tag }}'
             state: started
             restart_policy: always
+            # Recreate container when the tag (commit hash) changes
+            image_name_mismatch: recreate
             published_ports:
                 - '{{ host_port }}:{{ container_port }}'
             labels:

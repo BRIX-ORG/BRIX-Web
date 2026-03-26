@@ -4,8 +4,8 @@
   become: yes
 
   vars:
-      # Pinning version for production reproducibility
-      portainer_image: 'portainer/portainer-ce:2.19.4'
+      # Use latest to ensure compatibility with Docker Engine 29+
+      portainer_image: 'portainer/portainer-ce:latest'
       portainer_container: 'portainer'
 
   tasks:
@@ -22,6 +22,8 @@
             # Ensure we always have the latest pinned version and config updates
             pull: yes
             recreate: yes
+            # Silence deprecation warning for tag mismatches
+            image_name_mismatch: recreate
             published_ports:
                 - '9443:9443'
                 - '9000:9000'
