@@ -104,7 +104,7 @@ jobs:
             - name: Create temporary inventory
               run: |
                   echo "[webserver]" > inventory_ci.ini
-                  echo "${{ secrets.REMOTE_HOST }} ansible_user=${{ secrets.REMOTE_USER }} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python3" >> inventory_ci.ini
+                  echo "${{ secrets.REMOTE_HOST }} ansible_user=${{ secrets.REMOTE_USER }} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python3 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=10'" >> inventory_ci.ini
 
             - name: Deploy via Ansible
               run: |
