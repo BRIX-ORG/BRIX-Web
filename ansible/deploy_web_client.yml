@@ -27,6 +27,8 @@
             image_name_mismatch: recreate
             published_ports:
                 - '{{ host_port }}:{{ container_port }}'
+            networks:
+                - name: brix_network
             labels:
                 com.centurylinklabs.watchtower.enable: 'true'
 

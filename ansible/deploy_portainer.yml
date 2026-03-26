@@ -29,6 +29,8 @@
             published_ports:
                 - '9443:9443'
                 - '9000:9000'
+            networks:
+                - name: brix_network
             command:
                 - '--admin-password'
                 - '{{ portainer_admin_password | string | password_hash("bcrypt") }}'

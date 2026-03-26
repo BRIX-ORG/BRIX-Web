@@ -1,0 +1,9 @@
+---
+- name: Create Docker Network
+  hosts: all
+  become: yes
+  tasks:
+      - name: Create brix_network
+        docker_network:
+            name: brix_network
+            state: present

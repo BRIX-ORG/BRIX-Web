@@ -1,0 +1,41 @@
+---
+- name: Deploy Nginx Reverse Proxy
+  hosts: all
+  become: yes
+
+  vars:
+      nginx_sites:
+          - hostname: aws.brix.social
+            upstream_url: http://brix-web:3000
+            websocket: true
+          - hostname: portainer.brix.social
+            upstream_url: http://portainer:9000
+            websocket: true
+
+  tasks:
+      - name: Ensure nginx config directory exists
+        file:
+            path: /opt/nginx
+            state: directory
+            mode: '0755'
+
+      - name: Generate Nginx configuration
+        template:
+            src: templates/nginx.conf.j2
+            dest: /opt/nginx/nginx.conf
+        register: nginx_config
+
+      - name: Deploy Nginx container
+        docker_container:
+            name: brix-nginx
+            image: nginx:alpine
+            state: started
+            restart_policy: always
+            # Force recreate if config changed
+            recreate: '{{ nginx_config.changed }}'
+            published_ports:
+                - '80:80'
+            networks:
+                - name: brix_network
+            volumes:
+                - /opt/nginx/nginx.conf:/etc/nginx/nginx.conf:ro

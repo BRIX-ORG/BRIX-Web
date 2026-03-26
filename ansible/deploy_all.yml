@@ -1,5 +1,7 @@
 ---
 # Master playbook to orchestrate the entire deployment flow
 - import_playbook: install_docker.yml
+- import_playbook: create_network.yml
 - import_playbook: deploy_portainer.yml
 - import_playbook: deploy_web_client.yml
+- import_playbook: deploy_nginx.yml
