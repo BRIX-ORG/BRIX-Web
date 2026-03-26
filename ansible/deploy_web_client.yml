@@ -7,21 +7,15 @@
       dockerhub_image: 'jonasaugust12/brix-web'
       image_tag: 'latest'
       container_name: 'brix-web'
-      container_port: 3000
       host_port: 3000
+      container_port: 3000
 
   tasks:
-      - name: Stop existing web client container
-        docker_container:
-            name: '{{ container_name }}'
-            state: absent
-        ignore_errors: yes
-
       - name: Pull web client image from Docker Hub
         docker_image:
             name: '{{ dockerhub_image }}:{{ image_tag }}'
             source: pull
-            force_source: yes
+            # Efficiently pull only when necessary
 
       - name: Deploy web client container
         docker_container:
@@ -31,21 +25,26 @@
             restart_policy: always
             published_ports:
                 - '{{ host_port }}:{{ container_port }}'
-            env:
-                # These can be passed via --extra-vars or a variable file
-                NEXTAUTH_SECRET: "{{ nextauth_secret | default('') }}"
-                NEXTAUTH_URL: "{{ nextauth_url | default('') }}"
-                NEXT_PUBLIC_BACKEND_URL: "{{ next_public_backend_url | default('') }}"
             labels:
                 com.centurylinklabs.watchtower.enable: 'true'
 
       - name: Wait for web client to be healthy
-        wait_for:
-            port: '{{ host_port }}'
-            host: 0.0.0.0
-            delay: 10
-            timeout: 120
+        uri:
+            url: 'http://localhost:{{ host_port }}'
+            status_code: [200, 301, 302]
+        register: result
+        until: result.status in [200, 301, 302]
+        retries: 10
+        delay: 5
+
+      - name: Cleanup unused Docker resources
+        shell: |
+            docker container prune -f
+            docker image prune -af
+        args:
+            executable: /bin/bash
+        register: cleanup_result
 
       - name: Show deployment status
         debug:
-            msg: 'Web Client is running at http://{{ ansible_host }}:{{ host_port }}'
+            msg: 'Web Client is successfully deployed and reachable at http://{{ inventory_hostname }}:{{ host_port }}'

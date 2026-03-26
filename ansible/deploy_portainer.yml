@@ -4,7 +4,8 @@
   become: yes
 
   vars:
-      portainer_image: 'portainer/portainer-ce:latest'
+      # Pinning version for production reproducibility
+      portainer_image: 'portainer/portainer-ce:2.19.4'
       portainer_container: 'portainer'
 
   tasks:
@@ -12,18 +13,15 @@
         docker_volume:
             name: portainer_data
 
-      - name: Stop existing Portainer container
-        docker_container:
-            name: '{{ portainer_container }}'
-            state: absent
-        ignore_errors: yes
-
       - name: Deploy Portainer container
         docker_container:
             name: '{{ portainer_container }}'
             image: '{{ portainer_image }}'
             state: started
             restart_policy: always
+            # Ensure we always have the latest pinned version and config updates
+            pull: yes
+            recreate: yes
             published_ports:
                 - '9443:9443'
                 - '9000:9000'
@@ -33,4 +31,4 @@
 
       - name: Show Portainer dashboard URL
         debug:
-            msg: 'Portainer is running at https://{{ ansible_host }}:9443'
+            msg: 'Portainer is running at https://{{ inventory_hostname }}:9443'

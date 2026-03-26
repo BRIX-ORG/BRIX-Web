@@ -1,0 +1,3 @@
+---
+# Playbook for CI/CD to deploy only the web application
+- import_playbook: deploy_web_client.yml
