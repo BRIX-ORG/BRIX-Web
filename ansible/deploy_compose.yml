@@ -39,14 +39,12 @@
         register: compose_file
 
       - name: Deploy stack using Docker Compose
-        docker_compose:
+        community.docker.docker_compose_v2:
             project_src: /opt/brix
-            files:
-                - docker-compose.yml
             state: present
             # Recreate if config or compose file changed
-            recreate: "{{ 'always' if (nginx_config.changed or compose_file.changed) else 'smart' }}"
-            pull: yes
+            recreate: "{{ 'always' if (nginx_config.changed or compose_file.changed) else 'auto' }}"
+            pull: always
         register: compose_result
 
       - name: Show deployment status

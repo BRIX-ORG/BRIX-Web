@@ -78,6 +78,7 @@
                 - containerd.io
                 - docker-buildx-plugin
                 - docker-compose-plugin
+                - python3-docker
             state: present
             update_cache: yes
         when: docker_binary_check.rc != 0
@@ -91,6 +92,12 @@
             name: docker
             state: started
             enabled: yes
+
+      - name: CONFIG | Ensure Python Docker SDK is installed
+        apt:
+            name: python3-docker
+            state: present
+            update_cache: yes
 
       - name: CONFIG | Ensure docker group exists
         group:
