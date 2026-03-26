@@ -1,4 +1,4 @@
-name: Initial Server Setup
+name: initial-server-setup
 
 on:
     workflow_dispatch:
@@ -37,7 +37,7 @@ jobs:
               run: |
                   # Create temporary inventory
                   echo "[webserver]" > inventory_temp.ini
-                  echo "${{ github.event.inputs.server_ip }} ansible_user=${{ github.event.inputs.ansible_user }} ansible_ssh_private_key_file=~/.ssh/id_rsa" >> inventory_temp.ini
+                  echo "${{ github.event.inputs.server_ip }} ansible_user=${{ github.event.inputs.ansible_user }} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python3" >> inventory_temp.ini
 
                   # Run the dependency installation playbook
                   ansible-playbook -i inventory_temp.ini ansible/install_deps.yml

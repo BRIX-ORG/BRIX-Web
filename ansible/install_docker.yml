@@ -39,15 +39,15 @@
         when: docker_binary_check.rc != 0
 
       - name: INSTALL | Add Docker official GPG key
-        get_url:
-            url: https://download.docker.com/linux/ubuntu/gpg
-            dest: /usr/share/keyrings/docker.gpg
-            mode: '0644'
+        shell: |
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker.gpg
+        args:
+            creates: /usr/share/keyrings/docker.gpg
         when: docker_binary_check.rc != 0
 
       - name: INSTALL | Add Docker repository
         apt_repository:
-            repo: 'deb [arch=amd64 signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+            repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/usr/share/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_facts['distribution_release'] }} stable"
             state: present
             filename: docker
         when: docker_binary_check.rc != 0
