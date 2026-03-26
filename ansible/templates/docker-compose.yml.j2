@@ -17,7 +17,7 @@ services:
     restart: always
     command:
       - "--admin-password"
-      - "{{ portainer_admin_password | string | password_hash('bcrypt') }}"
+      - "{{ portainer_admin_password | string | password_hash('bcrypt') | replace('$', '$$') }}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
@@ -43,8 +43,7 @@ services:
 
 networks:
   brix_network:
-    name: brix_network
-    driver: bridge
+    external: true
 
 volumes:
   portainer_data:
