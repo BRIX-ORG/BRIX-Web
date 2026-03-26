@@ -53,7 +53,7 @@
 
     body {
         font-family: var(--font-body);
-        background-color: var(--color-brix-bg-dark);
+        background-color: var(--color-brix-bg-dark); /* fallback */
         margin: 0;
         padding: 0;
         min-height: 100vh;
