@@ -38,11 +38,11 @@
             mode: '0755'
         when: docker_binary_check.rc != 0
 
-      - name: INSTALL | Add Docker official GPG key
+      - name: INSTALL | Add Docker official GPG key (Force refresh dearmored)
         shell: |
             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker.gpg
         args:
-            creates: /usr/share/keyrings/docker.gpg
+            executable: /bin/bash
         when: docker_binary_check.rc != 0
 
       - name: INSTALL | Add Docker repository
