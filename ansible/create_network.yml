@@ -7,3 +7,8 @@
         docker_network:
             name: '{{ docker_network }}'
             state: present
+
+      - name: Create portainer_data volume
+        docker_volume:
+            name: portainer_data
+            state: present
