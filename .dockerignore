@@ -30,6 +30,21 @@ Thumbs.db
 coverage
 .nyc_output
 
+# Infrastructure (IaC)
+terraform/
+ansible/
+scripts/
+.terraform
+*.tfstate*
+*.tfvars*
+*.pem
+
+# GitHub
+.github/
+.husky/
+.agent/
+.claude/
+
 # Misc
 *.md
 !README.md
