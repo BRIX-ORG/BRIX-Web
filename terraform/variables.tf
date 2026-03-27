@@ -21,5 +21,5 @@ variable "security_group_ids" {
 
 variable "key_name" {
   description = "The name of the AWS Key Pair to use for SSH access"
-  default     = "brix" # Your actual key name in AWS
+  default     = "BRIX" # Your actual key name in AWS
 }
