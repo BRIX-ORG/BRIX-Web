@@ -140,12 +140,15 @@ jobs:
                   pip install ansible passlib
 
             - name: Check if EC2 Instance is running
+              id: check_instance
               run: |
-                  STATE=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=webnode" --query "Reservations[*].Instances[*].State.Name" --output text)
-                  echo "Current instance state: $STATE"
-                  if [ "$STATE" != "running" ]; then
-                    echo "::error::EC2 instance 'webnode' is not running ($STATE). Please run 'Infrastructure - Create or Start' action first."
-                    exit 1
+                  STATE=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=brix-web-server" --query "Reservations[*].Instances[*].State.Name" --output text)
+                  echo "Current instance state: '$STATE'"
+                  if [ "$STATE" == "running" ]; then
+                    echo "should_deploy=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "::warning::EC2 instance 'brix-web-server' is not running ($STATE). Skipping deployment."
+                    echo "should_deploy=false" >> $GITHUB_OUTPUT
                   fi
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -153,6 +156,7 @@ jobs:
                   AWS_DEFAULT_REGION: us-east-1
 
             - name: Set up SSH key
+              if: steps.check_instance.outputs.should_deploy == 'true'
               run: |
                   mkdir -p ~/.ssh
                   echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
@@ -160,11 +164,13 @@ jobs:
                   ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
 
             - name: Create temporary inventory
+              if: steps.check_instance.outputs.should_deploy == 'true'
               run: |
                   echo "[${{ needs.build-and-push.outputs.env_name }}]" > inventory_ci.ini
                   echo "${{ secrets.REMOTE_HOST }} ansible_user=${{ secrets.REMOTE_USER }} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python3 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=10'" >> inventory_ci.ini
 
             - name: Deploy via Ansible
+              if: steps.check_instance.outputs.should_deploy == 'true'
               run: |
                   ansible-playbook ansible/deploy_all.yml \
                     -i inventory_ci.ini \
