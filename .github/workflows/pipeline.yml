@@ -4,6 +4,19 @@ on:
     push:
         branches: [main, dev]
     workflow_dispatch:
+        inputs:
+            environment:
+                description: 'Deployment Environment'
+                required: true
+                default: 'dev'
+                type: choice
+                options:
+                    - dev
+                    - prod
+            image_tag:
+                description: 'Docker Image Tag (optional, e.g. prod-9045a20). If empty, builds from the current branch.'
+                required: false
+                type: string
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,6 +29,7 @@ jobs:
             push_needed: ${{ steps.filter.outputs.push_needed }}
             tag: ${{ steps.vars.outputs.tag }}
             env_name: ${{ steps.vars.outputs.env_name }}
+            build_needed: ${{ steps.vars.outputs.build_needed }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -41,7 +55,7 @@ jobs:
               uses: docker/setup-buildx-action@v3
 
             - name: Log in to Docker Hub
-              if: steps.filter.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch'
+              if: (steps.filter.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch') && steps.vars.outputs.build_needed == 'true'
               uses: docker/login-action@v3
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -51,20 +65,37 @@ jobs:
               id: vars
               run: |
                   SHORT_SHA=$(git rev-parse --short HEAD)
-                  if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-                    echo "tag=prod-${SHORT_SHA}" >> $GITHUB_OUTPUT
-                    echo "env_name=prod" >> $GITHUB_OUTPUT
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                    # Manual trigger logic
+                    ENV_NAME="${{ github.event.inputs.environment }}"
+                    echo "env_name=${ENV_NAME}" >> $GITHUB_OUTPUT
+
+                    if [[ -n "${{ github.event.inputs.image_tag }}" ]]; then
+                      echo "tag=${{ github.event.inputs.image_tag }}" >> $GITHUB_OUTPUT
+                      echo "build_needed=false" >> $GITHUB_OUTPUT
+                    else
+                      echo "tag=${ENV_NAME}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+                      echo "build_needed=true" >> $GITHUB_OUTPUT
+                    fi
                   else
-                    echo "tag=dev-${SHORT_SHA}" >> $GITHUB_OUTPUT
-                    echo "env_name=dev" >> $GITHUB_OUTPUT
+                    # Push (Automatic) logic
+                    if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+                      echo "tag=prod-${SHORT_SHA}" >> $GITHUB_OUTPUT
+                      echo "env_name=prod" >> $GITHUB_OUTPUT
+                    else
+                      echo "tag=dev-${SHORT_SHA}" >> $GITHUB_OUTPUT
+                      echo "env_name=dev" >> $GITHUB_OUTPUT
+                    fi
+                    echo "build_needed=true" >> $GITHUB_OUTPUT
                   fi
 
             - name: Build and push
+              if: steps.vars.outputs.build_needed == 'true' && (steps.filter.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch')
               uses: docker/build-push-action@v5
               with:
                   context: .
                   file: ./Dockerfile
-                  push: ${{ steps.filter.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch' }}
+                  push: true
                   tags: |
                       ${{ secrets.DOCKERHUB_USERNAME }}/brix-web:${{ steps.vars.outputs.tag }}
                       ${{ secrets.DOCKERHUB_USERNAME }}/brix-web:${{ steps.vars.outputs.env_name }}-latest
@@ -92,7 +123,7 @@ jobs:
 
     deploy:
         needs: build-and-push
-        if: (needs.build-and-push.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch')
+        if: (needs.build-and-push.outputs.build_needed == 'true' && needs.build-and-push.outputs.push_needed == 'true') || (github.event_name == 'workflow_dispatch')
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -107,6 +138,19 @@ jobs:
               run: |
                   python -m pip install --upgrade pip
                   pip install ansible passlib
+
+            - name: Check if EC2 Instance is running
+              run: |
+                  STATE=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=webnode" --query "Reservations[*].Instances[*].State.Name" --output text)
+                  echo "Current instance state: $STATE"
+                  if [ "$STATE" != "running" ]; then
+                    echo "::error::EC2 instance 'webnode' is not running ($STATE). Please run 'Infrastructure - Create or Start' action first."
+                    exit 1
+                  fi
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  AWS_DEFAULT_REGION: us-east-1
 
             - name: Set up SSH key
               run: |
