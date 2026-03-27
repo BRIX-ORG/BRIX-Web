@@ -10,6 +10,21 @@
             state: directory
             mode: '0755'
 
+      - name: Get current running image reference
+        shell: "docker inspect --format='{{ '{{' }} .Config.Image {{ '}}' }}' {{ app_container }}"
+        register: current_image_cmd
+        failed_when: false
+        changed_when: false
+
+      - name: Set deployment facts
+        set_fact:
+            previous_image: "{{ current_image_cmd.stdout if current_image_cmd.rc == 0 and current_image_cmd.stdout != '' else '' }}"
+            new_image: '{{ dockerhub_image }}:{{ image_tag }}'
+
+      - name: Determine if rollback is possible
+        set_fact:
+            can_rollback: "{{ previous_image != '' and previous_image != new_image }}"
+
       - name: Generate App Docker Compose file
         template:
             src: templates/docker-compose-app.yml.j2
@@ -22,3 +37,60 @@
             state: present
             pull: always
             recreate: "{{ 'always' if app_compose.changed else 'auto' }}"
+
+      - name: Wait for container to be healthy
+        community.docker.docker_container_info:
+            name: '{{ app_container }}'
+        register: container_info
+        until:
+            - container_info.container is defined
+            - container_info.container.State.Health is defined
+            - container_info.container.State.Health.Status == "healthy"
+        retries: 15
+        delay: 10
+        ignore_errors: yes
+
+      - name: Handle deployment failure and rollback
+        when:
+            - container_info.container is not defined or
+              container_info.container.State.Health is not defined or
+              container_info.container.State.Health.Status != "healthy"
+        block:
+            - name: Fail if no stable version exists for rollback
+              fail:
+                  msg: 'Deployment failed healthcheck and no previous stable version found to rollback to.'
+              when: not can_rollback
+
+            - name: Log rollback action
+              debug:
+                  msg: 'Healthcheck failed! Rolling back to known stable image: {{ previous_image }}'
+
+            - name: Update Compose with rollback image
+              template:
+                  src: templates/docker-compose-app.yml.j2
+                  dest: '/opt/brix/{{ env_name }}/docker-compose.yml'
+              vars:
+                  custom_image: '{{ previous_image }}'
+
+            - name: Deploy Rollback Stack
+              community.docker.docker_compose_v2:
+                  project_src: '/opt/brix/{{ env_name }}'
+                  state: present
+                  recreate: always
+              vars:
+                  custom_image: '{{ previous_image }}'
+
+            - name: Verify health after rollback
+              community.docker.docker_container_info:
+                  name: '{{ app_container }}'
+              register: rollback_info
+              until:
+                  - rollback_info.container is defined
+                  - rollback_info.container.State.Health is defined
+                  - rollback_info.container.State.Health.Status == "healthy"
+              retries: 10
+              delay: 10
+
+            - name: Finalize failure report
+              fail:
+                  msg: 'Deployment failed healthcheck. Automatically rolled back and verified previous version: {{ previous_image }}.'

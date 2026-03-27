@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, type ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http, createConfig, WagmiProvider } from 'wagmi';
 import type { Chain } from 'wagmi/chains';
 import { mainnet, polygon, arbitrum, optimism, sepolia } from 'wagmi/chains';
@@ -99,37 +98,24 @@ export function Web3Provider({ children }: Web3ProviderProps) {
         setMounted(true);
     }, []);
 
-    const [queryClient] = useState(
-        () =>
-            new QueryClient({
-                defaultOptions: {
-                    queries: {
-                        staleTime: 10 * 1000,
-                    },
-                },
-            }),
-    );
-
     if (!mounted || !config) {
         return <>{children}</>;
     }
 
     return (
         <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-                <RainbowKitProvider
-                    theme={darkTheme({
-                        accentColor: '#00eeff',
-                        accentColorForeground: 'black',
-                        borderRadius: 'medium',
-                        fontStack: 'system',
-                        overlayBlur: 'small',
-                    })}
-                    coolMode
-                >
-                    {children}
-                </RainbowKitProvider>
-            </QueryClientProvider>
+            <RainbowKitProvider
+                theme={darkTheme({
+                    accentColor: '#00eeff',
+                    accentColorForeground: 'black',
+                    borderRadius: 'medium',
+                    fontStack: 'system',
+                    overlayBlur: 'small',
+                })}
+                coolMode
+            >
+                {children}
+            </RainbowKitProvider>
         </WagmiProvider>
     );
 }
