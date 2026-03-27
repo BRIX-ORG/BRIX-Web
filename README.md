@@ -9,12 +9,13 @@ This repository contains the Next.js web client, deployment automation, and infr
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-0F172A?style=for-the-badge&logo=tailwindcss&logoColor=38BDF8)
+![Algolia](https://img.shields.io/badge/Algolia-003DFF?style=for-the-badge&logo=algolia&logoColor=white)
 ![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![Zustand](https://img.shields.io/badge/Zustand-4B2E1F?style=for-the-badge&logoColor=white)
 ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
 ![Polygon](https://img.shields.io/badge/Polygon-1A102B?style=for-the-badge&logo=polygon&logoColor=8247E5)
 ![Docker](https://img.shields.io/badge/Docker-0B1F3A?style=for-the-badge&logo=docker&logoColor=2496ED)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-0F172A?style=for-the-badge&logo=githubactions&logoColor=2088FF)
 ![Terraform](https://img.shields.io/badge/Terraform-1F1F3A?style=for-the-badge&logo=terraform&logoColor=844FBA)
 ![Ansible](https://img.shields.io/badge/Ansible-111111?style=for-the-badge&logo=ansible&logoColor=white)
@@ -85,7 +86,6 @@ References:
 - Next.js 16 with App Router
 - React 19
 - TypeScript
-- Tailwind CSS 4
 - Motion, GSAP, OGL, Three.js, React Three Fiber, Drei
 
 ### State and Data
