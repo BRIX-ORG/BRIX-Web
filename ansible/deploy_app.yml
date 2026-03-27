@@ -46,8 +46,8 @@
             - container_info.container is defined
             - container_info.container.State.Health is defined
             - container_info.container.State.Health.Status == "healthy"
-        retries: 15
-        delay: 10
+        retries: 20
+        delay: 15
         ignore_errors: yes
 
       - name: Handle deployment failure and rollback

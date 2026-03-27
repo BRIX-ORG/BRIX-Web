@@ -1027,6 +1027,26 @@
         "title": "Bình luận ({count})",
         "noComments": "Chưa có bình luận nào. Hãy là người đầu tiên!",
         "placeholder": "Viết bình luận...",
+        "edited": "đã chỉnh sửa",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "save": "Lưu thay đổi",
+        "cancel": "Hủy",
+        "reply": "Trả lời",
+        "replyCount": "{count} phản hồi",
+        "replyTo": "Trả lời @{name}",
+        "confirmDelete": {
+            "title": "Xóa bình luận",
+            "message": "Bạn có chắc chắn muốn xóa bình luận này không? Hành động này không thể hoàn tác.",
+            "confirm": "Xóa",
+            "cancel": "Hủy"
+        },
+        "confirmEdit": {
+            "title": "Chỉnh sửa bình luận",
+            "message": "Bạn có chắc chắn muốn lưu các thay đổi này không?",
+            "confirm": "Lưu",
+            "cancel": "Hủy"
+        },
         "input": {
             "placeholder": "Viết bình luận...",
             "replyPlaceholder": "Trả lời @{username}...",
