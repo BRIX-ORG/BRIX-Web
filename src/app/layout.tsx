@@ -83,8 +83,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" className="dark" suppressHydrationWarning>
             <body className={`${fontsVariables.join(' ')} antialiased`} suppressHydrationWarning>
                 <I18nProvider>
-                    <Web3Provider>
-                        <QueryProvider>
+                    <QueryProvider>
+                        <Web3Provider>
                             <ApiClientProvider>
                                 <ChatSocketProvider>
                                     <NotificationSocketProvider>
@@ -95,8 +95,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     </NotificationSocketProvider>
                                 </ChatSocketProvider>
                             </ApiClientProvider>
-                        </QueryProvider>
-                    </Web3Provider>
+                        </Web3Provider>
+                    </QueryProvider>
                 </I18nProvider>
                 <ToastContainer
                     position="top-right"
