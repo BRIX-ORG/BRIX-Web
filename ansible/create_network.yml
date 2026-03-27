@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   tasks:
-      - name: Create brix_network
+      - name: Create {{ docker_network }}
         docker_network:
-            name: brix_network
+            name: '{{ docker_network }}'
             state: present

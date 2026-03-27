@@ -1,0 +1,16 @@
+---
+docker_network: brix_network
+dockerhub_image: jonasaugust12/brix-web
+portainer_container: portainer
+nginx_container: brix-nginx
+
+nginx_sites:
+    - hostname: aws.brix.social
+      upstream_url: http://brix-web-prod:3000
+      websocket: true
+    - hostname: dev.brix.social
+      upstream_url: http://brix-web-dev:3000
+      websocket: true
+    - hostname: portainer.brix.social
+      upstream_url: http://portainer:9000
+      websocket: true

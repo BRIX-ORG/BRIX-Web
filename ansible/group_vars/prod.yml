@@ -1,0 +1,5 @@
+---
+env_name: prod
+app_host_port: 3000
+app_vhost: aws.brix.social
+app_container: brix-web-prod

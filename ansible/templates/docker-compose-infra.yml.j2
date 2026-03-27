@@ -1,0 +1,35 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: {{ portainer_container }}
+    restart: always
+    command:
+      - "--admin-password"
+      - "{{ portainer_admin_password | string | password_hash('bcrypt') | replace('$', '$$') }}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    expose:
+      - "9000"
+      - "9443"
+    networks:
+      - {{ docker_network }}
+
+  brix-nginx:
+    image: nginx:alpine
+    container_name: {{ nginx_container }}
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - /opt/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - {{ docker_network }}
+
+networks:
+  {{ docker_network }}:
+    external: true
+
+volumes:
+  portainer_data:
+    external: true

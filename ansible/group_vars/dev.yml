@@ -1,0 +1,5 @@
+---
+env_name: dev
+app_host_port: 3001
+app_vhost: dev.brix.social
+app_container: brix-web-dev

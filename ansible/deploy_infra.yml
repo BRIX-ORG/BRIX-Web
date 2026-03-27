@@ -1,0 +1,32 @@
+---
+- name: Deploy Shared Infrastructure
+  hosts: all
+  become: yes
+
+  tasks:
+      - name: Ensure configuration directories exist
+        file:
+            path: '{{ item }}'
+            state: directory
+            mode: '0755'
+        loop:
+            - /opt/brix/infra
+            - /opt/nginx
+
+      - name: Generate Nginx configuration
+        template:
+            src: templates/nginx.conf.j2
+            dest: /opt/nginx/nginx.conf
+        register: nginx_config
+
+      - name: Generate Infra Docker Compose file
+        template:
+            src: templates/docker-compose-infra.yml.j2
+            dest: /opt/brix/infra/docker-compose.yml
+        register: infra_compose
+
+      - name: Deploy Infrastructure Stack
+        community.docker.docker_compose_v2:
+            project_src: /opt/brix/infra
+            state: present
+            recreate: "{{ 'always' if (nginx_config.changed or infra_compose.changed) else 'auto' }}"

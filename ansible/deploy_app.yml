@@ -1,0 +1,24 @@
+---
+- name: Deploy Environment-Specific App
+  hosts: all
+  become: yes
+
+  tasks:
+      - name: Ensure app directory exists
+        file:
+            path: '/opt/brix/{{ env_name }}'
+            state: directory
+            mode: '0755'
+
+      - name: Generate App Docker Compose file
+        template:
+            src: templates/docker-compose-app.yml.j2
+            dest: '/opt/brix/{{ env_name }}/docker-compose.yml'
+        register: app_compose
+
+      - name: Deploy App Stack
+        community.docker.docker_compose_v2:
+            project_src: '/opt/brix/{{ env_name }}'
+            state: present
+            pull: always
+            recreate: "{{ 'always' if app_compose.changed else 'auto' }}"

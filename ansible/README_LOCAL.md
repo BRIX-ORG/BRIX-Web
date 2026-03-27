@@ -42,11 +42,56 @@ chmod 400 ~/path/to/your-key.pem
 
 ### 3.2 Update Inventory
 
-Edit the file ansible/inventory.ini and replace [IP_ADDRESS] with your actual EC2 public IP and pointing to your local key path:
+The inventory file (`ansible/inventory.ini`) is where you define your servers and their configurations. Below is an overview of key Ansible inventory concepts used in the BRIX project.
+
+| Concept                      | Usage / Example                                                                                       |
+| :--------------------------- | :---------------------------------------------------------------------------------------------------- |
+| **Single Host**              | `[webserver_single]` → Targets a single, unique host for specific tasks.                              |
+| **Group**                    | `[webservers]`, `[dbservers]` → Clusters multiple hosts of the same type (frontend, backend, DB).     |
+| **Group Vars**               | `[webservers:vars]` → Defines common settings (user, SSH key, port) for an entire group.              |
+| **Host Vars**                | `34.224.234.115 ansible_user=ubuntu_custom` → Overrides group-level variables for a specific host.    |
+| **Children / Nested Groups** | `[allservers:children]` → Combines multiple groups to target them all with one command.               |
+| **Extra Group Vars**         | `[allservers:vars]` → Variables (like `env=production`) applied to every host in the children groups. |
+
+#### Example `inventory.ini` for BRIX Project
 
 ```ini
-[webserver]
-your.ec2.ip.here ansible_user=ubuntu ansible_ssh_private_key_file=~/path/to/your-key.pem
+# --- Individual Hosts ---
+[webserver_single]
+34.224.234.114 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/brix.pem
+
+# --- Grouping Infrastructure ---
+[webservers]
+34.224.234.114
+34.224.234.115
+
+[dbservers]
+100.55.40.167
+100.55.40.168
+
+[redisservers]
+172.31.86.236
+
+# --- Group Variables ---
+[webservers:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/brix.pem
+ansible_port=22
+ansible_python_interpreter=/usr/bin/python3
+
+# --- Host-Level Overrides ---
+34.224.234.115 ansible_user=ubuntu_custom ansible_port=2222
+
+# --- Nested Architecture (Children Groups) ---
+[allservers:children]
+webservers
+dbservers
+redisservers
+
+# --- Global Group Variables ---
+[allservers:vars]
+env=production
+docker_network=brix_network
 ```
 
 ---
@@ -78,13 +123,26 @@ If you only want to update a specific component:
 
 ## 5. Advanced Usage
 
-### 5.1 Specify a Single Node
+### 5.1 Specify Targets (Limit)
 
-If you have multiple servers in your inventory but only want to run on one:
+Use the `-l` (limit) flag to run a playbook against a specific host or group from your inventory:
 
-```bash
-ansible-playbook -i ansible/inventory.ini ansible/deploy_all.yml --limit your.ec2.ip.here
-```
+- **Run on a single host:**
+    ```bash
+    ansible-playbook -i ansible/inventory.ini site.yml -l webserver_single
+    ```
+- **Run on a specific group:**
+    ```bash
+    ansible-playbook -i ansible/inventory.ini site.yml -l webservers
+    ```
+- **Run on multiple groups:**
+    ```bash
+    ansible-playbook -i ansible/inventory.ini site.yml -l webservers,dbservers
+    ```
+- **Run on a nested group:**
+    ```bash
+    ansible-playbook -i ansible/inventory.ini site.yml -l allservers
+    ```
 
 ### 5.2 Pass Extra Variables
 
@@ -99,10 +157,15 @@ Since the playbooks rely on dynamic tags and passwords, always use the -e flag t
 
 ## 6. Connectivity Troubleshooting
 
-Test if Ansible can reach your server before running a playbook:
+Before running a complex playbook, always test the connection to your targets using the `ping` module:
 
-```bash
-ansible all -i ansible/inventory.ini -m ping
-```
+- **Test connection to all servers:**
+    ```bash
+    ansible all -i ansible/inventory.ini -m ping
+    ```
+- **Test connection to a specific group (e.g., webservers):**
+    ```bash
+    ansible webservers -i ansible/inventory.ini -m ping
+    ```
 
-If you see "pong", the connection is working correctly.
+If you see a `"pong"` response, Ansible is successfully communicating with your servers.

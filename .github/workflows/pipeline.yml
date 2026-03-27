@@ -2,7 +2,7 @@ name: pipeline
 
 on:
     push:
-        branches: [main]
+        branches: [main, dev]
     workflow_dispatch:
 
 concurrency:
@@ -15,6 +15,7 @@ jobs:
         outputs:
             push_needed: ${{ steps.filter.outputs.push_needed }}
             tag: ${{ steps.vars.outputs.tag }}
+            env_name: ${{ steps.vars.outputs.env_name }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -46,9 +47,17 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_ACTOKEN }}
 
-            - name: Set tag
+            - name: Set environment variables
               id: vars
-              run: echo "tag=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+              run: |
+                  SHORT_SHA=$(git rev-parse --short HEAD)
+                  if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+                    echo "tag=prod-${SHORT_SHA}" >> $GITHUB_OUTPUT
+                    echo "env_name=prod" >> $GITHUB_OUTPUT
+                  else
+                    echo "tag=dev-${SHORT_SHA}" >> $GITHUB_OUTPUT
+                    echo "env_name=dev" >> $GITHUB_OUTPUT
+                  fi
 
             - name: Build and push
               uses: docker/build-push-action@v5
@@ -58,7 +67,7 @@ jobs:
                   push: ${{ steps.filter.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch' }}
                   tags: |
                       ${{ secrets.DOCKERHUB_USERNAME }}/brix-web:${{ steps.vars.outputs.tag }}
-                      ${{ secrets.DOCKERHUB_USERNAME }}/brix-web:latest
+                      ${{ secrets.DOCKERHUB_USERNAME }}/brix-web:${{ steps.vars.outputs.env_name }}-\latest
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   build-args: |
@@ -83,7 +92,7 @@ jobs:
 
     deploy:
         needs: build-and-push
-        if: github.ref == 'refs/heads/main' && (needs.build-and-push.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch')
+        if: (needs.build-and-push.outputs.push_needed == 'true' || github.event_name == 'workflow_dispatch')
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -108,12 +117,13 @@ jobs:
 
             - name: Create temporary inventory
               run: |
-                  echo "[webserver]" > inventory_ci.ini
+                  echo "[${{ needs.build-and-push.outputs.env_name }}]" > inventory_ci.ini
                   echo "${{ secrets.REMOTE_HOST }} ansible_user=${{ secrets.REMOTE_USER }} ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_python_interpreter=/usr/bin/python3 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ServerAliveInterval=60 -o ServerAliveCountMax=10'" >> inventory_ci.ini
 
             - name: Deploy via Ansible
               run: |
                   ansible-playbook ansible/deploy_all.yml \
                     -i inventory_ci.ini \
+                    -l ${{ needs.build-and-push.outputs.env_name }} \
                     -e "image_tag=${{ needs.build-and-push.outputs.tag }}" \
                     -e "portainer_admin_password=${{ secrets.PORTAINER_ADMIN_PASSWORD }}"

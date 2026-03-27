@@ -1,0 +1,16 @@
+services:
+  {{ app_container }}:
+    image: {{ dockerhub_image }}:{{ image_tag }}
+    container_name: {{ app_container }}
+    restart: always
+    expose:
+      - "3000"
+    networks:
+      - {{ docker_network }}
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      environment: "{{ env_name }}"
+
+networks:
+  {{ docker_network }}:
+    external: true
