@@ -142,9 +142,9 @@ jobs:
             - name: Check if EC2 Instance is running
               id: check_instance
               run: |
-                  STATE=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=brix-web-server" --query "Reservations[*].Instances[*].State.Name" --output text)
+                  STATE=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=brix-web-server" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].State.Name" --output text)
                   echo "Current instance state: '$STATE'"
-                  if [ "$STATE" == "running" ]; then
+                  if [[ "$STATE" == *"running"* ]]; then
                     echo "should_deploy=true" >> $GITHUB_OUTPUT
                   else
                     echo "::warning::EC2 instance 'brix-web-server' is not running ($STATE). Skipping deployment."
