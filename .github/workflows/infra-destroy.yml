@@ -1,4 +1,4 @@
-name: Infrastructure - Destroy Permanently
+name: infrastructure-destroy-permanently
 on:
     workflow_dispatch:
 

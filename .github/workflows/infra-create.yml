@@ -1,4 +1,4 @@
-name: Infrastructure - Create or Start
+name: infrastructure-create-or-start
 on:
     workflow_dispatch:
 

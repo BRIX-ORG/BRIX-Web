@@ -1,4 +1,4 @@
-name: Infrastructure - Stop Instance
+name: infrastructure-stop
 on:
     workflow_dispatch:
 
