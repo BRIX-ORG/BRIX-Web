@@ -1,5 +1,9 @@
 # BRIX Web
 
+[![Pipeline](https://github.com/BRIX-ORG/BRIX-Web/actions/workflows/pipeline.yml/badge.svg)](https://github.com/BRIX-ORG/BRIX-Web/actions/workflows/pipeline.yml)
+[![Lint](https://github.com/BRIX-ORG/BRIX-Web/actions/workflows/lint.yml/badge.svg)](https://github.com/BRIX-ORG/BRIX-Web/actions/workflows/lint.yml)
+[![Commit Lint](https://github.com/BRIX-ORG/BRIX-Web/actions/workflows/commit-lint.yml/badge.svg)](https://github.com/BRIX-ORG/BRIX-Web/actions/workflows/commit-lint.yml)
+
 BRIX Web is the frontend for a location-aware social platform built around authenticated media, realtime image capture, and onchain-native interactions. Users can upload standard images, capture realtime images with GPS and nonce-based verification, publish 3D model posts, explore a global map of media activity, chat in realtime, create albums, and support creators through blockchain donations.
 
 This repository contains the Next.js web client, deployment automation, and infrastructure workflow used to run the BRIX frontend across local, AWS, and Vercel environments.
