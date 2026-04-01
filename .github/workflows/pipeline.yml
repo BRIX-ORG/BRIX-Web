@@ -73,14 +73,22 @@ jobs:
                       echo "tag=${ENV_NAME}-${SHORT_SHA}" >> $GITHUB_OUTPUT
                       echo "build_needed=true" >> $GITHUB_OUTPUT
                     fi
+
+                    if [[ "$ENV_NAME" == "prod" ]]; then
+                      echo "backend_url=https://api.brix.social" >> $GITHUB_OUTPUT
+                    else
+                      echo "backend_url=https://api.dev.brix.social" >> $GITHUB_OUTPUT
+                    fi
                   else
                     # Push (Automatic) logic
                     if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
                       echo "tag=prod-${SHORT_SHA}" >> $GITHUB_OUTPUT
                       echo "env_name=prod" >> $GITHUB_OUTPUT
+                      echo "backend_url=https://api.brix.social" >> $GITHUB_OUTPUT
                     else
                       echo "tag=dev-${SHORT_SHA}" >> $GITHUB_OUTPUT
                       echo "env_name=dev" >> $GITHUB_OUTPUT
+                      echo "backend_url=https://api.dev.brix.social" >> $GITHUB_OUTPUT
                     fi
                     echo "build_needed=true" >> $GITHUB_OUTPUT
                   fi
@@ -105,7 +113,7 @@ jobs:
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
                   build-args: |
-                      NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+                      NEXT_PUBLIC_BACKEND_URL=${{ steps.vars.outputs.backend_url }}
                       NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
                       NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
                       NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
