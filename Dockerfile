@@ -84,6 +84,14 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# NextAuth runtime variables (must be available when server runs, not just at build time)
+ARG NEXTAUTH_SECRET
+ARG NEXTAUTH_URL
+ARG NEXTAUTH_SESSION_MAX_AGE
+ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV NEXTAUTH_SESSION_MAX_AGE=${NEXTAUTH_SESSION_MAX_AGE}
+
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
