@@ -96,6 +96,7 @@ function toNextAuthUser(data: AuthResponseData) {
 }
 
 export const authConfig: NextAuthConfig = {
+    trustHost: true,
     providers: [
         CredentialsProvider({
             name: 'Credentials',
