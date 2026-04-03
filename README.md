@@ -18,12 +18,6 @@ This repository contains the Next.js web client, deployment automation, and infr
 ![Zustand](https://img.shields.io/badge/Zustand-4B2E1F?style=for-the-badge&logoColor=white)
 ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
 ![Polygon](https://img.shields.io/badge/Polygon-1A102B?style=for-the-badge&logo=polygon&logoColor=8247E5)
-![Docker](https://img.shields.io/badge/Docker-0B1F3A?style=for-the-badge&logo=docker&logoColor=2496ED)
-![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-0F172A?style=for-the-badge&logo=githubactions&logoColor=2088FF)
-![Terraform](https://img.shields.io/badge/Terraform-1F1F3A?style=for-the-badge&logo=terraform&logoColor=844FBA)
-![Ansible](https://img.shields.io/badge/Ansible-111111?style=for-the-badge&logo=ansible&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=FF9900)
 
 ## Screenshots
 
@@ -308,48 +302,9 @@ GitHub Actions workflows live in [`.github/workflows`](/F:/BRIX-Web/.github/work
     - waits for health checks
     - supports rollback to the previous healthy image if deployment health fails
 
-### Infrastructure Workflows
-
-- `infra-create.yml` provisions or starts infrastructure with Terraform and updates DNS
-- `infra-stop.yml` stops the EC2 instance
-- `infra-destroy.yml` destroys infrastructure resources
-
-## Hosting and Runtime URLs
-
-Current web entry points:
-
-- Production web: [https://aws.brix.social](https://aws.brix.social)
-- Development web: [https://dev.brix.social](https://dev.brix.social)
-- Portainer: [https://portainer.brix.social](https://portainer.brix.social)
-- Vercel deployment: [https://vercel.brix.social](https://vercel.brix.social)
-
-The AWS-hosted environments are fronted by Nginx and deployed through Docker + Ansible. Vercel can be used as an additional deployment target for the frontend.
-
-## Infrastructure Notes
-
-- Terraform manages the EC2 instance lifecycle and remote state backend
-- Ansible handles Docker installation, shared infrastructure deployment, app deployment, and Nginx configuration
-- Docker health checks use the `/api/health` endpoint
-- The deployment flow now supports health validation and automatic rollback to the previous image when possible
-
 ## Frontend Architecture Notes
 
 - Feature-first component organization keeps domain areas such as album, artist, camera, dashboard, messages, realtime, settings, and upload isolated
 - Shared providers centralize auth, API token wiring, web3, sockets, queries, and i18n
 - Maps are treated as a core domain primitive for capture and discovery, not just a visual extra
 - The app combines product-style social interactions with web3-native donation and verification flows
-
-## Related Runtime Expectations
-
-This repository is the web frontend. It expects external services such as:
-
-- a BRIX backend API
-- authentication/session support
-- Socket.IO namespaces for chat and notifications
-- search indexing
-- wallet-compatible blockchain endpoints
-- optional IPFS / gateway infrastructure
-
-## License
-
-This project is currently private unless stated otherwise by the repository owner.
